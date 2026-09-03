@@ -1,0 +1,128 @@
+# oridecon-ai-agents
+
+Agent system for Oridecon Framework - AI agents with tools, strategies, and execution
+
+---
+
+## Overview
+
+Agent orchestration package for the Oridecon Framework. Provides agent base classes, tool registration, execution strategies (ReAct, Plan-and-Execute, Reflexion, Supervisor), observability, and multi-agent coordination — all wired through DI via `AgentsModule`. Zero-config usage starts with sensible defaults.
+
+
+> Full documentation: [docs.oridecon.dev](https://docs.oridecon.dev)
+## Install
+
+```bash
+uv add oridecon-ai-agents
+```
+
+## Quick Start
+
+```python
+from oridecon import Application
+from oridecon.di.module import Module, module
+
+from oridecon.ai.agents import AgentsModule
+from oridecon.ai.agents.config import AgentConfig
+from oridecon.ai.llm import LLMModule
+
+
+@module(
+    imports=[
+        LLMModule.stub(),  # provides LLMClientProtocol
+        AgentsModule.configure(AgentConfig(max_iterations=10)),
+    ]
+)
+class AppModule(Module):
+    pass
+
+
+async with Application.boot(modules=[AppModule]) as app:
+    # use app.container to resolve services
+    ...
+```
+
+> **Note:** `AgentsModule` requires an LLM client (`LLMClientProtocol`) in the container — provided by `LLMModule` (from `oridecon-ai-llm`). When using a real LLM provider, set `OPENAI_API_KEY` (or configure your provider in `ClientConfig`).
+
+## Configuration
+
+> **Zero-config usage:** Call `AgentsModule.configure()` with no arguments to use defaults.
+
+### Option 1 — YAML file
+
+```yaml
+# application.yaml
+ai_agents:
+  max_iterations: 10
+  default_temperature: 0.7
+  default_max_tokens: 2048
+  enable_tracing: true
+```
+
+### Option 2 — Profiles + Environment Variables *(recommended)*
+
+```bash
+export ORI_AI_AGENTS__MAX_ITERATIONS=15
+# Environment variables for each field
+```
+
+### Option 3 — Python
+
+```python
+from oridecon.ai.agents.config import AgentConfig
+from oridecon.ai.agents import AgentsModule
+
+config = AgentConfig(max_iterations=10)
+AgentsModule.configure(config)
+```
+
+### Config reference
+
+| Field | Default | Env var | Description |
+|-------|---------|---------|-------------|
+| `enabled` | `True` | `ORI_AI_AGENTS__ENABLED` | Enable the agent subsystem |
+| `max_iterations` | `10` | `ORI_AI_AGENTS__MAX_ITERATIONS` | Maximum reasoning iterations per execution |
+| `default_temperature` | `0.7` | `ORI_AI_AGENTS__DEFAULT_TEMPERATURE` | Default LLM temperature |
+| `default_max_tokens` | `2048` | `ORI_AI_AGENTS__DEFAULT_MAX_TOKENS` | Default max tokens for LLM responses |
+| `tool_max_retries` | `3` | `ORI_AI_AGENTS__TOOL_MAX_RETRIES` | Retry attempts for transient tool errors |
+| `enable_tracing` | `True` | `ORI_AI_AGENTS__ENABLE_TRACING` | Enable OpenTelemetry tracing |
+| `enable_metrics` | `True` | `ORI_AI_AGENTS__ENABLE_METRICS` | Enable Prometheus metrics |
+
+## Module Factory Methods
+
+| Method | Description |
+|--------|-------------|
+| `AgentsModule.configure(config, enable_multi_agent)` | Configure with explicit config |
+| `AgentsModule.stub()` | Minimal config for testing |
+
+## Key Features
+
+- **Agent base classes**: `AgentBase` for defining agents with tools and system prompts
+- **Execution strategies**: ReAct, Plan-and-Execute, Reflexion, Supervisor
+- **Tool system**: `@tool` decorator for registering standalone tool functions
+- **Multi-agent coordination**: `AgentAsToolAdapter` for agent-to-agent delegation
+- **Observability**: Built-in tracing and metrics via `AgentTracer` and `AgentMetrics`
+
+## Testing
+
+```python
+from oridecon.ai.llm import LLMModule
+
+async with Application.boot(modules=[LLMModule.stub(), AgentsModule.stub()]) as app:
+    # your test code
+    ...
+```
+
+> `AgentsModule.stub()` alone fails container validation without an `LLMClientProtocol` in the container — pair it with `LLMModule.stub()` as shown.
+
+## Key Source Files
+
+| File | What it contains |
+|------|-----------------|
+| `src/oridecon/ai/agents/module.py` | `AgentsModule.configure()` and `stub()` |
+| `src/oridecon/ai/agents/config.py` | `AgentConfig` and environment variable bindings |
+| `src/oridecon/ai/agents/agent/base.py` | `AgentBase` class with tools and prompts |
+| `src/oridecon/ai/agents/executor/executor.py` | `AgentExecutorImpl` — strategy execution loop |
+| `src/oridecon/ai/agents/tools/registry.py` | `ToolRegistryImpl` and `@tool` decorator |
+| `src/oridecon/ai/agents/strategies/react.py` | ReAct reasoning loop |
+| `src/oridecon/ai/agents/di/provider.py` | `AgentsProvider` — registers agents into DI |

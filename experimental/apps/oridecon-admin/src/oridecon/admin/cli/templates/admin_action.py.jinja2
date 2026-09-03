@@ -1,0 +1,78 @@
+"""{{ action_name }} admin action.
+
+This module provides a custom action for the Oridecon admin UI.
+"""
+
+from __future__ import annotations
+
+from typing import Any
+
+from oridecon.admin.actions.base import (
+    BulkAction,
+    HeaderAction,
+    RowAction,
+)
+from oridecon.admin.actions.exceptions import ActionError, PermissionDenied
+from oridecon.admin.actions.types import (
+    ActionColor,
+    ActionContext,
+    ConfirmationConfig,
+)
+from oridecon.result import Ok, Result
+
+
+class {{ action_name }}Action({{ "BulkAction" if action_type == "bulk" else "HeaderAction" if action_type == "header" else "RowAction" }}):
+    """Custom {{ action_name }} admin action.
+
+    Add it to a resource via ``actions = [{{ action_name }}Action()]``
+    (row/header) or ``bulk_actions = [{{ action_name }}Action()]`` (bulk).
+    """
+
+    def __init__(self) -> None:
+        """Initialize the action."""
+        super().__init__(
+            name="{{ action_name_snake }}",
+            label="{{ action_name }}",
+            icon="check",
+            color=ActionColor.SUCCESS,
+        )
+
+    def visible_for(self, record: Any | None = None, user: Any | None = None) -> bool:
+        """Return whether the action is visible for *record*."""
+        return True
+
+    def authorize(
+        self,
+        record: Any,
+        user: Any | None = None,
+    ) -> Result[None, PermissionDenied]:
+        """Check whether *user* may execute this action."""
+        return Ok(None)
+
+    def confirm(self) -> ConfirmationConfig | None:
+        """Return optional confirmation dialog configuration."""
+        return ConfirmationConfig(
+            title="{{ action_name }}",
+            message="Are you sure you want to run {{ action_name_snake }}?",
+            style=ActionColor.WARNING,
+        )
+
+    async def execute(
+        self,
+        record: Any,
+        ctx: ActionContext,
+    ) -> Result[Any, ActionError]:
+        """Execute the action.
+
+        Args:
+            record: The target record (``None`` for header actions, a list of
+                records for bulk actions).
+            ctx: Action execution context.
+
+        Returns:
+            ``Ok(outcome)`` on success, ``Err(ActionError)`` on failure.
+        """
+        # Implement your action logic here.
+        # Example:
+        # await publish_service.publish(record.id)
+        return Ok({"message": "{{ action_name }} executed successfully"})

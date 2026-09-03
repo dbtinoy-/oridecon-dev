@@ -1,0 +1,67 @@
+# Copy to application.yaml and adjust to your deployment. Remove sections you don't use.
+#
+# Each AI subsystem reads its own top-level section (loaded via the provider's
+# config_key when the module is configured without an explicit config object).
+# Environment variable prefix: ORI_AI__ (top-level) or ORI_{SECTION}__ for
+# individual sections, e.g. ORI_AI_LLM__PROVIDER, ORI_AI_LLM__MODEL.
+
+ai:
+  # Umbrella envelope (AIConfig). The per-subsystem knobs live in their own
+  # sections below — the nested `llm:` / `rag:` / `vector:` keys of older
+  # versions are not read.
+  enabled: true
+
+# LLM client (oridecon-ai-llm) — flat ClientConfig
+ai_llm:
+  enabled: true
+  provider: "ollama"        # openai, anthropic, groq, mistral, ollama, ...
+  model: "llama3.2"
+  api_base: "http://localhost:11434"   # local/self-hosted endpoints
+  # api_key: "${OPENAI_API_KEY}"       # required for hosted providers
+  temperature: 0.2
+
+# Vector store (oridecon-vector)
+vector:
+  backend: "memory"         # memory, pgvector, pinecone, qdrant, weaviate
+  default_dimension: 1536
+
+# RAG pipeline (oridecon-ai-rag) — flat fields
+ai_rag:
+  enabled: true
+  chunk_size: 512
+  chunk_overlap: 100
+  chunking_strategy: "recursive"   # fixed_size, recursive, semantic, sliding_window, token
+  top_k: 5
+  similarity_threshold: 0.7
+  embedding_model: "text-embedding-3-small"
+  use_hybrid_search: false
+
+# Governance (oridecon-ai-governance)
+ai_governance:
+  enabled: true
+  monthly_budget: 1000.0    # USD
+  max_tokens_per_request: 8000
+  enforce_budget: true
+  soft_limit_pct: 0.8       # warn at 80% usage
+  model_allowlist:
+    admin: ["gpt-4*", "claude-3-*"]
+    user: ["gpt-3.5-turbo", "claude-3-haiku"]
+  model_denylist:
+    user: ["gpt-4-turbo"]   # expensive model blocked for regular users
+
+# Observability (oridecon-ai-observability)
+ai_observability:
+  enabled: true
+  metrics_enabled: true
+  tracing_enabled: true
+  health_checks_enabled: true
+
+# Agents (oridecon-ai-agents)
+ai_agents:
+  enabled: true
+  max_iterations: 10
+  default_temperature: 0.7
+  default_max_tokens: 2048
+  tool_max_retries: 2
+  enable_tracing: true
+  enable_metrics: true

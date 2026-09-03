@@ -1,0 +1,168 @@
+# oridecon-cache
+
+Multi-backend caching system for Oridecon Framework — Redis, Memcached, and in-memory caching.
+
+---
+
+## Overview
+
+Multi-backend async caching for the Oridecon Framework. Supports Redis, in-memory,
+and Memcached backends with stampede protection, circuit breaker, `Result`-aware
+caching, and domain model round-trip serialization.
+
+Configure backends via `CacheModule.configure()` and inject `CacheBackendProtocol`
+into any service. The `@cacheable` decorator provides cache-aside logic with
+automatic key generation and Result support.
+
+
+> Full documentation: [docs.oridecon.dev](https://docs.oridecon.dev)
+## Install
+
+```bash
+uv add oridecon-cache
+# Optional extras
+uv add "oridecon-cache[redis,memcached,semantic]"
+```
+
+## Quick Start
+
+```python
+from oridecon import Application
+from oridecon.di.module import Module, module
+from oridecon.cache import CacheModule, CacheConfig
+from oridecon.cache.config import CacheBackendConfig
+from oridecon.cache.types import BackendType
+from oridecon.contracts.infra.cache import CacheBackendProtocol
+
+
+@module(
+    imports=[
+        CacheModule.configure(
+            CacheConfig(
+                backends=[
+                    CacheBackendConfig(
+                        name="default",
+                        type=BackendType.REDIS,
+                        default=True,
+                        redis_url="redis://localhost:6379/0",
+                    )
+                ]
+            )
+        )
+    ]
+)
+class AppModule(Module):
+    pass
+
+
+async def main():
+    async with Application.boot(modules=[AppModule]) as app:
+        cache = await app.container.resolve(CacheBackendProtocol)
+        await cache.set("greeting", "hello", ttl=60)
+        value = await cache.get("greeting")
+        print(value.unwrap())  # "hello"
+
+
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(main())
+```
+
+## Configuration
+
+> **Zero-config usage:** Call `CacheModule.configure()` with no arguments; backends are then loaded from the `cache:` section of `application.yaml`. Use `CacheModule.stub()` (in-memory) in tests.
+
+### Option 1 — YAML file
+
+```yaml
+# application.yaml
+cache:
+  enabled: true
+  backends:
+    - name: redis
+      type: redis
+      default: true
+      redis_url: "redis://localhost:6379/0"
+      default_ttl: 300
+  service:
+    enable_protection: true
+```
+
+### Option 2 — Profiles + Environment Variables *(recommended)*
+
+```bash
+export ORI_CACHE__ENABLED=true
+export ORI_CACHE__BACKENDS__0__TYPE=redis
+export ORI_CACHE__BACKENDS__0__REDIS_URL=redis://localhost:6379/0
+```
+
+### Option 3 — Python
+
+```python
+from oridecon.cache import CacheModule, CacheConfig
+from oridecon.cache.config import CacheBackendConfig
+from oridecon.cache.types import BackendType
+
+CacheModule.configure(
+    CacheConfig(
+        backends=[
+            CacheBackendConfig(
+                name="redis",
+                type=BackendType.REDIS,
+                default=True,
+                redis_url="redis://localhost:6379/0",
+            )
+        ]
+    )
+)
+```
+
+### Config reference
+
+| Field | Default | Env var | Description |
+|-------|---------|---------|-------------|
+| `enabled` | `True` | `ORI_CACHE__ENABLED` | Enable the cache module |
+| `backends[].name` | — | `ORI_CACHE__BACKENDS__0__NAME` | Unique backend name |
+| `backends[].type` | — | `ORI_CACHE__BACKENDS__0__TYPE` | Backend type: `redis`, `memory`, `memcached` |
+| `backends[].redis_url` | — | `ORI_CACHE__BACKENDS__0__REDIS_URL` | Redis connection URL |
+| `backends[].default_ttl` | `null` | `ORI_CACHE__BACKENDS__0__DEFAULT_TTL` | Default TTL in seconds |
+| `service.enable_protection` | `True` | `ORI_CACHE__SERVICE__ENABLE_PROTECTION` | Stampede protection |
+| `service.circuit_breaker_enabled` | `False` | `ORI_CACHE__SERVICE__CIRCUIT_BREAKER_ENABLED` | Circuit breaker on backend failures |
+
+## Module Factory Methods
+
+| Method | Description |
+|--------|-------------|
+| `CacheModule.configure(...)` | Configure with explicit CacheConfig |
+| `CacheModule.stub()` | In-memory backend for unit testing |
+
+## Key Features
+
+- **Multi-backend** — Redis, in-memory, and Memcached with a unified protocol
+- **Stampede protection** — Distributed lock on cold reads prevents thundering herd
+- **Circuit breaker** — Opens on repeated backend failures, falls through to origin
+- **`@cacheable` decorator** — Cache-aside with automatic key generation and Result support
+- **Domain model serialization** — Type-tagged JSON envelope preserves type identity round-trip
+- **Production security** — Blocks insecure Redis passwords when ORI_ENV=production
+
+## Testing
+
+```python
+from oridecon.cache import CacheService
+
+async with Application.boot(modules=[CacheModule.stub()]) as app:
+    cache = await app.container.resolve(CacheService)
+    await cache.set("key", "value", ttl=60)
+    assert await cache.get("key") == "value"
+```
+
+## Key Source Files
+
+| File | What it contains |
+|------|-----------------|
+| `src/oridecon/cache/module.py` | CacheModule with configure() and stub() |
+| `src/oridecon/cache/config.py` | CacheConfig, CacheBackendConfig, CacheServiceConfig |
+| `src/oridecon/cache/di/provider.py` | CacheProvider boot and registration |
+| `src/oridecon/cache/decorators.py` | @cacheable decorator |
+| `src/oridecon/cache/backends/` | Redis, in-memory, and Memcached implementations |

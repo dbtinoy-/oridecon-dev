@@ -1,0 +1,112 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "oridecon-webhook"
+version = "0.1.5008"
+description = "Webhook management for the Oridecon Framework — subscription CRUD, delivery tracking, HMAC verification, and dead-letter queue"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Oridecon Framework Team", email = "team@oridecon.dev" }]
+maintainers = [{ name = "Oridecon Framework Team", email = "team@oridecon.dev" }]
+keywords = [
+    "oridecon",
+    "webhook",
+    "delivery",
+    "hmac",
+    "subscription",
+    "framework",
+    "async",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Framework :: AsyncIO",
+    "Typing :: Typed",
+]
+dependencies = [
+    "oridecon>=0.1.4",
+    "oridecon-contracts>=0.1.4",
+    "httpx>=0.27.0",
+    "starlette>=0.28.0",
+]
+
+[project.license]
+text = "MIT"
+
+[project.optional-dependencies]
+sql = ["oridecon-sql>=0.1.4"]
+
+[project.urls]
+Homepage = "https://oridecon.dev"
+Repository = "https://github.com/dbtinoy-/oridecon"
+Documentation = "https://docs.oridecon.dev"
+Issues = "https://github.com/dbtinoy-/oridecon/issues"
+Changelog = "https://github.com/dbtinoy-/oridecon/blob/main/oridecon-webhook/CHANGELOG.md"
+
+[project.entry-points."oridecon.modules"]
+webhook = "oridecon.webhook.module:WebhookModule"
+
+[project.entry-points."oridecon.config"]
+webhook = "oridecon.webhook.config:WebhookConfig"
+
+[project.entry-points."oridecon.providers"]
+webhook = "oridecon.webhook.di.bundle_provider:WebhookBundleProvider"
+
+[project.entry-points."oridecon.admin.contributors"]
+webhook = "oridecon.webhook.admin.contributor:WebhookAdminContributor"
+
+[project.entry-points."oridecon.cli.contributors"]
+webhook = "oridecon.webhook.cli.contributor:WebhookCliContributor"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/oridecon"]
+
+[dependency-groups]
+dev = ["ruff>=0.16.4", "mypy>=1.0.0"]
+test = [
+    "oridecon-testing>=0.1.4",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+]
+
+[tool.uv.sources]
+oridecon = { workspace = true }
+oridecon-contracts = { workspace = true }
+oridecon-testing = { workspace = true }
+
+[tool.ruff]
+extend = "../../pyproject.toml"
+
+[tool.ruff.lint]
+extend-ignore = ["TID251"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = ["src"]
+ignore_missing_imports = true
+overrides = [
+    { module = "tests.*", ignore_errors = true },
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "--tb=short --cov=oridecon.webhook --cov-report=term-missing --cov-fail-under=40"
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["*/tests/*", "*/examples/*"]

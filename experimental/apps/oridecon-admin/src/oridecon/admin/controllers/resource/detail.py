@@ -1,0 +1,61 @@
+"""Detail view for the resource controller."""
+
+from __future__ import annotations
+
+from typing import Any
+
+from starlette.requests import Request
+from starlette.responses import HTMLResponse, Response
+
+from oridecon.admin.controllers.resource.meta import ResourceMeta, T
+from oridecon.admin.state.context import AdminContext, AdminContextManager
+from oridecon.ui import el, render_to_string
+
+
+class ResourceDetailMixin:
+    """Detail view and rendering."""
+
+    # Host attributes provided by sibling mixins on ResourceController.
+    meta: ResourceMeta
+
+    get_data_source: Any
+
+    async def detail(self, request: Request) -> Response:
+        """View single resource."""
+        async with AdminContextManager(request) as ctx:
+            item_id = request.path_params.get("id")
+
+            data_source = self.get_data_source()
+            item = await data_source.find_one(item_id)
+
+            if item is None:
+                from oridecon.admin.lib.template import render_error_page
+
+                html = render_error_page(
+                    status_code=404,
+                    title="Not Found",
+                    message=f"{self.meta.label} not found",
+                )
+                return HTMLResponse(html, status_code=404)
+
+            if ctx.is_htmx:
+                return HTMLResponse(self.render_detail_partial(ctx, item))
+
+            return HTMLResponse(self.render_detail(ctx, item))
+
+    def render_detail(self, ctx: AdminContext, item: T) -> str:
+        """Render full detail page. Override in subclass."""
+        return f"""
+<!DOCTYPE html>
+<html>
+<head><title>{self.meta.label}</title></head>
+<body>
+    <h1>{self.meta.label}</h1>
+    {self.render_detail_partial(ctx, item)}
+</body>
+</html>
+"""
+
+    def render_detail_partial(self, ctx: AdminContext, item: T) -> str:
+        """Render detail content. Override in subclass."""
+        return render_to_string(el("pre", str(item)))

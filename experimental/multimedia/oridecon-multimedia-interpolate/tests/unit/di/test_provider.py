@@ -1,0 +1,119 @@
+import pytest
+
+from oridecon.contracts.multimedia.exceptions import ProviderNotInstalledError
+from oridecon.contracts.multimedia.protocols import InterpolationProvider
+from oridecon.multimedia.interpolate.config import InterpolationConfig
+from oridecon.multimedia.interpolate.di.provider import InterpolationGenerationProvider
+from oridecon.multimedia.interpolate.providers.rife import RifeInterpolationProvider
+from oridecon.multimedia.interpolate.tasks import InterpolationTask
+
+
+class _FakeContainer:
+    def __init__(self) -> None:
+        self.bindings: dict[object, object] = {}
+
+    def singleton(self, key: object, value: object) -> None:
+        self.bindings[key] = value
+
+    async def resolve(self, key: object) -> object:
+        if key not in self.bindings:
+            raise LookupError(key)
+        return self.bindings[key]
+
+
+@pytest.mark.asyncio
+async def test_provider_declares_config_key_and_model() -> None:
+    provider = InterpolationGenerationProvider()
+    assert provider.config_key == "multimedia_interpolate"
+    assert provider.config_model is InterpolationConfig
+
+
+@pytest.mark.asyncio
+async def test_register_binds_interpolation_config_into_container() -> None:
+    provider = InterpolationGenerationProvider()
+    container = _FakeContainer()
+    await provider.register(container)
+    assert container.bindings[InterpolationConfig].backend == "rife"
+
+
+@pytest.mark.asyncio
+async def test_register_binds_rife_backend_by_default() -> None:
+    provider = InterpolationGenerationProvider(config=InterpolationConfig())
+    container = _FakeContainer()
+
+    await provider.register(container)
+
+    bound = container.bindings[InterpolationProvider]
+    assert isinstance(bound, RifeInterpolationProvider)
+
+
+@pytest.mark.asyncio
+async def test_register_binds_task_handler() -> None:
+    provider = InterpolationGenerationProvider(config=InterpolationConfig())
+    container = _FakeContainer()
+
+    await provider.register(container)
+
+    bound_task = container.bindings[InterpolationTask]
+    assert isinstance(bound_task, InterpolationTask)
+
+
+@pytest.mark.asyncio
+async def test_health_check_reports_healthy_after_register() -> None:
+    provider = InterpolationGenerationProvider(config=InterpolationConfig())
+    container = _FakeContainer()
+    await provider.register(container)
+
+    result = await provider.health_check()
+
+    assert result.component == "interpolate"
+
+
+@pytest.mark.asyncio
+async def test_unknown_backend_raises_not_installed() -> None:
+    provider = InterpolationGenerationProvider(
+        config=InterpolationConfig(backend="unknown")  # type: ignore[arg-type]
+    )
+    container = _FakeContainer()
+
+    with pytest.raises(ProviderNotInstalledError):
+        await provider.register(container)
+
+
+@pytest.mark.asyncio
+async def test_register_binds_video_interpolation_service_when_video_processor_present() -> (
+    None
+):
+    from unittest.mock import AsyncMock
+
+    from oridecon.contracts.multimedia.protocols import VideoProcessor
+    from oridecon.multimedia.interpolate.video_interpolation_service import (
+        VideoInterpolationService,
+    )
+
+    provider = InterpolationGenerationProvider(config=InterpolationConfig())
+    container = _FakeContainer()
+    container.singleton(VideoProcessor, AsyncMock())
+
+    await provider.register(container)
+
+    bound = container.bindings[VideoInterpolationService]
+    assert isinstance(bound, VideoInterpolationService)
+
+
+@pytest.mark.asyncio
+async def test_video_interpolation_service_not_registered_without_video_processor() -> (
+    None
+):
+    from oridecon.multimedia.interpolate.video_interpolation_service import (
+        VideoInterpolationService,
+    )
+
+    provider = InterpolationGenerationProvider(config=InterpolationConfig())
+    container = _FakeContainer()
+
+    await provider.register(container)
+
+    assert VideoInterpolationService not in container.bindings
+    with pytest.raises(LookupError):
+        await container.resolve(VideoInterpolationService)

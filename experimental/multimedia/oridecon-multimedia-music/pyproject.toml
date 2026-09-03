@@ -1,0 +1,129 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "oridecon-multimedia-music"
+version = "0.1.5008"
+description = "Music generation for the Oridecon Framework — local and API-based backends"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+keywords = ["oridecon", "multimedia", "music", "audio", "ai", "framework"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Framework :: AsyncIO",
+    "Typing :: Typed",
+]
+authors = [{ name = "Oridecon Framework Team", email = "team@oridecon.dev" }]
+maintainers = [{ name = "Oridecon Framework Team", email = "team@oridecon.dev" }]
+dependencies = [
+    "oridecon-contracts>=0.1.4",
+    "oridecon>=0.1.4",
+    "aiohttp>=3.9.0",
+    "typing-extensions>=4.0.0",
+]
+
+[project.urls]
+Homepage = "https://oridecon.dev"
+Repository = "https://github.com/dbtinoy-/oridecon"
+Issues = "https://github.com/dbtinoy-/oridecon/issues"
+Changelog = "https://github.com/dbtinoy-/oridecon/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+stability-audio = []
+ace-step-server = ["torch", "ace-step"]
+stable-audio-open-server = ["torch", "stable-audio-tools"]
+test = [
+    "oridecon-testing>=0.1.4",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+]
+dev = ["ruff>=0.8.0", "mypy>=1.0.0"]
+
+[dependency-groups]
+dev = ["ruff>=0.8.0", "mypy>=1.0.0"]
+test = [
+    "oridecon-testing>=0.1.4",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+]
+
+[project.scripts]
+oridecon-music-ace-step-serve = "oridecon.multimedia.music.servers.ace_step_server:main"
+oridecon-music-stable-audio-open-serve = "oridecon.multimedia.music.servers.stable_audio_open_server:main"
+
+[project.entry-points."oridecon.multimedia.subsystems"]
+music = "oridecon.multimedia.music.di.provider:AudioMusicProvider"
+
+[project.entry-points."oridecon.multimedia.modules"]
+music = "oridecon.multimedia.music.module:AudioMusicModule"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/oridecon"]
+
+[tool.mypy]
+python_version = "3.11"
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = ["src"]
+ignore_missing_imports = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+overrides = [{ module = "tests.*", ignore_errors = true }]
+
+[tool.ruff]
+extend = "../../../pyproject.toml"
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+extend-ignore = ["PYI063"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "TID252"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.isort]
+known-first-party = ["oridecon"]
+force-sort-within-sections = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "integration: mark a test as an integration test",
+    "scenario: marks cross-package scenario integration tests",
+    "requires_postgres: marks tests that require a live PostgreSQL connection",
+]
+addopts = [
+    "--cov=oridecon.multimedia.music",
+    "--cov-report=term",
+    "--cov-report=html",
+    "--cov-fail-under=40",
+]

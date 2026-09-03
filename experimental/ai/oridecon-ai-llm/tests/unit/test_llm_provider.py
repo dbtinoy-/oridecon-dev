@@ -1,0 +1,113 @@
+"""Unit tests for LLMProvider."""
+
+from __future__ import annotations
+
+from unittest.mock import AsyncMock, MagicMock
+
+import pytest
+
+from oridecon.ai.llm.config import PricingConfig
+from oridecon.ai.llm.di.provider import LLMProvider
+from oridecon.contracts.ai.llm import CostEstimatorProtocol
+from oridecon.contracts.core.provider import ProviderPriority
+from oridecon.contracts.web.http_models import HttpStatusError
+from oridecon.di.provider import Provider
+
+
+class TestLLMProviderStructure:
+    """Test LLMProvider class structure and attributes."""
+
+    def test_provider_class_exists(self) -> None:
+        """Verify LLMProvider class exists and can be instantiated."""
+        prov = LLMProvider()
+        assert prov is not None
+        assert isinstance(prov, LLMProvider)
+
+    def test_provider_name(self) -> None:
+        """Verify provider has correct name attribute."""
+        prov = LLMProvider()
+        assert prov.name == "llm"
+
+    def test_provider_priority(self) -> None:
+        """Verify provider has DOMAIN priority."""
+        prov = LLMProvider()
+        assert prov.priority == ProviderPriority.DOMAIN
+
+    def test_provider_is_provider_subclass(self) -> None:
+        """Verify LLMProvider is a proper Provider subclass."""
+        assert issubclass(LLMProvider, Provider)
+
+    def test_provider_has_required_methods(self) -> None:
+        """Verify provider has all required lifecycle methods."""
+        prov = LLMProvider()
+        assert hasattr(prov, "register")
+        assert callable(prov.register)
+        assert hasattr(prov, "boot")
+        assert callable(prov.boot)
+        assert hasattr(prov, "shutdown")
+        assert callable(prov.shutdown)
+
+
+class TestLLMProviderLifecycle:
+    """Test LLMProvider lifecycle methods."""
+
+    @pytest.mark.asyncio
+    async def test_register_method_signature(self) -> None:
+        """Verify register() method has correct async signature."""
+        prov = LLMProvider()
+        container = MagicMock()
+        container.singleton = MagicMock()
+
+        # Should complete without error
+        await prov.register(container)
+
+    @pytest.mark.asyncio
+    async def test_boot_method_signature(self) -> None:
+        """Verify boot() method has correct async signature."""
+        prov = LLMProvider()
+        container = MagicMock()
+        container.resolve = AsyncMock()
+        container.resolve_optional = AsyncMock()
+
+        # Should complete without error
+        await prov.boot(container)
+
+    @pytest.mark.asyncio
+    async def test_shutdown_method_signature(self) -> None:
+        """Verify shutdown() method has correct async signature."""
+        prov = LLMProvider()
+
+        # Should complete without error
+        await prov.shutdown()
+
+
+class TestPricingBootContainment:
+    """LLMProvider.boot must survive pricing warm() failures."""
+
+    @pytest.mark.asyncio
+    async def test_boot_survives_pricing_warm_http_error(self) -> None:
+        """An HTTP error during pricing warm-up must not abort boot."""
+        from oridecon.ai.llm.pricing.estimator import PricingCostEstimator
+
+        prov = LLMProvider()
+        prov.config.pricing = PricingConfig(enabled=True, sources=[])
+
+        async def _raise_http_error(*args: object) -> None:
+            raise HttpStatusError("boom", status=503, response=MagicMock())
+
+        estimator = PricingCostEstimator({})
+        estimator.warm = _raise_http_error  # type: ignore[method-assign]
+
+        async def _resolve(key: object) -> object:
+            if key is CostEstimatorProtocol:
+                return estimator
+            return MagicMock()
+
+        container = MagicMock()
+        container.resolve = AsyncMock(side_effect=_resolve)
+        container.resolve_optional = AsyncMock()
+
+        # Must complete without raising.
+        await prov.boot(container)
+
+        assert container.resolve_optional is not None

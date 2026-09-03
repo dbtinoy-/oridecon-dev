@@ -1,6 +1,6 @@
 # ==============================================================================
 # application.example.yaml
-# Oridecon Framework — complete configuration reference.
+# Oridecon Framework — example configuration reference.
 #
 # All values shown are exact defaults taken from each package's config class.
 # Secrets:  prefer environment variables or a vault over plaintext.

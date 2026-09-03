@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <link rel="icon" href="/static/icon.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <title>Memory Chat</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<nav class="demo-nav">
+  <a href="/" class="nav-brand">Oridecon</a>
+  <span class="nav-demo">Memory Chat</span>
+  <div class="nav-links">
+    <a href="https://oridecon.dev" target="_blank" rel="noopener">Docs</a>
+    <a href="https://github.com/dbtinoy-/oridecon" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</nav>
+
+  <header>
+    <h1>Memory Chat</h1>
+    <p class="muted">Zero LLM — template responder proves memory subsystem works standalone.</p>
+    <nav id="owners">
+      <button type="button" data-owner="alice">alice</button>
+      <button type="button" data-owner="bob">bob</button>
+    </nav>
+  </header>
+  <main>
+    <section id="chat-pane">
+      <div id="thread"></div>
+      <form id="ask-form">
+        <input id="message" type="text" autocomplete="off"
+               placeholder="Say &quot;I'm allergic to peanuts&quot; then ask for a menu">
+        <button type="submit">Send</button>
+      </form>
+      <p id="error" class="hidden"></p>
+    </section>
+    <aside id="facts-panel">
+      <h2>Facts</h2>
+      <ul id="facts"></ul>
+      <button type="button" id="demo-btn">Run demo replay</button>
+    </aside>
+  </main>
+  <script src="/static/app.js"></script>
+  <footer class="demo-footer">
+    <span>Powered by <a href="https://oridecon.dev" target="_blank" rel="noopener">Oridecon</a></span>
+  </footer>
+</body>
+</html>

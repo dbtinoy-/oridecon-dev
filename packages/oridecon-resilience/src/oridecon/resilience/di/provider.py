@@ -1,0 +1,157 @@
+from __future__ import annotations
+
+from typing import Any
+
+from oridecon.contracts.core.di import (
+    BootContainerProtocol,
+    ContainerRegistrarProtocol,
+)
+from oridecon.contracts.core.health import HealthCheckResult, HealthStatus
+from oridecon.contracts.infra.resilience import (
+    CircuitBreakerConfig,
+    CircuitBreakerRegistryProtocol,
+    ResiliencePipelineFactoryProtocol,
+    ResiliencePipelineProtocol,
+    RetryConfig,
+    TimeoutConfig,
+)
+from oridecon.di.provider import Provider, ProviderPriority
+from oridecon.logging import get_logger
+from oridecon.resilience.config import ResilienceConfig
+
+logger = get_logger(__name__)
+
+
+class ResilienceProvider(Provider):
+    """Resilience patterns DI provider.
+
+    Registers circuit breaker, retry, bulkhead, and rate-limiter
+    infrastructure into the container as singletons.
+    """
+
+    name = "resilience"
+    priority = ProviderPriority.INFRASTRUCTURE
+    config_key: str | None = "resilience"
+    config_model: type | None = ResilienceConfig
+
+    def __init__(self, config: ResilienceConfig | None = None) -> None:
+        super().__init__()
+        self._config = config  # populated by orchestrator in AUTO mode
+        self._registry: Any | None = None
+
+    async def register(self, container: ContainerRegistrarProtocol) -> None:
+        """Register resilience services and configurations."""
+        from oridecon.contracts.infra.resilience.protocols import (
+            BulkheadProtocol,
+            RateLimiterProtocol,
+        )
+        from oridecon.resilience.bulkhead.limiter import Bulkhead, BulkheadConfig
+        from oridecon.resilience.circuit.breaker import CircuitBreakerRegistry
+        from oridecon.resilience.rate_limiter.token_bucket import RateLimiter
+
+        cfg = self._config or ResilienceConfig()
+
+        # 1. Register Configs (Singleton) — factories close over the resolved
+        #    section so pipeline construction receives yaml-driven values.
+        #    Singleton because Bulkhead (singleton) requires BulkheadConfig;
+        #    transient configs in a singleton dependency tree trigger
+        #    ORI_ERR_DI_008 scope violations.
+        container.singleton(
+            CircuitBreakerConfig, lambda *, _cfg=cfg: _cfg.circuit_breaker
+        )
+        container.singleton(RetryConfig, lambda *, _cfg=cfg: _cfg.retry)
+        container.singleton(TimeoutConfig, lambda *, _cfg=cfg: _cfg.timeout)
+        container.singleton(BulkheadConfig, lambda *, _cfg=cfg: _cfg.bulkhead)
+
+        # 2. Register Registries (Singleton)
+        self._registry = CircuitBreakerRegistry()
+
+        container.singleton(CircuitBreakerRegistry, instance=self._registry)
+        container.singleton(CircuitBreakerRegistryProtocol, instance=self._registry)
+
+        # 3. Register RateLimiter (Singleton)
+        rate_limit_cfg = getattr(cfg, "rate_limit", None)
+        rate_limiter = RateLimiter(rate=rate_limit_cfg.rps if rate_limit_cfg else 1000)
+        container.singleton(RateLimiter, instance=rate_limiter)
+        container.singleton(RateLimiterProtocol, instance=rate_limiter)
+
+        # 4. Register Bulkhead (Singleton)
+        bulkhead = Bulkhead(config=cfg.bulkhead)
+        container.singleton(Bulkhead, instance=bulkhead)
+        container.singleton(BulkheadProtocol, instance=bulkhead)
+
+        # 5. Register ResiliencePipelineFactoryProtocol (Singleton)
+        from oridecon.resilience.pipeline.executor import ResiliencePipeline
+
+        def resilience_pipeline_factory(
+            retry_config: RetryConfig,
+            circuit_config: CircuitBreakerConfig,
+            timeout_config: TimeoutConfig,
+        ) -> ResiliencePipelineProtocol:
+            return ResiliencePipeline(
+                retry_config=retry_config,
+                circuit_config=circuit_config,
+                timeout_config=timeout_config,
+            )
+
+        container.singleton(
+            ResiliencePipelineFactoryProtocol,
+            factory=lambda: resilience_pipeline_factory,
+        )
+
+    async def boot(self, container: BootContainerProtocol) -> None:
+        """Initialize resilience patterns on application boot."""
+        from oridecon.contracts.observability.metrics import MetricsCollectorProtocol
+
+        collector = await container.resolve_optional(MetricsCollectorProtocol)
+        if (
+            collector is not None
+            and self._registry
+            and hasattr(self._registry, "set_metrics_collector")
+        ):
+            self._registry.set_metrics_collector(collector)
+
+        # Wire distributed circuit-breaker backend when configured
+        from oridecon.resilience.config import ResilienceConfig
+
+        config = await container.resolve_optional(ResilienceConfig)
+        if config is not None:
+            cb_backend = config.circuit_breaker.backend
+            if cb_backend != "memory" and self._registry is not None:
+                from oridecon.contracts import StateStoreProtocol
+                from oridecon.resilience.circuit.backend import (
+                    DistributedCircuitBreakerBackend,
+                )
+
+                state_store = await container.resolve_optional(StateStoreProtocol)
+                if state_store is not None:
+                    dist_backend = DistributedCircuitBreakerBackend(store=state_store)
+                    self._registry.set_backend(dist_backend)
+                    logger.info(
+                        "resilience.distributed_cb_backend_wired", backend=cb_backend
+                    )
+                else:
+                    logger.debug(
+                        "resilience.distributed_cb_backend_skipped",
+                        reason="StateStoreProtocol not registered",
+                    )
+
+    async def shutdown(self) -> None:
+        """Cleanup resilience patterns on shutdown."""
+        if self._registry and hasattr(self._registry, "cleanup"):
+            self._registry.cleanup()
+
+    async def health_check(self, timeout: float = 5.0) -> HealthCheckResult:
+        """Report resilience health."""
+        total_breakers = 0
+        if self._registry and hasattr(self._registry, "_breakers"):
+            total_breakers = len(self._registry._breakers)
+
+        return HealthCheckResult(
+            component=self.name,
+            status=HealthStatus.HEALTHY,
+            details={"circuit_breakers": {"total": total_breakers}},
+        )
+
+
+__all__ = ["ResilienceProvider"]

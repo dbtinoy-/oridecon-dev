@@ -1,0 +1,126 @@
+"""AdminObjectMapper — registry-based object-to-object mapper for oridecon-admin.
+
+Implements :class:`oridecon.contracts.mapping.ObjectMapperProtocol` so the mapper
+can be resolved by any consumer that depends on the contract.
+"""
+
+from __future__ import annotations
+
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any
+
+from oridecon.logging import get_logger
+from oridecon.primitives.registry import Registry
+
+if TYPE_CHECKING:
+    from oridecon.contracts.mapping import ObjectMapperProtocol
+
+logger = get_logger(__name__)
+
+
+class AdminObjectMapper:
+    """Registry-based mapper for admin domain objects.
+
+    Mapping functions are keyed by ``(source_type, dest_type)`` pair on a
+    oridecon core :class:`Registry`, so registrations are thread-safe and
+    support factories, decorators, and overwrite control.
+
+    Satisfies :class:`~oridecon.contracts.mapping.ObjectMapperProtocol`.
+
+    Example::
+
+        mapper = AdminObjectMapper()
+        mapper.add(AdminUserEntity, AdminUserRecord, lambda e: e.to_user())
+        record = mapper.map(entity, AdminUserRecord)
+    """
+
+    def __init__(self) -> None:
+        """Create an empty mapping registry."""
+        self._registry: Registry[tuple[type[Any], type[Any]], Callable[[Any], Any]] = (
+            Registry(
+                name="admin.mapping",
+                allow_overwrite=True,
+            )
+        )
+
+    def register(
+        self,
+        source_type: type[Any],
+        dest_type: type[Any],
+        mapper_func: Callable[[Any], Any],
+    ) -> None:
+        """Register a mapping function from *source_type* to *dest_type*.
+
+        Contract requirement (``ObjectMapperProtocol``); equivalent to
+        :meth:`add`.
+
+        Args:
+            source_type: The type to map from.
+            dest_type: The target type to produce.
+            mapper_func: Callable that accepts a source instance and returns a dest
+                instance.
+        """
+        self.add(source_type, dest_type, mapper_func)
+
+    def add(
+        self,
+        source_type: type[Any],
+        dest_type: type[Any],
+        mapper_func: Callable[[Any], Any],
+    ) -> None:
+        """Register a mapping function from *source_type* to *dest_type*.
+
+        Args:
+            source_type: The type to map from.
+            dest_type: The target type to produce.
+            mapper_func: Callable that accepts a source instance and returns a dest
+                instance.
+        """
+        self._registry.register((source_type, dest_type), mapper_func)
+        logger.debug(
+            "admin_mapper_registered",
+            source=source_type.__name__,
+            dest=dest_type.__name__,
+        )
+
+    def map(
+        self,
+        source: Any,
+        dest_type: type[Any],
+        *,
+        validate: bool = False,
+        validator: Callable[[Any], None] | None = None,
+    ) -> Any:
+        """Map *source* to an instance of *dest_type*.
+
+        Args:
+            source: The source object to transform.
+            dest_type: The target type to produce.
+            validate: Whether to validate the result after mapping (unused by
+                default; pass a *validator* to enable).
+            validator: Optional callable ``validator(result) -> None`` that raises
+                on invalid data.
+
+        Returns:
+            A new instance of *dest_type*.
+
+        Raises:
+            KeyError: If no mapping is registered for this type pair.
+        """
+        key = (type(source), dest_type)
+        mapper_func = self._registry.get(key)
+        if mapper_func is None:
+            raise KeyError(
+                f"No mapping registered from {type(source).__name__!r} "
+                f"to {dest_type.__name__!r}"
+            )
+        result = mapper_func(source)
+        if validate and validator is not None:
+            validator(result)
+        return result
+
+
+# Ensure the class satisfies the protocol at import time (structural check).
+_: ObjectMapperProtocol = AdminObjectMapper()
+
+__all__ = ["AdminObjectMapper"]

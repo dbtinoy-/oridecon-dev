@@ -1,0 +1,202 @@
+---
+title: oridecon-queue Guide
+description: Message bus and queue with Named DI multi-backend support.
+sidebar:
+  order: 2
+---
+
+## Requirements
+
+| Package | Required | Purpose |
+|---------|----------|---------|
+| `oridecon` | Yes | Core framework |
+| `oridecon-contracts` | Yes | Protocol definitions |
+| `redis` | Recommended | Redis queue backend |
+| `aio-pika` | Optional | RabbitMQ queue backend |
+| `boto3` | Optional | SQS queue backend |
+
+## Problem
+
+Applications need to exchange messages between services, decouple producers from consumers, and handle backpressure, retries, and dead-letter routing. `oridecon-queue` provides a unified, DI-friendly abstraction over six queue backends — memory, Redis, RabbitMQ, Kafka, SQS, Azure Service Bus, and GCP Pub/Sub — so you can switch backends without changing application code.
+
+## Mental Model
+
+The queue system is structured around three layers:
+
+```
+┌──────────────┐    publish/subscribe     ┌──────────────┐
+│  Producer    │ ───────────────────────▶  │  Consumer    │
+│  (any code)  │    BusMessage(topic,     │  (handler)   │
+│              │      payload, headers)   │              │
+└──────────────┘                          └──────────────┘
+        │                                        ▲
+        │                                        │
+        ▼                                        │
+┌──────────────────────────────────────────────────┐
+│            QueueProtocol implementations          │
+│  ┌────────┐ ┌──────────┐ ┌───────┐ ┌─────────┐ │
+│  │ Memory │ │  Redis   │ │ Kafka │ │ RabbitMQ│ │ ...
+│  └────────┘ └──────────┘ └───────┘ └─────────┘ │
+│         Named multi-backend via DI               │
+└──────────────────────────────────────────────────┘
+```
+
+## Core Concepts
+
+### QueueProtocol
+
+`QueueProtocol` (from `oridecon.contracts.queue`) defines the interface every backend implements:
+
+```python
+class QueueProtocol:
+    async def connect(self) -> None: ...
+    async def close(self) -> None: ...
+    async def publish(self, topic: str, message: BusMessage) -> None: ...
+    async def subscribe(
+        self,
+        topic: str,
+        handler: Callable[[BusMessage], Coroutine],
+    ) -> None: ...
+    async def health_check(self, timeout: float = 5.0) -> HealthCheckResult: ...
+```
+
+### BusMessage
+
+Messages are `BusMessage` instances (from `oridecon.contracts.queue`):
+
+```python
+from oridecon.contracts.queue import BusMessage, DeliveryGuarantee
+
+msg = BusMessage(
+    topic="orders.created",
+    payload={"order_id": "ord-1"},
+    headers={"source": "api"},
+    delivery_guarantee=DeliveryGuarantee.AT_LEAST_ONCE,
+)
+```
+
+### QueueModule
+
+Use `QueueModule` to register backends into the DI container:
+
+```python
+from oridecon.queue import QueueModule
+from oridecon.queue.config import QueueConfig
+
+config = QueueConfig(backends=[...])
+module = QueueModule.configure(config)  # returns DynamicModule
+```
+
+### Named Multi-Backend
+
+You can run multiple queue backends in the same application. Each backend gets registered under its `name` using `Named()` injection:
+
+```python
+from typing import Annotated
+from oridecon.contracts.queue import QueueProtocol
+from oridecon.di.markers import Named
+
+
+class OrderService:
+    def __init__(
+        self,
+        primary: QueueProtocol,                              # primary backend
+        events: Annotated[QueueProtocol, Named("events")],   # named backend
+    ) -> None:
+        ...
+```
+
+The **primary** backend (marked `primary=True` or the first entry) also gets the unnamed `QueueProtocol` binding.
+
+### In-Process Publish Batching
+
+`BatchedPublisher` stages messages in memory and publishes them in a single `flush()` call:
+
+```python
+from oridecon.queue import BatchedPublisher
+from oridecon.contracts.queue import BusMessage
+
+
+publisher = BatchedPublisher(queue)
+publisher.stage("orders.created", BusMessage(topic="orders.created", payload=data))
+await publisher.flush()
+```
+
+**Note:** `BatchedPublisher` is in-memory only — staged entries are lost if the process restarts or the instance is discarded before `flush()`. For crash-safe publishing alongside database writes, use the durable SQL outbox inside your own database transaction instead: `OutboxStoreProtocol` from `oridecon.contracts.data.outbox`, implemented by `SQLOutboxStore`, with `OutboxPublisher` relaying pending rows after commit.
+
+### Dead Letter Queue
+
+`DeadLetterQueue` stores messages that exceeded their retry limit:
+
+```python
+from oridecon.queue import DeadLetterQueue
+
+
+dlq = DeadLetterQueue(queue, max_retries=3)
+dlq.monitor_failures()  # routes to DLQ topic
+```
+
+### Message Pipeline
+
+`MessagePipeline` chains middleware around message processing:
+
+```python
+from oridecon.queue import MessagePipeline, MiddlewareBase
+
+
+class LoggingMiddleware(MiddlewareBase):
+    async def __call__(self, message, next_handler):
+        logger.info("processing", message_id=message.id)
+        return await next_handler(message)
+
+
+pipeline = MessagePipeline([LoggingMiddleware()])
+```
+
+## Typical Usage
+
+```python
+import asyncio
+
+from oridecon import Application
+from oridecon.contracts.queue import BusMessage, QueueProtocol
+from oridecon.di.module import module, Module
+from oridecon.queue import QueueModule
+from oridecon.queue.config import QueueConfig, NamedQueueConfig
+
+
+config = QueueConfig(backends=[
+    NamedQueueConfig(name="default", driver="memory", primary=True),
+])
+
+
+@module(imports=[QueueModule.configure(config)])
+class AppModule(Module):
+    pass
+
+
+async def main() -> None:
+    async with Application.boot(name="app", modules=[AppModule]) as app:
+        queue = await app.container.resolve(QueueProtocol)
+
+        async def handler(msg: BusMessage) -> None:
+            print(f"Handled: {msg.payload}")
+
+        await queue.subscribe("notifications", handler)
+        await queue.publish("notifications", BusMessage(
+            topic="notifications",
+            payload={"text": "Hello"},
+        ))
+        await asyncio.sleep(0.1)
+
+
+asyncio.run(main())
+```
+
+## Best Practices
+
+- **Always subscribe before publishing** in the same process to avoid race conditions (in-memory backend).
+- **Use named backends** when different message types have different delivery requirements (e.g., Redis for fast notifications, Kafka for durable event streaming).
+- **Set `max_retries`** per backend to control dead-letter behavior.
+- **Wrap cleanup in `try/finally`** when manually managing `QueueProtocol` lifecycle.
+- **Use `TransactionOutbox`** for reliable multi-service message emission.

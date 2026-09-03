@@ -1,0 +1,172 @@
+from __future__ import annotations
+
+import pytest
+
+from oridecon.di.container.container import Container
+from oridecon.secrets.config import SecretsConfig
+from oridecon.secrets.di.provider import SecretsProvider
+from oridecon.secrets.module import SecretsModule
+from oridecon.secrets.types import RotatableSecretStoreProtocol
+
+
+@pytest.mark.asyncio
+async def test_provider_registers_store() -> None:
+    config = SecretsConfig(backend_type="memory")
+    provider = SecretsProvider(config=config)
+    container = Container()
+
+    await provider.register(container)
+    container.freeze()
+
+    store = await container.resolve(RotatableSecretStoreProtocol)
+    assert store is not None
+    await store.set("key", "val")
+    result = await store.get("key")
+    assert result == "val"
+
+
+@pytest.mark.asyncio
+async def test_provider_memory_backend_is_real_store_not_test_fake() -> None:
+    """The memory backend is the runtime store, never the testing fake."""
+    from oridecon.secrets.backends.memory import InMemoryRotatableSecretStore
+
+    config = SecretsConfig(backend_type="memory")
+    provider = SecretsProvider(config=config)
+    container = Container()
+
+    await provider.register(container)
+    container.freeze()
+
+    store = await container.resolve(RotatableSecretStoreProtocol)
+    assert isinstance(store, InMemoryRotatableSecretStore)
+    assert type(store).__module__ != "oridecon.testing.fakes"
+
+
+@pytest.mark.asyncio
+async def test_provider_boot_creates_decorator() -> None:
+    config = SecretsConfig(backend_type="memory")
+    provider = SecretsProvider(config=config)
+    container = Container()
+
+    await provider.register(container)
+    container.freeze()
+    await provider.boot(container)
+
+    from oridecon.secrets.rotation import RotationDecorator
+
+    decorator = await container.resolve(RotationDecorator)
+    assert decorator is not None
+
+
+@pytest.mark.asyncio
+async def test_provider_disabled_skips_registration() -> None:
+    config = SecretsConfig(enabled=False)
+    provider = SecretsProvider(config=config)
+    container = Container()
+
+    await provider.register(container)
+    container.freeze()
+
+    with pytest.raises(Exception):
+        await container.resolve(RotatableSecretStoreProtocol)
+
+
+@pytest.mark.asyncio
+async def test_provider_with_tenant() -> None:
+    config = SecretsConfig(backend_type="memory", tenant_id="myapp")
+    provider = SecretsProvider(config=config)
+    container = Container()
+
+    await provider.register(container)
+    container.freeze()
+
+    store = await container.resolve(RotatableSecretStoreProtocol)
+    await store.set("key", "val")
+    assert await store.get("key") == "val"
+
+    from oridecon.secrets.tenancy import TenantScopedSecretStore
+
+    assert isinstance(store, TenantScopedSecretStore)
+
+
+@pytest.mark.asyncio
+async def test_provider_from_config() -> None:
+    config = SecretsConfig(backend_type="memory")
+    provider = SecretsProvider.from_config(config=config)
+    container = Container()
+    await provider.register(container)
+    container.freeze()
+    store = await container.resolve(RotatableSecretStoreProtocol)
+    assert store is not None
+
+
+@pytest.mark.asyncio
+async def test_provider_health_check() -> None:
+    config = SecretsConfig(backend_type="memory")
+    provider = SecretsProvider(config=config)
+    result = await provider.health_check()
+    assert result.status == "healthy"
+    assert result.component == "secrets"
+
+
+@pytest.mark.asyncio
+async def test_module_configure_returns_dynamic_module() -> None:
+    config = SecretsConfig(backend_type="memory")
+    dynamic = SecretsModule.configure(config=config)
+    assert dynamic.module is SecretsModule
+    assert len(dynamic.providers) == 1
+    assert isinstance(dynamic.providers[0], SecretsProvider)
+
+
+@pytest.mark.asyncio
+async def test_module_stub() -> None:
+    dynamic = SecretsModule.stub()
+    assert dynamic.module is SecretsModule
+    assert len(dynamic.providers) == 1
+
+
+@pytest.mark.asyncio
+async def test_module_configure_default_config() -> None:
+    dynamic = SecretsModule.configure()
+    assert dynamic.module is SecretsModule
+    assert len(dynamic.providers) == 1
+
+
+@pytest.mark.asyncio
+async def test_provider_shutdown() -> None:
+    config = SecretsConfig(backend_type="memory")
+    provider = SecretsProvider(config=config)
+    container = Container()
+    await provider.register(container)
+    container.freeze()
+    await provider.boot(container)
+    await provider.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_provider_with_store_override() -> None:
+    from oridecon.testing.fakes import FakeRotatableSecretStore
+
+    store = FakeRotatableSecretStore()
+    await store.set("pre", "loaded")
+    config = SecretsConfig(enabled=True)
+    provider = SecretsProvider(config=config, store=store)
+    container = Container()
+    await provider.register(container)
+    container.freeze()
+    resolved = await container.resolve(RotatableSecretStoreProtocol)
+    result = await resolved.get("pre")
+    assert result == "loaded"
+
+
+@pytest.mark.asyncio
+async def test_vault_backend_empty_token_raises_at_register() -> None:
+    from oridecon.secrets.exceptions import SecretConfigError
+
+    config = SecretsConfig(backend_type="vault", backend_options={"url": "http://x"})
+    provider = SecretsProvider(config=config)
+    container = Container()
+
+    with pytest.raises(SecretConfigError) as excinfo:
+        await provider.register(container)
+    assert "token" in str(excinfo.value)

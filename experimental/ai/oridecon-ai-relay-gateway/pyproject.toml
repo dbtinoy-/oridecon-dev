@@ -1,0 +1,142 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "oridecon-ai-relay-gateway"
+version = "0.1.5008"
+description = "Protocol-facing relay gateway for the Oridecon AI relay — channel selection, orchestration, upstream I/O, and SSE handling"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+keywords = ["oridecon", "relay", "gateway", "proxy", "ai", "framework", "async", "python"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Framework :: AsyncIO",
+    "Typing :: Typed",
+]
+authors = [{ name = "Oridecon Framework Team", email = "team@oridecon.dev" }]
+maintainers = [{ name = "Oridecon Framework Team", email = "team@oridecon.dev" }]
+dependencies = [
+    "oridecon-contracts>=0.1.4",
+    "oridecon>=0.1.4",
+    "starlette>=0.28.0",
+    "orjson>=3.9.0",
+]
+[project.urls]
+Homepage = "https://oridecon.dev"
+Repository = "https://github.com/dbtinoy-/oridecon"
+Documentation = "https://docs.oridecon.dev"
+Issues = "https://github.com/dbtinoy-/oridecon/issues"
+Changelog = "https://github.com/dbtinoy-/oridecon/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+redis = [
+    "redis>=5.0.0",
+]
+test = [
+    "oridecon-testing>=0.1.4",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+]
+dev = [
+    "ruff>=0.8.0",
+    "mypy>=1.0.0",
+]
+
+[project.entry-points."oridecon.providers"]
+relay-gateway = "oridecon.ai.relay.gateway.di.provider:RelayGatewayProvider"
+
+[project.entry-points."oridecon.web.contributors"]
+relay-gateway = "oridecon.ai.relay.gateway.web.contributor:RelayGatewayWebContributor"
+
+[project.entry-points."oridecon.ai.subsystems"]
+relay-gateway = "oridecon.ai.relay.gateway.di.provider:RelayGatewayProvider"
+
+[project.entry-points."oridecon.ai.modules"]
+relay-gateway = "oridecon.ai.relay.gateway.module:RelayGatewayModule"
+
+[project.entry-points."oridecon.admin.contributors"]
+relay-gateway = "oridecon.ai.relay.gateway.admin.contributor:RelayGatewayAdminContributor"
+
+[dependency-groups]
+dev = ["ruff>=0.8.0", "mypy>=1.0.0"]
+test = [
+    "oridecon-testing>=0.1.4",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/oridecon"]
+
+[tool.uv.sources]
+oridecon = { workspace = true }
+oridecon-contracts = { workspace = true }
+oridecon-testing = { workspace = true }
+
+[tool.mypy]
+python_version = "3.13"
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = ["src"]
+disable_error_code = ["attr-defined", "unused-ignore", "unreachable", "no-untyped-def", "type-arg", "misc", "arg-type", "assignment", "return-value", "override", "call-arg", "no-any-return", "operator", "dict-item", "import-not-found"]
+ignore_missing_imports = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+strict = true
+overrides = [
+    { module = "tests.*", ignore_errors = true },
+]
+
+[tool.ruff]
+extend = "../../../pyproject.toml"
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "TID252"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.isort]
+known-first-party = ["oridecon"]
+force-sort-within-sections = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = [
+    "--cov=oridecon.ai.relay.gateway",
+    "--cov-report=term",
+    "--cov-report=html",
+    "--cov-fail-under=60",
+]
+markers = [
+    "integration: mark a test as an integration test",
+    "relay: marks relay gateway tests",
+    "scenario: marks cross-package scenario integration tests",
+]

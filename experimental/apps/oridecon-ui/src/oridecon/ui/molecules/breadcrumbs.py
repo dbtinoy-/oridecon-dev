@@ -1,0 +1,86 @@
+from __future__ import annotations
+
+from typing import Any
+
+from oridecon.ui.core.base import Component, el
+
+
+class Breadcrumbs(Component):
+    """
+    Breadcrumb navigation component with home icon.
+
+    Args:
+        items: List of dicts with 'label' and 'url'
+        home_url: URL for the home icon link.
+    """
+
+    def __init__(
+        self,
+        items: list[dict[str, str]],
+        home_url: str = "/admin",
+        **props: Any,
+    ) -> None:
+        super().__init__(**props)
+        self.items = items
+        self.home_url = home_url
+
+    def render(self) -> Any:
+        from oridecon.ui.atoms.icons import get_icon
+
+        return el(
+            "nav",
+            {"class": "flex", "aria-label": "Breadcrumb"},
+            el(
+                "ol",
+                {"class": "flex items-center space-x-4"},
+                # Home Icon
+                el(
+                    "li",
+                    el(
+                        "div",
+                        el(
+                            "a",
+                            get_icon(
+                                "home",
+                                class_name="h-5 w-5 flex-shrink-0",
+                                aria_hidden="true",
+                            ),
+                            href=self.home_url,
+                            class_="text-muted-foreground hover:text-foreground transition-colors",
+                        ),
+                    ),
+                ),
+                # Breadcrumb Items
+                *[
+                    el(
+                        "li",
+                        el(
+                            "div",
+                            {"class": "flex items-center"},
+                            get_icon(
+                                "chevron-right",
+                                class_name="h-5 w-5 flex-shrink-0 text-muted-foreground",
+                                aria_hidden="true",
+                            ),
+                            el(
+                                "a" if item.get("url") else "span",
+                                item["label"],
+                                class_=f"ml-4 text-sm font-medium transition-colors {'text-muted-foreground hover:text-foreground' if i < len(self.items) - 1 else 'text-foreground cursor-default'}",
+                                **(
+                                    {
+                                        "href": item["url"],
+                                        "hx_get": item["url"],
+                                        "hx_target": "#main-content",
+                                        "hx_swap": "innerHTML",
+                                        "hx_push_url": "true",
+                                    }
+                                    if item.get("url")
+                                    else {}
+                                ),
+                            ),
+                        ),
+                    )
+                    for i, item in enumerate(self.items)
+                ],
+            ),
+        )

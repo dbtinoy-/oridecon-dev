@@ -182,7 +182,7 @@ smoke-examples: ## Import standalone demo entry points without binding ports
 demos-up: ## Start the demo hub (all demos embedded) at http://127.0.0.1:7000
 	@mkdir -p .cache/demo-logs .cache/demo-pids
 	@cd examples/demo-hub && \
-		LEX_WEB__SERVER__HOST=0.0.0.0 PYTHONPATH=src nohup $(CURDIR)/.venv/bin/python -m demo_hub \
+		WEB__SERVER__HOST=0.0.0.0 PYTHONPATH=src nohup $(CURDIR)/.venv/bin/python -m demo_hub \
 		>> $(CURDIR)/.cache/demo-logs/demo_hub.log 2>&1 & \
 		echo $$! > $(CURDIR)/.cache/demo-pids/demo_hub.pid; \
 		echo "started demo_hub :7000 (booting 23 demos)"

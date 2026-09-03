@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <link rel="icon" href="/static/icon.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <title>Feedback Loop</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<nav class="demo-nav">
+  <a href="/" class="nav-brand">Oridecon</a>
+  <span class="nav-demo">Feedback Loop</span>
+  <div class="nav-links">
+    <a href="https://oridecon.dev" target="_blank" rel="noopener">Docs</a>
+    <a href="https://github.com/dbtinoy-/oridecon" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</nav>
+
+  <header>
+    <h1>Feedback Loop</h1>
+    <p class="muted">No model call — canned Q&A, low ratings promote to regression dataset.</p>
+  </header>
+  <main>
+    <section id="console">
+      <div id="questions"></div>
+      <form id="ask-form">
+        <select id="rating">
+          <option value="5">★★★★★ helpful</option>
+          <option value="4">★★★★ ok</option>
+          <option value="3">★★★ meh</option>
+          <option value="2">★★ poor</option>
+          <option value="1">★ bad</option>
+        </select>
+        <button type="submit" id="rate-btn" disabled>Rate last answer</button>
+      </form>
+      <div id="outcomes" aria-live="polite"></div>
+      <p id="error" class="hidden" role="alert"></p>
+    </section>
+    <aside>
+      <h2>Stats</h2>
+      <p id="stats" class="muted">no ratings yet</p>
+      <button type="button" id="regress-btn">Run regression</button>
+      <table><thead><tr><th>run</th><th>passed</th></tr></thead>
+        <tbody id="runs-body"></tbody></table>
+    </aside>
+  </main>
+  <script src="/static/app.js"></script>
+  <footer class="demo-footer">
+    <span>Powered by <a href="https://oridecon.dev" target="_blank" rel="noopener">Oridecon</a></span>
+  </footer>
+</body>
+</html>

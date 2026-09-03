@@ -1,0 +1,208 @@
+"""Resource form display modes must select the configured UI path."""
+
+from __future__ import annotations
+
+from pydantic import BaseModel
+from starlette.requests import Request
+
+from oridecon.admin.config import AdminConfig
+from oridecon.admin.engine.renderer import AdminRenderer
+from oridecon.admin.resources.base import Resource
+from oridecon.admin.resources.form_renderer import FormRenderer
+
+
+def _request(target: str) -> Request:
+    scope = {
+        "type": "http",
+        "method": "GET",
+        "path": "/admin/widgets/create",
+        "raw_path": b"/admin/widgets/create",
+        "query_string": b"",
+        "headers": [(b"hx-target", target.encode())],
+        "scheme": "http",
+        "server": ("testserver", 80),
+        "client": ("127.0.0.1", 1234),
+        "asgi": {"version": "3.0", "spec_version": "2.0"},
+        "path_params": {},
+        "state": {},
+        "app": None,
+        "session": {},
+    }
+    return Request(scope)
+
+
+class _Widget(BaseModel):
+    name: str
+
+
+class _ModalResource(Resource):
+    name = "modal_widgets"
+    model = _Widget
+    form_display_mode = "modal"
+
+
+class _PageResource(Resource):
+    name = "page_widgets"
+    model = _Widget
+    form_display_mode = "page"
+
+
+async def _render(resource: type[Resource], target: str) -> str:
+    renderer = FormRenderer(
+        AdminConfig(prefix="/admin", title="Test"),
+        resource.name or "widgets",
+        AdminRenderer(),
+    )
+    response = await renderer.render_create(_request(target), resource)
+    return response.body.decode("utf-8", "replace")
+
+
+async def test_modal_mode_renders_bound_modal_footer() -> None:
+    html = await _render(_ModalResource, "#modal-container")
+
+    assert 'role="dialog"' in html
+    assert 'hx-target="#modal-container"' in html
+    assert 'form="modal_widgets-create-form"' in html
+    assert html.count('type="submit"') == 1
+    assert 'data-admin-form="true"' in html
+
+
+async def test_page_mode_does_not_emit_overlay_htmx_submission() -> None:
+    # A stale HX target must not turn a configured page form into a drawer.
+    html = await _render(_PageResource, "#slide-over-container")
+
+    assert "Create Page Widgets" in html
+    assert 'action="/admin/page_widgets/create"' in html
+    assert 'hx-post="/admin/page_widgets/create"' not in html
+    assert 'id="modal-title-' not in html
+    assert 'aria-labelledby="slide-over-title"' not in html
+
+
+async def test_form_urls_follow_the_request_prefix() -> None:
+    request = _request("#slide-over-container")
+    request.scope["headers"] = []
+    request.scope["admin_prefix"] = "/backoffice"
+    renderer = FormRenderer(
+        AdminConfig(prefix="/admin", title="Test"),
+        "page_widgets",
+        AdminRenderer(),
+    )
+
+    response = await renderer.render_create(request, _PageResource)
+    html = response.body.decode("utf-8", "replace")
+
+    assert 'action="/backoffice/page_widgets/create"' in html
+    assert 'href="/backoffice/page_widgets"' in html
+    assert "/admin/page_widgets/create" not in html
+
+
+async def test_form_level_errors_are_rendered_for_generated_forms() -> None:
+    request = _request("#slide-over-container")
+    renderer = FormRenderer(
+        AdminConfig(prefix="/admin", title="Test"),
+        "page_widgets",
+        AdminRenderer(),
+    )
+
+    response = await renderer.render_create(
+        request,
+        _PageResource,
+        errors={"__all__": ["The record could not be saved."]},
+        data={"name": "Draft"},
+    )
+    html = response.body.decode("utf-8", "replace")
+
+    assert 'role="alert"' in html
+    assert "The record could not be saved." in html
+
+
+async def test_wizard_urls_follow_the_request_prefix() -> None:
+    request = _request("#main-content")
+    request.scope["headers"] = []
+    request.scope["admin_prefix"] = "/backoffice"
+    renderer = FormRenderer(
+        AdminConfig(prefix="/admin", title="Test"),
+        "page_widgets",
+        AdminRenderer(),
+    )
+
+    response = await renderer.render_wizard(
+        request,
+        _PageResource,
+        [{"title": "Details", "fields": ["name"]}],
+        action_url="/admin/page_widgets/create",
+    )
+    html = response.body.decode("utf-8", "replace")
+
+    assert 'action="/backoffice/page_widgets/create"' in html
+    assert 'hx-post="/backoffice/page_widgets/create"' in html
+    assert 'href="/backoffice/page_widgets"' in html
+    assert 'name="csrf_token"' in html
+    assert 'data-admin-form="true"' in html
+    assert "data-admin-form-status" in html
+    assert "data-admin-form-actions" in html
+    assert 'role="progressbar"' in html
+    assert "/admin/page_widgets" not in html
+
+
+class _NoFieldView:
+    async def can_view_field(self, user, resource, field):
+        return False
+
+    async def can_edit_field(self, user, resource, field):
+        return False
+
+
+async def test_wizard_preserves_values_errors_and_field_permissions() -> None:
+    request = _request("#main-content")
+    renderer = FormRenderer(
+        AdminConfig(prefix="/admin", title="Test"),
+        "page_widgets",
+        AdminRenderer(),
+    )
+
+    response = await renderer.render_wizard(
+        request,
+        _PageResource,
+        [{"title": "Details", "fields": ["name"]}],
+        action_url="/admin/page_widgets/create",
+        data={"name": "Draft"},
+        errors={"name": ["Name is required."]},
+    )
+    html = response.body.decode("utf-8", "replace")
+    assert 'name="name"' in html
+    assert 'value="Draft"' in html
+    assert "Name is required." in html
+
+    denied_renderer = FormRenderer(
+        AdminConfig(prefix="/admin", title="Test"),
+        "page_widgets",
+        AdminRenderer(),
+        permission_service=_NoFieldView(),
+    )
+    denied = await denied_renderer.render_wizard(
+        request,
+        _PageResource,
+        [{"title": "Details", "fields": ["name"]}],
+        action_url="/admin/page_widgets/create",
+        user=object(),
+    )
+    assert 'name="name"' not in denied.body.decode("utf-8", "replace")
+
+
+async def test_empty_wizard_definition_returns_accessible_error() -> None:
+    request = _request("#main-content")
+    renderer = FormRenderer(
+        AdminConfig(prefix="/admin", title="Test"),
+        "page_widgets",
+        AdminRenderer(),
+    )
+
+    response = await renderer.render_wizard(
+        request, _PageResource, [], action_url="/admin/page_widgets/create"
+    )
+
+    assert response.status_code == 422
+    html = response.body.decode("utf-8", "replace")
+    assert 'role="alert"' in html
+    assert "no configured steps" in html

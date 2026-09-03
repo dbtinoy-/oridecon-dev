@@ -1,0 +1,193 @@
+"""MailerProvider — DI provider for email delivery backends."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
+from oridecon.contracts.core import HealthCheckResult, HealthStatus, ProviderPriority
+from oridecon.contracts.mailer.protocols import MailerProtocol
+from oridecon.di.provider import Provider
+from oridecon.logging import get_logger
+from oridecon.notification.config import (
+    MailerConfig,
+    NamedMailerConfig,
+)
+from oridecon.notification.mailer.backends.registry import MailerBackendRegistry
+
+if TYPE_CHECKING:
+    from oridecon.contracts.core.di import (
+        ContainerRegistrarProtocol,
+        ContainerResolverProtocol,
+    )
+
+logger = get_logger(__name__)
+
+
+class MailerProvider(Provider):
+    """Register SMTP and SendGrid mailer backends into the DI container.
+
+    Reads :class:`~oridecon.notification.config.MailerConfig`, creates the
+    appropriate mailer backends, and registers them as
+    :class:`~oridecon.contracts.mailer.protocols.MailerProtocol`.
+
+    Dual-mode configuration: an explicit ``config`` wins; otherwise the
+    typed ``mailer`` yaml section injected by the orchestrator (via
+    ``config_key``) is used; otherwise defaults apply.
+
+    Supports multi-backend (``MailerConfig.backends``) mode. Each entry is
+    registered under its name via ``container.singleton(name=entry.name)``.
+    The primary backend (``primary=True`` or the first entry) also receives
+    the unnamed binding for constructor injection without ``Named``.
+    """
+
+    name = "mailer"
+    priority = ProviderPriority.INFRASTRUCTURE
+    config_key: str | None = "mailer"
+    config_model: type | None = MailerConfig
+
+    def __init__(
+        self,
+        config: MailerConfig | None = None,
+        *,
+        backend_registry: MailerBackendRegistry | None = None,
+    ) -> None:
+        super().__init__()
+        self._requested_config = config
+        self._config: MailerConfig | None = config
+        self._backend_registry = (
+            backend_registry or MailerBackendRegistry.with_defaults()
+        )
+        self._mailers: list[tuple[str, Any]] = []
+
+    @classmethod
+    def from_config(cls, config: MailerConfig, **context: Any) -> MailerProvider:
+        """Factory method for DI container setup.
+
+        Args:
+            config: Mailer configuration.
+            **context: Ignored extra context.
+
+        Returns:
+            A new :class:`MailerProvider` instance.
+        """
+        return cls(config)
+
+    def _create_mailer(self, entry: NamedMailerConfig) -> Any:
+        """Instantiate the correct mailer implementation for a config entry.
+
+        Args:
+            entry: Named mailer configuration entry.
+
+        Returns:
+            A mailer instance conforming to :class:`MailerProtocol`.
+        """
+        return self._backend_registry.create_backend(entry.driver, entry)
+
+    async def register(self, container: ContainerRegistrarProtocol) -> None:
+        """Bind all mailer backends into the container.
+
+        When no backends are configured and ``console_fallback`` is enabled,
+        a :class:`~oridecon.notification.mailer.console_mailer.ConsoleMailer`
+        is bound as the default ``MailerProtocol`` so outgoing emails are
+        logged to the console instead of being silently dropped.
+
+        Args:
+            container: DI registrar received from the framework.
+        """
+        injected = self.config if isinstance(self.config, MailerConfig) else None
+        self._config = self._requested_config or injected or MailerConfig()
+        container.singleton(MailerConfig, self._config)
+
+        for entry in self._config.backends:
+            mailer = self._create_mailer(entry)
+            self._mailers.append((entry.name, mailer))
+            container.singleton(
+                MailerProtocol,
+                factory=lambda _resolver, m=mailer: m,
+                name=entry.name,
+            )
+            is_primary = entry.primary or (
+                not any(e.primary for e in self._config.backends)
+                and self._config.backends[0] is entry
+            )
+            if is_primary:
+                container.singleton(
+                    MailerProtocol, factory=lambda _resolver, m=mailer: m
+                )
+
+        if not self._config.backends and self._config.console_fallback:
+            from oridecon.notification.mailer.console_mailer import ConsoleMailer
+
+            console = ConsoleMailer()
+            self._mailers.append(("console", console))
+            container.singleton(
+                MailerProtocol,
+                factory=lambda _resolver, m=console: m,
+            )
+
+        logger.info(
+            "mailer_registered",
+            backends=[n for n, _ in self._mailers],
+        )
+
+    async def boot(self, container: ContainerResolverProtocol) -> None:
+        """No-op boot; mailers are stateless and require no startup.
+
+        Args:
+            container: DI resolver (unused).
+        """
+
+    async def shutdown(self) -> None:
+        """Clear registered mailer references."""
+        self._mailers.clear()
+
+    async def health_check(self, timeout: float = 5.0) -> HealthCheckResult:
+        """Aggregate health across all registered mailer backends.
+
+        Args:
+            timeout: Per-backend health-check timeout in seconds.
+
+        Returns:
+            :class:`~oridecon.contracts.core.HealthCheckResult`.
+        """
+        import asyncio
+
+        if not self._mailers:
+            return HealthCheckResult(
+                component="mailer",
+                status=HealthStatus.HEALTHY,
+                details={"backends": []},
+            )
+
+        results = await asyncio.gather(
+            *[
+                svc.health_check(timeout=timeout)
+                for _, svc in self._mailers
+                if hasattr(svc, "health_check")
+            ],
+            return_exceptions=True,
+        )
+        worst = HealthStatus.HEALTHY
+        details: dict[str, Any] = {}
+        for (name, _), result in zip(self._mailers, results, strict=False):
+            if isinstance(result, Exception):
+                worst = HealthStatus.UNHEALTHY
+                details[name] = {"status": "error", "error": str(result)}
+            elif isinstance(result, HealthCheckResult):
+                details[name] = {"status": result.status.value}
+                if result.status == HealthStatus.UNHEALTHY:
+                    worst = HealthStatus.UNHEALTHY
+                elif (
+                    result.status == HealthStatus.DEGRADED
+                    and worst == HealthStatus.HEALTHY
+                ):
+                    worst = HealthStatus.DEGRADED
+
+        return HealthCheckResult(
+            component="mailer",
+            status=worst,
+            details=details,
+        )
+
+
+__all__ = ["MailerProvider"]

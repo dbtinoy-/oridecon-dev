@@ -1,0 +1,124 @@
+"""Provider wiring for the content generation demo.
+
+Convention followed: **Provider pattern** — ``ContentGenProvider`` is the
+canonical shape (mirrors ``oridecon-auth`` + the boot-phase ``bind()``
+contract in ``oridecon.contracts.core.di``):
+
+- ``register()`` only *declares* bindings.  Zero-arg factories cover
+  purely config-derived services; dependency-full services are declared
+  as class bindings and instantiated in :meth:`boot`.
+- ``boot()`` resolves cross-module dependencies after every provider
+  has registered and rebinds the concrete instances via
+  ``container.bind()``.
+- Controllers are constructed by the router from the container; ``boot``
+  binds their prebuilt instances so per-request resolution reuses them.
+
+Lifecycle:
+  1. ``register()`` — declare bindings (no resolution)
+  2. ``boot()`` — resolve cross-module deps, create instances, bind
+  3. ``shutdown()`` — cleanup (not needed for in-memory stores)
+
+For full reference see:
+- ``oridecon.di.provider.Provider`` — base provider class
+- ``oridecon.contracts.core.di`` — container protocols
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from content_gen.config import ContentGenConfig
+from content_gen.controllers.api import ContentApiController
+from oridecon.contracts.core.health import (
+    HealthCheckCategory,
+    HealthCheckResult,
+    HealthStatus,
+)
+from oridecon.di.provider import Provider
+
+if TYPE_CHECKING:
+    from oridecon.contracts.core.di import (
+        ContainerRegistrarProtocol,
+        ContainerResolverProtocol,
+    )
+
+__all__ = ["ContentGenProvider"]
+
+
+class ContentGenProvider(Provider):
+    """Bind the content generation services as container-managed singletons.
+
+    This provider demonstrates the full lifecycle:
+    - ``register()`` declares the config and controller bindings
+    - ``boot()`` creates the LLM client and wires the services
+    - ``health_check()`` reports readiness status
+    """
+
+    name = "content_gen"
+
+    # Config binding — the framework injects the typed YAML section here
+    config_key: str | None = "content_gen"
+    config_model: type | None = ContentGenConfig
+
+    async def register(self, container: ContainerRegistrarProtocol) -> None:
+        """Declare bindings; concrete wiring happens in :meth:`boot`.
+
+        This method runs AFTER the framework has loaded the config.
+        ``self.config`` contains the typed ``ContentGenConfig`` instance
+        with YAML values + env overrides already merged.
+        """
+        cfg = self.config or ContentGenConfig()
+
+        # Bind the config as a singleton — other services can resolve it
+        container.singleton(ContentGenConfig, instance=cfg)
+
+        # Class bindings so the keys exist; boot() replaces them with
+        # fully-wired instances via container.bind().
+        container.singleton(ContentApiController, ContentApiController)
+
+    async def boot(self, container: ContainerResolverProtocol) -> None:
+        """Resolve cross-module dependencies and bind concrete instances.
+
+        This method runs AFTER all providers have registered.
+        Resolution is safe — all bindings are in place.
+        """
+        from content_gen.repository.fixtures import SCRIPTED_RESPONSES
+        from content_gen.repository.scripted_llm import ScriptedLLMClient
+        from content_gen.services.extractor import ProductExtractor
+        from content_gen.services.generator import ContentGenerator
+
+        cfg = await container.resolve(ContentGenConfig)
+
+        # Create the LLM client (scripted for demo/testing)
+        # In production, replace with a real client:
+        #   from oridecon.ai.llm import OllamaClient, ClientConfig
+        #   llm_client = OllamaClient(config=ClientConfig(model="llama3"))
+        llm_client = ScriptedLLMClient(responses=dict(SCRIPTED_RESPONSES))
+
+        # Create services — the generator handles prompt engineering,
+        # the extractor parses LLM responses into typed data
+        generator = ContentGenerator(
+            llm_client=llm_client,
+            default_style=cfg.default_style,
+            max_retries=cfg.max_retries,
+        )
+        extractor = ProductExtractor(llm_client=llm_client)
+
+        # Bind the wired controller — the router resolves this for
+        # every request, so per-request resolution reuses the same instance.
+        container.bind(
+            ContentApiController,
+            ContentApiController(generator=generator, extractor=extractor),
+        )
+
+    async def health_check(self, timeout: float = 5.0) -> HealthCheckResult:
+        """Report readiness of the content generator.
+
+        Called by the framework's health check system.  Return
+        HEALTHY if the service is ready to handle requests.
+        """
+        return HealthCheckResult(
+            component=self.name,
+            status=HealthStatus.HEALTHY,
+            category=HealthCheckCategory.READINESS,
+        )

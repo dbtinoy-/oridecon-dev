@@ -1,0 +1,32 @@
+"""Built-in authentication controller for Oridecon Admin (package facade).
+
+Implements login/logout, MFA challenge/setup, password reset, and
+registration/email-verification endpoints with standalone UI (no admin
+shell). Method implementations live in sibling mixin modules.
+"""
+
+from __future__ import annotations
+
+from oridecon.admin.controllers.auth.core import (
+    AuthCoreMixin,
+    _humanize_error,
+    logger,
+)
+from oridecon.admin.controllers.auth.login import AuthLoginMixin
+from oridecon.admin.controllers.auth.mfa import AuthMfaMixin
+from oridecon.admin.controllers.auth.password_reset import AuthPasswordResetMixin
+from oridecon.admin.controllers.auth.registration import AuthRegistrationMixin
+from oridecon.di.decorators import inject
+
+
+@inject
+class AuthController(
+    AuthLoginMixin,
+    AuthMfaMixin,
+    AuthPasswordResetMixin,
+    AuthRegistrationMixin,
+    AuthCoreMixin,
+):
+    """Built-in authentication controller for Oridecon Admin."""
+
+    prefix = ""

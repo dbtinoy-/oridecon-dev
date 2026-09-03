@@ -1,0 +1,305 @@
+"""Import actions (import, import bulk) with failed-import reports.
+
+Part of the ``oridecon.admin.actions.standard`` package.
+"""
+
+from __future__ import annotations
+
+import csv
+import io
+import re
+from typing import TYPE_CHECKING, Any
+
+from oridecon.admin.actions.base import BulkAction, HeaderAction
+from oridecon.admin.actions.exceptions import ActionError
+from oridecon.admin.actions.standard.utils import _resolve_data_source
+from oridecon.admin.actions.types import (
+    ActionColor,
+    ActionContext,
+)
+from oridecon.result import Err, Ok, Result
+
+if TYPE_CHECKING:
+    from oridecon.admin.services.import_ import AdminImportService
+
+_SAFE_FILENAME_CHARS = re.compile(r"[^A-Za-z0-9._-]+")
+_MAX_FILENAME_STEM = 100
+
+
+def _safe_filename_stem(source_filename: str) -> str:
+    """Derive a header-safe filename stem from an uploaded filename.
+
+    B18: upload filenames are attacker-influencable and end up inside
+    ``Content-Disposition: attachment; filename="…"``. Quotes, CR/LF, or
+    path separators there mean header breakage/injection. Allowlist to
+    ``[A-Za-z0-9._-]``, cap the length, and fall back to ``"import"``.
+
+    Args:
+        source_filename: Original uploaded filename (may be hostile).
+
+    Returns:
+        A safe, non-empty stem without the file extension.
+    """
+    stem = source_filename.rpartition(".")[0] or source_filename
+    cleaned = _SAFE_FILENAME_CHARS.sub("_", stem).strip("._") or "import"
+    return cleaned[:_MAX_FILENAME_STEM]
+
+
+async def _run_import(
+    service: AdminImportService,
+    content: bytes,
+    filename: str,
+    *,
+    dry_run: bool = False,
+) -> Result[Any, Any]:
+    """Parse and commit an import, returning the result summary.
+
+    With ``dry_run`` (R27), stop after the non-destructive parse step and
+    return a validation summary instead — nothing is written. Validation
+    errors are stored as a normal downloadable report.
+    """
+    parsed = await service.parse(content, filename)
+    if parsed.is_err():
+        return Err(parsed.unwrap_err())
+    job = parsed.unwrap()
+
+    if dry_run:
+        failed = len({e.row for e in job.errors})
+        valid = len(job.valid_rows)
+        payload: dict[str, Any] = {
+            "message": (
+                f"Validated {job.total_rows} row(s): {valid} ready to import, "
+                f"{failed} with error(s). Nothing was imported."
+            ),
+            "created": 0,
+            "failed": failed,
+            "total": job.total_rows,
+            "dry_run": True,
+        }
+        if failed:
+            report = service.store_validation_report(job)
+            stem = _safe_filename_stem(report.source_filename)
+            payload["report_id"] = report.id
+            payload["report_filename"] = f"{stem}-import-errors.csv"
+        return Ok(payload)
+
+    committed = await service.commit(job)
+    if committed.is_err():
+        return Err(committed.unwrap_err())
+    result = committed.unwrap()
+    payload = {
+        "message": f"Imported {result.created} of {result.total} record(s)",
+        "created": result.created,
+        "failed": result.failed,
+        "total": result.total,
+    }
+    if result.failed:
+        reports = service.reports()
+        if reports:
+            report = reports[-1]
+            stem = _safe_filename_stem(report.source_filename)
+            payload["report_id"] = report.id
+            payload["report_filename"] = f"{stem}-import-errors.csv"
+    return Ok(payload)
+
+
+class _ImportReportMixin:
+    """Shared failed-import report download helpers for import actions.
+
+    Depends on ``self._import_service`` (an :class:`AdminImportService`
+    with stored reports).
+    """
+
+    _import_service: AdminImportService | None = None
+
+    def report_csv(self, report_id: str) -> str | None:
+        """Return CSV content of a stored failed-import report.
+
+        Args:
+            report_id: Report identifier from the import service.
+
+        Returns:
+            CSV content, or None when no service is configured or the
+            report id is unknown.
+        """
+        service = self._import_service
+        if service is None:
+            return None
+        report = service.get_report(report_id)
+        if report is None:
+            return None
+        return report.to_csv()
+
+    def report_filename(self, report_id: str) -> str | None:
+        """Derive a download filename for a stored failed-import report.
+
+        Args:
+            report_id: Report identifier from the import service.
+
+        Returns:
+            ``{source}-import-errors.csv`` filename, or None when no
+            service is configured or the report id is unknown.
+        """
+        service = self._import_service
+        if service is None:
+            return None
+        report = service.get_report(report_id)
+        if report is None:
+            return None
+        stem = _safe_filename_stem(report.source_filename)
+        return f"{stem}-import-errors.csv"
+
+
+class ImportAction(_ImportReportMixin, HeaderAction):
+    """Import records into a resource through the admin import service."""
+
+    #: File extensions the admin import service can parse.
+    DEFAULT_ACCEPT_EXTENSIONS = (".csv", ".json", ".jsonl", ".xlsx")
+
+    def __init__(
+        self,
+        name: str = "import",
+        label: str | None = None,
+        import_service: AdminImportService | None = None,
+        data_source: Any | None = None,
+        file_content: bytes | None = None,
+        filename: str | None = None,
+        example_columns: list[str] | None = None,
+        example_filename: str = "import-example.csv",
+        accept_extensions: list[str] | None = None,
+    ) -> None:
+        super().__init__(
+            name=name,
+            label=label or "Import",
+            icon="upload",
+            color=ActionColor.GRAY,
+        )
+        self._import_service = import_service
+        self._data_source = data_source
+        self._file_content = file_content
+        self._filename = filename
+        self._example_columns = example_columns or []
+        self._example_filename = example_filename
+        self._accept_extensions = list(
+            accept_extensions or self.DEFAULT_ACCEPT_EXTENSIONS
+        )
+
+    def _get_htmx_attrs(
+        self, url: str, record: None, ctx: ActionContext
+    ) -> dict[str, str]:
+        """Render as a file-upload trigger instead of an htmx GET.
+
+        B31: the inherited default rendered ``hx-get {prefix}/import``
+        into the data zone — a route that did not exist, so clicking
+        Import swapped a 404 into the table. Both the toolbar and the
+        default :meth:`render_button` consume these attributes, handing
+        off to the shared ``OrideconImportUpload`` script, which opens a
+        file picker and POSTs the file to the upload route.
+        """
+        return {
+            "type": "button",
+            "data_import_upload_url": url,
+            "data_import_accept": ",".join(self._accept_extensions),
+            "onclick": "return window.OrideconImportUpload(this);",
+        }
+
+    def example_csv(self) -> str:
+        """Build a header-only example CSV from ``example_columns``.
+
+        Returns an empty string when no example columns are configured.
+        """
+        if not self._example_columns:
+            return ""
+        buffer = io.StringIO()
+        writer = csv.writer(buffer, lineterminator="\n")
+        writer.writerow(self._example_columns)
+        return buffer.getvalue()
+
+    @property
+    def example_filename(self) -> str:
+        """Download filename for the example CSV template."""
+        return self._example_filename
+
+    async def execute(self, record: None, ctx: ActionContext) -> Result[Any, Any]:
+        content = self._file_content or ctx.metadata.get("file_content")
+        if content is None:
+            return Err(
+                ActionError(
+                    "Import requires file content; pass file_content to the action "
+                    "or set ctx.metadata['file_content']."
+                )
+            )
+        filename = self._filename or ctx.metadata.get("filename") or "import.csv"
+        service = self._import_service
+        if service is None:
+            data_source = _resolve_data_source(ctx, self._data_source)
+            if data_source is None:
+                return Err(
+                    ActionError(
+                        "Import requires an AdminImportService or a data source; "
+                        "inject one or set ctx.data_source."
+                    )
+                )
+            from oridecon.admin.services.import_ import AdminImportService
+
+            service = AdminImportService(data_source=data_source)
+            # B19: keep the lazily created service so failed-import
+            # reports advertised via report_id stay downloadable through
+            # report_csv()/report_filename() after this request.
+            self._import_service = service
+        dry_run = bool(ctx.metadata.get("dry_run"))
+        return await _run_import(service, content, filename, dry_run=dry_run)
+
+
+class ImportBulkAction(_ImportReportMixin, BulkAction):
+    """Import multiple records through the admin import service."""
+
+    def __init__(
+        self,
+        name: str = "import",
+        label: str | None = None,
+        import_service: AdminImportService | None = None,
+        data_source: Any | None = None,
+        file_content: bytes | None = None,
+        filename: str | None = None,
+    ) -> None:
+        super().__init__(
+            name=name,
+            label=label or "Import Selected",
+            icon="upload",
+            color=ActionColor.GRAY,
+        )
+        self._import_service = import_service
+        self._data_source = data_source
+        self._file_content = file_content
+        self._filename = filename
+
+    async def execute(self, records: list[Any], ctx: ActionContext) -> Result[Any, Any]:
+        content = self._file_content or ctx.metadata.get("file_content")
+        if content is None:
+            return Err(
+                ActionError(
+                    "Import requires file content; pass file_content to the action "
+                    "or set ctx.metadata['file_content']."
+                )
+            )
+        filename = self._filename or ctx.metadata.get("filename") or "import.csv"
+        service = self._import_service
+        if service is None:
+            data_source = _resolve_data_source(ctx, self._data_source)
+            if data_source is None:
+                return Err(
+                    ActionError(
+                        "Import requires an AdminImportService or a data source; "
+                        "inject one or set ctx.data_source."
+                    )
+                )
+            from oridecon.admin.services.import_ import AdminImportService
+
+            service = AdminImportService(data_source=data_source)
+            # B19: keep the lazily created service so failed-import
+            # reports advertised via report_id stay downloadable through
+            # report_csv()/report_filename() after this request.
+            self._import_service = service
+        dry_run = bool(ctx.metadata.get("dry_run"))
+        return await _run_import(service, content, filename, dry_run=dry_run)

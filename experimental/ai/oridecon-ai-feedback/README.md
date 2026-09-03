@@ -1,0 +1,169 @@
+# oridecon-ai-feedback
+
+AI feedback collection for the Oridecon Framework — collection, processing, and storage
+
+---
+
+## Overview
+
+AI feedback collection and continuous-learning loop for the Oridecon Framework. Captures user ratings, corrections, text feedback, and ground-truth labels from LLM interactions and routes them through an extensible processor pipeline to configurable storage backends. Zero-config usage starts with sensible defaults.
+
+
+> Full documentation: [docs.oridecon.dev](https://docs.oridecon.dev)
+## Install
+
+```bash
+uv add oridecon-ai-feedback
+```
+
+## Quick Start
+
+```python
+from oridecon import Application
+from oridecon.di.module import Module, module
+
+from oridecon.ai.feedback import FeedbackModule
+from oridecon.ai.feedback.config import FeedbackConfig
+
+
+@module(
+    imports=[
+        FeedbackModule.configure(
+            FeedbackConfig(
+                enabled=True,
+                async_processing=True,
+                store_raw_payloads=False,
+            )
+        )
+    ]
+)
+class AppModule(Module):
+    pass
+
+
+async with Application.boot(modules=[AppModule]) as app:
+    # use app.container to resolve services
+    ...
+```
+
+## Configuration
+
+> **Zero-config usage:** Call `FeedbackModule.configure()` with no arguments to use defaults.
+
+### Option 1 — YAML file
+
+```yaml
+# application.yaml
+ai_feedback:
+  enabled: true
+  async_processing: true
+  store_raw_payloads: false
+```
+
+### Option 2 — Profiles + Environment Variables *(recommended)*
+
+```bash
+export ORI_AI_FEEDBACK__ENABLED=true
+# Environment variables for each field
+```
+
+### Option 3 — Python
+
+```python
+from oridecon.ai.feedback.config import FeedbackConfig
+from oridecon.ai.feedback import FeedbackModule
+
+config = FeedbackConfig(
+    enabled=True,
+    async_processing=True,
+    store_raw_payloads=False,
+)
+FeedbackModule.configure(config)
+```
+
+### Config reference
+
+| Field | Default | Env var | Description |
+|-------|---------|---------|-------------|
+| `enabled` | `True` | `ORI_AI_FEEDBACK__ENABLED` | Master on/off switch for all feedback collection |
+| `async_processing` | `True` | `ORI_AI_FEEDBACK__ASYNC_PROCESSING` | Process feedback handlers asynchronously in the background |
+| `store_raw_payloads` | `False` | `ORI_AI_FEEDBACK__STORE_RAW_PAYLOADS` | Persist raw incoming feedback payloads for auditing |
+
+## Module Factory Methods
+
+| Method | Description |
+|--------|-------------|
+| `FeedbackModule.configure(config)` | Configure with explicit config |
+| `FeedbackModule.stub()` | Minimal config for testing |
+
+## Key Features
+
+- **Four feedback types**: Rating, free-text, correction (original → corrected), and ground-truth labels
+- **Extensible processor pipeline**: Custom processors via `FeedbackProcessorRegistry`
+- **Storage backends**: In-memory, database (`DatabaseFeedbackStore`), and cache (`CachedFeedbackStore`)
+- **Middleware integration**: `FeedbackMiddleware` and `FeedbackContext` for request/response capture
+- **Lifecycle hooks**: `FeedbackSubmittedHook`, `FeedbackProcessedHook`, `FeedbackStoredHook`
+
+## Security
+
+### Enforced payload size limits
+
+Submitted feedback is validated at the submission chokepoints
+(`FeedbackCollector._store()` for the middleware/processor pipeline and
+the `collect_*` API; `FeedbackService.submit_feedback()` for the
+programmatic service). Oversized payloads are **rejected** with
+`FeedbackTooLargeError` (never silently truncated); boundary values
+(exactly at the limit) pass.
+
+| Limit | Constant | Applied to |
+|-------|----------|------------|
+| 10,000 characters | `MAX_FEEDBACK_TEXT_LENGTH` | `TEXT` feedback values and `submit_feedback(comment=...)` |
+| 50,000 characters (serialized JSON) | `MAX_CONTEXT_SIZE` | `context` and `metadata` dicts |
+
+### Optional endpoint authorization
+
+`create_feedback_endpoint()` performs **no identity check by default** —
+an endpoint mounted without an `authorize` callback accepts feedback from
+anyone who can reach it; that is an explicit, informed choice, not an
+enforced control. Pass an authorization callback to gate submissions:
+
+```python
+from oridecon.ai.feedback import FeedbackCollector, FeedbackMiddleware
+
+
+def authorize(ctx) -> bool:
+    # ctx.context_id is the context being submitted against;
+    # ctx.metadata carries what the host framework supplied (e.g. user)
+    return ctx.metadata.get("user_id") is not None
+
+
+middleware = FeedbackMiddleware(
+    collector=FeedbackCollector(),
+    authorize=authorize,
+)
+app.post("/feedback", middleware.create_feedback_endpoint())
+```
+
+Sync and async (`bool | Awaitable[bool]`) callables are supported. A
+denied submission raises `FeedbackAuthorizationError` before any
+processing.
+
+## Testing
+
+```python
+async with Application.boot(modules=[FeedbackModule.stub()]) as app:
+    # your test code
+    ...
+```
+
+## Key Source Files
+
+| File | What it contains |
+|------|-----------------|
+| `src/oridecon/ai/feedback/module.py` | `FeedbackModule.configure()`, `.stub()` |
+| `src/oridecon/ai/feedback/config.py` | `FeedbackConfig` |
+| `src/oridecon/ai/feedback/services/collector.py` | `FeedbackCollector` core service |
+| `src/oridecon/ai/feedback/storage/database.py` | `DatabaseFeedbackStore` |
+| `src/oridecon/ai/feedback/storage/cache.py` | `CachedFeedbackStore` |
+| `src/oridecon/ai/feedback/processors/processor_registry.py` | `FeedbackProcessorRegistry` |
+| `src/oridecon/ai/feedback/di/provider.py` | `FeedbackProvider` boot and registration |

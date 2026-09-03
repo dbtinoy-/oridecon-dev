@@ -1,0 +1,57 @@
+"""Shared type definitions for Oridecon AI.
+
+This module contains type definitions that are used across multiple
+sub-modules in intelligence package.
+"""
+
+from __future__ import annotations
+
+from collections.abc import Callable
+from dataclasses import dataclass
+from datetime import UTC, datetime
+from typing import Any, TypeVar
+
+from oridecon.contracts.ai.types import EmbeddingModel, ModelProvider, VectorProvider
+from oridecon.contracts.core import JSON, Metadata
+from oridecon.domain import DomainModel
+from oridecon.validation import ConfigDict, Field
+
+# Note: model_serializer not yet implemented in oridecon.contracts
+# Using a stub for now
+DecoratedMethod = TypeVar("DecoratedMethod", bound=Callable[..., Any])
+
+
+def model_serializer(mode: Any) -> Callable[[DecoratedMethod], DecoratedMethod]:
+    def decorator(func: DecoratedMethod) -> DecoratedMethod:
+        return func
+
+    return decorator
+
+
+@dataclass(init=False)
+class AIBaseEvent(DomainModel):
+    """Base class for AI intelligence domain events."""
+
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    metadata: Metadata = Field(default_factory=dict)
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    @model_serializer(mode="wrap")
+    def serialize_model(self, handler: Callable[..., Any]) -> Any:
+        """Custom serializer to handle datetime objects."""
+        data = handler(self)
+        # Convert datetime objects to ISO format strings
+        if isinstance(data.get("timestamp"), datetime):
+            data["timestamp"] = data["timestamp"].isoformat()
+        return data
+
+
+__all__ = [
+    "JSON",
+    "AIBaseEvent",
+    "EmbeddingModel",
+    "Metadata",
+    "ModelProvider",
+    "VectorProvider",
+]

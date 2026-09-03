@@ -1,0 +1,1 @@
+"""Integration tests for oridecon-cache package."""

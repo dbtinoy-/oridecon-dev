@@ -1,0 +1,1 @@
+"""Tests for oridecon-auth admin widget handlers."""

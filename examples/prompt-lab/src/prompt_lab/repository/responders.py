@@ -1,0 +1,42 @@
+"""Variant-keyed canned completion styles — Registry dispatch, no LLM.
+
+Instead of calling a real language model, each variant maps to a canned
+reply function registered in a ``oridecon.primitives.Registry``.  This
+keeps the A/B loop deterministic and byte-stable: same inputs always
+produce the same outputs, so scores are reproducible.
+
+The ``RESPONDERS`` registry is module-level so the A/B runner can look
+up any variant's reply function by key at runtime.
+"""
+
+from __future__ import annotations
+
+from collections.abc import Callable
+
+from oridecon.primitives import Registry
+
+__all__ = ["RESPONDERS"]
+
+
+def _v1_style(question: str) -> str:
+    """Terse canned reply."""
+    return f"Order issue noted. Ticket filed for: {question}"
+
+
+def _v2_style(question: str) -> str:
+    """Warm canned reply."""
+    return (
+        "I'm so sorry about the trouble — I'm happy to help with: "
+        f"{question} Let's sort it together."
+    )
+
+
+def _build_responders() -> Registry[str, Callable[[str], str]]:
+    """Framework Registry keyed by variant id."""
+    registry: Registry[str, Callable[[str], str]] = Registry()
+    registry.register("v1", _v1_style)
+    registry.register("v2", _v2_style)
+    return registry
+
+
+RESPONDERS: Registry[str, Callable[[str], str]] = _build_responders()

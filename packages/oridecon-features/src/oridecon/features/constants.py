@@ -1,0 +1,42 @@
+"""Constants for the feature-flag subsystem.
+
+Defines typed defaults and environment variable prefixes used across the
+feature-flag system.  Configuration models reference these to avoid
+hard-coding values in multiple places.
+"""
+
+from __future__ import annotations
+
+import importlib.metadata
+
+# -- Version -------------------------------------------------------------------
+
+try:
+    __version__: str = importlib.metadata.version("oridecon-features")
+except ImportError:
+    __version__ = "0.0.0"
+
+# -- Environment Variable Prefixes -------------------------------------------
+
+ENV_PREFIX: str = "ORI_FLAG_"
+"""Default prefix for environment variable flag definitions."""
+
+ENV_NESTED_DELIMITER: str = "__"
+"""Nested delimiter for environment variable configuration."""
+
+
+# -- Default Configuration Values --------------------------------------------
+
+DEFAULT_CACHE_TTL: int = 300
+"""Default TTL in seconds for cached flag evaluations (5 minutes)."""
+
+DEFAULT_ENABLED: bool = False
+"""Default evaluation result when a flag is not found, or when a rule is
+unconfigured (fail-closed)."""
+
+__all__ = [
+    "DEFAULT_CACHE_TTL",
+    "DEFAULT_ENABLED",
+    "ENV_NESTED_DELIMITER",
+    "ENV_PREFIX",
+]

@@ -1,0 +1,345 @@
+"""Error handling middleware with detailed error pages."""
+
+from __future__ import annotations
+
+import traceback
+from typing import Any
+from urllib.parse import quote
+
+from starlette.datastructures import URL
+from starlette.exceptions import HTTPException as HTTPError
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
+
+from oridecon.admin.exceptions import NotFoundError
+from oridecon.admin.state.context import wants_fragment
+from oridecon.logging import get_logger
+from oridecon.ui import el, render_to_string
+
+logger = get_logger(__name__)
+
+
+class AdminErrorMiddleware(BaseHTTPMiddleware):
+    """HTTP middleware that catches exceptions and displays detailed error pages or JSON responses.
+
+    Uses BaseHTTPMiddleware for proper exception handling in Starlette applications.
+    """
+
+    def __init__(
+        self,
+        app,
+        debug: bool = True,
+        login_url: str | None = None,
+        admin_prefix: str | None = None,
+    ) -> None:
+        """Initialize error middleware.
+
+        Args:
+            app: ASGI application
+            debug: Whether to show detailed error pages
+            login_url: URL to redirect to for 401 Unauthorized
+            admin_prefix: Configured admin mount prefix (default ``/admin``);
+                used for the dashboard link on error pages.
+        """
+        super().__init__(app)
+        self.debug = debug
+        self._admin_prefix = (admin_prefix or "/admin").rstrip("/")
+        self.login_url = login_url or f"{self._admin_prefix}/login"
+
+    async def dispatch(self, request: Request, call_next) -> Any:
+        """Dispatch method that wraps request processing and catches exceptions."""
+        try:
+            response = await call_next(request)
+        except Exception as exc:  # noqa: BLE001 — last-resort error middleware must catch all
+            logger.exception(
+                "AdminErrorMiddleware caught exception: %s", type(exc).__name__
+            )
+            return await self.handle(request, exc)
+        return await self._negotiate_response(request, response)
+
+    async def _negotiate_response(self, request: Request, response: Any) -> Any:
+        """Upgrade bare error responses to styled pages for browser navigations.
+
+        Routers and inner middleware can produce plain-text or JSON error
+        responses without raising (e.g. Starlette's default 404 ``Not Found``
+        and 405). An operator navigating in a browser should always see the
+        styled error page instead — while API and HTMX callers keep the
+        original machine-readable response untouched (roadmap R7).
+        """
+        from oridecon.admin.middleware._negotiation import (
+            NEGOTIABLE_STATUS_CODES,
+            prefers_html,
+            styled_error_response,
+        )
+
+        if response.status_code not in NEGOTIABLE_STATUS_CODES:
+            return response
+        content_type = response.headers.get("content-type", "")
+        if content_type.startswith("text/html"):
+            return response  # already a page — nothing to upgrade
+        if (
+            not prefers_html(request)
+            or self._is_htmx(request)
+            or self._should_return_json(request)
+        ):
+            return response
+
+        # Discard the original body stream before replacing the response.
+        body_iterator = getattr(response, "body_iterator", None)
+        if body_iterator is not None:
+            async for _ in body_iterator:
+                pass
+
+        logger.debug(
+            "admin_error.negotiated_html_page",
+            status_code=response.status_code,
+            path=request.url.path,
+        )
+        return styled_error_response(response.status_code, self._admin_prefix)
+
+    def _should_return_json(self, request: Request) -> bool:
+        """Determine if JSON response is preferred."""
+        accept = request.headers.get("accept", "")
+        # Check explicit Accept header
+        if "application/json" in accept:
+            return True
+        # Check path heuristic for API requests
+        try:
+            from oridecon.admin.settings import get_admin_settings
+
+            api_prefix = get_admin_settings().ADMIN_API_PREFIX.rstrip("/")  # type: ignore[attr-defined]
+            if request.url.path.startswith(api_prefix):
+                # But if it's HTMX, we might prefer HTML fragments
+                return not self._is_htmx(request)
+        except (ImportError, AttributeError):
+            pass
+        return False
+
+    def _is_htmx(self, request: Request) -> bool:
+        """Check if request expects a fragment swap."""
+        return wants_fragment(request)
+
+    async def handle(self, request: Request, exc: Exception) -> Response:
+        """Handle exceptions and return a Response object.
+
+        This method is compatible with Starlette's exception_handler signature.
+        """
+        status_code = 500
+        message = "Internal Server Error"
+
+        if isinstance(exc, NotFoundError):
+            status_code = 404
+            message = str(exc)
+        elif isinstance(exc, HTTPError):
+            status_code = exc.status_code
+            message = exc.detail
+
+        # Decide content type
+        if self._should_return_json(request):
+            return self._make_json_response(status_code, message)
+        if self._is_htmx(request):
+            return self._make_htmx_response(request, status_code, message, exc)
+        return self._make_html_response(request, status_code, message, exc)
+
+    def _make_json_response(self, status_code: int, message: str) -> Response:
+        """Create JSON error response."""
+        return JSONResponse(
+            status_code=status_code,
+            content={"error": {"code": status_code, "message": message}},
+        )
+
+    def _make_htmx_response(
+        self,
+        request: Request,
+        status_code: int,
+        message: str,
+        exc: Exception | None = None,
+    ) -> Response:
+        """Create HTMX error response with professional styling."""
+        # 1. Handle 401 - Full-page redirect to login via HX-Redirect so the
+        #    login page is not swapped into the current component. Loop-guarded
+        #    when the request already targets the login page.
+        if status_code == 401:
+            if str(request.url.path).rstrip("/") == str(self.login_url).rstrip("/"):
+                return JSONResponse(
+                    status_code=401,
+                    content={"error": "session_expired", "login_url": self.login_url},
+                )
+            full = (
+                request.url.path
+                if not request.url.query
+                else f"{request.url.path}?{request.url.query}"
+            )
+            next_url = quote(full, safe="/?=&")
+            login_url = f"{self.login_url}?next={next_url}"
+            response = Response(status_code=200)
+            response.headers["HX-Redirect"] = login_url
+            return response
+
+        # 2. Map Status to Metadata
+        title = "Error"
+        icon = "⚠️"
+
+        if status_code == 403:
+            title = "Access Denied"
+            icon = "🔒"
+        elif status_code == 404:
+            title = "Not Found"
+            icon = "🔍"
+        elif status_code == 500:
+            title = "Server Error"
+            icon = "💥"
+
+        # 3. Handle Debug Details
+        debug_html = ""
+        debug_button = ""
+        if self.debug and exc:
+            tb_text = "".join(
+                traceback.format_exception(type(exc), exc, exc.__traceback__),
+            )
+            debug_html = f"""
+            <div id="error-details-{id(exc)}" class="hidden mt-4 p-4 bg-background text-foreground rounded-lg text-xs overflow-auto max-h-64 font-mono">
+              {tb_text}
+            </div>
+            """
+            debug_button = f"""
+            <button onclick="document.getElementById('error-details-{id(exc)}').classList.toggle('hidden')" class="mr-2 text-sm font-medium text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300">
+              Show Details
+            </button>
+            """
+
+        # 4. Create Styled Fragment
+        html = f"""
+        <div class="admin-error-fragment p-6 my-4 bg-card rounded-xl shadow-sm border border-destructive/30">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center text-2xl">
+              {icon}
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-foreground">{title} ({status_code})</h3>
+              <p class="text-muted-foreground">{message}</p>
+            </div>
+          </div>
+          {debug_html}
+          <div class="mt-4 flex justify-end">
+            {debug_button}
+            <button onclick="this.closest('.admin-error-fragment').remove()" class="text-sm font-medium text-muted-foreground hover:text-foreground">
+              Dismiss
+            </button>
+          </div>
+        </div>
+        """
+
+        response = HTMLResponse(html, status_code=200)  # 200 so HTMX swaps by default
+
+        # 4. Trigger Toast Notifications
+        from oridecon.serialization import dumps_str
+
+        response.headers["HX-Trigger"] = dumps_str(
+            {"showMessage": {"message": f"{title}: {message}", "type": "error"}},
+        )
+
+        return response
+
+    def _make_html_response(
+        self,
+        request: Request,
+        status_code: int,
+        message: str,
+        exc: Exception,
+    ) -> Response:
+        """Create HTML error response."""
+
+        # 1. Handle 401 - Redirect to Login
+        if status_code == 401:
+            login_url = URL(self.login_url).include_query_params(next=str(request.url))
+            return RedirectResponse(url=str(login_url), status_code=302)
+
+        # 2. Handle 500 in Debug Mode - Show Traceback
+        if status_code == 500 and self.debug and not isinstance(exc, HTTPError):
+            html = self._render_debug_error_html(request, exc)
+            return HTMLResponse(html, status_code=500)
+
+        # 3. Handle Other Errors (403, 404, 500 production) - Show Styled Page
+        from oridecon.admin.lib.template import render_error_page
+        from oridecon.admin.middleware._negotiation import (
+            ERROR_PAGE_META,
+            error_page_meta,
+        )
+
+        if status_code in ERROR_PAGE_META:
+            title, message, icon = error_page_meta(status_code)
+        else:
+            title, _default_message, icon = error_page_meta(status_code)
+
+        html = render_error_page(
+            status_code=status_code,
+            title=title,
+            message=message,
+            icon=icon,
+            action_text="Go to Dashboard",
+            action_url=f"{self._admin_prefix}/",
+        )
+
+        return HTMLResponse(html, status_code=status_code)
+
+    def _render_debug_error_html(self, request: Request, exc: Exception) -> str:
+        """Render detailed error page HTML."""
+        from oridecon.admin.lib.template import render_template
+
+        exc_type = type(exc).__name__
+        exc_message = str(exc)
+
+        # Get traceback
+        tb_lines = traceback.format_exception(type(exc), exc, exc.__traceback__)
+        tb_html = render_to_string(
+            el("div", *[el("div", line, class_="tb-line") for line in tb_lines])
+        )
+        tb_plain = "".join(tb_lines)  # Plain text for copying
+
+        # Get local variables from the last frame
+        tb = exc.__traceback__
+        while tb and tb.tb_next:
+            tb = tb.tb_next
+
+        local_vars = {}
+        if tb:
+            for key, value in tb.tb_frame.f_locals.items():
+                if not key.startswith("__"):
+                    try:
+                        val_str = repr(value)[:200]
+                    except (
+                        RuntimeError,
+                        ValueError,
+                    ) as e:  # Best-effort error handling in debug page
+                        # Best-effort: avoid raising during error page rendering; fall back to placeholder
+                        from oridecon.logging import get_logger
+
+                        get_logger(__name__).debug(
+                            "Failed to repr local var %s: %s",
+                            key,
+                            e,
+                            exc_info=True,
+                        )
+                        val_str = "<unable to repr>"
+                    local_vars[key] = val_str
+
+        from oridecon.admin.lib.security import mask_sensitive_data
+
+        masked_query = mask_sensitive_data(dict(request.query_params))
+        masked_locals = mask_sensitive_data(local_vars)
+
+        # Render using template
+        return render_template(
+            "debug_error.html",
+            exc_type=exc_type,
+            exc_message=exc_message,
+            traceback=tb_html,
+            traceback_plain=tb_plain,
+            request_method=request.method,
+            request_url=str(request.url),
+            request_path=request.url.path,
+            request_query=masked_query,
+            local_vars=masked_locals,
+        )
