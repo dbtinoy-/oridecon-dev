@@ -380,7 +380,7 @@ async def validate_and_merge_request(
         if type(e).__name__ == "ValidationError":
             from oridecon.contracts.exceptions.domain import FieldError
 
-            lex_errors = []
+            ori_errors = []
             # Extract errors from pydantic (works for v1 and v2)
             pydantic_errors = getattr(e, "errors", None)
             if callable(pydantic_errors):
@@ -390,14 +390,14 @@ async def validate_and_merge_request(
 
             for err in pydantic_errors:
                 field = ".".join(str(loc) for loc in err.get("loc", []))
-                lex_errors.append(
+                ori_errors.append(
                     FieldError(
                         field=field,
                         message=err.get("msg", "Invalid value"),
                         code=err.get("type", "invalid"),
                     )
                 )
-            raise ValidationError("Validation failed", errors=lex_errors) from e
+            raise ValidationError("Validation failed", errors=ori_errors) from e
         raise
 
     # Run custom validation callables if present

@@ -217,17 +217,17 @@ class RouteSetup:
         """Register the Starlette app as the ASGI handler on the Application."""
         from oridecon.app.base import Application
 
-        lex_app = None
+        ori_app = None
         try:
-            lex_app = await container.resolve(
+            ori_app = await container.resolve(
                 Application,
                 bypass_visibility=True,
             )
         except (AttributeError, UnresolvableDependencyError) as exc:
             logger.warning("app_resolution_failed", error=str(exc))
 
-        if lex_app:
-            if hasattr(lex_app, "set_asgi_handler"):
-                lex_app.set_asgi_handler(app)
+        if ori_app:
+            if hasattr(ori_app, "set_asgi_handler"):
+                ori_app.set_asgi_handler(app)
             else:
-                lex_app._asgi_handler = app  # type: ignore[attr-defined]
+                ori_app._asgi_handler = app  # type: ignore[attr-defined]

@@ -16,10 +16,10 @@ class _BypassOnlyResolver:
         self,
         *,
         metrics_app: Starlette,
-        lex_app: SimpleNamespace,
+        ori_app: SimpleNamespace,
     ) -> None:
         self.metrics_app = metrics_app
-        self.lex_app = lex_app
+        self.ori_app = ori_app
         self.calls: list[tuple[object, bool]] = []
 
     async def resolve(
@@ -35,7 +35,7 @@ class _BypassOnlyResolver:
         if token is Application:
             if not bypass_visibility:
                 raise RuntimeError("application lookup must bypass visibility")
-            return self.lex_app
+            return self.ori_app
 
         return None
 
@@ -49,16 +49,16 @@ async def test_configure_bypasses_visibility_for_internal_mounts() -> None:
     setup = RouteSetup(WebConfig(), WebProviderConfig(), router_manager)
     app = Starlette()
     metrics_app = Starlette()
-    lex_app = SimpleNamespace(_asgi_handler=None)
+    ori_app = SimpleNamespace(_asgi_handler=None)
     resolver = _BypassOnlyResolver(
         metrics_app=metrics_app,
-        lex_app=lex_app,
+        ori_app=ori_app,
     )
     app.state.container = resolver
 
     await setup.configure(app, resolver, provider_context=object())
 
     assert any(getattr(route, "path", None) == "/metrics" for route in app.routes)
-    assert lex_app._asgi_handler is app
+    assert ori_app._asgi_handler is app
     assert ("prometheus_metrics_app", True) in resolver.calls
     assert (Application, True) in resolver.calls

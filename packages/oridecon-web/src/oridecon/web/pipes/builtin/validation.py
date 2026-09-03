@@ -91,7 +91,7 @@ class ValidationPipe(PipeProtocol):
             if type(e).__name__ == "ValidationError":
                 from oridecon.contracts.exceptions.domain import FieldError
 
-                lex_errors = []
+                ori_errors = []
                 # Extract errors from pydantic (works for v1 and v2)
                 pydantic_errors = getattr(e, "errors", None)
                 if callable(pydantic_errors):
@@ -107,7 +107,7 @@ class ValidationPipe(PipeProtocol):
                         ".".join(str(part) for part in loc) if loc else metadata.name
                     )
 
-                    lex_errors.append(
+                    ori_errors.append(
                         FieldError(
                             field=field,
                             message=err.get("msg", "Invalid value"),
@@ -115,7 +115,7 @@ class ValidationPipe(PipeProtocol):
                         )
                     )
                 raise ValidationError(
-                    f"Validation failed for {metadata.name}", errors=lex_errors
+                    f"Validation failed for {metadata.name}", errors=ori_errors
                 ) from e
             raise
 

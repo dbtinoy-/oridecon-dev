@@ -219,7 +219,7 @@ class CoreRouteHandler:
 
         # `app` here is the Starlette instance. Resolve the Oridecon Application
         # from the container to access script-mode _pending_routes.
-        lex_app: Any = app
+        ori_app: Any = app
         try:
             from oridecon.app.base import Application as OrideconApp
             from oridecon.contracts.exceptions.container import (
@@ -235,7 +235,7 @@ class CoreRouteHandler:
                     bypass_visibility=True,
                 )
                 if resolved is not None:
-                    lex_app = resolved
+                    ori_app = resolved
         except (
             LookupError,
             RuntimeError,
@@ -245,7 +245,7 @@ class CoreRouteHandler:
         ) as _exc:
             logger.debug("quickstart_app_resolution_skipped", reason=str(_exc))
 
-        pending = getattr(lex_app, "_pending_routes", [])
+        pending = getattr(ori_app, "_pending_routes", [])
         if not isinstance(pending, (list, tuple)):
             pending = []
 
@@ -271,8 +271,8 @@ class CoreRouteHandler:
             )
 
         # Consume pending routes to prevent double registration (REVISION MAJ-6)
-        if hasattr(lex_app, "_pending_routes"):
-            lex_app._pending_routes = []
+        if hasattr(ori_app, "_pending_routes"):
+            ori_app._pending_routes = []
 
 
 class ControllerRouteHandler:

@@ -57,8 +57,8 @@ class TestProviderConfigInjection:
     async def test_config_injected_when_key_and_model_declared(self) -> None:
         """Provider with config_key + config_model receives typed config before register()."""
         container = Container()
-        lex_config = OrideconConfig(cache={"host": "redis.local", "port": 6380})
-        container.singleton(OrideconConfig, lex_config)
+        ori_config = OrideconConfig(cache={"host": "redis.local", "port": 6380})
+        container.singleton(OrideconConfig, ori_config)
 
         provider = ConfigCapturingProvider()
         orchestrator = ProviderOrchestrator(container)
@@ -147,8 +147,8 @@ class TestProviderConfigInjection:
                 self._register_saw_config = isinstance(self.config, SomeConfig)
 
         container = Container()
-        lex_config = OrideconConfig(svc={"value": "injected"})
-        container.singleton(OrideconConfig, lex_config)
+        ori_config = OrideconConfig(svc={"value": "injected"})
+        container.singleton(OrideconConfig, ori_config)
 
         provider = OrderTrackingProvider()
         orchestrator = ProviderOrchestrator(container)

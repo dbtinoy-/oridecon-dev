@@ -11,7 +11,7 @@ class TestDomainConstants:
     def test_env_prefix(self) -> None:
         """Test ENV_PREFIX constant exists."""
         assert hasattr(constants, "ENV_PREFIX")
-        assert "LEX" in constants.ENV_PREFIX
+        assert "ORI" in constants.ENV_PREFIX
 
 
 class TestDomainTypes:

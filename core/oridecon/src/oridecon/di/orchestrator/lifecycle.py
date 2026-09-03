@@ -338,14 +338,14 @@ class LifecycleManager:
                 f"but the container does not support resolve_optional"
             )
 
-        lex_config: OrideconConfig | None = await resolve_optional(OrideconConfig)
-        if lex_config is None:
+        ori_config: OrideconConfig | None = await resolve_optional(OrideconConfig)
+        if ori_config is None:
             raise ConfigurationError(
                 f"Provider {provider.name!r} declared config_key={provider.config_key!r} "
                 f"but OrideconConfig is not registered in the container"
             )
 
-        provider.config = lex_config.get_section(
+        provider.config = ori_config.get_section(
             provider.config_key, provider.config_model
         )
 
