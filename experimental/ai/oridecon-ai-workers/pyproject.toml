@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-ai-workers"
-version = "0.1.5008"
+version = "0.1.000"
 description = "AI background workers for the Oridecon Framework — batch embedding, document ingestion, DLQ, maintenance"
 readme = "README.md"
 requires-python = ">=3.11"

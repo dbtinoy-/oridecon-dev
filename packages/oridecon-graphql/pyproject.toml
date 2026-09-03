@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-graphql"
-version = "0.1.5014"
+version = "0.1.000"
 description = "GraphQL support for Oridecon Framework - Strawberry, Apollo Federation, and subscriptions"
 readme = "README.md"
 requires-python = ">=3.11"

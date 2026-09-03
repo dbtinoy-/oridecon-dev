@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-ui"
-version = "0.1.5008"
+version = "0.1.000"
 description = "HTMX/htpy component library for Oridecon web applications"
 readme = "README.md"
 requires-python = ">=3.11"

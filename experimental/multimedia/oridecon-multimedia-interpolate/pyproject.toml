@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-multimedia-interpolate"
-version = "0.1.5008"
+version = "0.1.000"
 description = "Video frame-rate interpolation for the Oridecon Framework — RIFE backend"
 readme = "README.md"
 requires-python = ">=3.11"

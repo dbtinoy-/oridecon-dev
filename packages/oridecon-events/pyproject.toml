@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-events"
-version = "0.1.5010"
+version = "0.1.000"
 description = "Event Sourcing and CQRS engine for Oridecon Framework - Domain events, aggregates, and projections"
 readme = "README.md"
 requires-python = ">=3.11"

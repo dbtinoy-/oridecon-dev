@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-sql"
-version = "0.1.5011"
+version = "0.1.000"
 description = "SQL database abstractions for Oridecon Framework — Postgres, MySQL, SQLite with migrations, repositories, and query building"
 readme = "README.md"
 requires-python = ">=3.11"

@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-storage"
-version = "0.1.5009"
+version = "0.1.000"
 description = "Unified blob storage abstraction for Oridecon Framework - S3, GCS, Azure Blob, and local filesystem"
 readme = "README.md"
 requires-python = ">=3.11"

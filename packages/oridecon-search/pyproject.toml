@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-search"
-version = "0.1.5009"
+version = "0.1.000"
 description = "Full-text search and indexing for Oridecon Framework - Elasticsearch, Meilisearch, and Algolia"
 readme = "README.md"
 requires-python = ">=3.11"

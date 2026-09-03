@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-resilience"
-version = "0.1.5008"
+version = "0.1.000"
 description = "Resilience patterns for the Oridecon Framework (circuit breaker, retry, bulkhead, rate limiting, throttle, fallback)"
 readme = "README.md"
 requires-python = ">=3.11"

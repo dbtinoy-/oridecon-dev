@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-ai-relay-gateway"
-version = "0.1.5008"
+version = "0.1.000"
 description = "Protocol-facing relay gateway for the Oridecon AI relay — channel selection, orchestration, upstream I/O, and SSE handling"
 requires-python = ">=3.11"
 license = { text = "MIT" }

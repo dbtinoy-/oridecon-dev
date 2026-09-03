@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-secrets"
-version = "0.1.5008"
+version = "0.1.000"
 description = "Secret vaults with rotation, tenant scoping, and audit for Oridecon Framework"
 readme = "README.md"
 requires-python = ">=3.11"

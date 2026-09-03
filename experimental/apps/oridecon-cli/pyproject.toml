@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-cli"
-version = "0.1.5009"
+version = "0.1.000"
 description = "Command-line interface for Oridecon Framework - Project scaffolding, code generation, and development tools"
 readme = "README.md"
 requires-python = ">=3.11"

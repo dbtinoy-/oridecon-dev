@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-ai-relay"
-version = "0.1.5008"
+version = "0.1.000"
 description = "Protocol-neutral conversion engine for the Oridecon AI relay — OpenAI Chat, Responses, Claude, and Gemini"
 readme = "README.md"
 requires-python = ">=3.11"

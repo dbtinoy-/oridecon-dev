@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-ai-llm"
-version = "0.1.5008"
+version = "0.1.000"
 description = "LLM client layer for the Oridecon Framework — OpenAI, Anthropic, Ollama, Cohere, Groq, Mistral"
 readme = "README.md"
 requires-python = ">=3.11"

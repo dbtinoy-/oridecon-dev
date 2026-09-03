@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-graph"
-version = "0.1.5008"
+version = "0.1.000"
 description = "Graph database support for the Oridecon Framework (Neo4j, in-memory)"
 readme = "README.md"
 requires-python = ">=3.11"

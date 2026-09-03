@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-ai-observability"
-version = "0.1.5008"
+version = "0.1.000"
 description = "AI observability for the Oridecon Framework — tracing, metrics, and monitoring"
 readme = "README.md"
 requires-python = ">=3.11"

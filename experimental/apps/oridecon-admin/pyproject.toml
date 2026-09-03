@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-admin"
-version = "0.1.5010"
+version = "0.1.000"
 description = "Modern Python-first admin framework for Oridecon - HTMX, CRUD, dashboards, and extensions"
 readme = "README.md"
 requires-python = ">=3.11"

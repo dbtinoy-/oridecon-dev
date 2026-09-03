@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-ai-rag"
-version = "0.1.5008"
+version = "0.1.000"
 description = "Retrieval-Augmented Generation (RAG) pipeline for the Oridecon Framework"
 readme = "README.md"
 requires-python = ">=3.11"

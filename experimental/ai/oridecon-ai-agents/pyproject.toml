@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-ai-agents"
-version = "0.1.5008"
+version = "0.1.000"
 description = "Agent system for Oridecon Framework - AI agents with tools, strategies, and execution"
 readme = "README.md"
 requires-python = ">=3.11"

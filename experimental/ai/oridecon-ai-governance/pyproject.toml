@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-ai-governance"
-version = "0.1.5008"
+version = "0.1.000"
 description = "AI governance for the Oridecon Framework — policy enforcement, audit trails, budget tracking"
 readme = "README.md"
 requires-python = ">=3.11"

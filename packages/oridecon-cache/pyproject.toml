@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-cache"
-version = "0.1.5009"
+version = "0.1.000"
 description = "Multi-backend caching system for Oridecon Framework - Redis, Memcached, and in-memory caching"
 readme = "README.md"
 requires-python = ">=3.11"

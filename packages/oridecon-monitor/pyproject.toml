@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-monitor"
-version = "0.1.5009"
+version = "0.1.000"
 description = "Monitoring and observability for Oridecon Framework - Health checks, metrics, and system monitoring"
 readme = "README.md"
 requires-python = ">=3.11"

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-workflow"
-version = "0.1.5009"
+version = "0.1.000"
 description = "Workflow orchestration for the Oridecon Framework (pipelines, bulk ops, sagas, graph engine)"
 readme = "README.md"
 requires-python = ">=3.11"

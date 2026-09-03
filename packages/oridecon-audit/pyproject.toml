@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oridecon-audit"
-version = "0.1.5009"
+version = "0.1.000"
 description = "Unified audit trail for the Oridecon Framework — append-only, HMAC-verified, retention-managed"
 readme = "README.md"
 requires-python = ">=3.11"
