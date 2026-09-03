@@ -33,8 +33,8 @@ import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-APP_ROOT = ROOT / "experimental/apps/lexigram-admin"
-SRC = APP_ROOT / "src/lexigram/admin"
+APP_ROOT = ROOT / "experimental/apps/oridecon-admin"
+SRC = APP_ROOT / "src/oridecon/admin"
 CSS_DIR = SRC / "static/css"
 ADMIN_CSS = CSS_DIR / "admin.css"
 TAILWIND_CSS = CSS_DIR / "tailwind.css"

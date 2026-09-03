@@ -6,15 +6,15 @@ from approval_flow.controllers.api import ApprovalFlowApiController
 from approval_flow.di.provider import ApprovalFlowProvider
 from approval_flow.services.flow import build_approval_state_machine
 from approval_flow.ui.pages import ApprovalFlowPageController
-from lexigram.app.base import Application
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider
-from lexigram.web.module import WebModule
-from lexigram.workflow.module import WorkflowModule
+from oridecon.app.base import Application
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider
+from oridecon.web.module import WebModule
+from oridecon.workflow.module import WorkflowModule
 
 
 def build_modules() -> list[object]:
-    """Build the Lexigram modules required by the approval flow demo."""
+    """Build the Oridecon modules required by the approval flow demo."""
     return [
         WorkflowModule.configure(state_machine=build_approval_state_machine()),
         WebModule.configure(
@@ -28,7 +28,7 @@ def build_providers() -> list[Provider]:
     return [ApprovalFlowProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create and configure the approval flow application."""
     app = Application(name="approval-flow", config=config)
     app.add_modules(build_modules())

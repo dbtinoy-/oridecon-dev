@@ -68,13 +68,13 @@ def get_package_prefix(package_path: Path) -> str | None:
     """Resolve a package ENV_PREFIX constant when one is defined."""
 
     package_name = package_path.name
-    module_path = package_name.removeprefix("lexigram-").replace("-", "/")
+    module_path = package_name.removeprefix("oridecon-").replace("-", "/")
     possible_paths = (
-        package_path / "src" / "lexigram" / module_path / "constants.py",
-        package_path / "src" / "lexigram" / module_path / "core" / "constants.py",
+        package_path / "src" / "oridecon" / module_path / "constants.py",
+        package_path / "src" / "oridecon" / module_path / "core" / "constants.py",
         package_path / "constants.py",
-        package_path / "src" / "lexigram" / "constants.py",
-        package_path / "src" / "lexigram" / "config" / "constants.py",
+        package_path / "src" / "oridecon" / "constants.py",
+        package_path / "src" / "oridecon" / "config" / "constants.py",
     )
 
     for constants_path in possible_paths:
@@ -294,8 +294,8 @@ def _parse_config_file(
         )
 
     package_name = next(
-        (part for part in config_file.parts if part.startswith("lexigram-")),
-        "lexigram",
+        (part for part in config_file.parts if part.startswith("oridecon-")),
+        "oridecon",
     )
 
     def expand_from_root(root_class: ConfigClassDef) -> list[EnvVarDef]:
@@ -398,7 +398,7 @@ def generate_markdown(packages: dict[str, list[EnvVarDef]]) -> str:
         key=lambda item: (item[0], item[1]),
     )
 
-    markdown = """# AUDIT_ENV_VARS.md — Lexigram Framework Environment Variables
+    markdown = """# AUDIT_ENV_VARS.md — Oridecon Framework Environment Variables
 
 > **Source**: Extracted from `config.py` root settings classes and known non-config env reads.
 

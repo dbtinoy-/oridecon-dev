@@ -28,17 +28,17 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from lexigram.ai.rag.synthesis.synthesizers.extractive import (
+from oridecon.ai.rag.synthesis.synthesizers.extractive import (
     ExtractiveSynthesizer,
 )
-from lexigram.contracts.core.di import (
+from oridecon.contracts.core.di import (
     ContainerRegistrarProtocol,
     ContainerResolverProtocol,
 )
-from lexigram.contracts.core.health import (
+from oridecon.contracts.core.health import (
     HealthCheckResult,
 )
-from lexigram.di.provider import Provider
+from oridecon.di.provider import Provider
 from rag_docs.controllers.api import DocsAskApiController
 from rag_docs.repository.embedder import HashingEmbedder
 from rag_docs.repository.index_builder import build_docs_store

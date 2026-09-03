@@ -3,20 +3,20 @@ title: "Outbound HTTP Client"
 description: "Calling external APIs with pooled connections, retries, and observability built in."
 ---
 
-`lexigram-http` is the framework's **outbound** HTTP client — for talking to third-party APIs, partner services, and LLM providers. It is backed by `aiohttp`, ships with connection pooling and an interceptor chain, and wires opt-in resilience (retry, circuit breaker) through the DI container so your services depend on a protocol, not on a transport library.
+`oridecon-http` is the framework's **outbound** HTTP client — for talking to third-party APIs, partner services, and LLM providers. It is backed by `aiohttp`, ships with connection pooling and an interceptor chain, and wires opt-in resilience (retry, circuit breaker) through the DI container so your services depend on a protocol, not on a transport library.
 
-This guide covers the outbound client only. For the inbound ASGI server that handles requests coming **into** your app, see `lexigram-web`.
+This guide covers the outbound client only. For the inbound ASGI server that handles requests coming **into** your app, see `oridecon-web`.
 
-For the full API and configuration reference, see the [`lexigram-http` package docs](/packages/lexigram-http/).
+For the full API and configuration reference, see the [`oridecon-http` package docs](/packages/oridecon-http/).
 
 ---
 
 ## 1. Why a Framework HTTP Client
 
-Rolling your own `aiohttp.ClientSession` per service works — until you have five of them, none share a pool, none emit metrics, and each reinvents retry logic. `lexigram-http` gives you:
+Rolling your own `aiohttp.ClientSession` per service works — until you have five of them, none share a pool, none emit metrics, and each reinvents retry logic. `oridecon-http` gives you:
 
 - **One managed lifecycle** — the connection pool starts with the app and shuts down cleanly.
-- **Constructor-injected resilience** — `lexigram-resilience` policies are picked up from the container; no service-locator at request time.
+- **Constructor-injected resilience** — `oridecon-resilience` policies are picked up from the container; no service-locator at request time.
 - **Built-in observability** — every request emits `http.request.duration` and `http.request.status` when a metrics recorder is registered.
 - **Protocol-first contract** — services depend on `HTTPClientProtocol`, so swapping in a fake for tests is a one-line provider override.
 
@@ -24,11 +24,11 @@ Rolling your own `aiohttp.ClientSession` per service works — until you have fi
 
 ## 2. The Contract
 
-Application code never imports `aiohttp` directly. It depends on the protocol exported from `lexigram-contracts`:
+Application code never imports `aiohttp` directly. It depends on the protocol exported from `oridecon-contracts`:
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.contracts.web import HttpResponse
+from oridecon.contracts.web import HttpResponse
 
 
 @runtime_checkable
@@ -51,9 +51,9 @@ The concrete implementation — `HTTPClient` — returns `Result[HttpResponse, H
 Register the module and configure the `http` section. Defaults are sane; override only what you need.
 
 ```python
-from lexigram import Application
-from lexigram.di.module import Module, module
-from lexigram.http import HTTPModule, HTTPClientConfig
+from oridecon import Application
+from oridecon.di.module import Module, module
+from oridecon.http import HTTPModule, HTTPClientConfig
 
 
 @module(imports=[HTTPModule.configure(HTTPClientConfig())])
@@ -75,7 +75,7 @@ http:
   cookie_jar: true                    # in-memory per-session cookies
 ```
 
-Every key has an environment-variable form prefixed with `LEX_HTTP__`, e.g. `LEX_HTTP__POOL__TIMEOUT=15.0`.
+Every key has an environment-variable form prefixed with `ORI_HTTP__`, e.g. `ORI_HTTP__POOL__TIMEOUT=15.0`.
 
 ---
 
@@ -84,8 +84,8 @@ Every key has an environment-variable form prefixed with `LEX_HTTP__`, e.g. `LEX
 Inject the protocol and call it. The example below talks to a partner billing API:
 
 ```python
-from lexigram.contracts.web import HTTPClientProtocol
-from lexigram.result import Result, Ok, Err
+from oridecon.contracts.web import HTTPClientProtocol
+from oridecon.result import Result, Ok, Err
 from my_app.domain.models import Invoice
 
 
@@ -107,7 +107,7 @@ class BillingClient:
 For SDK-style adapters that hit one upstream with a fixed base URL and default headers (typical for LLM providers), use `BaseURLHTTPClient`:
 
 ```python
-from lexigram.http import BaseURLHTTPClient
+from oridecon.http import BaseURLHTTPClient
 
 async with BaseURLHTTPClient(
     base_url="https://api.partner.example.com/v1",
@@ -124,7 +124,7 @@ async with BaseURLHTTPClient(
 
 ## 5. Resilience Integration
 
-`HTTPProvider` resolves resilience contracts from the container at boot time. Register `lexigram-resilience` and the HTTP client is wrapped automatically:
+`HTTPProvider` resolves resilience contracts from the container at boot time. Register `oridecon-resilience` and the HTTP client is wrapped automatically:
 
 ```mermaid
 graph LR
@@ -158,10 +158,10 @@ When a `MetricsRecorderProtocol` is registered in the container, `HTTPClient` em
 - `http.request.duration` — histogram, tagged with `method`
 - `http.request.status` — counter, tagged with `method` and `status` (or `connection_error` / `timeout`)
 
-Structured logs are emitted via `lexigram.logging` under the `http.client.*` namespace (`error_response`, `connection_error`, `timeout`). Add tracing or correlation headers with an interceptor:
+Structured logs are emitted via `oridecon.logging` under the `http.client.*` namespace (`error_response`, `connection_error`, `timeout`). Add tracing or correlation headers with an interceptor:
 
 ```python
-from lexigram.contracts.web import InterceptorProtocol
+from oridecon.contracts.web import InterceptorProtocol
 
 
 class CorrelationInterceptor(InterceptorProtocol):
@@ -182,8 +182,8 @@ Pass interceptors to the `HTTPClient` constructor, or compose them via the `Inte
 Because services depend on `HTTPClientProtocol`, swap the real client for a fake in tests — no monkey-patching, no recorded fixtures unless you want them:
 
 ```python
-from lexigram.contracts.web import HTTPClientProtocol, HttpResponse
-from lexigram.result import Ok
+from oridecon.contracts.web import HTTPClientProtocol, HttpResponse
+from oridecon.result import Ok
 
 
 class FakeHTTPClient(HTTPClientProtocol):
@@ -207,4 +207,4 @@ For integration-style tests, `HTTPModule.stub()` registers an `HTTPClient` with 
 - [Resilience](/guides/resilience/) — retry, circuit breaker, and bulkhead policies
 - [Observability](/guides/observability/) — metrics, tracing, and structured logging
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding protocols to providers
-- [`lexigram-http` package](/packages/lexigram-http/) — interceptors, streaming, and full API
+- [`oridecon-http` package](/packages/oridecon-http/) — interceptors, streaming, and full API

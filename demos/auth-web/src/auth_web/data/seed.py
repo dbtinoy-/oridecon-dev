@@ -9,12 +9,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from lexigram.auth import UserService
-from lexigram.auth.authz import AuthorizationService
-from lexigram.logging import get_logger
+from oridecon.auth import UserService
+from oridecon.auth.authz import AuthorizationService
+from oridecon.logging import get_logger
 
 if TYPE_CHECKING:
-    from lexigram.auth.config import AuthConfig
+    from oridecon.auth.config import AuthConfig
 
 logger = get_logger(__name__)
 

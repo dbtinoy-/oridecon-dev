@@ -3,21 +3,21 @@ title: "Retrieval-Augmented Generation"
 description: "Chunk, embed, retrieve, and synthesize with the RAG pipeline protocol."
 ---
 
-`lexigram-ai-rag` provides a configurable RAG pipeline that ingests documents, chunks them, generates embeddings, retrieves relevant context, and synthesizes grounded answers. The pipeline is protocol-driven: swap chunking strategies, retrieval backends, and synthesis models without changing application code.
+`oridecon-ai-rag` provides a configurable RAG pipeline that ingests documents, chunks them, generates embeddings, retrieves relevant context, and synthesizes grounded answers. The pipeline is protocol-driven: swap chunking strategies, retrieval backends, and synthesis models without changing application code.
 
-For the full configuration reference and advanced features (HyDE, reranking, evaluation), see the [`lexigram-ai-rag` package docs](/packages/lexigram-ai-rag/).
+For the full configuration reference and advanced features (HyDE, reranking, evaluation), see the [`oridecon-ai-rag` package docs](/packages/oridecon-ai-rag/).
 
 ---
 
 ## 1. The Contracts
 
-The RAG system is built on protocols from `lexigram.contracts.ai.rag`. Every pipeline operation returns a `Result` so failures are explicit:
+The RAG system is built on protocols from `oridecon.contracts.ai.rag`. Every pipeline operation returns a `Result` so failures are explicit:
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.result import Result
-from lexigram.contracts.ai.rag import RAGContext, RAGResponse, RAGError
-from lexigram.contracts.ai.vector import SearchResultProtocol
+from oridecon.result import Result
+from oridecon.contracts.ai.rag import RAGContext, RAGResponse, RAGError
+from oridecon.contracts.ai.vector import SearchResultProtocol
 
 
 class RAGPipelineProtocol(Protocol):
@@ -40,7 +40,7 @@ class RetrievalStrategyProtocol(Protocol):
 ```python
 from dataclasses import dataclass
 from typing import Any
-from lexigram.contracts.ai.vector import SearchResultProtocol
+from oridecon.contracts.ai.vector import SearchResultProtocol
 
 
 @dataclass(frozen=True)
@@ -66,8 +66,8 @@ class RAGResponse:
 Add the `RAGModule` and configure chunking, retrieval, and synthesis:
 
 ```python
-from lexigram import Application
-from lexigram.ai.rag import RAGModule, RAGConfig
+from oridecon import Application
+from oridecon.ai.rag import RAGModule, RAGConfig
 
 app = Application(name="my-app")
 app.add_module(RAGModule.configure(
@@ -121,8 +121,8 @@ The pipeline supports multiple chunking strategies configured via `chunking_stra
 Use the `create_chunker` factory for programmatic access:
 
 ```python
-from lexigram.ai.rag import create_chunker
-from lexigram.ai.rag.chunking import ChunkingConfig, ChunkingStrategy
+from oridecon.ai.rag import create_chunker
+from oridecon.ai.rag.chunking import ChunkingConfig, ChunkingStrategy
 
 chunker = create_chunker(
     ChunkingStrategy.RECURSIVE,
@@ -141,8 +141,8 @@ chunks = await chunker.chunk(document_text)
 Ingest documents into the vector store through the pipeline. Documents are chunked, embedded, and stored automatically:
 
 ```python
-from lexigram.ai.rag import RAGModule, RAGPipeline, RAGConfig
-from lexigram.contracts.ai.rag import RAGPipelineProtocol
+from oridecon.ai.rag import RAGModule, RAGPipeline, RAGConfig
+from oridecon.contracts.ai.rag import RAGPipelineProtocol
 
 
 async def index_documents() -> None:
@@ -168,9 +168,9 @@ For bulk ingestion, configure `vector_store_type`, `collection_name`, and `embed
 Run a RAG query to retrieve relevant documents and synthesize an answer:
 
 ```python
-from lexigram import Application
-from lexigram.ai.rag import RAGModule, RAGConfig
-from lexigram.contracts.ai.rag import RAGPipelineProtocol, RAGContext
+from oridecon import Application
+from oridecon.ai.rag import RAGModule, RAGConfig
+from oridecon.contracts.ai.rag import RAGPipelineProtocol, RAGContext
 
 
 async def ask(query: str) -> None:
@@ -211,7 +211,7 @@ Hybrid search (vector + keyword) is enabled at the vector-store level via the `u
 Reranking is handled by `RerankingStrategyProtocol` implementations registered in `RerankingStrategyRegistry`:
 
 ```python
-from lexigram.ai.rag import RetrievalStrategyRegistry
+from oridecon.ai.rag import RetrievalStrategyRegistry
 
 registry = RetrievalStrategyRegistry.with_defaults()
 strategy = registry.get("mmr")
@@ -224,9 +224,9 @@ strategy = registry.get("mmr")
 Use `RAGModule.stub()` for isolated tests:
 
 ```python
-from lexigram import Application
-from lexigram.ai.rag import RAGModule
-from lexigram.contracts.ai.rag import RAGPipelineProtocol
+from oridecon import Application
+from oridecon.ai.rag import RAGModule
+from oridecon.contracts.ai.rag import RAGPipelineProtocol
 
 
 async def test_pipeline_resolves() -> None:
@@ -247,4 +247,4 @@ The stub uses in-memory storage and a mock embedding provider. Results are deter
 - [AI Agents](/guides/ai-agents/) — connecting RAG to agent tool use
 - [AI Memory](/guides/ai-memory/) — episodic and semantic memory for conversation context
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding protocols to implementations
-- [`lexigram-ai-rag` package](/packages/lexigram-ai-rag/) — HyDE, reranking, evaluation, reasoning
+- [`oridecon-ai-rag` package](/packages/oridecon-ai-rag/) — HyDE, reranking, evaluation, reasoning

@@ -1,6 +1,6 @@
 """Lifecycle wiring for the single-purpose RAG retrieval demo.
 
-The demo owns document chunking and a deterministic local embedder.  Lexigram
+The demo owns document chunking and a deterministic local embedder.  Oridecon
 owns vector-store lifecycle, collection management, and similarity search.
 That boundary makes the example easy to move from the in-memory backend to
 Qdrant, pgvector, or another configured backend later.
@@ -10,23 +10,23 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from lexigram.contracts.core.health import (
+from oridecon.contracts.core.health import (
     HealthCheckCategory,
     HealthCheckResult,
     HealthStatus,
 )
-from lexigram.contracts.data.vector import (
+from oridecon.contracts.data.vector import (
     CollectionConfig,
     DistanceMetric,
     IndexType,
     VectorStoreProtocol,
 )
-from lexigram.di.provider import Provider
+from oridecon.di.provider import Provider
 from ragdocs.config import RagDocsConfig
 from ragdocs.controllers.api import RagApiController
 
 if TYPE_CHECKING:
-    from lexigram.contracts.core.di import (
+    from oridecon.contracts.core.di import (
         ContainerRegistrarProtocol,
         ContainerResolverProtocol,
     )

@@ -1,10 +1,10 @@
 """Composition root for the realtime-monitor demo — start reading here.
 
-Every Lexigram application has exactly one place that knows how the pieces
+Every Oridecon application has exactly one place that knows how the pieces
 fit together: the **composition root**.  Everything else (controllers,
 services, templates) is inert until *this file* wires it.
 
-The mental model has three layers.  Once these click, every Lexigram app
+The mental model has three layers.  Once these click, every Oridecon app
 reads the same way:
 
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -12,12 +12,12 @@ reads the same way:
 │    ``application.yaml`` holds your values.  The framework loads it,     │
 │    merges overrides on top (highest → lowest):                          │
 │                                                                         │
-│        LEX_DEMO__HEARTBEAT_INTERVAL_SECONDS=5  env vars  ← win         │
+│        ORI_DEMO__HEARTBEAT_INTERVAL_SECONDS=5  env vars  ← win         │
 │        application.production.yaml  profile overlay                     │
 │        application.yaml             base file                           │
 │        dataclass field defaults     last resort                         │
 │                                                                         │
-│    Result: ONE typed ``LexigramConfig`` object.                         │
+│    Result: ONE typed ``OrideconConfig`` object.                         │
 │                                                                         │
 │ 2. CAPABILITIES (declarative)                                           │
 │    ``Module.configure(...)`` switches framework packages on and tells   │
@@ -48,16 +48,16 @@ Run with::
 
 from __future__ import annotations
 
-from lexigram.app.base import Application
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider
-from lexigram.web.module import WebModule
+from oridecon.app.base import Application
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider
+from oridecon.web.module import WebModule
 from ops_console.controllers.api import ConsoleController
 from ops_console.controllers.operator import OperatorHandler
 from ops_console.di.provider import RealtimeProvider
 from ops_console.ui.pages import PagesController
 
-# Lexigram follows a strict dependency direction: application code imports
+# Oridecon follows a strict dependency direction: application code imports
 # framework packages, never the reverse.  This file is the only place
 # that references both framework modules AND your controllers/providers.
 
@@ -68,9 +68,9 @@ def build_modules() -> list[object]:
     Each ``Module.configure(...)`` returns a DynamicModule: a recipe the
     framework expands into providers at boot.  Because every provider in
     the bundle declares ``config_key`` / ``config_model``, the orchestrator
-    injects the matching typed section of ``LexigramConfig`` into
+    injects the matching typed section of ``OrideconConfig`` into
     ``provider.config`` right before ``register()`` runs — YAML values and
-    ``LEX_*`` environment overrides already merged.
+    ``ORI_*`` environment overrides already merged.
     """
     return [
         WebModule.configure(
@@ -82,14 +82,14 @@ def build_modules() -> list[object]:
 def build_providers() -> list[Provider]:
     """Imperative services owned by this demo.
 
-    A Provider is Lexigram's unit of lifecycle management: ``register()``
+    A Provider is Oridecon's unit of lifecycle management: ``register()``
     binds services into the DI container, ``boot()`` runs post-registration
     setup (here: starting the heartbeat producer), ``shutdown()`` cleans up.
     """
     return [RealtimeProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create the application in ``CREATED`` state (not yet started).
 
     Use this directly in tests (boot it yourself so you control the

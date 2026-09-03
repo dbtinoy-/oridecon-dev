@@ -19,10 +19,10 @@ from artifact_vault.app import build_providers  # noqa: E402
 from artifact_vault.controllers.api import ArtifactVaultApiController  # noqa: E402
 from artifact_vault.di.provider import ArtifactVaultProvider  # noqa: E402
 from artifact_vault.ui.pages import ArtifactVaultPageController  # noqa: E402
-from lexigram.app.base import Application  # noqa: E402
-from lexigram.storage.module import StorageModule  # noqa: E402
-from lexigram.web import WebProvider  # noqa: E402
-from lexigram.web.module import WebModule  # noqa: E402
+from oridecon.app.base import Application  # noqa: E402
+from oridecon.storage.module import StorageModule  # noqa: E402
+from oridecon.web import WebProvider  # noqa: E402
+from oridecon.web.module import WebModule  # noqa: E402
 
 
 @pytest.fixture(autouse=True)

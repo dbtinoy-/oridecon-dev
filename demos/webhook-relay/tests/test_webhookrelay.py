@@ -9,8 +9,8 @@ from __future__ import annotations
 import httpx
 import pytest
 
-from lexigram.serialization import dumps
-from lexigram.webhook.verification.hmac import HMACSignatureVerifier
+from oridecon.serialization import dumps
+from oridecon.webhook.verification.hmac import HMACSignatureVerifier
 
 
 class TestWebhookReceiving:
@@ -41,7 +41,7 @@ class TestWebhookReceiving:
 
 
 class TestWebhookSubscriptions:
-    """Exercise Lexigram-managed subscription and verification wiring."""
+    """Exercise Oridecon-managed subscription and verification wiring."""
 
     @pytest.mark.asyncio
     async def test_create_and_verify_subscription_event(

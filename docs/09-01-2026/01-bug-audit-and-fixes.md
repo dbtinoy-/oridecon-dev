@@ -1,6 +1,6 @@
 # 01 — Bug Audit & Fixes (2026-09-01)
 
-Scope: `experimental/apps/lexigram-admin` (with one supporting change in the
+Scope: `experimental/apps/oridecon-admin` (with one supporting change in the
 playground). Bugs were found by booting the real provider lifecycle
 (`register → boot → mount_to_app`) against SQLite via
 `playground/serve.py` and exercising the full first-run → login → CRUD flow
@@ -22,14 +22,14 @@ effectively unusable.
 `AdminRbacConfig.super_admin_role` (default `"superadmin"`), but every
 permission engine downstream only recognized `is_superuser == True` or the
 hardcoded role names `admin` / `superuser`
-(`lexigram-auth _check_mixin.has_any_permission`). Nothing ever translated
+(`oridecon-auth _check_mixin.has_any_permission`). Nothing ever translated
 "holds the configured super-admin role" into "bypasses permission checks".
 
 **Fix (defense in depth, all layers consistent).**
 
 | Layer | Change |
 | ----- | ------ |
-| `middleware/auth.py` | New `_mark_super_admin(user)` runs right after `_load_user`: holders of the configured role get `user.is_superuser = True` on the request's user record. Single choke-point every authenticated request passes through, so *all* downstream checks (authz middleware, nav filtering, lexigram-auth bypass) see one consistent flag. Guests/None are never touched; records that reject attribute assignment log `auth.super_admin_mark_unsupported` and degrade gracefully. |
+| `middleware/auth.py` | New `_mark_super_admin(user)` runs right after `_load_user`: holders of the configured role get `user.is_superuser = True` on the request's user record. Single choke-point every authenticated request passes through, so *all* downstream checks (authz middleware, nav filtering, oridecon-auth bypass) see one consistent flag. Guests/None are never touched; records that reject attribute assignment log `auth.super_admin_mark_unsupported` and degrade gracefully. |
 | `middleware/authorization.py` | `_is_super_admin(user)` (strict `is True` on `is_superuser`, or configured role via `rbac.super_admin.is_super_admin`) short-circuits `_resource_capabilities` to all-True capabilities. The permission engine is never consulted for super admins — it has no knowledge of the configured role. |
 | `ui/templates/shell_sections.py` | `_user_has_permission` honors `is_superuser` for both dict-shaped and object-shaped users, so the sidebar renders all items for super admins. |
 | `di/bundle_provider.py` | Both middlewares receive `super_admin_role` from `(config.rbac or AdminRbacConfig()).super_admin_role` — configuration is the single source of truth; renaming the role in config Just Works. |
@@ -147,7 +147,7 @@ producing wrong browser-tab titles and invalid HTML.
 **Fix.** `StandaloneLayout` now overrides `render()` to compose the full
 `"Page | App"` title once and pass it to the base document renderer; the
 extra `<title>` in `render_head_content` was removed. Exactly one title tag
-per page, verified live (`<title>Login | Lexigram Admin</title>`).
+per page, verified live (`<title>Login | Oridecon Admin</title>`).
 
 ---
 
@@ -202,7 +202,7 @@ partial page swaps. Zero `unpkg.com` references in served admin pages
 
 **Symptom.** When the verification email could not be sent at login, the
 user was redirected to
-`?error=[LEX_ERR_ADMIN_010]+Verification+email+could+not+be+delivered:+[LEX_ERR_ADMIN_009]+…+https://docs.lexigram.dev/…`
+`?error=[ORI_ERR_ADMIN_010]+Verification+email+could+not+be+delivered:+[ORI_ERR_ADMIN_009]+…+https://docs.oridecon.dev/…`
 — an internal error chain with error codes and doc links, URL-encoded into
 the address bar.
 
@@ -237,7 +237,7 @@ none on subsequent requests.
 
 ---
 
-## B12 (critical, lexigram-sql, found during R15 verification) — `DatabaseService.execute` never committed DML on SQLite
+## B12 (critical, oridecon-sql, found during R15 verification) — `DatabaseService.execute` never committed DML on SQLite
 
 **Symptom.** During R15's live verification, boot #1's schema-marker
 `INSERT` logged `Query SUCCESS`, yet after a clean shutdown a fresh
@@ -246,7 +246,7 @@ connection saw no row. Reproduced with a standalone probe: any
 success with `rowcount=0` and its effects vanished at connection close.
 
 **Root cause.** `DatabaseService.execute`
-(`packages/lexigram-sql/src/lexigram/sql/providers/_query_mixin.py`) routed
+(`packages/oridecon-sql/src/oridecon/sql/providers/_query_mixin.py`) routed
 *all* SQL through the read path (`execute_query` → sqlite `fetchall`, no
 commit). Under python-sqlite3's legacy isolation, DML opened an implicit
 transaction that was silently rolled back on close; DDL (autocommit) always
@@ -256,14 +256,14 @@ connection and flushed pending rows with it. Every admin store writing via
 `db.execute` — audit log, login attempts, lockouts, settings — was exposed.
 Postgres (asyncpg autocommit) was unaffected.
 
-**Fix (in lexigram-sql, at the source).** `execute` now classifies the
+**Fix (in oridecon-sql, at the source).** `execute` now classifies the
 statement: reads (`SELECT/PRAGMA/EXPLAIN/WITH/SHOW` prefix or `RETURNING`)
 keep the read path; writes go through a new `_execute_write` →
 `db_provider.execute` → `execute_modify`, which commits (and still respects
 explicit `transaction()` blocks). Rowcounts are now real. Full design and
 verification in [11-startup-cost.md](11-startup-cost.md) §6.
 
-**Tests.** `packages/lexigram-sql/tests/unit/test_execute_commit_regression.py`
+**Tests.** `packages/oridecon-sql/tests/unit/test_execute_commit_regression.py`
 (8 tests: persistence across shutdown for INSERT/UPSERT/UPDATE/DELETE, real
 rowcount, read-path preservation, failed-write semantics, explicit-transaction
 rollback).
@@ -278,4 +278,4 @@ rollback).
 | Setup page hx-boost/Alpine interplay | Needs a browser-level repro; no functional breakage found via HTTP. |
 | Duplicate audit-log lines in console logging | Duplicate *log emission*, single row inserted; logging-pipeline issue. Roadmap R9. |
 | JSON 403 body for browser navigation requests | Should render the styled error page for `Accept: text/html`. Roadmap R10. |
-| `lexigram-ui` `HeadConfig.icon_library_url` default still points at unpkg (pinned 0.263.1) | Different package; changing the default could break consumers that don't serve the file. Policy + migration in doc 03. |
+| `oridecon-ui` `HeadConfig.icon_library_url` default still points at unpkg (pinned 0.263.1) | Different package; changing the default could break consumers that don't serve the file. Policy + migration in doc 03. |

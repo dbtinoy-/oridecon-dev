@@ -1,18 +1,18 @@
 # ==============================================================================
 # application.example.yaml
-# Lexigram Framework — complete configuration reference.
+# Oridecon Framework — complete configuration reference.
 #
 # All values shown are exact defaults taken from each package's config class.
 # Secrets:  prefer environment variables or a vault over plaintext.
 #           Syntax: "${ENV_VAR_NAME}" lets the loader substitute at runtime.
 # Env-var overrides use double-underscore nesting, e.g.:
-#   LEX_WEB__SERVER__PORT=9000  →  web.server.port = 9000
+#   ORI_WEB__SERVER__PORT=9000  →  web.server.port = 9000
 # ==============================================================================
 
-# ── Core Framework (lexigram) ──────────────────────────────────────────────────
-# config_section: root (folded by LexigramConfig._fold_lexigram_env_section)
+# ── Core Framework (oridecon) ──────────────────────────────────────────────────
+# config_section: root (folded by OrideconConfig._fold_oridecon_env_section)
 # Core config fields live at the root level of the YAML.
-app_name: "lexigram-app"
+app_name: "oridecon-app"
 debug: false
 env: development
 logging:
@@ -22,14 +22,14 @@ modules: []
 discovery:
   auto_discover: true
   package_patterns:
-    - "lexigram_*"
+    - "oridecon_*"
 health:
   enabled: true
   path: /health
   detailed: false
 
-# ── Admin (lexigram-admin) ─────────────────────────────────────────────────────
-# env_prefix: LEX_ADMIN__
+# ── Admin (oridecon-admin) ─────────────────────────────────────────────────────
+# env_prefix: ORI_ADMIN__
 admin:
   api_prefix: "/admin/api"  # —
   audit:
@@ -52,7 +52,7 @@ admin:
     mfa:
       enabled: true  # Enable TOTP 2FA
       factor: "totp"  # Second factor used at login: 'totp' (authenticator app) or 'email' (one-time ...
-      issuer: "Lexigram Admin"  # TOTP issuer label shown in authenticator apps
+      issuer: "Oridecon Admin"  # TOTP issuer label shown in authenticator apps
       skew: 1  # Allowed clock skew in 30 second steps
     oauth_enabled: false  # —
     oauth_providers: null  # —
@@ -79,10 +79,10 @@ admin:
       ip_rate_limit_per_minute: 10  # —
       lockout_thresholds: null  # —
       permanent_lockout_threshold: 50  # —
-      setup_token: "${LEX_ADMIN__AUTH__SECURITY__SETUP_TOKEN}"  # Optional ADMIN_SETUP_TOKEN — when set, must be provided during first-run setup.
+      setup_token: "${ORI_ADMIN__AUTH__SECURITY__SETUP_TOKEN}"  # Optional ADMIN_SETUP_TOKEN — when set, must be provided during first-run setup.
       setup_token_optin_unsafe: false  # Explicit escape hatch: boot without a setup token. Only for local/ephemeral e...
     session_lifetime: 86400  # —
-    session_secret: "${LEX_ADMIN__AUTH__SESSION_SECRET}"  # Session secret for signing
+    session_secret: "${ORI_ADMIN__AUTH__SESSION_SECRET}"  # Session secret for signing
     users: null  # —
   clusters:
     extra: null  # Extra clusters beyond the built-in infrastructure cluster
@@ -171,7 +171,7 @@ admin:
     header_name: "x-tenant-id"  # —
     route_prefix_template: null  # —
     tenant_field: "tenant_id"  # —
-  title: "Lexigram Admin"  # —
+  title: "Oridecon Admin"  # —
   ui:
     content_max_width: null  # —
     favicon_url: null  # —
@@ -181,8 +181,8 @@ admin:
     sidebar_width: 256  # —
     theme: "system"  # —
 
-# ── AI (lexigram-ai) ───────────────────────────────────────────────────────────
-# env_prefix: LEX_AI__
+# ── AI (oridecon-ai) ───────────────────────────────────────────────────────────
+# env_prefix: ORI_AI__
 ai:
   enabled: true  # Enable AI features
   governance: null  # AI governance configuration
@@ -193,8 +193,8 @@ ai:
   subsystems: null  # Dynamic configuration for third-party AI subsystems discovered via entry poin...
   vector: null  # Vector store configuration
 
-# ── AI Agents (lexigram-ai-agents) ─────────────────────────────────────────────
-# env_prefix: LEX_AI_AGENTS__
+# ── AI Agents (oridecon-ai-agents) ─────────────────────────────────────────────
+# env_prefix: ORI_AI_AGENTS__
 ai_agents:
   default_max_tokens: 2048  # Default max tokens for LLM responses
   default_temperature: 0.7  # Default temperature for LLM calls
@@ -204,8 +204,8 @@ ai_agents:
   max_iterations: 10  # Maximum reasoning iterations per execution
   tool_max_retries: 3  # Number of retries for transient tool execution errors (ConnectionError, Timeo...
 
-# ── AI Evaluation (lexigram-ai-evaluation) ─────────────────────────────────────
-# env_prefix: LEX_AI_EVALUATION__
+# ── AI Evaluation (oridecon-ai-evaluation) ─────────────────────────────────────
+# env_prefix: ORI_AI_EVALUATION__
 ai_evaluation:
   default_seed: null  # Default seed for reproducible experiment runs
   default_threshold: 0.8  # Default score threshold for passing evaluations
@@ -217,15 +217,15 @@ ai_evaluation:
   max_samples: null  # Maximum number of samples per evaluation run
   timeout_seconds: 30  # Timeout for evaluation execution in seconds
 
-# ── AI Feedback (lexigram-ai-feedback) ─────────────────────────────────────────
-# env_prefix: LEX_AI_FEEDBACK__
+# ── AI Feedback (oridecon-ai-feedback) ─────────────────────────────────────────
+# env_prefix: ORI_AI_FEEDBACK__
 ai_feedback:
   async_processing: true  # Process feedback handlers asynchronously in the background
   enabled: true  # Master on/off switch for all feedback collection
   store_raw_payloads: false  # Persist raw incoming feedback payloads for auditing
 
-# ── AI Governance (lexigram-ai-governance) ─────────────────────────────────────
-# env_prefix: LEX_AI_GOVERNANCE__
+# ── AI Governance (oridecon-ai-governance) ─────────────────────────────────────
+# env_prefix: ORI_AI_GOVERNANCE__
 ai_governance:
   enabled: true  # Enable AI governance
   enforce_budget: true  # Enforce budget limits
@@ -239,8 +239,8 @@ ai_governance:
   soft_limit_pct: null  # Fraction of monthly_budget at which to emit a soft-limit warning (e.g. 0.8 = ...
   tpm_limit: null  # Tokens Per Minute limit
 
-# ── AI Guard (lexigram-ai-guard) ───────────────────────────────────────────────
-# env_prefix: LEX_AI_GUARD__
+# ── AI Guard (oridecon-ai-guard) ───────────────────────────────────────────────
+# env_prefix: ORI_AI_GUARD__
 ai_guard:
   enable_llm_guards: false  # —
   enabled: true  # —
@@ -260,11 +260,11 @@ ai_guard:
   restricted_topics: null  # —
   sensitivity_level: "medium"  # —
 
-# ── AI LLM (lexigram-ai-llm) ───────────────────────────────────────────────────
-# env_prefix: LEX_AI_LLM__
+# ── AI LLM (oridecon-ai-llm) ───────────────────────────────────────────────────
+# env_prefix: ORI_AI_LLM__
 ai_llm:
   api_base: null  # Custom API base URL (for Azure, local, or proxied endpoints).
-  api_key: "${LEX_AI_LLM__API_KEY}"  # API key for the chosen provider.
+  api_key: "${ORI_AI_LLM__API_KEY}"  # API key for the chosen provider.
   cache_ttl: 3600  # Cache TTL in seconds.
   enable_cache: false  # Enable response caching (requires CacheBackendProtocol in container).
   enabled: true  # Enable the LLM subsystem
@@ -286,8 +286,8 @@ ai_llm:
     suppress: false  # —
   timeout: 60.0  # Request timeout in seconds.
 
-# ── AI MCP (lexigram-ai-mcp) ───────────────────────────────────────────────────
-# env_prefix: LEX_AI_MCP__
+# ── AI MCP (oridecon-ai-mcp) ───────────────────────────────────────────────────
+# env_prefix: ORI_AI_MCP__
 ai_mcp:
   allow_unauthenticated: false  # —
   client_stdio_command: null  # —
@@ -300,12 +300,12 @@ ai_mcp:
   path: "/mcp"  # —
   port: 8080  # —
   request_timeout: 30.0  # —
-  server_name: "lexigram-mcp"  # —
+  server_name: "oridecon-mcp"  # —
   server_version: "1.0.0"  # —
   stdio_mode: false  # —
 
-# ── AI Memory (lexigram-ai-memory) ─────────────────────────────────────────────
-# env_prefix: LEX_AI_MEMORY__
+# ── AI Memory (oridecon-ai-memory) ─────────────────────────────────────────────
+# env_prefix: ORI_AI_MEMORY__
 ai_memory:
   consolidation:
     age_threshold_hours: null  # Minimum entry age (hours) before it can be consolidated
@@ -333,8 +333,8 @@ ai_memory:
     system_prompt_tokens: null  # Fixed token allocation for system prompt
     tool_descriptions_fraction: null  # Fraction of remaining budget for tool descriptions
 
-# ── AI Observability (lexigram-ai-observability) ───────────────────────────────
-# env_prefix: LEX_AI_OBSERVABILITY__
+# ── AI Observability (oridecon-ai-observability) ───────────────────────────────
+# env_prefix: ORI_AI_OBSERVABILITY__
 ai_observability:
   enabled: true  # Master on/off switch for all observability
   health_checks_enabled: true  # Enable background health checking for AI components
@@ -343,8 +343,8 @@ ai_observability:
   trace_redaction_enabled: false  # Redact secret-shaped keys (e.g. token, password, api_key) from trace span att...
   tracing_enabled: true  # Enable distributed tracing
 
-# ── AI Prompt (lexigram-ai-prompt) ─────────────────────────────────────────────
-# env_prefix: LEX_AI_PROMPT__
+# ── AI Prompt (oridecon-ai-prompt) ─────────────────────────────────────────────
+# env_prefix: ORI_AI_PROMPT__
 ai_prompt:
   default_format: "DEFAULT_RENDER_FORMAT"  # —
   enabled: true  # Enable the AI prompt subsystem
@@ -352,8 +352,8 @@ ai_prompt:
   sanitize_inputs: true  # —
   strict_sanitizer: true  # —
 
-# ── AI RAG (lexigram-ai-rag) ───────────────────────────────────────────────────
-# env_prefix: LEX_AI_RAG__
+# ── AI RAG (oridecon-ai-rag) ───────────────────────────────────────────────────
+# env_prefix: ORI_AI_RAG__
 ai_rag:
   cache_ttl: 3600  # Cache TTL in seconds (default: 1 hour)
   chunk_overlap: 50  # Overlap between consecutive chunks
@@ -380,8 +380,8 @@ ai_rag:
   vector_dimension: 1536  # Embedding vector dimension (1536 for OpenAI ada-002)
   vector_store_type: "pgvector"  # Vector store backend (pgvector, chroma, qdrant, mock)
 
-# ── AI Session (lexigram-ai-session) ───────────────────────────────────────────
-# env_prefix: LEX_AI_SESSION__
+# ── AI Session (oridecon-ai-session) ───────────────────────────────────────────
+# env_prefix: ORI_AI_SESSION__
 ai_session:
   auto_checkpoint_interval: null  # Checkpoint every N turns; None to disable
   backend: null  # Persistence backend (in_memory, cache, database)
@@ -400,8 +400,8 @@ ai_session:
   name: "ai-session"  # Logical name used for DI registration keys
   session_ttl: null  # Maximum age of a session in seconds (0 to disable)
 
-# ── AI Skills (lexigram-ai-skills) ─────────────────────────────────────────────
-# env_prefix: LEX_AI_SKILLS__
+# ── AI Skills (oridecon-ai-skills) ─────────────────────────────────────────────
+# env_prefix: ORI_AI_SKILLS__
 ai_skills:
   allowed_script_types: null  # Allowed script types (py, sh, js)
   auto_discover: null  # Whether to auto-scan packages for skills on boot
@@ -422,8 +422,8 @@ ai_skills:
   script_timeout_seconds: null  # Timeout for skill script execution (seconds)
   skill_paths: null  # Paths to scan for skills (SKILL.md folders)
 
-# ── AI Workers (lexigram-ai-workers) ───────────────────────────────────────────
-# env_prefix: LEX_AI_WORKERS__
+# ── AI Workers (oridecon-ai-workers) ───────────────────────────────────────────
+# env_prefix: ORI_AI_WORKERS__
 ai_workers:
   batch_embedding_concurrency: 3  # Concurrency level for batch embedding execution
   dlq_check_interval: 60  # Interval in seconds for DLQ recovery sweeps
@@ -431,22 +431,22 @@ ai_workers:
   enable_maintenance: true  # Enable vector store and cache maintenance tasks
   enabled: true  # Master on/off switch for all background workers
 
-# ── Audit (lexigram-audit) ─────────────────────────────────────────────────────
-# env_prefix: LEX_AUDIT__
+# ── Audit (oridecon-audit) ─────────────────────────────────────────────────────
+# env_prefix: ORI_AUDIT__
 audit:
   enable_admin: null  # Whether to register the AuditAdminContributor
-  hmac_key: "${LEX_AUDIT__HMAC_KEY}"  # HMAC key for checksum computation
+  hmac_key: "${ORI_AUDIT__HMAC_KEY}"  # HMAC key for checksum computation
   retention_policy: null  # Retention rules
   store_backend: null  # Backend type — 'sql' or 'memory'
   table_name: null  # SQL table name for the unified audit store
   verification_batch_size: null  # Entries to verify per verification run
   verification_schedule: null  # Cron expression for scheduled verification
 
-# ── Auth (lexigram-auth) ───────────────────────────────────────────────────────
-# env_prefix: LEX_AUTH__
+# ── Auth (oridecon-auth) ───────────────────────────────────────────────────────
+# env_prefix: ORI_AUTH__
 auth:
   admin_email: null  # Initial admin email
-  admin_password: "${LEX_AUTH__ADMIN_PASSWORD}"  # Initial admin password
+  admin_password: "${ORI_AUTH__ADMIN_PASSWORD}"  # Initial admin password
   enabled: true  # —
   login_rate_limit: "5/minute"  # Default rate limit
   max_sessions_per_user: null  # Maximum number of concurrent sessions allowed per user. ``None`` (the default...
@@ -483,7 +483,7 @@ auth:
     superuser_bypass: true  # Allow superuser role to bypass all checks
   relay_verification: false  # Enable binding ``RelayAuthVerifierProtocol`` for the relay gateway's inbound ...
   roles: null  # Role definitions
-  secret_key: "${LEX_AUTH__SECRET_KEY}"  # Secret key for signing
+  secret_key: "${ORI_AUTH__SECRET_KEY}"  # Secret key for signing
   token:
     access_token_expire: null  # Access token expiry duration
     algorithm: null  # Algorithm
@@ -491,11 +491,11 @@ auth:
     key_rotation_grace_period: null  # Duration during which tokens signed by a rotated-out key remain accepted. Pre...
     refresh_token_expire: null  # Refresh token expiry duration
     required_audience: null  # Expected ``aud`` claim for every token verified by this service. When set, to...
-    secret_key: "${LEX_AUTH__TOKEN__SECRET_KEY}"  # Secret key for signing tokens
+    secret_key: "${ORI_AUTH__TOKEN__SECRET_KEY}"  # Secret key for signing tokens
   users: null  # Initial users
 
-# ── Cache (lexigram-cache) ─────────────────────────────────────────────────────
-# env_prefix: LEX_CACHE__
+# ── Cache (oridecon-cache) ─────────────────────────────────────────────────────
+# env_prefix: ORI_CACHE__
 cache:
   backends: null  # Backend configs
   debug: null  # Debug mode
@@ -516,16 +516,16 @@ cache:
     protection_retry_interval: null  # Lock retry interval
   version: null  # Config version
 
-# ── CLI (lexigram-cli) ─────────────────────────────────────────────────────────
-# env_prefix: LEX_CLI__
+# ── CLI (oridecon-cli) ─────────────────────────────────────────────────────────
+# env_prefix: ORI_CLI__
 cli:
   color: true  # —
   default_database: "postgres"  # —
   default_template: "web-api"  # —
   verbose: false  # —
 
-# ── Events (lexigram-events) ───────────────────────────────────────────────────
-# env_prefix: LEX_EVENTS__
+# ── Events (oridecon-events) ───────────────────────────────────────────────────
+# env_prefix: ORI_EVENTS__
 events:
   command_bus:
     enable_logging: null  # —
@@ -639,8 +639,8 @@ events:
     strict_mode: null  # —
   version_skew_alerts_enabled: true  # —
 
-# ── Features (lexigram-features) ───────────────────────────────────────────────
-# env_prefix: LEX_FEATURES__
+# ── Features (oridecon-features) ───────────────────────────────────────────────
+# env_prefix: ORI_FEATURES__
 features:
   cache_ttl: "DEFAULT_CACHE_TTL"  # Seconds to cache flag evaluations (0 = disabled).
   default_enabled: "DEFAULT_ENABLED"  # Default value when a flag is not found in the provider.
@@ -648,8 +648,8 @@ features:
   flag_env_prefix: "FLAG_ENV_PREFIX"  # Env var prefix used by EnvProvider when reading flag values.
   initial_flags: null  # Seed flags for the in-memory provider (name -> enabled).
 
-# ── Graph (lexigram-graph) ─────────────────────────────────────────────────────
-# env_prefix: LEX_GRAPH__
+# ── Graph (oridecon-graph) ─────────────────────────────────────────────────────
+# env_prefix: ORI_GRAPH__
 graph:
   backend: null  # Graph store backend to use
   bulk_batch_size: null  # Batch size for bulk operations
@@ -667,7 +667,7 @@ graph:
     fetch_size: null  # Default fetch size for results
     max_connection_pool_size: null  # Maximum number of connections in the pool
     max_transaction_retry_time: 30.0  # Maximum time for transaction retries
-    password: "${LEX_GRAPH__NEO4J__PASSWORD}"  # Neo4j password
+    password: "${ORI_GRAPH__NEO4J__PASSWORD}"  # Neo4j password
     trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES"  # Trust strategy for SSL
     uri: "bolt://localhost:7687"  # Neo4j BOLT URI
     username: "neo4j"  # Neo4j username
@@ -677,8 +677,8 @@ graph:
     strategy: "node_property"  # Which tenancy strategy to use. One of ``"node_property"`` or ``"graph_per_ten...
     template: null  # Collection name template for ``GRAPH_PER_TENANT`` strategy. Supports ``{logic...
 
-# ── GraphQL (lexigram-graphql) ─────────────────────────────────────────────────
-# env_prefix: LEX_GRAPHQL__
+# ── GraphQL (oridecon-graphql) ─────────────────────────────────────────────────
+# env_prefix: ORI_GRAPHQL__
 graphql:
   alias_limit:
     enabled: true  # —
@@ -722,7 +722,7 @@ graphql:
     enabled: false  # —
     histogram_buckets: null  # —
     include_labels: null  # —
-    namespace: "lexigram_graphql"  # —
+    namespace: "oridecon_graphql"  # —
   name: "graphql"  # —
   path: null  # —
   persisted_queries:
@@ -732,7 +732,7 @@ graphql:
   playground:
     enabled: true  # —
     path: null  # —
-    title: "Lexigram GraphQL Playground"  # —
+    title: "Oridecon GraphQL Playground"  # —
   rate_limit:
     burst_limit: 10  # —
     enabled: true  # —
@@ -747,12 +747,12 @@ graphql:
   tracing:
     enabled: false  # —
     sample_rate: 1.0  # —
-    service_name: "lexigram-graphql"  # —
+    service_name: "oridecon-graphql"  # —
     trace_dataloaders: true  # —
     trace_resolvers: true  # —
 
-# ── HTTP Client (lexigram-http) ────────────────────────────────────────────────
-# env_prefix: LEX_HTTP__
+# ── HTTP Client (oridecon-http) ────────────────────────────────────────────────
+# env_prefix: ORI_HTTP__
 http:
   cookie_jar: true  # —
   enforce_url_safety: true  # —
@@ -767,8 +767,8 @@ http:
   proxy: null  # —
   trust_env: true  # —
 
-# ── Monitor (lexigram-monitor) ─────────────────────────────────────────────────
-# env_prefix: LEX_MONITOR__
+# ── Monitor (oridecon-monitor) ─────────────────────────────────────────────────
+# env_prefix: ORI_MONITOR__
 monitor:
   backend_type: null  # Monitoring backend type
   debug: null  # Enable debug mode
@@ -829,8 +829,8 @@ monitor:
     sampler_type: null  # Tracing sampler type
     service_name: null  # Service name for traces
 
-# ── Multimedia (lexigram-multimedia) ───────────────────────────────────────────
-# env_prefix: LEX_MULTIMEDIA__
+# ── Multimedia (oridecon-multimedia) ───────────────────────────────────────────
+# env_prefix: ORI_MULTIMEDIA__
 multimedia:
   beat:
     backend: "librosa"  # —
@@ -849,10 +849,10 @@ multimedia:
     comfyui_steps: 20  # —
     comfyui_workflow_path: null  # —
     local_http_base_url: "http://localhost:5005"  # —
-    openai_api_key_secret_name: "${LEX_MULTIMEDIA__IMAGE__OPENAI_API_KEY_SECRET_NAME}"  # —
+    openai_api_key_secret_name: "${ORI_MULTIMEDIA__IMAGE__OPENAI_API_KEY_SECRET_NAME}"  # —
     openai_base_url: "https://api.openai.com"  # —
     openai_model: "dall-e-3"  # —
-    stability_api_key_secret_name: "${LEX_MULTIMEDIA__IMAGE__STABILITY_API_KEY_SECRET_NAME}"  # —
+    stability_api_key_secret_name: "${ORI_MULTIMEDIA__IMAGE__STABILITY_API_KEY_SECRET_NAME}"  # —
     timeout: 60.0  # —
   interpolate:
     backend: "rife"  # —
@@ -862,7 +862,7 @@ multimedia:
     ace_step_base_url: "http://localhost:5300"  # —
     backend: "local-http"  # —
     local_http_base_url: "http://localhost:5003"  # —
-    stability_api_key_secret_name: "${LEX_MULTIMEDIA__MUSIC__STABILITY_API_KEY_SECRET_NAME}"  # —
+    stability_api_key_secret_name: "${ORI_MULTIMEDIA__MUSIC__STABILITY_API_KEY_SECRET_NAME}"  # —
     stable_audio_open_base_url: "http://localhost:5301"  # —
     timeout: 60.0  # —
   storage_path_prefix: "multimedia/"  # —
@@ -872,13 +872,13 @@ multimedia:
     chatterbox_cfg_weight: 0.5  # —
     chatterbox_exaggeration: 0.5  # —
     chatterbox_temperature: 0.85  # —
-    elevenlabs_api_key_secret_name: "${LEX_MULTIMEDIA__TTS__ELEVENLABS_API_KEY_SECRET_NAME}"  # —
+    elevenlabs_api_key_secret_name: "${ORI_MULTIMEDIA__TTS__ELEVENLABS_API_KEY_SECRET_NAME}"  # —
     elevenlabs_voice_id: null  # —
     f5_tts_base_url: "http://localhost:5102"  # —
     kokoro_base_url: "http://localhost:5101"  # —
     kokoro_default_voice: "af_heart"  # —
     local_http_base_url: "http://localhost:5002"  # —
-    openai_api_key_secret_name: "${LEX_MULTIMEDIA__TTS__OPENAI_API_KEY_SECRET_NAME}"  # —
+    openai_api_key_secret_name: "${ORI_MULTIMEDIA__TTS__OPENAI_API_KEY_SECRET_NAME}"  # —
     openai_base_url: "https://api.openai.com"  # —
     openai_model: "tts-1"  # —
     openai_voice: "alloy"  # —
@@ -900,7 +900,7 @@ multimedia:
     comfyui_poll_interval: 1.0  # —
     comfyui_workflow_path: null  # —
     local_http_base_url: "http://localhost:5004"  # —
-    openai_api_key_secret_name: "${LEX_MULTIMEDIA__VIDEO__OPENAI_API_KEY_SECRET_NAME}"  # —
+    openai_api_key_secret_name: "${ORI_MULTIMEDIA__VIDEO__OPENAI_API_KEY_SECRET_NAME}"  # —
     openai_base_url: "https://api.openai.com"  # —
     openai_model: "sora-2"  # —
     processing:
@@ -909,13 +909,13 @@ multimedia:
       max_concurrent_jobs: 2  # —
       temp_dir: null  # —
       timeout: 300.0  # —
-    runway_api_key_secret_name: "${LEX_MULTIMEDIA__VIDEO__RUNWAY_API_KEY_SECRET_NAME}"  # —
+    runway_api_key_secret_name: "${ORI_MULTIMEDIA__VIDEO__RUNWAY_API_KEY_SECRET_NAME}"  # —
     svd_base_url: "http://localhost:5202"  # —
     timeout: null  # —
     wan22_base_url: "http://localhost:5200"  # —
 
-# ── NoSQL (lexigram-nosql) ─────────────────────────────────────────────────────
-# env_prefix: LEX_NOSQL__
+# ── NoSQL (oridecon-nosql) ─────────────────────────────────────────────────────
+# env_prefix: ORI_NOSQL__
 nosql:
   backends: null  # Named NoSQL backends for multi-store support. When non-empty, the provider re...
   driver: "mongodb"  # NoSQL driver name
@@ -927,7 +927,7 @@ nosql:
   mongodb:
     auth_source: "admin"  # Authentication database
     connect_timeout_ms: 10000  # Connection timeout (ms)
-    database: "lexigram"  # Database name
+    database: "oridecon"  # Database name
     max_pool_size: 100  # Maximum connection pool size
     min_pool_size: 10  # Minimum connection pool size
     read_preference: "primaryPreferred"  # Read preference mode
@@ -938,19 +938,19 @@ nosql:
     uri: "mongodb://localhost:27017"  # MongoDB connection URI
     write_concern_w: "majority"  # Write concern level
 
-# ── Notification (lexigram-notification) ───────────────────────────────────────
-# env_prefix: LEX_NOTIFICATION__
+# ── Notification (oridecon-notification) ───────────────────────────────────────
+# env_prefix: ORI_NOTIFICATION__
 notification:
   push_backends: null  # Named push notification backends for multi-backend support. When non-empty, t...
   sms_backends: null  # Named SMS backends for multi-backend support. When non-empty, the provider re...
 
-# ── Queue (lexigram-queue) ─────────────────────────────────────────────────────
-# env_prefix: LEX_QUEUE__
+# ── Queue (oridecon-queue) ─────────────────────────────────────────────────────
+# env_prefix: ORI_QUEUE__
 queue:
   backends: null  # Named queue backends for multi-backend support. When non-empty, the provider ...
 
-# ── Resilience (lexigram-resilience) ───────────────────────────────────────────
-# env_prefix: LEX_RESILIENCE__
+# ── Resilience (oridecon-resilience) ───────────────────────────────────────────
+# env_prefix: ORI_RESILIENCE__
 resilience:
   bulkhead:
     max_concurrent: 10  # Max concurrent requests
@@ -976,25 +976,25 @@ resilience:
     timeout: 30.0  # —
     timeout_message: "Operation timed out"  # —
 
-# ── Search (lexigram-search) ───────────────────────────────────────────────────
-# env_prefix: LEX_SEARCH__
+# ── Search (oridecon-search) ───────────────────────────────────────────────────
+# env_prefix: ORI_SEARCH__
 search:
   backend_type: null  # Search backend type
   backends: null  # Named search backends for multi-backend support. When non-empty, the provider...
   database: null  # Named database to use for DB-backed backends (postgres/mysql). References a n...
   elasticsearch:
-    api_key: "${LEX_SEARCH__ELASTICSEARCH__API_KEY}"  # —
+    api_key: "${ORI_SEARCH__ELASTICSEARCH__API_KEY}"  # —
     hosts: null  # Elasticsearch hosts
-    index_prefix: "lexigram_search_"  # —
+    index_prefix: "oridecon_search_"  # —
     number_of_replicas: 0  # —
     number_of_shards: 1  # —
-    password: "${LEX_SEARCH__ELASTICSEARCH__PASSWORD}"  # —
+    password: "${ORI_SEARCH__ELASTICSEARCH__PASSWORD}"  # —
     use_ssl: false  # —
     username: null  # —
     verify_certs: true  # —
   enabled: true  # Enable the search subsystem
   meilisearch:
-    api_key: "${LEX_SEARCH__MEILISEARCH__API_KEY}"  # MeiliSearch API key
+    api_key: "${ORI_SEARCH__MEILISEARCH__API_KEY}"  # MeiliSearch API key
     displayed_attributes: null  # Fields to return in results
     filterable_attributes: null  # Attributes that can be filtered
     max_connections: 10  # Maximum number of connections
@@ -1015,8 +1015,8 @@ search:
     min_word_length: 3  # —
   opensearch:
     hosts: null  # OpenSearch hosts
-    index_prefix: "lexigram_search_"  # —
-    password: "${LEX_SEARCH__OPENSEARCH__PASSWORD}"  # —
+    index_prefix: "oridecon_search_"  # —
+    password: "${ORI_SEARCH__OPENSEARCH__PASSWORD}"  # —
     timeout: 30  # —
     use_ssl: false  # —
     username: null  # —
@@ -1045,27 +1045,27 @@ search:
     tokenizer: "porter unicode61"  # —
   timeout: null  # Default request timeout seconds
   typesense:
-    api_key: "${LEX_SEARCH__TYPESENSE__API_KEY}"  # Typesense API key
+    api_key: "${ORI_SEARCH__TYPESENSE__API_KEY}"  # Typesense API key
     connection_timeout: 30  # Connection timeout
     health_check_interval: 60  # Health check interval
     nodes: null  # Typesense node connections
 
-# ── Secrets (lexigram-secrets) ─────────────────────────────────────────────────
-# env_prefix: LEX_SECRETS_
+# ── Secrets (oridecon-secrets) ─────────────────────────────────────────────────
+# env_prefix: ORI_SECRETS_
 secrets:
-  audit_actor_id: "${LEX_SECRETS__AUDIT_ACTOR_ID}"  # Actor identifier for audit log entries
-  backend_options: "${LEX_SECRETS__BACKEND_OPTIONS}"  # Keyword arguments for backend constructor
-  backend_type: "${LEX_SECRETS__BACKEND_TYPE}"  # Backend store type (memory, vault, ...)
-  enabled: "${LEX_SECRETS__ENABLED}"  # Whether secrets subsystem is enabled
-  max_age_seconds: "${LEX_SECRETS__MAX_AGE_SECONDS}"  # Seconds before automatic rotation
-  name: "${LEX_SECRETS__NAME}"  # Configuration name
-  tenant_id: "${LEX_SECRETS__TENANT_ID}"  # Optional tenant namespace
-  warning_before_seconds: "${LEX_SECRETS__WARNING_BEFORE_SECONDS}"  # Seconds before expiry to warn
+  audit_actor_id: "${ORI_SECRETS__AUDIT_ACTOR_ID}"  # Actor identifier for audit log entries
+  backend_options: "${ORI_SECRETS__BACKEND_OPTIONS}"  # Keyword arguments for backend constructor
+  backend_type: "${ORI_SECRETS__BACKEND_TYPE}"  # Backend store type (memory, vault, ...)
+  enabled: "${ORI_SECRETS__ENABLED}"  # Whether secrets subsystem is enabled
+  max_age_seconds: "${ORI_SECRETS__MAX_AGE_SECONDS}"  # Seconds before automatic rotation
+  name: "${ORI_SECRETS__NAME}"  # Configuration name
+  tenant_id: "${ORI_SECRETS__TENANT_ID}"  # Optional tenant namespace
+  warning_before_seconds: "${ORI_SECRETS__WARNING_BEFORE_SECONDS}"  # Seconds before expiry to warn
 
-# ── SQL Database (lexigram-sql) ────────────────────────────────────────────────
-# env_prefix: LEX_SQL__
+# ── SQL Database (oridecon-sql) ────────────────────────────────────────────────
+# env_prefix: ORI_SQL__
 db:
-  audit_hmac_key: "${LEX_SQL__AUDIT_HMAC_KEY}"  # HMAC key for audit checksum signing. Plain text or base64.
+  audit_hmac_key: "${ORI_SQL__AUDIT_HMAC_KEY}"  # HMAC key for audit checksum signing. Plain text or base64.
   backend:
     url: null  # Database connection URL (may contain credentials)
   backends: null  # Multi-database backends list. When non-empty, drives multi-DB mode. The entry...
@@ -1090,8 +1090,8 @@ db:
     recycle: 3600  # —
     timeout: null  # —
 
-# ── Storage (lexigram-storage) ─────────────────────────────────────────────────
-# env_prefix: LEX_STORAGE__
+# ── Storage (oridecon-storage) ─────────────────────────────────────────────────
+# env_prefix: ORI_STORAGE__
 storage:
   backends: null  # Named storage backends for multi-store support. When non-empty, the provider ...
   default_driver: null  # Default storage driver to use
@@ -1104,8 +1104,8 @@ storage:
     allowed_mime_types: null  # Allowed MIME types for upload validation. Defaults to a safe set of common im...
     max_file_size_mb: null  # Maximum file size in MB
 
-# ── Tasks (lexigram-tasks) ─────────────────────────────────────────────────────
-# env_prefix: LEX_TASKS__
+# ── Tasks (oridecon-tasks) ─────────────────────────────────────────────────────
+# env_prefix: ORI_TASKS__
 tasks:
   backend:
     amqp_url: null  # AMQP connection URL (may contain credentials).
@@ -1154,8 +1154,8 @@ tasks:
     shutdown_timeout: null  # Timeout for graceful shutdown (seconds)
     worker_count: null  # Number of worker instances
 
-# ── Tenancy (lexigram-tenancy) ─────────────────────────────────────────────────
-# env_prefix: LEX_TENANCY__
+# ── Tenancy (oridecon-tenancy) ─────────────────────────────────────────────────
+# env_prefix: ORI_TENANCY__
 tenancy:
   integration:
     cache_key_prefix: true  # —
@@ -1175,23 +1175,23 @@ tenancy:
     trusted_resolvers: null  # —
     validator_cache_ttl: "DEFAULT_VALIDATOR_CACHE_TTL"  # —
 
-# ── Testing (lexigram-testing) ─────────────────────────────────────────────────
-# env_prefix: LEX_TESTING__
-# LEX_TEST_ELASTICSEARCH_URL=—
-# LEX_TEST_KAFKA_BOOTSTRAP=—
-# LEX_TEST_MINIO_ACCESS_KEY=—
-# LEX_TEST_MINIO_ENDPOINT=—
-# LEX_TEST_MINIO_SECRET_KEY=—
-# LEX_TEST_MONGODB_DSN=—
-# LEX_TEST_NEO4J_AUTH=—
-# LEX_TEST_NEO4J_URL=—
-# LEX_TEST_POSTGRES_DSN=—
-# LEX_TEST_POSTGRES_DSN_RAW=—
-# LEX_TEST_QDRANT_URL=—
-# LEX_TEST_REDIS_URL=—
+# ── Testing (oridecon-testing) ─────────────────────────────────────────────────
+# env_prefix: ORI_TESTING__
+# ORI_TEST_ELASTICSEARCH_URL=—
+# ORI_TEST_KAFKA_BOOTSTRAP=—
+# ORI_TEST_MINIO_ACCESS_KEY=—
+# ORI_TEST_MINIO_ENDPOINT=—
+# ORI_TEST_MINIO_SECRET_KEY=—
+# ORI_TEST_MONGODB_DSN=—
+# ORI_TEST_NEO4J_AUTH=—
+# ORI_TEST_NEO4J_URL=—
+# ORI_TEST_POSTGRES_DSN=—
+# ORI_TEST_POSTGRES_DSN_RAW=—
+# ORI_TEST_QDRANT_URL=—
+# ORI_TEST_REDIS_URL=—
 
-# ── UI (lexigram-ui) ───────────────────────────────────────────────────────────
-# env_prefix: LEX_UI__
+# ── UI (oridecon-ui) ───────────────────────────────────────────────────────────
+# env_prefix: ORI_UI__
 ui:
   auto_escape: true  # HTML-escape user strings by default.
   debug_components: false  # Render data-component debug attributes.
@@ -1201,8 +1201,8 @@ ui:
   htmx_version: "2.0.4"  # HTMX CDN version.
   theme: "light"  # Active UI theme.
 
-# ── Vector (lexigram-vector) ───────────────────────────────────────────────────
-# env_prefix: LEX_VECTOR__
+# ── Vector (oridecon-vector) ───────────────────────────────────────────────────
+# env_prefix: ORI_VECTOR__
 vector:
   backend: null  # Vector store backend to use
   backends: null  # Named vector store backends for multi-store support. When non-empty, the prov...
@@ -1227,14 +1227,14 @@ vector:
     schema: "public"  # Database schema for vector tables
     table_prefix: "vec_"  # Prefix for vector storage tables
   pinecone:
-    api_key: "${LEX_VECTOR__PINECONE__API_KEY}"  # Pinecone API key
+    api_key: "${ORI_VECTOR__PINECONE__API_KEY}"  # Pinecone API key
     environment: null  # Pinecone environment (e.g. 'us-west1-gcp')
     index_name: null  # Name of the Pinecone index
     namespace: null  # Default namespace for the index
     pool_threads: 4  # Number of threads for the connection pool
     timeout: null  # Request timeout in seconds
   qdrant:
-    api_key: "${LEX_VECTOR__QDRANT__API_KEY}"  # Qdrant API key
+    api_key: "${ORI_VECTOR__QDRANT__API_KEY}"  # Qdrant API key
     grpc_port: 6334  # gRPC port for Qdrant
     prefer_grpc: true  # Whether to prefer gRPC over HTTP
     timeout: null  # Request timeout in seconds
@@ -1245,13 +1245,13 @@ vector:
     resolver_kind: "templated"  # Which ``TenantCollectionResolver`` to use. One of ``"templated"`` or ``"pinec...
   upsert_batch_size: null  # Number of vectors per upsert batch
   weaviate:
-    api_key: "${LEX_VECTOR__WEAVIATE__API_KEY}"  # Weaviate API key for authenticated clusters
+    api_key: "${ORI_VECTOR__WEAVIATE__API_KEY}"  # Weaviate API key for authenticated clusters
     grpc_port: 50051  # gRPC port for the Weaviate cluster
     timeout: null  # Request timeout in seconds
     url: "http://localhost:8080"  # Weaviate cluster URL (HTTP)
 
-# ── Web (lexigram-web) ─────────────────────────────────────────────────────────
-# env_prefix: LEX_WEB__
+# ── Web (oridecon-web) ─────────────────────────────────────────────────────────
+# env_prefix: ORI_WEB__
 web:
   api_docs:
     enabled: true  # Enable API documentation endpoints (/docs, /redoc) and auto-configure CSP for...
@@ -1260,7 +1260,7 @@ web:
   compression_enabled: true  # —
   cors: null  # —
   debug_routes: false  # Enable debug routes
-  debug_routes_token: "${LEX_WEB__DEBUG_ROUTES_TOKEN}"  # Token required to access debug routes (sent as X-Debug-Token header).
+  debug_routes_token: "${ORI_WEB__DEBUG_ROUTES_TOKEN}"  # Token required to access debug routes (sent as X-Debug-Token header).
   enable_auth: false  # Enable built-in authentication middleware. Requires authenticators to be regi...
   enable_debug_routes_env_gate: false  # Require explicit opt-in for debug route registration.
   enable_identity_resolution: false  # Automatically resolve OAuth external IDs to internal UUIDs in authenticated r...
@@ -1285,7 +1285,7 @@ web:
   security:
     allowed_hosts: null  # Hostnames permitted to reach the application. Empty by default; must be confi...
     cors:
-      allow_credentials: "${LEX_WEB__SECURITY__CORS__ALLOW_CREDENTIALS}"  # —
+      allow_credentials: "${ORI_WEB__SECURITY__CORS__ALLOW_CREDENTIALS}"  # —
       allow_headers: null  # —
       allow_methods: null  # —
       allow_origin_regex: null  # Regex pattern for allowed origins (matched when not in allowed_origins)
@@ -1313,7 +1313,7 @@ web:
       exclude_content_types: null  # Content-Type values that bypass CSRF validation (explicit opt-in — JSON reque...
       excluded_paths: null  # URL path prefixes exempt from CSRF validation for cookie-less requests; cooki...
       header_name: "X-CSRF-Token"  # —
-      secret_key: "${LEX_WEB__SECURITY__CSRF__SECRET_KEY}"  # HMAC secret used to sign and verify CSRF tokens (populated via LEX_WEB__SECUR...
+      secret_key: "${ORI_WEB__SECURITY__CSRF__SECRET_KEY}"  # HMAC secret used to sign and verify CSRF tokens (populated via ORI_WEB__SECUR...
       token_length: 32  # —
       token_ttl: 3600  # TTL in seconds for synchronizer-mode tokens stored in cache.
     custom_headers: null  # Additional HTTP response headers emitted verbatim
@@ -1352,8 +1352,8 @@ web:
   swagger_ui_url: null  # —
   template_directory: "templates"  # Directory for Jinja2 templates
 
-# ── Webhook (lexigram-webhook) ─────────────────────────────────────────────────
-# env_prefix: LEX_WEBHOOK__
+# ── Webhook (oridecon-webhook) ─────────────────────────────────────────────────
+# env_prefix: ORI_WEBHOOK__
 webhook:
   allow_private_urls: null  # Allow registering and delivering webhooks to private, loopback, or link-local...
   delivery_log_retention_days: null  # Days to retain delivery log (0 = indefinite)
@@ -1367,9 +1367,9 @@ webhook:
   retry_base_delay: null  # Initial retry delay in seconds
   retry_max_attempts: null  # Maximum delivery attempts before dead-letter
   retry_max_delay: null  # Maximum retry delay ceiling in seconds
-  secret_length: "${LEX_WEBHOOK__SECRET_LENGTH}"  # Secret length in bytes (hex-encoded output is 2x)
-  secret_rotation_grace_hours: "${LEX_WEBHOOK__SECRET_ROTATION_GRACE_HOURS}"  # Hours both old and new secrets are accepted
+  secret_length: "${ORI_WEBHOOK__SECRET_LENGTH}"  # Secret length in bytes (hex-encoded output is 2x)
+  secret_rotation_grace_hours: "${ORI_WEBHOOK__SECRET_ROTATION_GRACE_HOURS}"  # Hours both old and new secrets are accepted
   signature_algorithm: null  # HMAC algorithm name
   signature_header: null  # HTTP header for the HMAC signature
-  store_backend: null  # Persistence backend ('sql' requires lexigram-webhook[sql])
+  store_backend: null  # Persistence backend ('sql' requires oridecon-webhook[sql])
   timestamp_header: null  # HTTP header for the delivery timestamp

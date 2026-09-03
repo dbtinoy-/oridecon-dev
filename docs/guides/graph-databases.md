@@ -3,9 +3,9 @@ title: "Graph Databases"
 description: "Model and query graph data with Neo4j or in-memory via GraphProtocol."
 ---
 
-`lexigram-graph` provides async graph-database access behind a single protocol. Application code depends on `GraphStoreProtocol` for lifecycle and `GraphProtocol` for CRUD and traversal; the backend (Neo4j or in-memory) is chosen in configuration. You can swap backends and substitute an in-memory stub in tests without touching the services that use them.
+`oridecon-graph` provides async graph-database access behind a single protocol. Application code depends on `GraphStoreProtocol` for lifecycle and `GraphProtocol` for CRUD and traversal; the backend (Neo4j or in-memory) is chosen in configuration. You can swap backends and substitute an in-memory stub in tests without touching the services that use them.
 
-For the full configuration reference, traversal query DSL, and Cypher compiler, see the [`lexigram-graph` package docs](/packages/lexigram-graph/).
+For the full configuration reference, traversal query DSL, and Cypher compiler, see the [`oridecon-graph` package docs](/packages/oridecon-graph/).
 
 ---
 
@@ -15,7 +15,7 @@ All backends implement `GraphStoreProtocol` (top-level lifecycle) and `GraphProt
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.contracts.data.graph.types import (
+from oridecon.contracts.data.graph.types import (
     GraphNode,
     GraphEdge,
     GraphPath,
@@ -53,8 +53,8 @@ graph LR
 Add the provider and configure the `graph` section:
 
 ```python
-from lexigram import Application
-from lexigram.graph import GraphModule
+from oridecon import Application
+from oridecon.graph import GraphModule
 
 app = Application(name="my-app")
 ```
@@ -98,9 +98,9 @@ The `memory` backend is not persistent. All data is lost when the process exits.
 Inject `GraphStoreProtocol`, get a graph handle, and perform CRUD:
 
 ```python
-from lexigram.contracts.data.graph.protocols import GraphStoreProtocol
-from lexigram.contracts.data.graph.types import GraphNode, GraphEdge, NodeResult
-from lexigram.contracts.data.graph.filters import Prop
+from oridecon.contracts.data.graph.protocols import GraphStoreProtocol
+from oridecon.contracts.data.graph.types import GraphNode, GraphEdge, NodeResult
+from oridecon.contracts.data.graph.filters import Prop
 
 
 class FriendGraph:
@@ -136,13 +136,13 @@ The `neighbors()` method supports `depth` for multi-hop traversal and `direction
 Structured traversals use `TraversalQuery` with a `StartSpec` and one or more `TraversalStep` objects:
 
 ```python
-from lexigram.contracts.data.graph.types import (
+from oridecon.contracts.data.graph.types import (
     StartSpec,
     TraversalQuery,
     TraversalStep,
     GraphPath,
 )
-from lexigram.contracts.data.graph.enums import EdgeDirection
+from oridecon.contracts.data.graph.enums import EdgeDirection
 
 
 class RecommendationEngine:
@@ -190,7 +190,7 @@ if path is not None:
 Bulk create operations batch nodes and edges for efficiency:
 
 ```python
-from lexigram.contracts.data.graph.types import NodeSpec, EdgeSpec, BulkNodeResult
+from oridecon.contracts.data.graph.types import NodeSpec, EdgeSpec, BulkNodeResult
 
 async def import_users(self, users: list[dict]) -> BulkNodeResult:
     graph = await self._store.get_graph("social")
@@ -201,8 +201,8 @@ async def import_users(self, users: list[dict]) -> BulkNodeResult:
 Schema management creates indexes and constraints:
 
 ```python
-from lexigram.contracts.data.graph.types import IndexSpec, ConstraintSpec
-from lexigram.contracts.data.graph.enums import IndexKind, ConstraintKind
+from oridecon.contracts.data.graph.types import IndexSpec, ConstraintSpec
+from oridecon.contracts.data.graph.enums import IndexKind, ConstraintKind
 
 await graph.create_index(IndexSpec(name="idx_name", label="Person", properties=("name",), kind=IndexKind.BTREE))
 await graph.create_constraint(ConstraintSpec(name="uq_email", label="User", properties=("email",), kind=ConstraintKind.UNIQUE))
@@ -232,9 +232,9 @@ The Neo4j backend compiles `TraversalQuery` into parameterized Cypher via the in
 `GraphModule.stub()` uses in-memory backends with no external dependencies:
 
 ```python
-from lexigram import Application
-from lexigram.graph import GraphModule
-from lexigram.contracts.data.graph.protocols import GraphStoreProtocol
+from oridecon import Application
+from oridecon.graph import GraphModule
+from oridecon.contracts.data.graph.protocols import GraphStoreProtocol
 
 
 async def test_creates_and_finds_node() -> None:
@@ -254,4 +254,4 @@ async def test_creates_and_finds_node() -> None:
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding protocols to implementations
 - [Providers](/fundamentals/providers/) — how `GraphProvider` hooks into application boot
 - [Testing](/guides/testing/) — substituting stubs for infrastructure
-- [`lexigram-graph` package](/packages/lexigram-graph/) — traversal DSL, Cypher compiler, event hooks
+- [`oridecon-graph` package](/packages/oridecon-graph/) — traversal DSL, Cypher compiler, event hooks

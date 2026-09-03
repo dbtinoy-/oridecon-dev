@@ -23,7 +23,7 @@ from decimal import Decimal
 from enum import Enum
 import random
 
-from lexigram.primitives import clock
+from oridecon.primitives import clock
 from rates.domain import RateQuote
 from rates.exceptions import UpstreamTimeoutError, UpstreamUnavailableError
 

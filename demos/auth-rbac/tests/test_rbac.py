@@ -4,7 +4,7 @@ Every test drives the real ASGI app through httpx — real middleware, real
 cookies — via fixtures from conftest.py.  This validates the full
 request lifecycle: middleware → controller → service → Result → HTTP.
 
-Key Lexigram test patterns:
+Key Oridecon test patterns:
 - Real composition root (no mocks of framework internals)
 - Cookie-based sessions via ASGITransport (in-process, no network)
 - Result<T,E> handlers mapping to HTTP status codes automatically

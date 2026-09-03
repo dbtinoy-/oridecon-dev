@@ -3,9 +3,9 @@ title: "File Storage"
 description: "Object and blob storage with a single protocol — swap S3, GCS, Azure Blob, R2, or local filesystem via config."
 ---
 
-`lexigram-storage` puts one protocol in front of every major object store. Application code depends on `BlobStoreProtocol`; the driver (`local`, `s3`, `gcs`, `azure`, `r2`, or `memory`) is chosen in configuration. Dev runs on disk, production on S3 or GCS, tests on the in-memory driver — none of which requires changes to the services that read and write files. Presigned URLs are part of the protocol, so you can hand out time-limited links without coupling to a provider SDK.
+`oridecon-storage` puts one protocol in front of every major object store. Application code depends on `BlobStoreProtocol`; the driver (`local`, `s3`, `gcs`, `azure`, `r2`, or `memory`) is chosen in configuration. Dev runs on disk, production on S3 or GCS, tests on the in-memory driver — none of which requires changes to the services that read and write files. Presigned URLs are part of the protocol, so you can hand out time-limited links without coupling to a provider SDK.
 
-For the full configuration reference, see the [`lexigram-storage` package docs](/packages/lexigram-storage/).
+For the full configuration reference, see the [`oridecon-storage` package docs](/packages/oridecon-storage/).
 
 ---
 
@@ -17,7 +17,7 @@ All drivers implement `BlobStoreProtocol`. Operations return raw bytes, a `FileI
 from collections.abc import AsyncIterator
 from datetime import timedelta
 from typing import Any, Protocol, runtime_checkable
-from lexigram.contracts.infra.storage import FileInfo
+from oridecon.contracts.infra.storage import FileInfo
 
 
 @runtime_checkable
@@ -45,8 +45,8 @@ class BlobStoreProtocol(Protocol):
 Add the provider and configure the `storage` section. Pick a driver with `default_driver` and place its settings under `drivers.<name>`. The `local` driver needs no external service:
 
 ```python
-from lexigram import Application
-from lexigram.storage import StorageProvider
+from oridecon import Application
+from oridecon.storage import StorageProvider
 
 app = Application(name="my-app")
 app.add_provider(StorageProvider())
@@ -89,7 +89,7 @@ GCS, Azure, and Cloudflare R2 follow the same shape; see the package docs for dr
 Inject `BlobStoreProtocol` into any service. Pass bytes (or an async iterator for large payloads) with the MIME type. The returned `FileInfo` carries the metadata the backend recorded:
 
 ```python
-from lexigram.contracts.infra.storage import BlobStoreProtocol, FileInfo
+from oridecon.contracts.infra.storage import BlobStoreProtocol, FileInfo
 
 
 class AvatarService:
@@ -183,8 +183,8 @@ Inject named backends with `Named`:
 
 ```python
 from typing import Annotated
-from lexigram.contracts.infra.storage import BlobStoreProtocol
-from lexigram.di.markers import Named
+from oridecon.contracts.infra.storage import BlobStoreProtocol
+from oridecon.di.markers import Named
 
 
 class MediaService:
@@ -204,9 +204,9 @@ class MediaService:
 For unit tests, `StorageModule.stub()` registers an in-memory backend that satisfies `BlobStoreProtocol` with no filesystem or network:
 
 ```python
-from lexigram import Application
-from lexigram.storage import StorageModule
-from lexigram.contracts.infra.storage import BlobStoreProtocol
+from oridecon import Application
+from oridecon.storage import StorageModule
+from oridecon.contracts.infra.storage import BlobStoreProtocol
 
 
 async def test_avatar_round_trip() -> None:
@@ -224,4 +224,4 @@ For tests that exercise the real filesystem layout, point the `local` driver at 
 
 - [Multi-tenancy](/guides/multi-tenancy/) — tenant-scoped buckets and key prefixes
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding `BlobStoreProtocol` to a driver
-- [`lexigram-storage` package](/packages/lexigram-storage/) — driver-specific options, encryption, KV store
+- [`oridecon-storage` package](/packages/oridecon-storage/) — driver-specific options, encryption, KV store

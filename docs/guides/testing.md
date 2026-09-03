@@ -3,13 +3,13 @@ title: "Testing Strategies"
 description: "Fast, decoupled tests with fakes, test clients, and protocol compliance suites."
 ---
 
-Lexigram is built for testability. Because services depend on **protocols** and are wired by the container, you can replace any infrastructure dependency with an in-memory implementation and run your tests entirely in-process. The `lexigram-testing` package provides the building blocks.
+Oridecon is built for testability. Because services depend on **protocols** and are wired by the container, you can replace any infrastructure dependency with an in-memory implementation and run your tests entirely in-process. The `oridecon-testing` package provides the building blocks.
 
 ---
 
 ## 1. Fakes Over Mocks
 
-Lexigram favours **fakes** — real, in-memory implementations of a protocol — over mocks that merely record calls. Fakes behave like the real thing (you can read back what you wrote), so your tests exercise genuine logic at unit-test speed.
+Oridecon favours **fakes** — real, in-memory implementations of a protocol — over mocks that merely record calls. Fakes behave like the real thing (you can read back what you wrote), so your tests exercise genuine logic at unit-test speed.
 
 | Test type | Dependencies | Speed |
 |-----------|--------------|-------|
@@ -21,10 +21,10 @@ Lexigram favours **fakes** — real, in-memory implementations of a protocol —
 
 ## 2. Built-in Fakes
 
-`lexigram-testing` ships fakes for the common contracts:
+`oridecon-testing` ships fakes for the common contracts:
 
 ```python
-from lexigram.testing import (
+from oridecon.testing import (
     FakeCache,          # CacheBackendProtocol
     FakeEventBus,       # EventBusProtocol
     FakeClock,          # ClockProtocol (manually advanced)
@@ -41,7 +41,7 @@ Use a fake exactly where the real implementation would go — inject it as the p
 
 ```python
 import pytest
-from lexigram.testing import FakeCache
+from oridecon.testing import FakeCache
 from my_app.services import OrderService
 
 
@@ -57,7 +57,7 @@ async def test_order_is_cached():
     assert cached.unwrap() is not None
 ```
 
-`FakeEventBus` records the events your code publishes; consult the [`lexigram-testing` package docs](/packages/lexigram-testing/) for its inspection helpers.
+`FakeEventBus` records the events your code publishes; consult the [`oridecon-testing` package docs](/packages/oridecon-testing/) for its inspection helpers.
 
 ---
 
@@ -67,7 +67,7 @@ For expiry, scheduling, or timestamp logic, inject a deterministic clock instead
 
 ```python
 from datetime import datetime, UTC
-from lexigram.testing import FixedClock
+from oridecon.testing import FixedClock
 
 clock = FixedClock(datetime(2026, 1, 1, 12, 0, tzinfo=UTC))
 service = TokenService(clock=clock)
@@ -85,7 +85,7 @@ assert token.expires_at == datetime(2026, 1, 1, 13, 0, tzinfo=UTC)
 When you boot the real application but want to replace one dependency, use a `testing_mode` container and `override()`:
 
 ```python
-from lexigram import Container
+from oridecon import Container
 
 container = Container(testing_mode=True)
 container.override(UserRepository, FakeUserRepository())
@@ -96,8 +96,8 @@ container.override(UserRepository, FakeUserRepository())
 Modules expose `stub()` for the same purpose at the module level — it returns a test-mode variant backed by in-memory/no-op providers:
 
 ```python
-from lexigram import Application
-from lexigram.tenancy import TenancyModule
+from oridecon import Application
+from oridecon.tenancy import TenancyModule
 
 async with Application.boot(modules=[TenancyModule.stub()]) as app:
     ...
@@ -107,7 +107,7 @@ async with Application.boot(modules=[TenancyModule.stub()]) as app:
 
 ## 5. Test Clients
 
-`lexigram-testing` provides per-subsystem **test beds** and **clients** that boot the relevant providers in-process:
+`oridecon-testing` provides per-subsystem **test beds** and **clients** that boot the relevant providers in-process:
 
 | Client | Bed | For |
 |--------|-----|-----|
@@ -117,7 +117,7 @@ async with Application.boot(modules=[TenancyModule.stub()]) as app:
 | `AITestClient` | `AITestBed` | Drive AI services with a stubbed LLM |
 
 ```python
-from lexigram.testing import WebTestBed
+from oridecon.testing import WebTestBed
 
 
 async def test_get_profile():
@@ -133,10 +133,10 @@ See the package docs for each bed's exact setup options.
 
 ## 6. Protocol Compliance Suites
 
-A standout feature of `lexigram-testing`: reusable **compliance suites** that verify *your* implementation of a protocol behaves correctly. Run the suite against your backend to guarantee it honours the contract:
+A standout feature of `oridecon-testing`: reusable **compliance suites** that verify *your* implementation of a protocol behaves correctly. Run the suite against your backend to guarantee it honours the contract:
 
 ```python
-from lexigram.testing import CacheBackendCompliance
+from oridecon.testing import CacheBackendCompliance
 from my_app.infrastructure.cache import MyCustomCache
 
 
@@ -166,7 +166,7 @@ uv run pytest -m integration
 
 ### Scenario Suite
 
-The `tests/integration/scenarios/` directory contains **cross-package integration tests** that run entirely in-memory — no live Postgres, Redis, or Docker required. Each scenario boots a minimal Lexigram application configured for a specific package composition (CRUD, events, web auth, audit, cache, tasks, tenancy).
+The `tests/integration/scenarios/` directory contains **cross-package integration tests** that run entirely in-memory — no live Postgres, Redis, or Docker required. Each scenario boots a minimal Oridecon application configured for a specific package composition (CRUD, events, web auth, audit, cache, tasks, tenancy).
 
 ```bash
 # Run scenario tests
@@ -180,7 +180,7 @@ uv run pytest -m integration -k "scenario"
 
 ```bash
 # One package's unit tests
-uv run pytest packages/lexigram-web/tests/
+uv run pytest packages/oridecon-web/tests/
 
 # One file
 uv run pytest tests/dev/test_registry.py -v
@@ -193,6 +193,6 @@ uv run pytest tests/dev/test_registry.py::test_audit_registry_contains_expected_
 
 ## Next Steps
 
-- [`lexigram-testing` package](/packages/lexigram-testing/) — full fixture and helper reference
+- [`oridecon-testing` package](/packages/oridecon-testing/) — full fixture and helper reference
 - [Dependency Injection](/fundamentals/dependency-injection/) — `testing_mode` and `override()`
 - [Result Pattern](/fundamentals/result-pattern/) — asserting on `Ok` / `Err`

@@ -1,6 +1,6 @@
 # 11 — Startup Cost Audit: Schema-Version Marker (R15) (Full Plan)
 
-**Date:** 2026-09-02 · **Status:** ✅ Done · **Branch:** `arena/01a05b98-lexigram`
+**Date:** 2026-09-02 · **Status:** ✅ Done · **Branch:** `arena/01a05b98-oridecon`
 
 ## 1. Problem (measured)
 
@@ -36,7 +36,7 @@ costs nothing. The waste is exclusively the eager boot loop.
 
 New table `admin_schema_markers(component PK, fingerprint, updated_at)`
 managed by `AdminSchemaMarker`
-(`src/lexigram/admin/auth/store/schema_marker.py`):
+(`src/oridecon/admin/auth/store/schema_marker.py`):
 
 - **Boot, marker current** (the common case): `CREATE TABLE IF NOT EXISTS`
   for the marker itself + one `SELECT` → **2 statements**. The ensure loop
@@ -91,9 +91,9 @@ leaves room for them to adopt the same mechanism later.
 | `di/sub_providers/auth.py` | Boot loop consults the marker: skip + mark stores ready when current; upsert marker after a fully successful ensure pass |
 | `tests/unit/test_schema_marker.py` | Fingerprint staleness guard; marker is_current/mark_current/upsert; error tolerance |
 | `tests/unit/test_sub_providers/test_auth_sub.py` | Boot-loop matrix: current → skipped+marked ready; stale → ensures run + marker written; ensure failure → marker not written; marker error → ensures run |
-| `packages/lexigram-sql/.../providers/_query_mixin.py` | **B12 fix** (§6): `execute` classifies reads vs writes; writes go through the committing `execute_modify` path |
-| `packages/lexigram-sql/tests/unit/test_execute_commit_regression.py` | New: 8-test commit/persistence regression suite |
-| `packages/lexigram-sql/tests/integration/test_migrations.py`, `test_monitoring_slow_query.py` | Test hygiene: relative `sqlite:///test.db` → `tmp_path`-backed absolute paths (§6.3) |
+| `packages/oridecon-sql/.../providers/_query_mixin.py` | **B12 fix** (§6): `execute` classifies reads vs writes; writes go through the committing `execute_modify` path |
+| `packages/oridecon-sql/tests/unit/test_execute_commit_regression.py` | New: 8-test commit/persistence regression suite |
+| `packages/oridecon-sql/tests/integration/test_migrations.py`, `test_monitoring_slow_query.py` | Test hygiene: relative `sqlite:///test.db` → `tmp_path`-backed absolute paths (§6.3) |
 
 ## 4. Verification
 
@@ -107,7 +107,7 @@ leaves room for them to adopt the same mechanism later.
 
 - Admin unit suite: **5335 passed / 8 skipped, coverage 75.95%** (18 new
   tests: 13 in `test_schema_marker.py`, 5 boot-matrix cases in
-  `test_auth_sub.py`). E2E: 72 passed / 2 skipped. lexigram-sql suite:
+  `test_auth_sub.py`). E2E: 72 passed / 2 skipped. oridecon-sql suite:
   **1403 passed / 48 skipped** (8 new regression tests — see §6).
 - Live-verified (playground, three consecutive boots):
   - Boot A ran the full ensure pass (9 `CREATE TABLE`s in the query log)
@@ -123,14 +123,14 @@ leaves room for them to adopt the same mechanism later.
 
 ## 6. B12 — discovered en route: `DatabaseService.execute` never committed DML on SQLite
 
-Verifying §4 exposed a latent **data-loss bug in `lexigram-sql`**, not in
+Verifying §4 exposed a latent **data-loss bug in `oridecon-sql`**, not in
 the admin app: boot #1's marker `INSERT` logged `Query SUCCESS`, yet after
 a clean shutdown a fresh connection saw no row.
 
 ### 6.1 Root cause (probe-proven)
 
 `DatabaseService.execute`
-(`packages/lexigram-sql/src/lexigram/sql/providers/_query_mixin.py`) routed
+(`packages/oridecon-sql/src/oridecon/sql/providers/_query_mixin.py`) routed
 **all** SQL — reads and writes alike — through `execute_query`, whose
 sqlite driver path does `fetchall()` and **never commits**. Under
 python-sqlite3's legacy isolation, DML opens an implicit transaction that
@@ -146,7 +146,7 @@ A standalone probe (boot → `execute(INSERT)` → shutdown → fresh sqlite3
 read) reproduced it deterministically: pre-fix `rowcount=0` and no row
 after shutdown; post-fix `rowcount=1` and the row persists.
 
-### 6.2 Fix (at the source, in lexigram-sql)
+### 6.2 Fix (at the source, in oridecon-sql)
 
 `execute` now classifies the statement:
 
@@ -160,7 +160,7 @@ after shutdown; post-fix `rowcount=1` and the row persists.
 
 ### 6.3 Regression coverage
 
-`packages/lexigram-sql/tests/unit/test_execute_commit_regression.py`
+`packages/oridecon-sql/tests/unit/test_execute_commit_regression.py`
 (8 tests): INSERT/UPSERT/UPDATE/DELETE survive service shutdown, real
 rowcount, SELECT and CTE-SELECT stay on the read path, failed write →
 failed result, explicit-transaction rollback still respected.

@@ -1,6 +1,6 @@
 """The five scripted demo acts — Registry dispatch, no if/elif chains.
 
-Lexigram uses Registry-based dispatch instead of if/elif
+Oridecon uses Registry-based dispatch instead of if/elif
 chains.  The Registry is a generic typed container (Registry[Key, Value])
 that provides register/get/keys operations.  This pattern is extensible
 — add new acts without modifying existing code.  In a real app, you'd
@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from lexigram.primitives import Registry
+from oridecon.primitives import Registry
 
 ALLOWED_MODEL = "gpt-4o-mini"
 RESTRICTED_MODEL = "gpt-5-restricted"
@@ -37,7 +37,7 @@ class Act:
 def _build_acts() -> Registry[str, Act]:
     """Framework Registry keyed by act id.
 
-    with_defaults() is the Lexigram convention for populating
+    with_defaults() is the Oridecon convention for populating
     registries with default entries.  In production, you'd call
     register() in a loop over database rows or config entries.
     The registry is module-level (ACTS) so it's shared across the process.

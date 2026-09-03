@@ -3,19 +3,19 @@ title: "AI Sessions"
 description: "Conversation sessions with branching, checkpointing, and multi-agent coordination."
 ---
 
-`lexigram-ai-session` provides stateful conversation session management with branching, checkpointing, and multi-agent coordination. Sessions track turns, metadata, and lifecycle state, supporting fork-and-branch workflows and point-in-time restoration.
+`oridecon-ai-session` provides stateful conversation session management with branching, checkpointing, and multi-agent coordination. Sessions track turns, metadata, and lifecycle state, supporting fork-and-branch workflows and point-in-time restoration.
 
-For the full configuration reference and advanced features (analytics, middleware, context pruning), see the [`lexigram-ai-session` package docs](/packages/lexigram-ai-session/).
+For the full configuration reference and advanced features (analytics, middleware, context pruning), see the [`oridecon-ai-session` package docs](/packages/oridecon-ai-session/).
 
 ---
 
 ## 1. The Contracts
 
-Sessions are managed through two protocols from `lexigram.contracts.ai.session`:
+Sessions are managed through two protocols from `oridecon.contracts.ai.session`:
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.contracts.ai.session import (
+from oridecon.contracts.ai.session import (
     SessionState, SessionStatus, SessionTurn, SessionCheckpoint,
 )
 
@@ -85,8 +85,8 @@ class SessionStatus(StrEnum):
 Add `SessionModule` and configure persistence and lifecycle:
 
 ```python
-from lexigram import Application
-from lexigram.ai.session import SessionModule, SessionConfig
+from oridecon import Application
+from oridecon.ai.session import SessionModule, SessionConfig
 
 app = Application(name="my-app")
 app.add_module(SessionModule.configure(
@@ -126,9 +126,9 @@ In production, use `backend: cache` or `backend: database`. The `in_memory` back
 Create a session, add turns, and close it through `SessionManagerProtocol`:
 
 ```python
-from lexigram import Application
-from lexigram.ai.session import SessionModule, SessionConfig
-from lexigram.contracts.ai.session import (
+from oridecon import Application
+from oridecon.ai.session import SessionModule, SessionConfig
+from oridecon.contracts.ai.session import (
     SessionManagerProtocol, SessionTurn,
 )
 from datetime import datetime, UTC
@@ -217,8 +217,8 @@ Branching is useful for exploring alternative conversation paths, testing differ
 Sessions support multi-agent coordination with turn management:
 
 ```python
-from lexigram.ai.session.multi_agent.turn_manager import RoundRobinTurnManager
-from lexigram.ai.session.multi_agent.group_session import GroupSession
+from oridecon.ai.session.multi_agent.turn_manager import RoundRobinTurnManager
+from oridecon.ai.session.multi_agent.group_session import GroupSession
 
 
 async def multi_agent_session(manager: SessionManagerProtocol, session_id: str) -> None:
@@ -244,9 +244,9 @@ Role isolation (`RoleIsolation`) ensures agents only access turns and context re
 Use `SessionModule.stub()` for isolated tests:
 
 ```python
-from lexigram import Application
-from lexigram.ai.session import SessionModule
-from lexigram.contracts.ai.session import SessionManagerProtocol
+from oridecon import Application
+from oridecon.ai.session import SessionModule
+from oridecon.contracts.ai.session import SessionManagerProtocol
 
 
 async def test_session_lifecycle() -> None:
@@ -272,4 +272,4 @@ The stub uses an in-memory store with the cleanup scheduler disabled. Data is no
 - [AI Memory](/guides/ai-memory/) — consolidating sessions into episodic and semantic memory
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding protocols to implementations
 - [Providers](/fundamentals/providers/) — how `SessionProvider` hooks into application boot
-- [`lexigram-ai-session` package](/packages/lexigram-ai-session/) — analytics, middleware, pruning
+- [`oridecon-ai-session` package](/packages/oridecon-ai-session/) — analytics, middleware, pruning

@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import pytest
 
-from lexigram.contracts.core import HealthCheckResult, HealthStatus
-from lexigram.contracts.domain.events import DomainEvent
-from lexigram.testing.memory.event_bus import InMemoryEventBus
-from lexigram.monitor.health import HealthChecker, health_checker
-from lexigram.workflow.core.pipe import TransformPipe
+from oridecon.contracts.core import HealthCheckResult, HealthStatus
+from oridecon.contracts.domain.events import DomainEvent
+from oridecon.testing.memory.event_bus import InMemoryEventBus
+from oridecon.monitor.health import HealthChecker, health_checker
+from oridecon.workflow.core.pipe import TransformPipe
 
 # ---------------------------------------------------------------------------
 # Fixtures / helpers

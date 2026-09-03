@@ -10,10 +10,10 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 from auth_web.config import AccountVerificationConfig
-from lexigram.auth.storage import UserStoreProtocol
-from lexigram.logging import get_logger
-from lexigram.primitives import clock
-from lexigram.result import Err, Ok, Result
+from oridecon.auth.storage import UserStoreProtocol
+from oridecon.logging import get_logger
+from oridecon.primitives import clock
+from oridecon.result import Err, Ok, Result
 
 logger = get_logger(__name__)
 

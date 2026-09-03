@@ -9,7 +9,7 @@ from release_control.app import create_app
 
 async def serve() -> None:
     """Start the release control server and block until shutdown."""
-    from lexigram.web.server.runner import run_server
+    from oridecon.web.server.runner import run_server
 
     app = create_app()
     await app.start()

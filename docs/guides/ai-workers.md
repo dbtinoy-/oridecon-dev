@@ -3,9 +3,9 @@ title: "AI Workers"
 description: "Background AI work — batch embedding, document ingestion, and maintenance."
 ---
 
-`lexigram-ai-workers` provides background processing for batch embedding, document ingestion, and scheduled maintenance tasks. Workers register with the task system and run in a separate process or thread pool, leaving the main application loop free for request handling.
+`oridecon-ai-workers` provides background processing for batch embedding, document ingestion, and scheduled maintenance tasks. Workers register with the task system and run in a separate process or thread pool, leaving the main application loop free for request handling.
 
-For the full configuration reference and advanced features (DLQ recovery, custom schedulers, error classification), see the [`lexigram-ai-workers` package docs](/packages/lexigram-ai-workers/).
+For the full configuration reference and advanced features (DLQ recovery, custom schedulers, error classification), see the [`oridecon-ai-workers` package docs](/packages/oridecon-ai-workers/).
 
 ---
 
@@ -14,7 +14,7 @@ For the full configuration reference and advanced features (DLQ recovery, custom
 Add the module and configure the `ai_workers:` section. The module wires ingestion, embedding, DLQ, and maintenance workers:
 
 ```python
-from lexigram.ai.workers import WorkersModule, WorkersConfig
+from oridecon.ai.workers import WorkersModule, WorkersConfig
 
 app.add_module(
     WorkersModule.configure(
@@ -56,7 +56,7 @@ Three worker families are registered by `WorkersModule`:
 `BatchEmbeddingWorker` processes embedding jobs in parallel. It takes chunk lists, calls the configured embedding provider, and stores results. `embed_batch()` returns a job id you can poll with `get_progress()`:
 
 ```python
-from lexigram.ai.workers import BatchEmbeddingWorker
+from oridecon.ai.workers import BatchEmbeddingWorker
 
 
 class EmbeddingOrchestrator:
@@ -79,7 +79,7 @@ class EmbeddingOrchestrator:
 
 ```python
 from pathlib import Path
-from lexigram.ai.workers import DocumentIngestionWorker
+from oridecon.ai.workers import DocumentIngestionWorker
 
 
 class DocumentProcessor:
@@ -101,7 +101,7 @@ class DocumentProcessor:
 `MaintenanceWorker` runs periodic tasks like index optimization, cache cleanup, and health checks. Register tasks with a handler callable, then trigger them manually with `run_task_now()`:
 
 ```python
-from lexigram.ai.workers import MaintenanceWorker, MaintenanceTaskType
+from oridecon.ai.workers import MaintenanceWorker, MaintenanceTaskType
 
 
 class HealthMonitor:
@@ -129,7 +129,7 @@ class HealthMonitor:
 Failed jobs land in the DLQ for retry, archive, or notification. Configure the sweep interval in `WorkersConfig`:
 
 ```python
-from lexigram.ai.workers import DeadLetterQueueWorker, FailureCategory
+from oridecon.ai.workers import DeadLetterQueueWorker, FailureCategory
 
 
 class DLQManager:
@@ -155,9 +155,9 @@ Each `DLQItem` tracks failure count, category, backoff, and next retry time. The
 Use `WorkersModule.stub()` for unit tests. It disables the background scheduler and uses no-op worker implementations:
 
 ```python
-from lexigram import Application
-from lexigram.ai.workers import WorkersModule
-from lexigram.contracts.infra.tasks.protocols import TaskWorkerProtocol
+from oridecon import Application
+from oridecon.ai.workers import WorkersModule
+from oridecon.contracts.infra.tasks.protocols import TaskWorkerProtocol
 
 
 async def test_worker_registration() -> None:
@@ -175,4 +175,4 @@ You can also bind hand-rolled fakes to `TaskWorkerProtocol` in any container —
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding workers to protocols
 - [Tasks & Scheduling](/guides/background-jobs/) — registering workers with the task system
 - [Testing](/guides/testing/) — substituting stubs for infrastructure
-- [`lexigram-ai-workers` package](/packages/lexigram-ai-workers/) — full config reference, DLQ recovery, error classifier
+- [`oridecon-ai-workers` package](/packages/oridecon-ai-workers/) — full config reference, DLQ recovery, error classifier

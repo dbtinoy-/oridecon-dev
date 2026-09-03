@@ -1,26 +1,26 @@
 # 04 — Verification Playbook
 
 How the 2026-09-01 fixes were verified, and the repeatable procedure for
-verifying any future change to lexigram-admin. Auth/authz changes require
+verifying any future change to oridecon-admin. Auth/authz changes require
 **both** layers: unit tests *and* a live playground pass.
 
 ## 1. Unit suite (fast, always)
 
 ```bash
 # from repo root
-uv run pytest experimental/apps/lexigram-admin/tests/unit -q
+uv run pytest experimental/apps/oridecon-admin/tests/unit -q
 ```
 
 - Baseline 2026-09-02: **5357 passed, 8 skipped**, coverage
-  ≈ 76.0% (configured minimum 60%). lexigram-sql package suite baseline:
-  **1403 passed, 48 skipped** (`cd packages/lexigram-sql && uv run pytest tests -q`).
+  ≈ 76.0% (configured minimum 60%). oridecon-sql package suite baseline:
+  **1403 passed, 48 skipped** (`cd packages/oridecon-sql && uv run pytest tests -q`).
 - The suite adds `--cov` flags from `pyproject.toml`; use `--no-cov` for
   quick single-file runs.
 - New regression tests added this date:
   - `tests/e2e/test_first_run_scenario_e2e.py` — **the first-run scenario**
     (roadmap R5): real SQL stores via `create_app()`, full operator journey.
     Run it for any change touching auth/authz/middleware/bootstrap:
-    `uv run pytest experimental/apps/lexigram-admin/tests/e2e/test_first_run_scenario_e2e.py --no-cov`
+    `uv run pytest experimental/apps/oridecon-admin/tests/e2e/test_first_run_scenario_e2e.py --no-cov`
   - `tests/unit/middleware/test_super_admin_marking.py` (B1)
   - `tests/unit/middleware/test_setup_middleware.py` — caching tests (P1)
   - `tests/unit/auth/test_email_verification_store.py` — `mark_verified` (B3)
@@ -33,9 +33,9 @@ uv run pytest experimental/apps/lexigram-admin/tests/unit -q
     403/404/405/500 (R7)
   - `tests/unit/middleware/test_permission_scheme.py` — canonical permission
     scheme + legacy alias bridge (R6)
-  - `packages/lexigram-sql/tests/unit/test_query_log_single_emission.py` —
+  - `packages/oridecon-sql/tests/unit/test_query_log_single_emission.py` —
     one query-log entry per statement (R9):
-    `uv run pytest packages/lexigram-sql/tests/unit/test_query_log_single_emission.py --no-cov`
+    `uv run pytest packages/oridecon-sql/tests/unit/test_query_log_single_emission.py --no-cov`
   - `tests/unit/settings/test_default_csp.py` — default CSP is fully
     first-party (doc 03)
   - `tests/unit/schema/test_text_area.py` — Trix vendored, no CDN (doc 03)
@@ -96,7 +96,7 @@ uv run pytest experimental/apps/lexigram-admin/tests/unit -q
 
 ## 2. Live playground (for anything touching auth, authz, middleware, layouts)
 
-The playground (`experimental/apps/lexigram-admin/playground/`) is a
+The playground (`experimental/apps/oridecon-admin/playground/`) is a
 **committed** dev asset — only the SQLite files (`playground.db*`) are
 gitignored. Since R8 (2026-09-01), a clean boot must produce **zero
 tracebacks**: optional contributors whose dependencies aren't registered
@@ -106,8 +106,8 @@ INFO entries instead. A traceback at boot is a regression.
 ### Boot
 
 ```bash
-rm -f experimental/apps/lexigram-admin/playground/playground.db*   # ALWAYS all three files (-wal/-shm too)
-uv run python experimental/apps/lexigram-admin/playground/serve.py  # 0.0.0.0:8000, setup token: dev-setup-token
+rm -f experimental/apps/oridecon-admin/playground/playground.db*   # ALWAYS all three files (-wal/-shm too)
+uv run python experimental/apps/oridecon-admin/playground/serve.py  # 0.0.0.0:8000, setup token: dev-setup-token
 ```
 
 The playground boots the real lifecycle (`register → boot → mount_to_app`)
@@ -142,13 +142,13 @@ grep -c 'href="/admin/products"' /tmp/d.html                              # ≥1
 grep -c "<title>" /tmp/d.html                                             # exactly 1 (B4)
 grep -o '<script src="[^"]*"' /tmp/d.html                                 # only /admin/static/... (B6)
 grep -c "unpkg" /tmp/d.html                                               # 0 (B6)
-grep -c "LEX_ERR" /tmp/d.html                                             # 0 (B7)
+grep -c "ORI_ERR" /tmp/d.html                                             # 0 (B7)
 ```
 
 ### Database spot-checks
 
 ```bash
-sqlite3 experimental/apps/lexigram-admin/playground/playground.db \
+sqlite3 experimental/apps/oridecon-admin/playground/playground.db \
   "SELECT user_id, email_verified_at FROM admin_email_verifications;"
 # first admin must have email_verified_at set at creation time (B3)
 ```
@@ -159,7 +159,7 @@ sqlite3 experimental/apps/lexigram-admin/playground/playground.db \
 - Audit row `email_verified` with `{"reason": "out_of_band_setup"}` (B3).
 - Exactly **one** `SELECT COUNT(*) FROM admin_users` after the first
   post-setup request; none on subsequent requests (P1).
-- No `[LEX_ERR_*]` text in any `Location:` response header (B7).
+- No `[ORI_ERR_*]` text in any `Location:` response header (B7).
 
 ## 3. Environment notes (sandbox/CI quirks)
 

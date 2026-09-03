@@ -17,13 +17,13 @@ description: RAG console with multi-strategy retrieval and citation display
 #   2. ai_memory:  (not used — this demo has no memory subsystem)
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram RAG:       packages/lexigram-ai-rag/
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon RAG:       packages/oridecon-ai-rag/
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 #
@@ -59,7 +59,7 @@ web:
       # excluded_paths: []        # paths exempt from CSRF validation
       # exclude_content_types: [] # Content-Types that bypass CSRF
       # exclude_auth_schemes: []  # Auth schemes that bypass CSRF
-      # secret_key: null          # HMAC key (LEX_WEB__SECURITY__CSRF__SECRET_KEY)
+      # secret_key: null          # HMAC key (ORI_WEB__SECURITY__CSRF__SECRET_KEY)
 
     # ── CORS ─────────────────────────────────────────────────────────────────
     # cors:

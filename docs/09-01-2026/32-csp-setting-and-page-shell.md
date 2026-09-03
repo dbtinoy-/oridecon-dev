@@ -1,7 +1,7 @@
 # 32 — CSP Report-Only Setting + Structured-Page Shell Fix (R36)
 
 **Date:** 2026-09-02 (docs series 09-01-2026)
-**Branch:** `arena/01a05b98-lexigram` · follows R34 (doc 30) / R35 (doc 31)
+**Branch:** `arena/01a05b98-oridecon` · follows R34 (doc 30) / R35 (doc 31)
 
 ## 1. Problems (both found in the same recon sweep)
 

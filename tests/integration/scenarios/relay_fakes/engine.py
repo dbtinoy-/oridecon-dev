@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 
-from lexigram.contracts.ai.relay import (
+from oridecon.contracts.ai.relay import (
     ConversionQuality,
     RelayConverterProtocol,
     RelayConvertResult,
@@ -14,7 +14,7 @@ from lexigram.contracts.ai.relay import (
     RelayResponsePayload,
     RelayUsage,
 )
-from lexigram.contracts.ai.relay.operations import (
+from oridecon.contracts.ai.relay.operations import (
     RelayActiveStream,
     RelayChannelHealth,
     RelayOperationsControlProtocol,
@@ -25,11 +25,11 @@ from lexigram.contracts.ai.relay.operations import (
     RelayRouteMetrics,
     TimeWindow,
 )
-from lexigram.contracts.ai.relay.protocols import (
+from oridecon.contracts.ai.relay.protocols import (
     RelayRegistryProtocol,
     RelayStreamSessionProtocol,
 )
-from lexigram.contracts.core.result import Err, Ok, Result
+from oridecon.contracts.core.result import Err, Ok, Result
 
 
 @dataclass
@@ -65,8 +65,8 @@ class FakeRelayConverter(RelayConverterProtocol):
             return Ok(self.request_result)
         # The gateway serializes the converted value with ``to_dict()``,
         # so the fake produces the typed target DTO through the real codec.
-        from lexigram.ai.relay.gateway.codec import RelayPayloadCodec
-        from lexigram.serialization import dumps
+        from oridecon.ai.relay.gateway.codec import RelayPayloadCodec
+        from oridecon.serialization import dumps
 
         decoded = RelayPayloadCodec().decode_request(
             target, dumps(payload), request_id=""

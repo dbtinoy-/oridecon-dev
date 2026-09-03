@@ -2,7 +2,7 @@ from __future__ import annotations
 
 """Error-tracking wiring scenario: provider boot installs the unhandled hook.
 
-Packages under test: lexigram-monitor
+Packages under test: oridecon-monitor
 Infrastructure: none (external SDK is faked via ``sys.modules``)
 
 Scenario:
@@ -17,10 +17,10 @@ from typing import Any
 
 import pytest
 
-from lexigram.app.base import Application
-from lexigram.monitor import MonitorModule
-from lexigram.monitor.config import ErrorTrackingConfig, MonitorConfig
-from lexigram.monitor.error_tracking import UnhandledExceptionHook
+from oridecon.app.base import Application
+from oridecon.monitor import MonitorModule
+from oridecon.monitor.config import ErrorTrackingConfig, MonitorConfig
+from oridecon.monitor.error_tracking import UnhandledExceptionHook
 
 pytestmark = [pytest.mark.integration, pytest.mark.scenario]
 

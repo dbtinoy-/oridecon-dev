@@ -3,9 +3,9 @@ title: "Audit Trail"
 description: "Append-only, HMAC-verified audit logging with retention management."
 ---
 
-`lexigram-audit` provides append-only audit logging with HMAC-SHA256 tamper detection, retention policies, and scheduled verification. The audit subsystem is designed to be fire-tolerant — a logging failure never blocks the operation that triggered it.
+`oridecon-audit` provides append-only audit logging with HMAC-SHA256 tamper detection, retention policies, and scheduled verification. The audit subsystem is designed to be fire-tolerant — a logging failure never blocks the operation that triggered it.
 
-For the full configuration reference, SQL store schema, and CLI commands, see the [`lexigram-audit` package docs](/packages/lexigram-audit/).
+For the full configuration reference, SQL store schema, and CLI commands, see the [`oridecon-audit` package docs](/packages/oridecon-audit/).
 
 ---
 
@@ -15,7 +15,7 @@ Three protocols define the audit stack:
 
 ```python
 from typing import Protocol, runtime_checkable
-from lexigram.contracts.audit import (
+from oridecon.contracts.audit import (
     AuditLoggerProtocol,
     AuditStoreProtocol,
     AuditVerifierProtocol,
@@ -65,8 +65,8 @@ AuditEntry(
 Configure the audit subsystem through `AuditModule.configure()`:
 
 ```python
-from lexigram import Application
-from lexigram.audit import AuditModule
+from oridecon import Application
+from oridecon.audit import AuditModule
 
 app = Application(name="my-app")
 app.add_module(AuditModule.configure(
@@ -106,13 +106,13 @@ The `hmac_key` is required for tamper detection. Without it, verification is a n
 Inject `AuditLoggerProtocol` and call `log()`:
 
 ```python
-from lexigram.contracts.audit import (
+from oridecon.contracts.audit import (
     AuditLoggerProtocol,
     AuditEntry,
     AuditQuery,
     AuditEventSeverity,
 )
-from lexigram.result import Result, Ok, Err
+from oridecon.result import Result, Ok, Err
 
 
 class UserService:
@@ -149,7 +149,7 @@ class UserService:
 For common patterns, the `@audited` decorator attaches metadata that an interceptor reads to log automatically:
 
 ```python
-from lexigram.audit.decorators import audited
+from oridecon.audit.decorators import audited
 
 
 class ProductService:
@@ -167,7 +167,7 @@ The decorator sets `__audited__`, `__audit_action__`, `__audit_resource_type__`,
 Query entries with the composable `AuditQuery`:
 
 ```python
-from lexigram.contracts.audit import AuditQuery, AuditEventSeverity
+from oridecon.contracts.audit import AuditQuery, AuditEventSeverity
 
 
 async def find_recent_failures(self, actor_id: str) -> list[AuditEntry]:
@@ -188,7 +188,7 @@ async def find_recent_failures(self, actor_id: str) -> list[AuditEntry]:
 Every entry appended to the store gets an HMAC-SHA256 checksum over its serialised content. Verification detects tampering:
 
 ```python
-from lexigram.audit import AuditVerifier, verify_audit_checksum
+from oridecon.audit import AuditVerifier, verify_audit_checksum
 
 
 async def verify_integrity(verifier: AuditVerifier) -> None:
@@ -211,7 +211,7 @@ Checksum verification uses constant-time comparison (`hmac.compare_digest`) to p
 Define a retention policy with severity-based overrides:
 
 ```python
-from lexigram.contracts.audit import RetentionPolicy
+from oridecon.contracts.audit import RetentionPolicy
 
 policy = RetentionPolicy(
     name="default",
@@ -226,7 +226,7 @@ policy = RetentionPolicy(
 Run the purger manually or via cron:
 
 ```python
-from lexigram.audit import AuditPurger
+from oridecon.audit import AuditPurger
 
 purger = AuditPurger(store, policy)
 purged = await purger.purge_expired()
@@ -256,9 +256,9 @@ the `dry_run` flag on each purger run.
 For unit tests, configure the module with `store_backend="memory"`:
 
 ```python
-from lexigram import Application
-from lexigram.audit import AuditModule
-from lexigram.contracts.audit import AuditLoggerProtocol, AuditEntry
+from oridecon import Application
+from oridecon.audit import AuditModule
+from oridecon.contracts.audit import AuditLoggerProtocol, AuditEntry
 
 
 async def test_logs_audit_entry() -> None:
@@ -283,4 +283,4 @@ The in-memory store uses a bounded `deque` (max 10,000 entries). For larger test
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding protocols to implementations
 - [Providers](/fundamentals/providers/) — how `AuditBundleProvider` hooks into application boot
 - [Testing](/guides/testing/) — substituting stubs for infrastructure
-- [`lexigram-audit` package](/packages/lexigram-audit/) — CLI commands, SQL store schema, admin dashboard
+- [`oridecon-audit` package](/packages/oridecon-audit/) — CLI commands, SQL store schema, admin dashboard

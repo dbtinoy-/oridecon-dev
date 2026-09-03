@@ -12,23 +12,23 @@ description: Health checks, metrics collection, and distributed tracing
 # defaults.  Each section maps 1:1 to a typed config model — the
 # framework validates your yaml against it at boot time.
 #
-# DEMO FOCUS: Lexigram MonitorModule health, metrics, and tracing.
+# DEMO FOCUS: Oridecon MonitorModule health, metrics, and tracing.
 # The package-owned in-memory instruments keep the console standalone.
 #
 # LEARNING PATH:
 #   1. web:        HTTP server, security, CSRF
-#   2. monitor:     Lexigram metric/tracing backend and span retention
+#   2. monitor:     Oridecon metric/tracing backend and span retention
 #   3. monitorstack: Demo health-response label
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram Monitor:   packages/lexigram-monitor/
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon Monitor:   packages/oridecon-monitor/
 #   - Demo config:        demos/monitor-stack/src/monitorstack/config.py
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -79,7 +79,7 @@ web:
 # Demo-owned display label. MonitorModule reads its own observability section
 # above; this provider config is deliberately not a second metrics system.
 # ─────────────────────────────────────────────────────────────────────────────
-# ── Lexigram Monitor capability ──────────────────────────────────────────────
+# ── Oridecon Monitor capability ──────────────────────────────────────────────
 # MonitorModule supplies the real metric instruments, bounded in-memory trace
 # provider, and categorised health registry used by the console.
 monitor:

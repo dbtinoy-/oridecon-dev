@@ -16,7 +16,7 @@ os.chdir(_DEMO_ROOT)
 sys.path.insert(0, str(_DEMO_ROOT / "src"))
 
 from content_gen.app import create_app  # noqa: E402
-from lexigram.web import WebProvider  # noqa: E402
+from oridecon.web import WebProvider  # noqa: E402
 
 
 @pytest.fixture

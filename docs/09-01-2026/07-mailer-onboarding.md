@@ -24,14 +24,14 @@ Three small pieces, no new dependencies (contracts only):
 ### 1. `AdminConsoleMailer` — debug-mode fallback backend
 
 `services/notifications/console_mailer.py`. Implements
-`lexigram.contracts.mailer.protocols.MailerProtocol`:
+`oridecon.contracts.mailer.protocols.MailerProtocol`:
 
 - `send(message)` → logs one structured line (subject, recipients, body —
   the body carries verification/reset links, so dev flows are completable
   from the log) and returns `Ok(MessageDeliveryReceipt(backend="console"))`.
 - `health_check()` → always healthy (`console` backend, no network).
 
-The admin package must not depend on `lexigram-notification`; the console
+The admin package must not depend on `oridecon-notification`; the console
 mailer is ~60 lines against contracts. Embedders with the notification
 package keep using their own `ConsoleMailer`/real backends — the fallback
 only registers when **nothing** is bound.

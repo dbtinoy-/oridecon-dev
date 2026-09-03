@@ -6,7 +6,7 @@ from dev.checks.env_example import main
 
 
 def _write_example(path: Path, names: list[str]) -> None:
-    lines = ["LEX_DEBUG=false  # debug toggle"] + [f"{name}=" for name in names]
+    lines = ["ORI_DEBUG=false  # debug toggle"] + [f"{name}=" for name in names]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -23,8 +23,8 @@ def _run_check(root: Path, example: Path) -> int:
 
 def test_check_passes_when_all_references_documented(tmp_path: Path) -> None:
     example = tmp_path / ".env.example"
-    _write_example(example, ["DATABASE_URL", "LEX_PROFILE"])
-    source = tmp_path / "lexigram" / "src"
+    _write_example(example, ["DATABASE_URL", "ORI_PROFILE"])
+    source = tmp_path / "oridecon" / "src"
     source.mkdir(parents=True)
     (source / "doctor.py").write_text(
         'import os\nurl = os.getenv("DATABASE_URL")\n',
@@ -37,7 +37,7 @@ def test_check_passes_when_all_references_documented(tmp_path: Path) -> None:
 def test_check_fails_when_reference_missing_from_example(tmp_path: Path) -> None:
     example = tmp_path / ".env.example"
     _write_example(example, [])
-    source = tmp_path / "lexigram" / "src"
+    source = tmp_path / "oridecon" / "src"
     source.mkdir(parents=True)
     (source / "doctor.py").write_text(
         'import os\nurl = os.environ.get("DATABASE_URL")\n',
@@ -50,7 +50,7 @@ def test_check_fails_when_reference_missing_from_example(tmp_path: Path) -> None
 def test_check_reports_each_missing_variable(tmp_path: Path, capsys: object) -> None:
     example = tmp_path / ".env.example"
     _write_example(example, [])
-    source = tmp_path / "lexigram" / "src"
+    source = tmp_path / "oridecon" / "src"
     source.mkdir(parents=True)
     (source / "doctor.py").write_text(
         'import os\na = os.environ["JWT_SECRET"]\nb = os.getenv("BROKER_URL")\n',
@@ -66,7 +66,7 @@ def test_check_reports_each_missing_variable(tmp_path: Path, capsys: object) -> 
 def test_check_finds_dynamic_same_line_references(tmp_path: Path) -> None:
     example = tmp_path / ".env.example"
     _write_example(example, [])
-    source = tmp_path / "lexigram-ai" / "src"
+    source = tmp_path / "oridecon-ai" / "src"
     source.mkdir(parents=True)
     (source / "doctor.py").write_text(
         "import os\n"
@@ -82,7 +82,7 @@ def test_check_finds_dynamic_same_line_references(tmp_path: Path) -> None:
 def test_check_ignores_test_dirs_and_vcs(tmp_path: Path) -> None:
     example = tmp_path / ".env.example"
     _write_example(example, [])
-    tests_dir = tmp_path / "lexigram" / "tests"
+    tests_dir = tmp_path / "oridecon" / "tests"
     tests_dir.mkdir(parents=True)
     (tests_dir / "test_doctor.py").write_text(
         'import os\nx = os.environ.get("TEST_ONLY_VAR")\n',
@@ -100,7 +100,7 @@ def test_check_ignores_test_dirs_and_vcs(tmp_path: Path) -> None:
 
 def test_check_fails_when_example_missing(tmp_path: Path) -> None:
     example = tmp_path / ".env.example"
-    source = tmp_path / "lexigram" / "src"
+    source = tmp_path / "oridecon" / "src"
     source.mkdir(parents=True)
 
     assert _run_check(tmp_path, example) == 1

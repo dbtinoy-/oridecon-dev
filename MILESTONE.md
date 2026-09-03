@@ -1,7 +1,7 @@
 # Milestones
 
-Rolling roadmap for the Lexigram Framework monorepo. Release dates follow the
-annotated `v0.1.x` tags published on `dbtinoy-/lexigram` (authoritative);
+Rolling roadmap for the Oridecon Framework monorepo. Release dates follow the
+annotated `v0.1.x` tags published on `dbtinoy-/oridecon` (authoritative);
 `CHANGELOG.md` sections may carry their own, older dates.
 
 ---
@@ -25,7 +25,7 @@ Focus: push aggregate test coverage from 75.6% toward 80% target; resolve docume
 > Coverage gate reference: the CI aggregate gate is `--cov-fail-under=70`
 > (`.github/workflows/ci.yml` → coverage job); the 80% figure is the
 > milestone target, and per-package floors live in each package's
-> `pyproject.toml` `addopts` (e.g. `lexigram` core uses 38%). These are
+> `pyproject.toml` `addopts` (e.g. `oridecon` core uses 38%). These are
 > three different numbers by design: floor ≠ target ≠ per-package floor.
 
 ### Completed this week
@@ -46,7 +46,7 @@ Focus: push aggregate test coverage from 75.6% toward 80% target; resolve docume
 
 | Day | Focus | Target |
 |-----|-------|--------|
-| Mon–Tue | Coverage: `lexigram-auth` + `lexigram` (core) | 68%→75%, 39%→45% |
+| Mon–Tue | Coverage: `oridecon-auth` + `oridecon` (core) | 68%→75%, 39%→45% |
 | Wed | Aggregate coverage check | verify ~78–79% |
 | Thu–Fri | Cut v0.1.5 release | bump + tag |
 | Sat | Update MILESTONE.md with v0.1.5 status | sync |

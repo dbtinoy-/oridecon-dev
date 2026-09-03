@@ -11,9 +11,9 @@ deferred follow-up in doc 18 §5 was:
 
 Today, with nothing selected, both client helpers dead-end:
 
-- `admin.js::LexigramDownloadBulk` → toast "Select at least one row to
+- `admin.js::OrideconDownloadBulk` → toast "Select at least one row to
   export." and gives up.
-- DataTable inline script `LexigramDownloadBulk` → `alert('Select at
+- DataTable inline script `OrideconDownloadBulk` → `alert('Select at
   least one record.')` and gives up.
 
 So "export everything matching my current search/filter" — the single
@@ -43,7 +43,7 @@ every record matching the forwarded list state instead of a selection.
   Missing `ids` *without* `scope=filtered` (or for non-export actions)
   still 400s.
 
-**Clients:** both `LexigramDownloadBulk` implementations now treat "no
+**Clients:** both `OrideconDownloadBulk` implementations now treat "no
 rows checked" as "export the current filtered view": they append
 `scope=filtered` and `list_query=location.search` instead of bailing.
 
@@ -54,7 +54,7 @@ rows checked" as "export the current filtered view": they append
 | `controllers/resource/bulk.py` | `bulk_action` accepts id-less filtered exports; new `bulk_export_filtered()` builds the list `QuerySpec` from the forwarded querystring via `URLState` + `_build_query`, pages through results (cap 10k), and reuses the shared attachment encoder extracted from `bulk_export` (`_export_attachment`). |
 | `resources/handler.py` | Export branch accepts `scope=filtered`; `_fetch_filtered_export_records()` parses `list_query` with `TableState.from_request`, allowlists the sort field, and pages through `ListDataFetcher.fetch_data` (same integration path as the list page, cap 10k). Record shaping extracted to `_shape_export_record` and shared with the ids path. |
 | `static/js/admin.js` | No selection → filtered export (`scope` + `list_query` from `location.search`), matching toast copy. |
-| `lexigram-ui/.../data_table_client_logic.py` | Same for the native-form fallback; the alert dead-end is gone. |
+| `oridecon-ui/.../data_table_client_logic.py` | Same for the native-form fallback; the alert dead-end is gone. |
 | tests | New regressions for both stacks: filtered export honors search/filters, unknown sort dropped, cap enforced, id-less non-scoped POST still 400, disabled export still 403; client scripts carry the new fields. |
 
 ## 4. Implementation notes (post-verify)
@@ -72,11 +72,11 @@ rows checked" as "export the current filtered view": they append
   on fetch failure so the endpoint answers 503 instead of shipping an
   empty file. Record shaping is shared with the ids path via
   `_shape_export_record`.
-- Clients: both `LexigramDownloadBulk` implementations now send
+- Clients: both `OrideconDownloadBulk` implementations now send
   `scope=filtered` + `list_query=location.search` when nothing is
   checked; the "Select at least one…" dead-ends are gone.
 - Verified: 20 new regressions green; full admin unit suite **5461
-  passed / 8 skipped (76.46% coverage)**; lexigram-ui suite 1275 passed;
+  passed / 8 skipped (76.46% coverage)**; oridecon-ui suite 1275 passed;
   e2e **72 passed / 2 skipped**; ruff check + format clean.
 - Live-verified on the playground (curl, cookie jar + CSRF from the list
   page's `data-csrf-token`): `scope=filtered` with empty `list_query`

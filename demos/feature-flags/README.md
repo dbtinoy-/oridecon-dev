@@ -1,6 +1,6 @@
 # Feature Flags — Release Control Lab
 
-A focused, browser-first example of **Lexigram FeatureFlagsModule**. It uses
+A focused, browser-first example of **Oridecon FeatureFlagsModule**. It uses
 one domain module plus `WebModule`, no external services, and deterministic
 in-memory state.
 
@@ -12,7 +12,7 @@ in-memory state.
 3. Force a flag on or off, then clear the override.
 4. Inspect the package-owned override audit trail and clear the TTL cache.
 
-## Lexigram surface
+## Oridecon surface
 
 - `FeatureFlagsModule.configure()` and DI-injected `FlagManager`
 - `FlagContext` with user IDs and attributes
@@ -40,7 +40,7 @@ The hub embeds this console at `/demos/feature-flags/`.
 | POST | `/api/flags/cache/clear` | Flush manager TTL results |
 | GET | `/api/flags/audit` | Inspect override history |
 
-## Lexigram Concepts
+## Oridecon Concepts
 
 | Concept | How it's used |
 |---------|---------------|

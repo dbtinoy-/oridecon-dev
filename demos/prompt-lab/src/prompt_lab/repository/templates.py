@@ -1,6 +1,6 @@
 """The two support-reply prompt variants under iteration.
 
-Lexigram convention: ``repository/`` holds data access, fixtures, and
+Oridecon convention: ``repository/`` holds data access, fixtures, and
 scripted stores.  These templates are plain Python — no framework imports
 beyond the prompt contracts.  ``build_v1`` and ``build_v2`` are factories
 that return fresh ``ChatPromptTemplate`` instances, keyed by variant id
@@ -15,9 +15,9 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from lexigram.ai.prompt.template.base import AbstractPromptTemplate
-from lexigram.ai.prompt.template.chat import ChatPromptTemplate
-from lexigram.ai.prompt.variables.types import PromptVariable
+from oridecon.ai.prompt.template.base import AbstractPromptTemplate
+from oridecon.ai.prompt.template.chat import ChatPromptTemplate
+from oridecon.ai.prompt.variables.types import PromptVariable
 
 __all__ = ["TEMPLATES", "VARIANT_LABELS", "build_v1", "build_v2"]
 

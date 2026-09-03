@@ -1,8 +1,8 @@
 """Provider wiring for the content generation demo.
 
 Convention followed: **Provider pattern** — ``ContentGenProvider`` is the
-canonical shape (mirrors ``lexigram-auth`` + the boot-phase ``bind()``
-contract in ``lexigram.contracts.core.di``):
+canonical shape (mirrors ``oridecon-auth`` + the boot-phase ``bind()``
+contract in ``oridecon.contracts.core.di``):
 
 - ``register()`` only *declares* bindings.  Zero-arg factories cover
   purely config-derived services; dependency-full services are declared
@@ -19,8 +19,8 @@ Lifecycle:
   3. ``shutdown()`` — cleanup (not needed for in-memory stores)
 
 For full reference see:
-- ``lexigram.di.provider.Provider`` — base provider class
-- ``lexigram.contracts.core.di`` — container protocols
+- ``oridecon.di.provider.Provider`` — base provider class
+- ``oridecon.contracts.core.di`` — container protocols
 """
 
 from __future__ import annotations
@@ -29,15 +29,15 @@ from typing import TYPE_CHECKING
 
 from content_gen.config import ContentGenConfig
 from content_gen.controllers.api import ContentApiController
-from lexigram.contracts.core.health import (
+from oridecon.contracts.core.health import (
     HealthCheckCategory,
     HealthCheckResult,
     HealthStatus,
 )
-from lexigram.di.provider import Provider
+from oridecon.di.provider import Provider
 
 if TYPE_CHECKING:
-    from lexigram.contracts.core.di import (
+    from oridecon.contracts.core.di import (
         ContainerRegistrarProtocol,
         ContainerResolverProtocol,
     )
@@ -91,7 +91,7 @@ class ContentGenProvider(Provider):
 
         # Create the LLM client (scripted for demo/testing)
         # In production, replace with a real client:
-        #   from lexigram.ai.llm import OllamaClient, ClientConfig
+        #   from oridecon.ai.llm import OllamaClient, ClientConfig
         #   llm_client = OllamaClient(config=ClientConfig(model="llama3"))
         llm_client = ScriptedLLMClient(responses=dict(SCRIPTED_RESPONSES))
 

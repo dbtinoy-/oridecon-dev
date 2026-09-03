@@ -6,8 +6,8 @@ import asyncio
 
 import pytest
 
-from lexigram.contracts.ai.agents import AgentResponse
-from lexigram.result import Ok
+from oridecon.contracts.ai.agents import AgentResponse
+from oridecon.result import Ok
 
 from support_agent.services.support_service import SupportAgent, build_support_agent
 from support_agent.repository.scenarios import SCENARIOS

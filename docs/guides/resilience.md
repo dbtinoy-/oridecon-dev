@@ -12,9 +12,9 @@ uv run python -m rates demo
 :::
 
 
-`lexigram-resilience` ships the core fault-tolerance patterns: **retry**, **circuit breaker**, **bulkhead**, **rate limiter**, **throttle**, **timeout**, and **fallback**. Wrap any call that crosses a process boundary — HTTP APIs, databases, message brokers, LLM providers — and turn intermittent failures into bounded, observable behaviour.
+`oridecon-resilience` ships the core fault-tolerance patterns: **retry**, **circuit breaker**, **bulkhead**, **rate limiter**, **throttle**, **timeout**, and **fallback**. Wrap any call that crosses a process boundary — HTTP APIs, databases, message brokers, LLM providers — and turn intermittent failures into bounded, observable behaviour.
 
-For the complete API and tuning knobs, see the [`lexigram-resilience` package docs](/packages/lexigram-resilience/).
+For the complete API and tuning knobs, see the [`oridecon-resilience` package docs](/packages/oridecon-resilience/).
 
 ---
 
@@ -47,7 +47,7 @@ graph LR
 Use `@retry` for operations that may fail transiently. Backoff is exponential with optional jitter; `abort_on` stops retries on errors that will never recover (e.g. `4xx` validation failures).
 
 ```python
-from lexigram.resilience import retry, RetryConfig
+from oridecon.resilience import retry, RetryConfig
 
 @retry(RetryConfig(
     max_attempts=3,           # 1 initial call + 2 retries
@@ -75,7 +75,7 @@ Only retry **idempotent** operations. Retrying a `POST /payments` may charge a c
 A circuit breaker tracks failures in a sliding window. After `failure_threshold` errors it **opens** and rejects calls immediately with `CircuitOpenError`. After `recovery_timeout` seconds it lets a single probe through (**half-open**); on success the breaker **closes** and traffic resumes.
 
 ```python
-from lexigram.resilience import CircuitBreaker, CircuitBreakerConfig, CircuitOpenError
+from oridecon.resilience import CircuitBreaker, CircuitBreakerConfig, CircuitOpenError
 
 breaker = CircuitBreaker(
     config=CircuitBreakerConfig(
@@ -103,7 +103,7 @@ For a registry-managed breaker shared across handlers, resolve `CircuitBreakerRe
 A bulkhead caps concurrent in-flight calls so a single slow dependency can't drain the event loop. Requests above the cap wait in a bounded queue; once both are full, new calls raise `BulkheadRejectedError` immediately.
 
 ```python
-from lexigram.resilience import bulkhead, BulkheadConfig
+from oridecon.resilience import bulkhead, BulkheadConfig
 
 @bulkhead(BulkheadConfig(max_concurrent=8, queue_size=32, timeout=5.0))
 async def transcode(asset_id: str) -> bytes:
@@ -119,7 +119,7 @@ Size `max_concurrent` to the dependency's safe parallelism — not your worker c
 Both cap throughput, but at different layers. **`@throttle`** is the high-level decorator; **`RateLimiter`** is the low-level token-bucket primitive it builds on. Prefer the decorator unless you need to share one limiter across many code paths.
 
 ```python
-from lexigram.resilience import throttle, RateLimiter
+from oridecon.resilience import throttle, RateLimiter
 
 # Decorator: 100 calls per 60s, smoothed across the window
 @throttle(calls=100, period=60.0, strategy="sliding_window")
@@ -143,9 +143,9 @@ async def send_sms(to: str, body: str) -> None:
 When the primary path fails, return a degraded result. Steps are tried in order; the first to succeed wins.
 
 ```python
-from lexigram.contracts.infra.resilience.models import RetryConfig
-from lexigram.resilience.fallback import Fallback, AlternativeFallback
-from lexigram.result import Ok, Result
+from oridecon.contracts.infra.resilience.models import RetryConfig
+from oridecon.resilience.fallback import Fallback, AlternativeFallback
+from oridecon.result import Ok, Result
 
 async def cached_recommendations(ctx, err) -> Result[list[str], Exception]:
     cached = await cache.get(f"recs:{ctx['user_id']}")
@@ -167,11 +167,11 @@ steps = [
 Most production calls want several patterns at once. `ResiliencePipeline` composes them in the canonical order **bulkhead → circuit breaker → retry → timeout**, with bulkhead outermost and timeout closest to the call.
 
 ```python
-from lexigram.contracts.infra.resilience.models import (
+from oridecon.contracts.infra.resilience.models import (
     CircuitBreakerConfig, RetryConfig, TimeoutConfig,
 )
-from lexigram.resilience import BulkheadConfig
-from lexigram.resilience import ResiliencePipeline
+from oridecon.resilience import BulkheadConfig
+from oridecon.resilience import ResiliencePipeline
 
 pipeline = ResiliencePipeline(
     retry_config=RetryConfig(max_attempts=3, base_delay=0.5),
@@ -193,11 +193,11 @@ Other packages obtain a configured pipeline by injecting `ResiliencePipelineFact
 
 ## 8. Configuration
 
-Register `ResilienceModule` (or `ResilienceProvider` directly) and tune the `resilience:` block. All keys are overridable via `LEX_RESILIENCE__*` environment variables. For tests, `ResilienceModule.stub()` provides minimal in-memory wiring.
+Register `ResilienceModule` (or `ResilienceProvider` directly) and tune the `resilience:` block. All keys are overridable via `ORI_RESILIENCE__*` environment variables. For tests, `ResilienceModule.stub()` provides minimal in-memory wiring.
 
 ```python
-from lexigram import Application
-from lexigram.resilience import ResilienceModule
+from oridecon import Application
+from oridecon.resilience import ResilienceModule
 
 app = Application(name="my-app")
 app.add_module(ResilienceModule.configure())
@@ -231,4 +231,4 @@ resilience:
 
 - [Database & Persistence](/guides/database/) — wrapping query handlers with a resilience pipeline
 - [Observability](/guides/observability/) — emitting circuit-state and retry counters to your metrics backend
-- [`lexigram-resilience` package](/packages/lexigram-resilience/) — distributed backends, hooks, and the idempotency subsystem
+- [`oridecon-resilience` package](/packages/oridecon-resilience/) — distributed backends, hooks, and the idempotency subsystem

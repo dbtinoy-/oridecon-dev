@@ -17,14 +17,14 @@ import asyncio
 import sys
 
 from apikey_console.app import create_app
-from lexigram.logging import get_logger
+from oridecon.logging import get_logger
 
 logger = get_logger(__name__)
 
 
 async def serve() -> None:
     """Boot and serve until interrupted."""
-    from lexigram.web.server.runner import run_server
+    from oridecon.web.server.runner import run_server
 
     # Lazy import of the server runner. The web module's
     # run_server reads host/port from application.yaml by default.

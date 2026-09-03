@@ -6,9 +6,9 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from lexigram.monitor.instrumentation.decorators import metered, traced
-from lexigram.observability.core import NoOpSpan
-from lexigram.monitor.services.core import ObservabilityService
+from oridecon.monitor.instrumentation.decorators import metered, traced
+from oridecon.observability.core import NoOpSpan
+from oridecon.monitor.services.core import ObservabilityService
 
 # ---------------------------------------------------------------------------
 # ObservabilityService
@@ -174,19 +174,19 @@ class TestHealthInObservability:
     """Verify health module is accessible from observability."""
 
     def test_import_from_observability(self) -> None:
-        from lexigram.monitor.health import HealthChecker
+        from oridecon.monitor.health import HealthChecker
 
         checker = HealthChecker()
         assert checker is not None
 
     def test_import_from_observability_init(self) -> None:
-        from lexigram.monitor import HealthChecker
+        from oridecon.monitor import HealthChecker
 
         checker = HealthChecker()
         assert checker is not None
 
     def test_backward_compat_from_core(self) -> None:
-        from lexigram.monitor.health import HealthChecker
+        from oridecon.monitor.health import HealthChecker
 
         checker = HealthChecker()
         assert checker is not None

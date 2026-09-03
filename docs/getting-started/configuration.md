@@ -25,7 +25,7 @@ logging:
   level: INFO
   json_format: true         # true | false
 
-# lexigram-web  (name: "web")
+# oridecon-web  (name: "web")
 web:
   server:
     host: "0.0.0.0"
@@ -34,7 +34,7 @@ web:
     enabled: true
     allow_origins: ["https://myapp.com"]
 
-# lexigram-sql  (config_key: "sql")
+# oridecon-sql  (config_key: "sql")
 sql:
   backend:
     url: "${DATABASE_URL}"
@@ -42,7 +42,7 @@ sql:
     min_size: 2
     max_size: 10
 
-# lexigram-cache  (config_key: "cache")
+# oridecon-cache  (config_key: "cache")
 cache:
   backends:
     - name: memory
@@ -57,22 +57,22 @@ The shape of each section matches the package's config model exactly. The reposi
 ### Loading Config
 
 ```python
-from lexigram import LexigramConfig
+from oridecon import OrideconConfig
 
 # Auto-discovers application.yaml in the project root
-config = LexigramConfig.from_yaml()
+config = OrideconConfig.from_yaml()
 
 # Or from a specific path
-config = LexigramConfig.from_yaml("path/to/application.yaml")
+config = OrideconConfig.from_yaml("path/to/application.yaml")
 ```
 
-`Application` loads configuration for you when you don't pass one — it calls `LexigramConfig.from_env_profile()` by default.
+`Application` loads configuration for you when you don't pass one — it calls `OrideconConfig.from_env_profile()` by default.
 
-`LexigramConfig` has typed top-level fields:
+`OrideconConfig` has typed top-level fields:
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `app_name` | `str` | `"lexigram-app"` | Application name |
+| `app_name` | `str` | `"oridecon-app"` | Application name |
 | `debug` | `bool` | `False` | Debug mode |
 | `env` | `Environment` | `development` | Deployment environment |
 | `logging` | `LoggingConfig` | — | Structured logging settings |
@@ -95,40 +95,40 @@ sql:
   backend:
     url: "${DATABASE_URL:sqlite+aiosqlite:///./dev.db}"
 auth:
-  secret_key: "${LEX_AUTH__SECRET_KEY}"
+  secret_key: "${ORI_AUTH__SECRET_KEY}"
 ```
 
-### 2. Override any key with `LEX_` env vars
+### 2. Override any key with `ORI_` env vars
 
-Any configuration key can be overridden by an environment variable using the `LEX_` prefix and **double underscores** for nesting. Env vars win over YAML:
+Any configuration key can be overridden by an environment variable using the `ORI_` prefix and **double underscores** for nesting. Env vars win over YAML:
 
 ```bash
-LEX_WEB__SERVER__PORT=9000          # web.server.port = 9000
-LEX_SQL__BACKEND__URL=postgresql+asyncpg://...   # db backend url
-LEX_AI_LLM__PROVIDERS__0__API_KEY=sk-...         # list items use numeric indices
+ORI_WEB__SERVER__PORT=9000          # web.server.port = 9000
+ORI_SQL__BACKEND__URL=postgresql+asyncpg://...   # db backend url
+ORI_AI_LLM__PROVIDERS__0__API_KEY=sk-...         # list items use numeric indices
 ```
 
 ### Standard variables
 
 | Variable | Purpose | Default |
 |----------|---------|---------|
-| `LEX_PROFILE` | Active configuration profile | _(none)_ |
-| `LEX_DEBUG` | Enable debug mode | `false` |
-| `LEX_QUIET` | Suppress startup banner | `false` |
-| `LEX_ENV` | Deployment environment | `development` |
+| `ORI_PROFILE` | Active configuration profile | _(none)_ |
+| `ORI_DEBUG` | Enable debug mode | `false` |
+| `ORI_QUIET` | Suppress startup banner | `false` |
+| `ORI_ENV` | Deployment environment | `development` |
 
 ---
 
 ## Profile Overlays
 
-Lexigram merges a profile-specific YAML over the base config. Set `LEX_PROFILE` to activate it:
+Oridecon merges a profile-specific YAML over the base config. Set `ORI_PROFILE` to activate it:
 
 ```
 application.yaml                 # Base config (always loaded)
-application.development.yaml     # Merged when LEX_PROFILE=development
-application.staging.yaml         # Merged when LEX_PROFILE=staging
-application.production.yaml      # Merged when LEX_PROFILE=production
-application.test.yaml            # Merged when LEX_PROFILE=test
+application.development.yaml     # Merged when ORI_PROFILE=development
+application.staging.yaml         # Merged when ORI_PROFILE=staging
+application.production.yaml      # Merged when ORI_PROFILE=production
+application.test.yaml            # Merged when ORI_PROFILE=test
 ```
 
 ### Example profiles
@@ -159,16 +159,16 @@ cache:
 ### Loading with a profile
 
 ```python
-from lexigram import LexigramConfig
+from oridecon import OrideconConfig
 
-# Reads LEX_PROFILE from the environment
-config = LexigramConfig.from_env_profile()
+# Reads ORI_PROFILE from the environment
+config = OrideconConfig.from_env_profile()
 
 # Explicit profile
-config = LexigramConfig.from_env_profile("production")
+config = OrideconConfig.from_env_profile("production")
 
 # With a custom base path
-config = LexigramConfig.from_env_profile("staging", base_path="./config")
+config = OrideconConfig.from_env_profile("staging", base_path="./config")
 ```
 
 ### Environment validation
@@ -176,7 +176,7 @@ config = LexigramConfig.from_env_profile("staging", base_path="./config")
 `validate_for_environment()` checks environment-specific constraints (for example, `debug=True` in production):
 
 ```python
-from lexigram.contracts.core.config import Environment
+from oridecon.contracts.core.config import Environment
 
 issues = config.validate_for_environment(Environment.PRODUCTION)
 ```
@@ -189,8 +189,8 @@ A provider declares `config_key` and `config_model` to automatically receive its
 
 ```python
 from dataclasses import dataclass
-from lexigram import Provider
-from lexigram.contracts.core.di import ContainerRegistrarProtocol
+from oridecon import Provider
+from oridecon.contracts.core.di import ContainerRegistrarProtocol
 
 
 @dataclass
@@ -209,7 +209,7 @@ class BillingProvider(Provider):
         container.singleton(StripeClient, StripeClient(cfg.stripe_key))
 ```
 
-Before calling `register()`, the framework reads the matching section via `LexigramConfig.get_section(config_key, config_model)` and assigns it to `provider.config`. Built-in providers use the same mechanism:
+Before calling `register()`, the framework reads the matching section via `OrideconConfig.get_section(config_key, config_model)` and assigns it to `provider.config`. Built-in providers use the same mechanism:
 
 | Provider | `config_key` |
 |----------|-------------|
@@ -234,7 +234,7 @@ web:
 ```python
 config.get_section("web", WebConfig)
 # UnknownConfigKeysError: Unknown configuration key(s) in section
-# 'web': server.prot — did you mean 'port'?  [LEX_ERR_CFG_006]
+# 'web': server.prot — did you mean 'port'?  [ORI_ERR_CFG_006]
 ```
 
 Typos die at startup with the exact key name instead of silently falling
@@ -244,7 +244,7 @@ back to defaults. Nested keys report their full dotted path
 **Escape hatch** (legacy files, forward-declared keys):
 
 ```bash
-LEX_CONFIG_ALLOW_UNKNOWN=true   # warn + prune instead of raising
+ORI_CONFIG_ALLOW_UNKNOWN=true   # warn + prune instead of raising
 ```
 
 Untyped access (`get_section("web")` without a model) stays permissive —
@@ -255,7 +255,7 @@ strictness applies only where a model defines the contract.
 ## Config API
 
 ```python
-config = LexigramConfig.from_yaml()
+config = OrideconConfig.from_yaml()
 
 # Typed top-level access
 config.app_name         # "my-app"

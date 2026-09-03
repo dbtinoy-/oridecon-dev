@@ -20,14 +20,14 @@ from dev._lib.validation import PackageCoverageResult, validate_package_coverage
 
 @dataclass(frozen=True, slots=True)
 class RuleScanResult:
-    """Structured output from a full Lexigram rules scan."""
+    """Structured output from a full Oridecon rules scan."""
 
     findings: tuple[RuleFinding, ...]
     coverage: PackageCoverageResult
 
 
 def run_rules(root: Path | str, packages: tuple[str, ...] | None = None) -> RuleScanResult:
-    """Run the configured Lexigram rules against every discovered package source tree."""
+    """Run the configured Oridecon rules against every discovered package source tree."""
 
     root_path = Path(root).resolve()
     if packages is None:

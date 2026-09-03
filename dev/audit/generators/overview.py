@@ -17,7 +17,7 @@ class OverviewAuditGenerator(MarkdownAuditGenerator):
         """Render package overview markdown."""
 
         package_rows = [_package_summary(path) for path in self.iter_package_roots(root=root)]
-        markdown = """# AUDIT_OVERVIEW.md — Lexigram Framework Package Overview
+        markdown = """# AUDIT_OVERVIEW.md — Oridecon Framework Package Overview
 
 > **Source**: Package directories and `pyproject.toml` metadata.
 

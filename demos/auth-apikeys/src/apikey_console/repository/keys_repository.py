@@ -1,6 +1,6 @@
 """Dict-backed API-key repository for the demo."""
 # Repository pattern — implements APIKeyRepositoryProtocol
-# from lexigram-contracts. This is the in-memory demo adapter; swap
+# from oridecon-contracts. This is the in-memory demo adapter; swap
 # for a database-backed implementation in production.
 
 from __future__ import annotations
@@ -9,8 +9,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-from lexigram.contracts.auth import APIKeyRepositoryProtocol
-from lexigram.primitives import clock
+from oridecon.contracts.auth import APIKeyRepositoryProtocol
+from oridecon.primitives import clock
 
 
 def _utc_now() -> datetime:

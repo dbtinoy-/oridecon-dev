@@ -6,7 +6,7 @@ Run::
     PYTHONPATH=src uv run python -m rag_docs
 
 Host/port come from ``application.yaml`` (``web.server``); override without
-editing the file via ``LEX_WEB__SERVER__PORT``.
+editing the file via ``ORI_WEB__SERVER__PORT``.
 
 The split-screen console exposes both single questions and the guided
 three-question walkthrough.
@@ -27,7 +27,7 @@ from __future__ import annotations
 
 import asyncio
 
-from lexigram.logging import get_logger
+from oridecon.logging import get_logger
 from rag_docs.app import build_modules, build_providers
 
 logger = get_logger(__name__)
@@ -35,9 +35,9 @@ logger = get_logger(__name__)
 
 async def serve() -> None:
     """Boot once and serve until interrupted; stop cleanly afterwards."""
-    from lexigram.app.base import Application
-    from lexigram.web.di.provider import WebProvider
-    from lexigram.web.server.runner import run_server
+    from oridecon.app.base import Application
+    from oridecon.web.di.provider import WebProvider
+    from oridecon.web.server.runner import run_server
 
     async with Application.boot(
         name="rag-docs",

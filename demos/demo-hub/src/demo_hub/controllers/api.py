@@ -18,18 +18,18 @@ from starlette.requests import Request
 
 from demo_hub.fleet import Fleet
 from demo_hub.services.registry import ServiceRegistry
-from lexigram.web import Controller, JSONResponse, get
+from oridecon.web import Controller, JSONResponse, get
 
 
 class HubApiController(Controller):
     """Expose the service catalog with embedded-fleet health status.
 
-    Lexigram pattern: controllers are stateless handlers that receive
+    Oridecon pattern: controllers are stateless handlers that receive
     collaborators via constructor injection.  The framework resolves the
     controller when a request matches its routes — you never instantiate
     it manually.
 
-    Route decorators (@get, @post) come from lexigram.web, not Starlette
+    Route decorators (@get, @post) come from oridecon.web, not Starlette
     directly — they integrate with the framework's middleware stack.
     """
 

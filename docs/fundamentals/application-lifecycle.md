@@ -1,19 +1,19 @@
 ---
 title: "Application Lifecycle"
-description: "Understanding the Lexigram application lifecycle and the Composition Root."
+description: "Understanding the Oridecon application lifecycle and the Composition Root."
 ---
 
-The **Application** class is the heartbeat of a Lexigram project. It acts as the **Composition Root**, the single place where dependencies are wired, providers are registered, and the application's runtime environment is established.
+The **Application** class is the heartbeat of a Oridecon project. It acts as the **Composition Root**, the single place where dependencies are wired, providers are registered, and the application's runtime environment is established.
 
 ## 1. The Composition Root
 
-Every Lexigram application begins with a single entry point, typically `main.py` or `app.py`. This is where you create the `Application` instance and configure its initial state.
+Every Oridecon application begins with a single entry point, typically `main.py` or `app.py`. This is where you create the `Application` instance and configure its initial state.
 
 ```python
-from lexigram import Application, LexigramConfig
+from oridecon import Application, OrideconConfig
 
 # 1. Initialize Configuration
-config = LexigramConfig.from_yaml()
+config = OrideconConfig.from_yaml()
 
 # 2. Create the Application (Composition Root)
 app = Application(name="order-service", config=config)
@@ -105,7 +105,7 @@ For scripts or tests, use the context manager form which guarantees shutdown:
 
 ```python
 import asyncio
-from lexigram import Application
+from oridecon import Application
 
 async def main():
     async with Application.boot(
@@ -124,7 +124,7 @@ asyncio.run(main())
 
 ## 5. Health Checks
 
-Lexigram provides aggregated health checks for monitoring:
+Oridecon provides aggregated health checks for monitoring:
 
 ```python
 # Liveness — is the app alive?
@@ -160,7 +160,7 @@ await app.start()
 ### Using run_application
 
 ```python
-from lexigram import Application, run_application
+from oridecon import Application, run_application
 
 app = Application(name="my-app")
 app.add_provider(MyProvider())
@@ -172,7 +172,7 @@ await run_application(app)
 
 ## 7. Module Compilation
 
-When modules are registered, Lexigram uses `ModuleCompiler` to:
+When modules are registered, Oridecon uses `ModuleCompiler` to:
 1. Validate import/export visibility
 2. Detect circular dependencies
 3. Order providers correctly
@@ -180,7 +180,7 @@ When modules are registered, Lexigram uses `ModuleCompiler` to:
 ```python
 # If modules are registered, ModuleCompiler extracts and orders providers
 if self._modules:
-    from lexigram.di.module import ModuleCompiler
+    from oridecon.di.module import ModuleCompiler
     compiler = ModuleCompiler()
     graph = compiler.compile(root_modules=self._modules, standalone_providers=standalone)
 ```
@@ -198,4 +198,4 @@ Application lifecycle events are emitted via `EventBusProtocol`:
 | `ApplicationStopping` | Before shutdown begins |
 | `ApplicationStopped` | After all providers shut down |
 
-Subscribers can listen using `@event_handler` from `lexigram.events`.
+Subscribers can listen using `@event_handler` from `oridecon.events`.

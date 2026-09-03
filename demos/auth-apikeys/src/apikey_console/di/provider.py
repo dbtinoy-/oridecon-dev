@@ -20,20 +20,20 @@ from apikey_console.data.seed import DemoSeedService
 from apikey_console.repository.keys_repository import InMemoryAPIKeyRepository
 from apikey_console.repository.session_repository import InMemorySessionRepository
 from apikey_console.ui.pages import PagesController
-from lexigram.auth import (
+from oridecon.auth import (
     AuthenticationService,
     SessionCookieBackend,
     UserService,
 )
-from lexigram.auth.authn.apikeys import APIKeyManager
-from lexigram.auth.config import AuthConfig
-from lexigram.contracts.auth import APIKeyRepositoryProtocol, SessionRepositoryProtocol
-from lexigram.contracts.core.di import (
+from oridecon.auth.authn.apikeys import APIKeyManager
+from oridecon.auth.config import AuthConfig
+from oridecon.contracts.auth import APIKeyRepositoryProtocol, SessionRepositoryProtocol
+from oridecon.contracts.core.di import (
     BootContainerProtocol,
     ContainerRegistrarProtocol,
 )
-from lexigram.di.provider import Provider
-from lexigram.logging import get_logger
+from oridecon.di.provider import Provider
+from oridecon.logging import get_logger
 
 logger = get_logger(__name__)
 

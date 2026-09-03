@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from lexigram.contracts.data.vector.types import SearchQuery
-from lexigram.vector.backends.memory import MemoryVectorStore
+from oridecon.contracts.data.vector.types import SearchQuery
+from oridecon.vector.backends.memory import MemoryVectorStore
 
 from rag_docs.di.provider import resolve_default_docs_dir
 from rag_docs.repository.embedder import EMBEDDING_DIMENSION, HashingEmbedder

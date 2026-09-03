@@ -1,6 +1,6 @@
 # 16 — Export Service Lifecycle Correctness (R20 / B20–B23) (Full Plan)
 
-**Date:** 2026-09-02 · **Status:** 🚧 In progress · **Branch:** `arena/01a05b98-lexigram`
+**Date:** 2026-09-02 · **Status:** 🚧 In progress · **Branch:** `arena/01a05b98-oridecon`
 
 ## 1. Findings (all repro-confirmed)
 

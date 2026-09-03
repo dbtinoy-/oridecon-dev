@@ -1,4 +1,4 @@
-"""Tests for lexigram-testing fakes — FakeEventBus, FakeLogger, FakeClock, TestProvider."""
+"""Tests for oridecon-testing fakes — FakeEventBus, FakeLogger, FakeClock, TestProvider."""
 
 from __future__ import annotations
 
@@ -6,8 +6,8 @@ from datetime import UTC, datetime, timedelta
 
 import pytest
 
-from lexigram.contracts.domain.events import DomainEvent
-from lexigram.testing.fakes import (
+from oridecon.contracts.domain.events import DomainEvent
+from oridecon.testing.fakes import (
     Clock,
     FakeClock,
     FakeEventBus,
@@ -15,7 +15,7 @@ from lexigram.testing.fakes import (
     LogEntry,
     SystemClock,
 )
-from lexigram.testing.mocks.test_provider import LifecycleTracker
+from oridecon.testing.mocks.test_provider import LifecycleTracker
 
 # ---------------------------------------------------------------------------
 # Test events

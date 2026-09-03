@@ -66,7 +66,7 @@ EXCLUDED_DIRS = frozenset(
 
 # Repo-specific generated scaffolding excluded from every quality gate
 # (mirrors the ruff/mypy/coverage excludes for CLI templates).
-EXCLUDED_PREFIXES = ("experimental/apps/lexigram-cli/src/lexigram/cli/templates/",)
+EXCLUDED_PREFIXES = ("experimental/apps/oridecon-cli/src/oridecon/cli/templates/",)
 
 
 def count_lines(path: Path) -> int:

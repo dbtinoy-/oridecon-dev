@@ -12,17 +12,17 @@ Simplest patterns for new users:
 
 from __future__ import annotations
 
-from lexigram.contracts.ai.memory import (
+from oridecon.contracts.ai.memory import (
     EpisodicMemoryProtocol,
     SemanticMemoryProtocol,
     WorkingMemoryProtocol,
 )
-from lexigram.contracts.core.di import (
+from oridecon.contracts.core.di import (
     ContainerRegistrarProtocol,
     ContainerResolverProtocol,
 )
-from lexigram.contracts.core.health import HealthCheckResult
-from lexigram.di.provider import Provider
+from oridecon.contracts.core.health import HealthCheckResult
+from oridecon.di.provider import Provider
 from memory_chat.repository.memory_repository import MemoryRepository
 from memory_chat.services.chat_service import ConciergeService
 

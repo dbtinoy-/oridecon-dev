@@ -20,11 +20,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from lexigram.contracts.ai.memory import MemoryEntry
-from lexigram.contracts.exceptions.domain import ValidationError
-from lexigram.logging import get_logger
-from lexigram.primitives import clock
-from lexigram.result import Err, Ok, Result
+from oridecon.contracts.ai.memory import MemoryEntry
+from oridecon.contracts.exceptions.domain import ValidationError
+from oridecon.logging import get_logger
+from oridecon.primitives import clock
+from oridecon.result import Err, Ok, Result
 from memory_chat.repository.memory_repository import MemoryRepository
 from memory_chat.services.extraction import extract_facts
 from memory_chat.services.responder import reply_for
@@ -152,7 +152,7 @@ class ConciergeService:
     def _entry_for(self, owner: str, text: str) -> MemoryEntry:
         """Build the entry; timestamp comes from the ambient clock.
 
-        Uses ``lexigram.primitives.clock`` for testable time — tests
+        Uses ``oridecon.primitives.clock`` for testable time — tests
         can freeze it with ``clock.use(FixedClock(...))``.
         """
         n = self._turns.get(owner, 0)

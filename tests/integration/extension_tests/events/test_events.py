@@ -3,7 +3,7 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from lexigram.events.messages.event import Event
+from oridecon.events.messages.event import Event
 
 
 class MinimalEvent(Event):

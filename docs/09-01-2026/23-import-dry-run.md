@@ -34,7 +34,7 @@ default import flow.
 - The HTMX response omits the `refresh-list` trigger on dry runs
   (nothing changed), keeping the toast + failed-report link.
 
-**Client (`LexigramImportUpload`)**
+**Client (`OrideconImportUpload`)**
 
 - New default flow: pick file → POST with `dry_run=1` → show the
   server's validation summary in a `confirm()` → on OK, POST again
@@ -50,7 +50,7 @@ default import flow.
 | `actions/standard/imports.py` | `_run_import(..., dry_run=...)` summary path; both actions forward `ctx.metadata["dry_run"]`. |
 | `controllers/resource/imports.py` | Parse `dry_run` field; conditional `refresh-list` trigger. |
 | `resources/action_handlers.py` | Same for the declarative stack. |
-| `lexigram-ui/.../data_table_client_logic.py` | Validate-then-confirm flow in `LexigramImportUpload`. |
+| `oridecon-ui/.../data_table_client_logic.py` | Validate-then-confirm flow in `OrideconImportUpload`. |
 | tests | Dry run writes nothing; summary message/payload; validation report downloadable; both routes omit `refresh-list` on dry runs and still refresh on commits; client script carries `dry_run` + `confirm`. |
 
 ## 4. Implementation notes (post-verify)
@@ -62,7 +62,7 @@ default import flow.
   still writes, dry-run→commit sequence, validation report downloadable
   via `report_csv`, both routes omit `refresh-list` on dry runs, client
   script carries the validate-then-confirm flow). Full admin unit suite
-  **5498 passed / 7 skipped (76.60% coverage)**; lexigram-ui 1275
+  **5498 passed / 7 skipped (76.60% coverage)**; oridecon-ui 1275
   passed; ruff check + format clean.
 - Live-verified on the playground: `dry_run=1` upload → "Validated 2
   row(s): 2 ready to import, 0 with error(s). Nothing was imported."

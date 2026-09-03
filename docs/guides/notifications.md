@@ -3,9 +3,9 @@ title: "Notifications"
 description: "Send email, SMS, and push through one protocol-based API with swappable providers."
 ---
 
-`lexigram-notification` delivers email, SMS, and push notifications behind a small set of protocols. Application code depends on `MailerProtocol`, `SMSChannelProtocol`, or `PushChannelProtocol`; the concrete backend (SMTP, SendGrid, Twilio, FCM, APNs) is chosen in configuration. You can register several backends side-by-side under different names, swap providers without touching call sites, and substitute stubs in tests.
+`oridecon-notification` delivers email, SMS, and push notifications behind a small set of protocols. Application code depends on `MailerProtocol`, `SMSChannelProtocol`, or `PushChannelProtocol`; the concrete backend (SMTP, SendGrid, Twilio, FCM, APNs) is chosen in configuration. You can register several backends side-by-side under different names, swap providers without touching call sites, and substitute stubs in tests.
 
-For the full configuration reference and per-driver options, see the [`lexigram-notification` package docs](/packages/lexigram-notification/).
+For the full configuration reference and per-driver options, see the [`oridecon-notification` package docs](/packages/oridecon-notification/).
 
 ---
 
@@ -15,9 +15,9 @@ Every channel exposes an async `send()` that returns a `Result`. Expected delive
 
 ```python
 from typing import Protocol, runtime_checkable
-from lexigram.result import Result
-from lexigram.contracts.mailer.types import EmailMessage, MessageDeliveryReceipt
-from lexigram.contracts.notification.types import PushMessage, SMSMessage
+from oridecon.result import Result
+from oridecon.contracts.mailer.types import EmailMessage, MessageDeliveryReceipt
+from oridecon.contracts.notification.types import PushMessage, SMSMessage
 
 @runtime_checkable
 class MailerProtocol(Protocol):
@@ -42,9 +42,9 @@ Each channel takes its own typed dataclass — `EmailMessage`, `SMSMessage`, `Pu
 The package splits into two modules — `NotificationModule` (SMS + push) and `MailerModule` (email). Per-user inbox storage is a plain service (`InboxService`) with its own `inbox:` config section. Wire only the pieces you use.
 
 ```python
-from lexigram import Application
-from lexigram.notification import NotificationModule
-from lexigram.notification.mailer import MailerModule
+from oridecon import Application
+from oridecon.notification import NotificationModule
+from oridecon.notification.mailer import MailerModule
 
 app = Application(name="my-app")
 app.add_module(MailerModule.configure())
@@ -89,9 +89,9 @@ SMTP credentials, Twilio tokens, FCM keys, and APNs `.p8` files belong in enviro
 Inject `MailerProtocol` and pass an `EmailMessage`. Check `is_ok()` before unwrapping the receipt.
 
 ```python
-from lexigram.contracts.mailer.protocols import MailerProtocol
-from lexigram.contracts.mailer.types import EmailMessage
-from lexigram.result import Result, Ok, Err
+from oridecon.contracts.mailer.protocols import MailerProtocol
+from oridecon.contracts.mailer.types import EmailMessage
+from oridecon.result import Result, Ok, Err
 
 class PasswordResetService:
     def __init__(self, mailer: MailerProtocol) -> None:
@@ -109,7 +109,7 @@ class PasswordResetService:
         return Err(str(result.unwrap_err()))
 ```
 
-For reusable templates, subclass `Mailable` from `lexigram.notification.mailer` — it encapsulates the data and rendering of a single email type behind a `to_message()` method.
+For reusable templates, subclass `Mailable` from `oridecon.notification.mailer` — it encapsulates the data and rendering of a single email type behind a `to_message()` method.
 
 ---
 
@@ -118,8 +118,8 @@ For reusable templates, subclass `Mailable` from `lexigram.notification.mailer` 
 Build an `SMSMessage` with recipient(s) in E.164 format and a body. The backend's configured `from_number` is used when you leave it unset.
 
 ```python
-from lexigram.contracts.notification.protocols import SMSChannelProtocol
-from lexigram.contracts.notification.types import SMSMessage
+from oridecon.contracts.notification.protocols import SMSChannelProtocol
+from oridecon.contracts.notification.types import SMSMessage
 
 class AlertNotifier:
     def __init__(self, sms: SMSChannelProtocol) -> None:
@@ -136,8 +136,8 @@ class AlertNotifier:
 `PushMessage` takes a list of device tokens plus title, body, and optional custom `data` for deep-linking in the client. Use `send_batch()` for many recipients — providers like FCM accept them in one round trip.
 
 ```python
-from lexigram.contracts.notification.protocols import PushChannelProtocol
-from lexigram.contracts.notification.types import PushMessage
+from oridecon.contracts.notification.protocols import PushChannelProtocol
+from oridecon.contracts.notification.types import PushMessage
 
 class OrderNotifier:
     def __init__(self, push: PushChannelProtocol) -> None:
@@ -160,7 +160,7 @@ class OrderNotifier:
 `RetryingMailer` wraps any `MailerProtocol` with exponential back-off and persistent attempt tracking via a `DeliveryStoreProtocol`. Transient infrastructure errors are retried; `Err(MailerError)` failures (bounced, rejected) are returned immediately.
 
 ```python
-from lexigram.notification import RetryingMailer
+from oridecon.notification import RetryingMailer
 
 retrying = RetryingMailer(inner=smtp_mailer, delivery_store=store, max_attempts=3, base_delay=1.0)
 await retrying.send(message)
@@ -169,7 +169,7 @@ await retrying.send(message)
 For in-app notifications (the bell-icon widget), `InboxService` persists messages to memory or SQL.
 
 ```python
-from lexigram.notification import InboxService
+from oridecon.notification import InboxService
 
 await inbox.send(user_id="u-42", title="Order shipped", body="#123 is on the way.", order_id="123")
 messages = await inbox.get_inbox("u-42", unread_only=True)
@@ -184,8 +184,8 @@ await inbox.mark_read(message_id, "u-42")
 Every module ships a `.stub()` variant that wires the protocols with empty configs — sends are dropped, no external services contacted:
 
 ```python
-from lexigram import Application
-from lexigram.notification.mailer import MailerModule
+from oridecon import Application
+from oridecon.notification.mailer import MailerModule
 
 async def test_password_reset() -> None:
     async with Application.boot(modules=[MailerModule.stub()]) as app:
@@ -201,4 +201,4 @@ For assertions on what *would* have been sent, bind a hand-rolled fake to the pr
 - [Background Jobs](/guides/background-jobs/) — push sends off the request path
 - [Event-Driven](/guides/event-driven/) — react to `NotificationSentEvent` / `EmailBouncedEvent`
 - [Dependency Injection](/fundamentals/dependency-injection/) — `Named()` for multiple backends per channel
-- [`lexigram-notification` package](/packages/lexigram-notification/) — full driver options, delivery store, web push
+- [`oridecon-notification` package](/packages/oridecon-notification/) — full driver options, delivery store, web push

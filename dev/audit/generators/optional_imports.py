@@ -129,10 +129,10 @@ def _is_stdlib(module: str) -> bool:
     return module in sys.stdlib_module_names
 
 
-def _is_lexigram(module: str) -> bool:
-    """Return True when the import root belongs to the lexigram workspace."""
+def _is_oridecon(module: str) -> bool:
+    """Return True when the import root belongs to the oridecon workspace."""
 
-    return module == "lexigram" or module.startswith("lexigram-")
+    return module == "oridecon" or module.startswith("oridecon-")
 
 
 def _strip_import(node: ast.Import | ast.ImportFrom) -> str:
@@ -258,7 +258,7 @@ def _unused_extras(
 
     unused: list[str] = []
     for dist in sorted(declarations.optional):
-        if _is_dev_tool(dist) or _is_lexigram(dist):
+        if _is_dev_tool(dist) or _is_oridecon(dist):
             continue
         candidates = REVERSE_ALIASES.get(dist, ())
         if not candidates:
@@ -350,7 +350,7 @@ class OptionalImportsAuditGenerator(MarkdownAuditGenerator):
                     if any(part == "templates" for part in path.parts):
                         continue
                     for module, dotted, line, guarded, type_only in _scan_file(path)[0]:
-                        if _is_stdlib(module) or _is_lexigram(module):
+                        if _is_stdlib(module) or _is_oridecon(module):
                             continue
                         roots.add(module)
                         findings.append(

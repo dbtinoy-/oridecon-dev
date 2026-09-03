@@ -7,7 +7,7 @@ import httpx
 async def test_console_renders(client: httpx.AsyncClient) -> None:
     r = await client.get("/")
     assert r.status_code == 200
-    assert "Lexigram" in r.text
+    assert "Oridecon" in r.text
 
 async def test_console_has_nav(client: httpx.AsyncClient) -> None:
     r = await client.get("/")
@@ -16,7 +16,7 @@ async def test_console_has_nav(client: httpx.AsyncClient) -> None:
 
 async def test_console_exposes_package_flow(client: httpx.AsyncClient) -> None:
     r = await client.get("/")
-    assert "Create a Lexigram subscription" in r.text
+    assert "Create a Oridecon subscription" in r.text
     assert "Verify with the active subscription secret" in r.text
 
 async def test_console_has_light_theme(client: httpx.AsyncClient) -> None:
@@ -27,7 +27,7 @@ async def test_console_has_light_theme(client: httpx.AsyncClient) -> None:
 async def test_console_has_footer(client: httpx.AsyncClient) -> None:
     r = await client.get("/")
     assert "demo-footer" in r.text
-    assert "lexigram.dev" in r.text
+    assert "oridecon.dev" in r.text
 
 async def test_css_returns(client: httpx.AsyncClient) -> None:
     r = await client.get("/static/style.css")

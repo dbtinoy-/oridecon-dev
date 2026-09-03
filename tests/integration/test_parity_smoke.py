@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import pytest
 
-from lexigram.ai.evaluation.evaluators.criteria import CriteriaEvaluator
-from lexigram.ai.evaluation.harness.runner import EvaluationHarness
-from lexigram.ai.llm.parsers import JSONOutputParser
-from lexigram.contracts.ai.evaluation import EvaluationDataset, EvaluationSample
-from lexigram.contracts.ai.retrievers import RetrievalQuery, RetrievedNode
+from oridecon.ai.evaluation.evaluators.criteria import CriteriaEvaluator
+from oridecon.ai.evaluation.harness.runner import EvaluationHarness
+from oridecon.ai.llm.parsers import JSONOutputParser
+from oridecon.contracts.ai.evaluation import EvaluationDataset, EvaluationSample
+from oridecon.contracts.ai.retrievers import RetrievalQuery, RetrievedNode
 
 
 @pytest.mark.asyncio
@@ -22,7 +22,7 @@ async def test_parity_end_to_end():
     def multiply_two(x: int) -> int:
         return x * 2
 
-    from lexigram.ai.llm.runnable import RunnableLambda, RunnableSequence
+    from oridecon.ai.llm.runnable import RunnableLambda, RunnableSequence
 
     r1 = RunnableLambda(add_one)
     r2 = RunnableLambda(multiply_two)
@@ -58,11 +58,11 @@ async def test_parity_end_to_end():
 @pytest.mark.asyncio
 async def test_retriever_protocol():
     """Test RetrieverProtocol compliance."""
-    from lexigram.contracts.ai.retrievers import RetrieverProtocol
+    from oridecon.contracts.ai.retrievers import RetrieverProtocol
 
     class MockRetriever:
         async def retrieve(self, query: RetrievalQuery):
-            from lexigram.result import Ok
+            from oridecon.result import Ok
 
             return Ok(
                 [
@@ -88,7 +88,7 @@ async def test_retriever_protocol():
 @pytest.mark.asyncio
 async def test_callback_manager():
     """Test CallbackManagerImpl basic functionality."""
-    from lexigram.ai.observability.callbacks.manager import CallbackManagerImpl
+    from oridecon.ai.observability.callbacks.manager import CallbackManagerImpl
 
     manager = CallbackManagerImpl()
 

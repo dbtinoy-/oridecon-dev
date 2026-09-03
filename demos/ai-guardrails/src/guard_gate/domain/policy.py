@@ -3,7 +3,7 @@
 This toggle is registered as a singleton in the DI container.
 Both the API controller and the assistant service share the same
 instance — flip it in the UI and every subsequent request sees the
-change immediately.  This is the Lexigram pattern for live config
+change immediately.  This is the Oridecon pattern for live config
 that doesn't require a restart.
 """
 

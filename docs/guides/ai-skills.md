@@ -3,20 +3,20 @@ title: "AI Skills"
 description: "Register, compose, and execute callable skills for AI agents and MCP."
 ---
 
-`lexigram-ai-skills` provides a registry-based skill system where agents can discover, validate, and execute composable capabilities. Skills are async functions or classes registered by name, with JSON Schema parameter validation, caching, permission checking, and execution lifecycle management.
+`oridecon-ai-skills` provides a registry-based skill system where agents can discover, validate, and execute composable capabilities. Skills are async functions or classes registered by name, with JSON Schema parameter validation, caching, permission checking, and execution lifecycle management.
 
-For full configuration details, see the [`lexigram-ai-skills` package docs](/packages/lexigram-ai-skills/).
+For full configuration details, see the [`oridecon-ai-skills` package docs](/packages/oridecon-ai-skills/).
 
 ---
 
 ## 1. The Contracts
 
-The skill system is built on three core protocols from `lexigram.contracts.ai.skills`:
+The skill system is built on three core protocols from `oridecon.contracts.ai.skills`:
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.result import Result
-from lexigram.contracts.ai.skills import (
+from oridecon.result import Result
+from oridecon.contracts.ai.skills import (
     SkillDefinition, SkillResult, SkillError,
 )
 
@@ -84,8 +84,8 @@ class SkillResult:
 Add `SkillsModule` and configure execution defaults:
 
 ```python
-from lexigram import Application
-from lexigram.ai.skills import SkillsModule, SkillsConfig
+from oridecon import Application
+from oridecon.ai.skills import SkillsModule, SkillsConfig
 
 app = Application(name="my-app")
 app.add_module(SkillsModule.configure(
@@ -127,7 +127,7 @@ Built-in skills are registered automatically when `enable_builtin: true`. The `b
 Use the `@skill` decorator with `@skill_param` annotations to register a skill:
 
 ```python
-from lexigram.ai.skills import skill, skill_param
+from oridecon.ai.skills import skill, skill_param
 
 
 @skill(
@@ -150,9 +150,9 @@ The decorator builds a JSON Schema from the collected `@skill_param` annotations
 Register skills with the registry and execute them through the executor:
 
 ```python
-from lexigram import Application
-from lexigram.ai.skills import SkillsModule, SkillsConfig
-from lexigram.contracts.ai.skills import (
+from oridecon import Application
+from oridecon.ai.skills import SkillsModule, SkillsConfig
+from oridecon.contracts.ai.skills import (
     SkillRegistryProtocol,
     SkillExecutorProtocol,
 )
@@ -202,8 +202,8 @@ Built-in skills are registered during boot when `enable_builtin: true` and their
 Chain skills by enriching a shared context using `SkillPipeline`:
 
 ```python
-from lexigram.ai.skills import SkillPipeline
-from lexigram.contracts.ai.skills import SkillExecutorProtocol
+from oridecon.ai.skills import SkillPipeline
+from oridecon.contracts.ai.skills import SkillExecutorProtocol
 
 
 async def composed_workflow() -> None:
@@ -229,9 +229,9 @@ async def composed_workflow() -> None:
 Use `SkillsModule.stub()` for isolated tests:
 
 ```python
-from lexigram import Application
-from lexigram.ai.skills import SkillsModule
-from lexigram.contracts.ai.skills import SkillExecutorProtocol
+from oridecon import Application
+from oridecon.ai.skills import SkillsModule
+from oridecon.contracts.ai.skills import SkillExecutorProtocol
 
 
 async def test_skill_executor_resolves() -> None:
@@ -251,4 +251,4 @@ The stub disables built-in skills and the tool bridge. Register test-specific sk
 - [AI Agents](/guides/ai-agents/) — connecting skills to agent tool registries
 - [AI RAG](/guides/ai-rag/) — retrieval-augmented generation
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding protocols
-- [`lexigram-ai-skills` package](/packages/lexigram-ai-skills/) — MCP bridge, discovery, caching
+- [`oridecon-ai-skills` package](/packages/oridecon-ai-skills/) — MCP bridge, discovery, caching

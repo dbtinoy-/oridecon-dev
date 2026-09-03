@@ -1,4 +1,4 @@
-# REF_ENV_VARS.md — Lexigram Framework Environment Variables
+# REF_ENV_VARS.md — Oridecon Framework Environment Variables
 
 **Date:** 2026-08-24
 **Total entries:** 1074
@@ -12,1298 +12,1298 @@
 - **Direct env access vars**: 17 — accessed via `os.environ.get()` outside config classes
 - **Missing descriptions**: 530 of 1079 (49%)
 - **Complex defaults**: 14 — default values that could not be statically resolved
-- **Packages with NO env vars**: lexigram-ai-relay, lexigram-ai-relay-gateway, lexigram-contracts, lexigram-multimedia-beat, lexigram-multimedia-image, lexigram-multimedia-interpolate, lexigram-multimedia-music, lexigram-multimedia-tts, lexigram-multimedia-upscale, lexigram-multimedia-video, lexigram-workflow
+- **Packages with NO env vars**: oridecon-ai-relay, oridecon-ai-relay-gateway, oridecon-contracts, oridecon-multimedia-beat, oridecon-multimedia-image, oridecon-multimedia-interpolate, oridecon-multimedia-music, oridecon-multimedia-tts, oridecon-multimedia-upscale, oridecon-multimedia-video, oridecon-workflow
 
 ---
 
 ## Package Registry
 
-### `lexigram` (31 vars)
+### `oridecon` (31 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_DEBUG` | str | — | — | `core/lexigram/src/lexigram/logging/debug.py *(direct env access; not config-derived)*` |
-| `LEX_LEXIGRAM__APP_NAME` | str | 'lexigram-app' | Application name | `core/lexigram/src/lexigram/config/main.py:LexigramConfig.app_name` |
-| `LEX_LEXIGRAM__DEBUG` | bool | False | Enable debug mode. Also toggled by the LEX_DEBUG env var. | `core/lexigram/src/lexigram/config/main.py:LexigramConfig.debug` |
-| `LEX_LEXIGRAM__DISCOVERY__AUTO_DISCOVER` | bool | False | — | `core/lexigram/src/lexigram/app/config/discovery.py:LexigramConfig.discovery.auto_discover` |
-| `LEX_LEXIGRAM__DISCOVERY__DIRECTORIES` | list[str] | (complex) | — | `core/lexigram/src/lexigram/app/config/discovery.py:LexigramConfig.discovery.directories` |
-| `LEX_LEXIGRAM__DISCOVERY__DISABLED_MODULES` | list[str] | (complex) | — | `core/lexigram/src/lexigram/app/config/discovery.py:LexigramConfig.discovery.disabled_modules` |
-| `LEX_LEXIGRAM__DISCOVERY__ENABLED_MODULES` | list[str] | (complex) | — | `core/lexigram/src/lexigram/app/config/discovery.py:LexigramConfig.discovery.enabled_modules` |
-| `LEX_LEXIGRAM__DISCOVERY__ENTRY_POINT_GROUP` | str | "lexigram.modules" | — | `core/lexigram/src/lexigram/app/config/discovery.py:LexigramConfig.discovery.entry_point_group` |
-| `LEX_LEXIGRAM__ENV` | Environment | Environment.DEVELOPMENT | Deployment environment (development, staging, production, test). | `core/lexigram/src/lexigram/config/main.py:LexigramConfig.env` |
-| `LEX_LEXIGRAM__HEALTH__CHECK_TIMEOUT` | float | DEFAULT_HEALTH_CHECK_TIMEOUT | — | `core/lexigram/src/lexigram/app/config/models.py:LexigramConfig.health.check_timeout` |
-| `LEX_LEXIGRAM__HEALTH__INCLUDE_DETAILS` | bool | True | — | `core/lexigram/src/lexigram/app/config/models.py:LexigramConfig.health.include_details` |
-| `LEX_LEXIGRAM__LOGGING__JSON_FORMAT` | bool | False | JSON log format | `core/lexigram/src/lexigram/logging/config/models.py:LexigramConfig.logging.json_format` |
-| `LEX_LEXIGRAM__LOGGING__LEVEL` | str | 'INFO' | Global log level | `core/lexigram/src/lexigram/logging/config/models.py:LexigramConfig.logging.level` |
-| `LEX_LEXIGRAM__LOGGING__LEVELS` | dict[str, str] | — | Per-logger level overrides | `core/lexigram/src/lexigram/logging/config/models.py:LexigramConfig.logging.levels` |
-| `LEX_LEXIGRAM__LOGGING__REDACTION__ENABLED` | bool | True | — | `core/lexigram/src/lexigram/logging/config/redaction.py:LexigramConfig.logging.redaction.enabled` |
-| `LEX_LEXIGRAM__LOGGING__REDACTION__FIELD_DENYLIST` | tuple[str, ...] | — | — | `core/lexigram/src/lexigram/logging/config/redaction.py:...mConfig.logging.redaction.field_denylist` |
-| `LEX_LEXIGRAM__LOGGING__SAMPLING__DEFAULT_RATE` | float | 1.0 | — | `core/lexigram/src/lexigram/logging/config/sampling.py:LexigramConfig.logging.sampling.default_rate` |
-| `LEX_LEXIGRAM__LOGGING__SAMPLING__ENABLED` | bool | False | — | `core/lexigram/src/lexigram/logging/config/sampling.py:LexigramConfig.logging.sampling.enabled` |
-| `LEX_LEXIGRAM__LOGGING__SAMPLING__RULES` | dict[str, float] | — | — | `core/lexigram/src/lexigram/logging/config/sampling.py:LexigramConfig.logging.sampling.rules` |
-| `LEX_LEXIGRAM__MODULES` | list[str] | — | Enabled modules | `core/lexigram/src/lexigram/config/main.py:LexigramConfig.modules` |
-| `LEX_PROFILE` | str | — | — | `core/lexigram/src/lexigram/config/base.py *(direct env access; not config-derived)*` |
-| `LEX_QUIET` | str | — | — | `core/lexigram/src/lexigram/app/base.py *(direct env access; not config-derived)*` |
-| `LEX_SECURITY__HASHING__ALGORITHM` | str | 'pbkdf2_sha256' | — | `core/lexigram/src/lexigram/security/config.py:SecurityConfig.hashing.algorithm` |
-| `LEX_SECURITY__HASHING__BLAKE2B_DIGEST_SIZE` | int | 64 | — | `core/lexigram/src/lexigram/security/config.py:SecurityConfig.hashing.blake2b_digest_size` |
-| `LEX_SECURITY__HASHING__DEFAULT_HASHER` | str | 'sha256' | — | `core/lexigram/src/lexigram/security/config.py:SecurityConfig.hashing.default_hasher` |
-| `LEX_SECURITY__HASHING__DKLEN` | int | 32 | — | `core/lexigram/src/lexigram/security/config.py:SecurityConfig.hashing.dklen` |
-| `LEX_SECURITY__HASHING__ITERATIONS` | int | 100000 | — | `core/lexigram/src/lexigram/security/config.py:SecurityConfig.hashing.iterations` |
-| `LEX_SECURITY__HASHING__SALT_LENGTH` | int | 16 | — | `core/lexigram/src/lexigram/security/config.py:SecurityConfig.hashing.salt_length` |
-| `LEX_SECURITY__SANITIZATION__ALLOWED_TAGS` | set[str] \| None | None | — | `core/lexigram/src/lexigram/security/config.py:SecurityConfig.sanitization.allowed_tags` |
-| `LEX_SECURITY__SANITIZATION__DEFAULT_SANITIZE_MODE` | str | "allow" | — | `core/lexigram/src/lexigram/security/config.py:SecurityConfig.sanitization.default_sanitize_mode` |
-| `LEX_SECURITY__SANITIZATION__STRIP_COMMENTS` | bool | True | — | `core/lexigram/src/lexigram/security/config.py:SecurityConfig.sanitization.strip_comments` |
+| `ORI_DEBUG` | str | — | — | `core/oridecon/src/oridecon/logging/debug.py *(direct env access; not config-derived)*` |
+| `ORI_ORIDECON__APP_NAME` | str | 'oridecon-app' | Application name | `core/oridecon/src/oridecon/config/main.py:OrideconConfig.app_name` |
+| `ORI_ORIDECON__DEBUG` | bool | False | Enable debug mode. Also toggled by the ORI_DEBUG env var. | `core/oridecon/src/oridecon/config/main.py:OrideconConfig.debug` |
+| `ORI_ORIDECON__DISCOVERY__AUTO_DISCOVER` | bool | False | — | `core/oridecon/src/oridecon/app/config/discovery.py:OrideconConfig.discovery.auto_discover` |
+| `ORI_ORIDECON__DISCOVERY__DIRECTORIES` | list[str] | (complex) | — | `core/oridecon/src/oridecon/app/config/discovery.py:OrideconConfig.discovery.directories` |
+| `ORI_ORIDECON__DISCOVERY__DISABLED_MODULES` | list[str] | (complex) | — | `core/oridecon/src/oridecon/app/config/discovery.py:OrideconConfig.discovery.disabled_modules` |
+| `ORI_ORIDECON__DISCOVERY__ENABLED_MODULES` | list[str] | (complex) | — | `core/oridecon/src/oridecon/app/config/discovery.py:OrideconConfig.discovery.enabled_modules` |
+| `ORI_ORIDECON__DISCOVERY__ENTRY_POINT_GROUP` | str | "oridecon.modules" | — | `core/oridecon/src/oridecon/app/config/discovery.py:OrideconConfig.discovery.entry_point_group` |
+| `ORI_ORIDECON__ENV` | Environment | Environment.DEVELOPMENT | Deployment environment (development, staging, production, test). | `core/oridecon/src/oridecon/config/main.py:OrideconConfig.env` |
+| `ORI_ORIDECON__HEALTH__CHECK_TIMEOUT` | float | DEFAULT_HEALTH_CHECK_TIMEOUT | — | `core/oridecon/src/oridecon/app/config/models.py:OrideconConfig.health.check_timeout` |
+| `ORI_ORIDECON__HEALTH__INCLUDE_DETAILS` | bool | True | — | `core/oridecon/src/oridecon/app/config/models.py:OrideconConfig.health.include_details` |
+| `ORI_ORIDECON__LOGGING__JSON_FORMAT` | bool | False | JSON log format | `core/oridecon/src/oridecon/logging/config/models.py:OrideconConfig.logging.json_format` |
+| `ORI_ORIDECON__LOGGING__LEVEL` | str | 'INFO' | Global log level | `core/oridecon/src/oridecon/logging/config/models.py:OrideconConfig.logging.level` |
+| `ORI_ORIDECON__LOGGING__LEVELS` | dict[str, str] | — | Per-logger level overrides | `core/oridecon/src/oridecon/logging/config/models.py:OrideconConfig.logging.levels` |
+| `ORI_ORIDECON__LOGGING__REDACTION__ENABLED` | bool | True | — | `core/oridecon/src/oridecon/logging/config/redaction.py:OrideconConfig.logging.redaction.enabled` |
+| `ORI_ORIDECON__LOGGING__REDACTION__FIELD_DENYLIST` | tuple[str, ...] | — | — | `core/oridecon/src/oridecon/logging/config/redaction.py:...mConfig.logging.redaction.field_denylist` |
+| `ORI_ORIDECON__LOGGING__SAMPLING__DEFAULT_RATE` | float | 1.0 | — | `core/oridecon/src/oridecon/logging/config/sampling.py:OrideconConfig.logging.sampling.default_rate` |
+| `ORI_ORIDECON__LOGGING__SAMPLING__ENABLED` | bool | False | — | `core/oridecon/src/oridecon/logging/config/sampling.py:OrideconConfig.logging.sampling.enabled` |
+| `ORI_ORIDECON__LOGGING__SAMPLING__RULES` | dict[str, float] | — | — | `core/oridecon/src/oridecon/logging/config/sampling.py:OrideconConfig.logging.sampling.rules` |
+| `ORI_ORIDECON__MODULES` | list[str] | — | Enabled modules | `core/oridecon/src/oridecon/config/main.py:OrideconConfig.modules` |
+| `ORI_PROFILE` | str | — | — | `core/oridecon/src/oridecon/config/base.py *(direct env access; not config-derived)*` |
+| `ORI_QUIET` | str | — | — | `core/oridecon/src/oridecon/app/base.py *(direct env access; not config-derived)*` |
+| `ORI_SECURITY__HASHING__ALGORITHM` | str | 'pbkdf2_sha256' | — | `core/oridecon/src/oridecon/security/config.py:SecurityConfig.hashing.algorithm` |
+| `ORI_SECURITY__HASHING__BLAKE2B_DIGEST_SIZE` | int | 64 | — | `core/oridecon/src/oridecon/security/config.py:SecurityConfig.hashing.blake2b_digest_size` |
+| `ORI_SECURITY__HASHING__DEFAULT_HASHER` | str | 'sha256' | — | `core/oridecon/src/oridecon/security/config.py:SecurityConfig.hashing.default_hasher` |
+| `ORI_SECURITY__HASHING__DKLEN` | int | 32 | — | `core/oridecon/src/oridecon/security/config.py:SecurityConfig.hashing.dklen` |
+| `ORI_SECURITY__HASHING__ITERATIONS` | int | 100000 | — | `core/oridecon/src/oridecon/security/config.py:SecurityConfig.hashing.iterations` |
+| `ORI_SECURITY__HASHING__SALT_LENGTH` | int | 16 | — | `core/oridecon/src/oridecon/security/config.py:SecurityConfig.hashing.salt_length` |
+| `ORI_SECURITY__SANITIZATION__ALLOWED_TAGS` | set[str] \| None | None | — | `core/oridecon/src/oridecon/security/config.py:SecurityConfig.sanitization.allowed_tags` |
+| `ORI_SECURITY__SANITIZATION__DEFAULT_SANITIZE_MODE` | str | "allow" | — | `core/oridecon/src/oridecon/security/config.py:SecurityConfig.sanitization.default_sanitize_mode` |
+| `ORI_SECURITY__SANITIZATION__STRIP_COMMENTS` | bool | True | — | `core/oridecon/src/oridecon/security/config.py:SecurityConfig.sanitization.strip_comments` |
 
-### `lexigram-admin` (123 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_ADMIN__API_PREFIX` | str | '/admin/api' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.api_prefix` |
-| `LEX_ADMIN__AUDIT__READ_AUDIT_ENABLED` | bool | False | Log read operations (off by default; compliance mode only). | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.audit.read_audit_enabled` |
-| `LEX_ADMIN__AUTH__CSRF_TOKEN_LIFETIME` | int | 3600 | CSRF token expiry in seconds | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.csrf_token_lifetime` |
-| `LEX_ADMIN__AUTH__EMAIL_OTP__ENABLED` | bool | True | Enable email OTP factor | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.email_otp.enabled` |
-| `LEX_ADMIN__AUTH__EMAIL_OTP__RESEND_COOLDOWN_SECONDS` | int | 60 | Minimum seconds between email OTP sends | `experimental/apps/lexigram-admin/src/lexigram/admin/con...g.auth.email_otp.resend_cooldown_seconds` |
-| `LEX_ADMIN__AUTH__EMAIL_OTP__TTL_MINUTES` | int | 10 | Code validity window in minutes | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.email_otp.ttl_minutes` |
-| `LEX_ADMIN__AUTH__EMAIL_VERIFICATION__ENABLED` | bool | True | Enable email verification flow | `experimental/apps/lexigram-admin/src/lexigram/admin/con...inConfig.auth.email_verification.enabled` |
-| `LEX_ADMIN__AUTH__EMAIL_VERIFICATION__ENFORCEMENT` | bool | True | Block login until the email is verified | `experimental/apps/lexigram-admin/src/lexigram/admin/con...nfig.auth.email_verification.enforcement` |
-| `LEX_ADMIN__AUTH__EMAIL_VERIFICATION__TOKEN_TTL_HOURS` | int | 24 | Verify link validity in hours | `experimental/apps/lexigram-admin/src/lexigram/admin/con....auth.email_verification.token_ttl_hours` |
-| `LEX_ADMIN__AUTH__ENABLED` | bool | True | Enable authentication | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.enabled` |
-| `LEX_ADMIN__AUTH__ENV` | Literal['development', 'staging', 'production'] | 'development' | Deployment environment for cookie security defaults | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.env` |
-| `LEX_ADMIN__AUTH__IDLE_TIMEOUT` | int | 3600 | Session idle timeout in seconds | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.idle_timeout` |
-| `LEX_ADMIN__AUTH__LOGIN_URL` | str | '/admin/login' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.login_url` |
-| `LEX_ADMIN__AUTH__LOGOUT_URL` | str | '/admin/logout' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.logout_url` |
-| `LEX_ADMIN__AUTH__MFA__ENABLED` | bool | True | Enable TOTP 2FA | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.mfa.enabled` |
-| `LEX_ADMIN__AUTH__MFA__FACTOR` | str | 'totp' | Second factor used at login: 'totp' (authenticator app) or 'email' (one-time ... | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.mfa.factor` |
-| `LEX_ADMIN__AUTH__MFA__ISSUER` | str | 'Lexigram Admin' | TOTP issuer label shown in authenticator apps | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.mfa.issuer` |
-| `LEX_ADMIN__AUTH__MFA__SKEW` | int | 1 | Allowed clock skew in 30 second steps | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.mfa.skew` |
-| `LEX_ADMIN__AUTH__OAUTH_ENABLED` | bool | False | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.oauth_enabled` |
-| `LEX_ADMIN__AUTH__OAUTH_PROVIDERS` | list[str] | — | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.oauth_providers` |
-| `LEX_ADMIN__AUTH__PASSWORD_POLICY__MAX_LENGTH` | int | 128 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...inConfig.auth.password_policy.max_length` |
-| `LEX_ADMIN__AUTH__PASSWORD_POLICY__MIN_LENGTH` | int | 12 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...inConfig.auth.password_policy.min_length` |
-| `LEX_ADMIN__AUTH__PASSWORD_POLICY__REJECT_COMMON_PASSWORDS` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con....password_policy.reject_common_passwords` |
-| `LEX_ADMIN__AUTH__PASSWORD_POLICY__REJECT_CONTAINING_EMAIL` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con....password_policy.reject_containing_email` |
-| `LEX_ADMIN__AUTH__PASSWORD_POLICY__REQUIRE_DIGIT` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...onfig.auth.password_policy.require_digit` |
-| `LEX_ADMIN__AUTH__PASSWORD_POLICY__REQUIRE_LOWERCASE` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...g.auth.password_policy.require_lowercase` |
-| `LEX_ADMIN__AUTH__PASSWORD_POLICY__REQUIRE_SPECIAL` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...fig.auth.password_policy.require_special` |
-| `LEX_ADMIN__AUTH__PASSWORD_POLICY__REQUIRE_UPPERCASE` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...g.auth.password_policy.require_uppercase` |
-| `LEX_ADMIN__AUTH__PERMISSION_CACHE_TTL` | int | 300 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.permission_cache_ttl` |
-| `LEX_ADMIN__AUTH__PRINCIPAL_SOURCE` | Literal['internal', 'app'] | 'internal' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.principal_source` |
-| `LEX_ADMIN__AUTH__REGISTRATION__ALLOWED_EMAIL_DOMAINS` | list[str] | — | Restrict registration to these email domains (empty = any) | `experimental/apps/lexigram-admin/src/lexigram/admin/con....auth.registration.allowed_email_domains` |
-| `LEX_ADMIN__AUTH__REGISTRATION__DEFAULT_ROLE` | str | 'admin' | Role granted to new accounts | `experimental/apps/lexigram-admin/src/lexigram/admin/con...minConfig.auth.registration.default_role` |
-| `LEX_ADMIN__AUTH__REGISTRATION__ENABLED` | bool | False | Allow self-service registration | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.registration.enabled` |
-| `LEX_ADMIN__AUTH__ROLES` | dict[str, Any] | — | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.roles` |
-| `LEX_ADMIN__AUTH__SECURITY__IP_RATE_LIMIT_ENABLED` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...nfig.auth.security.ip_rate_limit_enabled` |
-| `LEX_ADMIN__AUTH__SECURITY__IP_RATE_LIMIT_PER_15_MINUTES` | int | 30 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...th.security.ip_rate_limit_per_15_minutes` |
-| `LEX_ADMIN__AUTH__SECURITY__IP_RATE_LIMIT_PER_HOUR` | int | 60 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...fig.auth.security.ip_rate_limit_per_hour` |
-| `LEX_ADMIN__AUTH__SECURITY__IP_RATE_LIMIT_PER_MINUTE` | int | 10 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...g.auth.security.ip_rate_limit_per_minute` |
-| `LEX_ADMIN__AUTH__SECURITY__LOCKOUT_THRESHOLDS` | list[tuple[int, int]] | — | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...nConfig.auth.security.lockout_thresholds` |
-| `LEX_ADMIN__AUTH__SECURITY__PERMANENT_LOCKOUT_THRESHOLD` | int | 50 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...uth.security.permanent_lockout_threshold` |
-| `LEX_ADMIN__AUTH__SECURITY__SETUP_TOKEN` | SecretStr \| None | None | Optional ADMIN_SETUP_TOKEN — when set, must be provided during first-run setup. | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.security.setup_token` |
-| `LEX_ADMIN__AUTH__SECURITY__SETUP_TOKEN_OPTIN_UNSAFE` | bool | False | Explicit escape hatch: boot without a setup token. Only for local/ephemeral e... | `experimental/apps/lexigram-admin/src/lexigram/admin/con...g.auth.security.setup_token_optin_unsafe` |
-| `LEX_ADMIN__AUTH__SESSION_LIFETIME` | int | 86400 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.session_lifetime` |
-| `LEX_ADMIN__AUTH__SESSION_SECRET` | SecretStr | SecretStr('change-me-in-production') | Session secret for signing | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.session_secret` |
-| `LEX_ADMIN__AUTH__USERS` | list[Any] | — | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.auth.users` |
-| `LEX_ADMIN__CLUSTERS__EXTRA` | list[ClusterSpec] | — | Extra clusters beyond the built-in infrastructure cluster | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.clusters.extra` |
-| `LEX_ADMIN__COMMANDS` | list[dict[str, Any]] | — | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.commands` |
-| `LEX_ADMIN__CONTRIBUTORS` | dict[str, ContributorConfig] | — | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.contributors` |
-| `LEX_ADMIN__CONTRIBUTOR_COLLISION_MODE` | Literal['warn', 'error'] | 'warn' | How to handle name collisions when multiple contributors register widgets, pa... | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.contributor_collision_mode` |
-| `LEX_ADMIN__DASHBOARD_LAYOUT__LAYOUT` | Literal['grid', 'masonry'] | 'grid' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.dashboard_layout.layout` |
-| `LEX_ADMIN__DASHBOARD_LAYOUT__MAX_WIDGETS` | int | 20 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...AdminConfig.dashboard_layout.max_widgets` |
-| `LEX_ADMIN__DASHBOARD_LAYOUT__WIDGET_REFRESH_DEFAULT` | int | 30 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con....dashboard_layout.widget_refresh_default` |
-| `LEX_ADMIN__DATA__QUERY_TIMEOUT_SECONDS` | int | 5 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.data.query_timeout_seconds` |
-| `LEX_ADMIN__DEBUG` | bool | False | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.debug` |
-| `LEX_ADMIN__ENABLED` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.enabled` |
-| `LEX_ADMIN__EXTENSIONS` | dict[str, Any] | — | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.extensions` |
-| `LEX_ADMIN__FEATURES__ACTIVITY_FEED` | bool | False | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.features.activity_feed` |
-| `LEX_ADMIN__FEATURES__API_DOCS` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.features.api_docs` |
-| `LEX_ADMIN__FEATURES__AUDIT_LOGGING` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.features.audit_logging` |
-| `LEX_ADMIN__FEATURES__AUTOSAVE` | bool | False | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.features.autosave` |
-| `LEX_ADMIN__FEATURES__COMMAND_PALETTE` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.features.command_palette` |
-| `LEX_ADMIN__FEATURES__KEYBOARD_SHORTCUTS` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...:AdminConfig.features.keyboard_shortcuts` |
-| `LEX_ADMIN__FEATURES__NOTIFICATIONS` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.features.notifications` |
-| `LEX_ADMIN__FEATURES__OPTIMISTIC_UPDATES` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...:AdminConfig.features.optimistic_updates` |
-| `LEX_ADMIN__FEATURES__SEARCH` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.features.search` |
-| `LEX_ADMIN__FEATURES__THEME_TOGGLE` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.features.theme_toggle` |
-| `LEX_ADMIN__FEATURES__UNDO_REDO` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.features.undo_redo` |
-| `LEX_ADMIN__FEATURES__WEBHOOKS` | bool | False | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.features.webhooks` |
-| `LEX_ADMIN__FORM_DEFAULTS` | FormDefaults | — | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.form_defaults` |
-| `LEX_ADMIN__FRAMEWORK_PAGES__ENABLED` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.framework_pages.enabled` |
-| `LEX_ADMIN__FRAMEWORK_PAGES__REQUIRE_PERMISSION` | str | 'admin:framework:access' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...onfig.framework_pages.require_permission` |
-| `LEX_ADMIN__HTMX_PREFIX` | str | '/admin/htmx' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.htmx_prefix` |
-| `LEX_ADMIN__INTEGRATIONS__CACHE__DEFAULT_TTL_SECONDS` | int | 60 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...g.integrations.cache.default_ttl_seconds` |
-| `LEX_ADMIN__INTEGRATIONS__CACHE__ENABLED` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.integrations.cache.enabled` |
-| `LEX_ADMIN__INTEGRATIONS__CACHE__KEY_PREFIX` | str | 'admin' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...dminConfig.integrations.cache.key_prefix` |
-| `LEX_ADMIN__INTEGRATIONS__ENABLED` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.integrations.enabled` |
-| `LEX_ADMIN__INTEGRATIONS__FEATURES__ENABLED` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...dminConfig.integrations.features.enabled` |
-| `LEX_ADMIN__INTEGRATIONS__MONITOR__ENABLED` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...AdminConfig.integrations.monitor.enabled` |
-| `LEX_ADMIN__INTEGRATIONS__RESILIENCE__CIRCUIT_FAILURE_THRESHOLD` | int | 5 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...ons.resilience.circuit_failure_threshold` |
-| `LEX_ADMIN__INTEGRATIONS__RESILIENCE__ENABLED` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...inConfig.integrations.resilience.enabled` |
-| `LEX_ADMIN__INTEGRATIONS__RESILIENCE__RETRY_MAX_ATTEMPTS` | int | 3 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...tegrations.resilience.retry_max_attempts` |
-| `LEX_ADMIN__INTEGRATIONS__SEARCH__ENABLED` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...:AdminConfig.integrations.search.enabled` |
-| `LEX_ADMIN__INTEGRATIONS__SEARCH__FALLBACK_TO_LIKE` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...fig.integrations.search.fallback_to_like` |
-| `LEX_ADMIN__INTEGRATIONS__STORAGE__ENABLED` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...AdminConfig.integrations.storage.enabled` |
-| `LEX_ADMIN__INTEGRATIONS__STORAGE__PRESIGNED_URL_EXPIRY` | int | 3600 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...ntegrations.storage.presigned_url_expiry` |
-| `LEX_ADMIN__INTEGRATIONS__TASKS__BULK_THRESHOLD` | int | 25 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...Config.integrations.tasks.bulk_threshold` |
-| `LEX_ADMIN__INTEGRATIONS__TASKS__ENABLED` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.integrations.tasks.enabled` |
-| `LEX_ADMIN__NAME` | str | "admin" | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.name` |
-| `LEX_ADMIN__NAVIGATION_GROUPS` | dict[str, AdminNavigationGroup] | — | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.navigation_groups` |
-| `LEX_ADMIN__OBSERVABILITY__HIGH_CARDINALITY_LABELS_ENABLED` | bool | False | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...vability.high_cardinality_labels_enabled` |
-| `LEX_ADMIN__OBSERVABILITY__METRICS_ENABLED` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...dminConfig.observability.metrics_enabled` |
-| `LEX_ADMIN__PREFIX` | str | '/admin' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.prefix` |
-| `LEX_ADMIN__RATE_LIMIT__BULK_PER_MINUTE` | int | 5 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.rate_limit.bulk_per_minute` |
-| `LEX_ADMIN__RATE_LIMIT__BURST_SIZE` | int | 10 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.rate_limit.burst_size` |
-| `LEX_ADMIN__RATE_LIMIT__CREATE_PER_MINUTE` | int | 30 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...AdminConfig.rate_limit.create_per_minute` |
-| `LEX_ADMIN__RATE_LIMIT__DELETE_PER_MINUTE` | int | 20 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...AdminConfig.rate_limit.delete_per_minute` |
-| `LEX_ADMIN__RATE_LIMIT__ENABLED` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.rate_limit.enabled` |
-| `LEX_ADMIN__RATE_LIMIT__REQUESTS_PER_HOUR` | int | 1000 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...AdminConfig.rate_limit.requests_per_hour` |
-| `LEX_ADMIN__RATE_LIMIT__REQUESTS_PER_MINUTE` | int | 60 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...minConfig.rate_limit.requests_per_minute` |
-| `LEX_ADMIN__RATE_LIMIT__UPDATE_PER_MINUTE` | int | 60 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...AdminConfig.rate_limit.update_per_minute` |
-| `LEX_ADMIN__RBAC__SUPER_ADMIN_ROLE` | str | 'superadmin' | already special-cased by settings/widgets/impersonation. | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.rbac.super_admin_role` |
-| `LEX_ADMIN__REQUIRE_AUTH` | bool | True | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.require_auth` |
-| `LEX_ADMIN__RESOURCES` | dict[str, ResourceYAMLConfig] | — | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.resources` |
-| `LEX_ADMIN__RESOURCE_DEFAULTS` | ResourceDefaults | — | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.resource_defaults` |
-| `LEX_ADMIN__STATIC_DIR` | str \| None | None | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.static_dir` |
-| `LEX_ADMIN__STATIC_PREFIX` | str | '/admin/static' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.static_prefix` |
-| `LEX_ADMIN__STRICT_RESOURCE_RESOLUTION` | bool | True | When True (production default), resource/controller resolution failures durin... | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.strict_resource_resolution` |
-| `LEX_ADMIN__TABLE_DEFAULTS` | TableDefaults | — | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.table_defaults` |
-| `LEX_ADMIN__TEMPLATES_DIR` | str \| None | None | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.templates_dir` |
-| `LEX_ADMIN__TENANCY__COOKIE_NAME` | str | 'admin_tenant' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.tenancy.cookie_name` |
-| `LEX_ADMIN__TENANCY__DEFAULT_TENANT_ID` | str | '' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.tenancy.default_tenant_id` |
-| `LEX_ADMIN__TENANCY__ENABLED` | bool | False | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.tenancy.enabled` |
-| `LEX_ADMIN__TENANCY__HEADER_NAME` | str | 'x-tenant-id' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.tenancy.header_name` |
-| `LEX_ADMIN__TENANCY__ROUTE_PREFIX_TEMPLATE` | str | '' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/con...dminConfig.tenancy.route_prefix_template` |
-| `LEX_ADMIN__TENANCY__TENANT_FIELD` | str | 'tenant_id' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.tenancy.tenant_field` |
-| `LEX_ADMIN__TITLE` | str | 'Lexigram Admin' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.title` |
-| `LEX_ADMIN__UI__CONTENT_MAX_WIDTH` | int \| None | None | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.ui.content_max_width` |
-| `LEX_ADMIN__UI__FAVICON_URL` | str \| None | None | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.ui.favicon_url` |
-| `LEX_ADMIN__UI__LOGO_URL` | str \| None | None | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.ui.logo_url` |
-| `LEX_ADMIN__UI__PRIMARY_COLOR` | str | '#6B7280' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.ui.primary_color` |
-| `LEX_ADMIN__UI__SIDEBAR_COLLAPSED_WIDTH` | int | 64 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.ui.sidebar_collapsed_width` |
-| `LEX_ADMIN__UI__SIDEBAR_WIDTH` | int | 256 | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.ui.sidebar_width` |
-| `LEX_ADMIN__UI__THEME` | Literal['light', 'dark', 'system'] | 'system' | — | `experimental/apps/lexigram-admin/src/lexigram/admin/config.py:AdminConfig.ui.theme` |
-
-### `lexigram-ai` (9 vars)
+### `oridecon-admin` (123 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_AI__ENABLED` | bool | True | Enable AI features | `experimental/ai/lexigram-ai/src/lexigram/ai/config.py:AIConfig.enabled` |
-| `LEX_AI__GOVERNANCE` | Any | — | AI governance configuration | `experimental/ai/lexigram-ai/src/lexigram/ai/config.py:AIConfig.governance` |
-| `LEX_AI__LLM` | Any \| None | None | LLM configuration (optional) | `experimental/ai/lexigram-ai/src/lexigram/ai/config.py:AIConfig.llm` |
-| `LEX_AI__NAME` | str | 'ai' | Configuration name | `experimental/ai/lexigram-ai/src/lexigram/ai/config.py:AIConfig.name` |
-| `LEX_AI__OBSERVABILITY` | Any | — | AI observability configuration (tracing and metrics) | `experimental/ai/lexigram-ai/src/lexigram/ai/config.py:AIConfig.observability` |
-| `LEX_AI__RAG` | Any \| None | None | RAG pipeline configuration (optional) | `experimental/ai/lexigram-ai/src/lexigram/ai/config.py:AIConfig.rag` |
-| `LEX_AI__SUBSYSTEMS` | dict[str, dict[str, Any]] | — | Dynamic configuration for third-party AI subsystems discovered via entry poin... | `experimental/ai/lexigram-ai/src/lexigram/ai/config.py:AIConfig.subsystems` |
-| `LEX_AI__VECTOR` | Any \| None | None | Vector store configuration | `experimental/ai/lexigram-ai/src/lexigram/ai/config.py:AIConfig.vector` |
-| `LEX_ENV` | str | — | — | `experimental/ai/lexigram-ai/src/lexigram/ai/config.py *(direct env access; not config-derived)*` |
+| `ORI_ADMIN__API_PREFIX` | str | '/admin/api' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.api_prefix` |
+| `ORI_ADMIN__AUDIT__READ_AUDIT_ENABLED` | bool | False | Log read operations (off by default; compliance mode only). | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.audit.read_audit_enabled` |
+| `ORI_ADMIN__AUTH__CSRF_TOKEN_LIFETIME` | int | 3600 | CSRF token expiry in seconds | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.csrf_token_lifetime` |
+| `ORI_ADMIN__AUTH__EMAIL_OTP__ENABLED` | bool | True | Enable email OTP factor | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.email_otp.enabled` |
+| `ORI_ADMIN__AUTH__EMAIL_OTP__RESEND_COOLDOWN_SECONDS` | int | 60 | Minimum seconds between email OTP sends | `experimental/apps/oridecon-admin/src/oridecon/admin/con...g.auth.email_otp.resend_cooldown_seconds` |
+| `ORI_ADMIN__AUTH__EMAIL_OTP__TTL_MINUTES` | int | 10 | Code validity window in minutes | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.email_otp.ttl_minutes` |
+| `ORI_ADMIN__AUTH__EMAIL_VERIFICATION__ENABLED` | bool | True | Enable email verification flow | `experimental/apps/oridecon-admin/src/oridecon/admin/con...inConfig.auth.email_verification.enabled` |
+| `ORI_ADMIN__AUTH__EMAIL_VERIFICATION__ENFORCEMENT` | bool | True | Block login until the email is verified | `experimental/apps/oridecon-admin/src/oridecon/admin/con...nfig.auth.email_verification.enforcement` |
+| `ORI_ADMIN__AUTH__EMAIL_VERIFICATION__TOKEN_TTL_HOURS` | int | 24 | Verify link validity in hours | `experimental/apps/oridecon-admin/src/oridecon/admin/con....auth.email_verification.token_ttl_hours` |
+| `ORI_ADMIN__AUTH__ENABLED` | bool | True | Enable authentication | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.enabled` |
+| `ORI_ADMIN__AUTH__ENV` | Literal['development', 'staging', 'production'] | 'development' | Deployment environment for cookie security defaults | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.env` |
+| `ORI_ADMIN__AUTH__IDLE_TIMEOUT` | int | 3600 | Session idle timeout in seconds | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.idle_timeout` |
+| `ORI_ADMIN__AUTH__LOGIN_URL` | str | '/admin/login' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.login_url` |
+| `ORI_ADMIN__AUTH__LOGOUT_URL` | str | '/admin/logout' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.logout_url` |
+| `ORI_ADMIN__AUTH__MFA__ENABLED` | bool | True | Enable TOTP 2FA | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.mfa.enabled` |
+| `ORI_ADMIN__AUTH__MFA__FACTOR` | str | 'totp' | Second factor used at login: 'totp' (authenticator app) or 'email' (one-time ... | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.mfa.factor` |
+| `ORI_ADMIN__AUTH__MFA__ISSUER` | str | 'Oridecon Admin' | TOTP issuer label shown in authenticator apps | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.mfa.issuer` |
+| `ORI_ADMIN__AUTH__MFA__SKEW` | int | 1 | Allowed clock skew in 30 second steps | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.mfa.skew` |
+| `ORI_ADMIN__AUTH__OAUTH_ENABLED` | bool | False | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.oauth_enabled` |
+| `ORI_ADMIN__AUTH__OAUTH_PROVIDERS` | list[str] | — | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.oauth_providers` |
+| `ORI_ADMIN__AUTH__PASSWORD_POLICY__MAX_LENGTH` | int | 128 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...inConfig.auth.password_policy.max_length` |
+| `ORI_ADMIN__AUTH__PASSWORD_POLICY__MIN_LENGTH` | int | 12 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...inConfig.auth.password_policy.min_length` |
+| `ORI_ADMIN__AUTH__PASSWORD_POLICY__REJECT_COMMON_PASSWORDS` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con....password_policy.reject_common_passwords` |
+| `ORI_ADMIN__AUTH__PASSWORD_POLICY__REJECT_CONTAINING_EMAIL` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con....password_policy.reject_containing_email` |
+| `ORI_ADMIN__AUTH__PASSWORD_POLICY__REQUIRE_DIGIT` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...onfig.auth.password_policy.require_digit` |
+| `ORI_ADMIN__AUTH__PASSWORD_POLICY__REQUIRE_LOWERCASE` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...g.auth.password_policy.require_lowercase` |
+| `ORI_ADMIN__AUTH__PASSWORD_POLICY__REQUIRE_SPECIAL` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...fig.auth.password_policy.require_special` |
+| `ORI_ADMIN__AUTH__PASSWORD_POLICY__REQUIRE_UPPERCASE` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...g.auth.password_policy.require_uppercase` |
+| `ORI_ADMIN__AUTH__PERMISSION_CACHE_TTL` | int | 300 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.permission_cache_ttl` |
+| `ORI_ADMIN__AUTH__PRINCIPAL_SOURCE` | Literal['internal', 'app'] | 'internal' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.principal_source` |
+| `ORI_ADMIN__AUTH__REGISTRATION__ALLOWED_EMAIL_DOMAINS` | list[str] | — | Restrict registration to these email domains (empty = any) | `experimental/apps/oridecon-admin/src/oridecon/admin/con....auth.registration.allowed_email_domains` |
+| `ORI_ADMIN__AUTH__REGISTRATION__DEFAULT_ROLE` | str | 'admin' | Role granted to new accounts | `experimental/apps/oridecon-admin/src/oridecon/admin/con...minConfig.auth.registration.default_role` |
+| `ORI_ADMIN__AUTH__REGISTRATION__ENABLED` | bool | False | Allow self-service registration | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.registration.enabled` |
+| `ORI_ADMIN__AUTH__ROLES` | dict[str, Any] | — | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.roles` |
+| `ORI_ADMIN__AUTH__SECURITY__IP_RATE_LIMIT_ENABLED` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...nfig.auth.security.ip_rate_limit_enabled` |
+| `ORI_ADMIN__AUTH__SECURITY__IP_RATE_LIMIT_PER_15_MINUTES` | int | 30 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...th.security.ip_rate_limit_per_15_minutes` |
+| `ORI_ADMIN__AUTH__SECURITY__IP_RATE_LIMIT_PER_HOUR` | int | 60 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...fig.auth.security.ip_rate_limit_per_hour` |
+| `ORI_ADMIN__AUTH__SECURITY__IP_RATE_LIMIT_PER_MINUTE` | int | 10 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...g.auth.security.ip_rate_limit_per_minute` |
+| `ORI_ADMIN__AUTH__SECURITY__LOCKOUT_THRESHOLDS` | list[tuple[int, int]] | — | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...nConfig.auth.security.lockout_thresholds` |
+| `ORI_ADMIN__AUTH__SECURITY__PERMANENT_LOCKOUT_THRESHOLD` | int | 50 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...uth.security.permanent_lockout_threshold` |
+| `ORI_ADMIN__AUTH__SECURITY__SETUP_TOKEN` | SecretStr \| None | None | Optional ADMIN_SETUP_TOKEN — when set, must be provided during first-run setup. | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.security.setup_token` |
+| `ORI_ADMIN__AUTH__SECURITY__SETUP_TOKEN_OPTIN_UNSAFE` | bool | False | Explicit escape hatch: boot without a setup token. Only for local/ephemeral e... | `experimental/apps/oridecon-admin/src/oridecon/admin/con...g.auth.security.setup_token_optin_unsafe` |
+| `ORI_ADMIN__AUTH__SESSION_LIFETIME` | int | 86400 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.session_lifetime` |
+| `ORI_ADMIN__AUTH__SESSION_SECRET` | SecretStr | SecretStr('change-me-in-production') | Session secret for signing | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.session_secret` |
+| `ORI_ADMIN__AUTH__USERS` | list[Any] | — | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.auth.users` |
+| `ORI_ADMIN__CLUSTERS__EXTRA` | list[ClusterSpec] | — | Extra clusters beyond the built-in infrastructure cluster | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.clusters.extra` |
+| `ORI_ADMIN__COMMANDS` | list[dict[str, Any]] | — | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.commands` |
+| `ORI_ADMIN__CONTRIBUTORS` | dict[str, ContributorConfig] | — | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.contributors` |
+| `ORI_ADMIN__CONTRIBUTOR_COLLISION_MODE` | Literal['warn', 'error'] | 'warn' | How to handle name collisions when multiple contributors register widgets, pa... | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.contributor_collision_mode` |
+| `ORI_ADMIN__DASHBOARD_LAYOUT__LAYOUT` | Literal['grid', 'masonry'] | 'grid' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.dashboard_layout.layout` |
+| `ORI_ADMIN__DASHBOARD_LAYOUT__MAX_WIDGETS` | int | 20 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...AdminConfig.dashboard_layout.max_widgets` |
+| `ORI_ADMIN__DASHBOARD_LAYOUT__WIDGET_REFRESH_DEFAULT` | int | 30 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con....dashboard_layout.widget_refresh_default` |
+| `ORI_ADMIN__DATA__QUERY_TIMEOUT_SECONDS` | int | 5 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.data.query_timeout_seconds` |
+| `ORI_ADMIN__DEBUG` | bool | False | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.debug` |
+| `ORI_ADMIN__ENABLED` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.enabled` |
+| `ORI_ADMIN__EXTENSIONS` | dict[str, Any] | — | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.extensions` |
+| `ORI_ADMIN__FEATURES__ACTIVITY_FEED` | bool | False | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.features.activity_feed` |
+| `ORI_ADMIN__FEATURES__API_DOCS` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.features.api_docs` |
+| `ORI_ADMIN__FEATURES__AUDIT_LOGGING` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.features.audit_logging` |
+| `ORI_ADMIN__FEATURES__AUTOSAVE` | bool | False | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.features.autosave` |
+| `ORI_ADMIN__FEATURES__COMMAND_PALETTE` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.features.command_palette` |
+| `ORI_ADMIN__FEATURES__KEYBOARD_SHORTCUTS` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...:AdminConfig.features.keyboard_shortcuts` |
+| `ORI_ADMIN__FEATURES__NOTIFICATIONS` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.features.notifications` |
+| `ORI_ADMIN__FEATURES__OPTIMISTIC_UPDATES` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...:AdminConfig.features.optimistic_updates` |
+| `ORI_ADMIN__FEATURES__SEARCH` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.features.search` |
+| `ORI_ADMIN__FEATURES__THEME_TOGGLE` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.features.theme_toggle` |
+| `ORI_ADMIN__FEATURES__UNDO_REDO` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.features.undo_redo` |
+| `ORI_ADMIN__FEATURES__WEBHOOKS` | bool | False | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.features.webhooks` |
+| `ORI_ADMIN__FORM_DEFAULTS` | FormDefaults | — | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.form_defaults` |
+| `ORI_ADMIN__FRAMEWORK_PAGES__ENABLED` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.framework_pages.enabled` |
+| `ORI_ADMIN__FRAMEWORK_PAGES__REQUIRE_PERMISSION` | str | 'admin:framework:access' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...onfig.framework_pages.require_permission` |
+| `ORI_ADMIN__HTMX_PREFIX` | str | '/admin/htmx' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.htmx_prefix` |
+| `ORI_ADMIN__INTEGRATIONS__CACHE__DEFAULT_TTL_SECONDS` | int | 60 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...g.integrations.cache.default_ttl_seconds` |
+| `ORI_ADMIN__INTEGRATIONS__CACHE__ENABLED` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.integrations.cache.enabled` |
+| `ORI_ADMIN__INTEGRATIONS__CACHE__KEY_PREFIX` | str | 'admin' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...dminConfig.integrations.cache.key_prefix` |
+| `ORI_ADMIN__INTEGRATIONS__ENABLED` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.integrations.enabled` |
+| `ORI_ADMIN__INTEGRATIONS__FEATURES__ENABLED` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...dminConfig.integrations.features.enabled` |
+| `ORI_ADMIN__INTEGRATIONS__MONITOR__ENABLED` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...AdminConfig.integrations.monitor.enabled` |
+| `ORI_ADMIN__INTEGRATIONS__RESILIENCE__CIRCUIT_FAILURE_THRESHOLD` | int | 5 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...ons.resilience.circuit_failure_threshold` |
+| `ORI_ADMIN__INTEGRATIONS__RESILIENCE__ENABLED` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...inConfig.integrations.resilience.enabled` |
+| `ORI_ADMIN__INTEGRATIONS__RESILIENCE__RETRY_MAX_ATTEMPTS` | int | 3 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...tegrations.resilience.retry_max_attempts` |
+| `ORI_ADMIN__INTEGRATIONS__SEARCH__ENABLED` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...:AdminConfig.integrations.search.enabled` |
+| `ORI_ADMIN__INTEGRATIONS__SEARCH__FALLBACK_TO_LIKE` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...fig.integrations.search.fallback_to_like` |
+| `ORI_ADMIN__INTEGRATIONS__STORAGE__ENABLED` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...AdminConfig.integrations.storage.enabled` |
+| `ORI_ADMIN__INTEGRATIONS__STORAGE__PRESIGNED_URL_EXPIRY` | int | 3600 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...ntegrations.storage.presigned_url_expiry` |
+| `ORI_ADMIN__INTEGRATIONS__TASKS__BULK_THRESHOLD` | int | 25 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...Config.integrations.tasks.bulk_threshold` |
+| `ORI_ADMIN__INTEGRATIONS__TASKS__ENABLED` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.integrations.tasks.enabled` |
+| `ORI_ADMIN__NAME` | str | "admin" | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.name` |
+| `ORI_ADMIN__NAVIGATION_GROUPS` | dict[str, AdminNavigationGroup] | — | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.navigation_groups` |
+| `ORI_ADMIN__OBSERVABILITY__HIGH_CARDINALITY_LABELS_ENABLED` | bool | False | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...vability.high_cardinality_labels_enabled` |
+| `ORI_ADMIN__OBSERVABILITY__METRICS_ENABLED` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...dminConfig.observability.metrics_enabled` |
+| `ORI_ADMIN__PREFIX` | str | '/admin' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.prefix` |
+| `ORI_ADMIN__RATE_LIMIT__BULK_PER_MINUTE` | int | 5 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.rate_limit.bulk_per_minute` |
+| `ORI_ADMIN__RATE_LIMIT__BURST_SIZE` | int | 10 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.rate_limit.burst_size` |
+| `ORI_ADMIN__RATE_LIMIT__CREATE_PER_MINUTE` | int | 30 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...AdminConfig.rate_limit.create_per_minute` |
+| `ORI_ADMIN__RATE_LIMIT__DELETE_PER_MINUTE` | int | 20 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...AdminConfig.rate_limit.delete_per_minute` |
+| `ORI_ADMIN__RATE_LIMIT__ENABLED` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.rate_limit.enabled` |
+| `ORI_ADMIN__RATE_LIMIT__REQUESTS_PER_HOUR` | int | 1000 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...AdminConfig.rate_limit.requests_per_hour` |
+| `ORI_ADMIN__RATE_LIMIT__REQUESTS_PER_MINUTE` | int | 60 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...minConfig.rate_limit.requests_per_minute` |
+| `ORI_ADMIN__RATE_LIMIT__UPDATE_PER_MINUTE` | int | 60 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...AdminConfig.rate_limit.update_per_minute` |
+| `ORI_ADMIN__RBAC__SUPER_ADMIN_ROLE` | str | 'superadmin' | already special-cased by settings/widgets/impersonation. | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.rbac.super_admin_role` |
+| `ORI_ADMIN__REQUIRE_AUTH` | bool | True | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.require_auth` |
+| `ORI_ADMIN__RESOURCES` | dict[str, ResourceYAMLConfig] | — | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.resources` |
+| `ORI_ADMIN__RESOURCE_DEFAULTS` | ResourceDefaults | — | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.resource_defaults` |
+| `ORI_ADMIN__STATIC_DIR` | str \| None | None | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.static_dir` |
+| `ORI_ADMIN__STATIC_PREFIX` | str | '/admin/static' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.static_prefix` |
+| `ORI_ADMIN__STRICT_RESOURCE_RESOLUTION` | bool | True | When True (production default), resource/controller resolution failures durin... | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.strict_resource_resolution` |
+| `ORI_ADMIN__TABLE_DEFAULTS` | TableDefaults | — | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.table_defaults` |
+| `ORI_ADMIN__TEMPLATES_DIR` | str \| None | None | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.templates_dir` |
+| `ORI_ADMIN__TENANCY__COOKIE_NAME` | str | 'admin_tenant' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.tenancy.cookie_name` |
+| `ORI_ADMIN__TENANCY__DEFAULT_TENANT_ID` | str | '' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.tenancy.default_tenant_id` |
+| `ORI_ADMIN__TENANCY__ENABLED` | bool | False | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.tenancy.enabled` |
+| `ORI_ADMIN__TENANCY__HEADER_NAME` | str | 'x-tenant-id' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.tenancy.header_name` |
+| `ORI_ADMIN__TENANCY__ROUTE_PREFIX_TEMPLATE` | str | '' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/con...dminConfig.tenancy.route_prefix_template` |
+| `ORI_ADMIN__TENANCY__TENANT_FIELD` | str | 'tenant_id' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.tenancy.tenant_field` |
+| `ORI_ADMIN__TITLE` | str | 'Oridecon Admin' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.title` |
+| `ORI_ADMIN__UI__CONTENT_MAX_WIDTH` | int \| None | None | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.ui.content_max_width` |
+| `ORI_ADMIN__UI__FAVICON_URL` | str \| None | None | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.ui.favicon_url` |
+| `ORI_ADMIN__UI__LOGO_URL` | str \| None | None | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.ui.logo_url` |
+| `ORI_ADMIN__UI__PRIMARY_COLOR` | str | '#6B7280' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.ui.primary_color` |
+| `ORI_ADMIN__UI__SIDEBAR_COLLAPSED_WIDTH` | int | 64 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.ui.sidebar_collapsed_width` |
+| `ORI_ADMIN__UI__SIDEBAR_WIDTH` | int | 256 | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.ui.sidebar_width` |
+| `ORI_ADMIN__UI__THEME` | Literal['light', 'dark', 'system'] | 'system' | — | `experimental/apps/oridecon-admin/src/oridecon/admin/config.py:AdminConfig.ui.theme` |
 
-### `lexigram-ai-agents` (7 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_AI_AGENTS__DEFAULT_MAX_TOKENS` | int | 2048 | Default max tokens for LLM responses | `experimental/ai/lexigram-ai-agents/src/lexigram/ai/agents/config.py:AgentConfig.default_max_tokens` |
-| `LEX_AI_AGENTS__DEFAULT_TEMPERATURE` | float | 0.7 | Default temperature for LLM calls | `experimental/ai/lexigram-ai-agents/src/lexigram/ai/agents/config.py:AgentConfig.default_temperature` |
-| `LEX_AI_AGENTS__ENABLED` | bool | True | Enable the AI agents subsystem | `experimental/ai/lexigram-ai-agents/src/lexigram/ai/agents/config.py:AgentConfig.enabled` |
-| `LEX_AI_AGENTS__ENABLE_METRICS` | bool | True | Enable Prometheus metrics | `experimental/ai/lexigram-ai-agents/src/lexigram/ai/agents/config.py:AgentConfig.enable_metrics` |
-| `LEX_AI_AGENTS__ENABLE_TRACING` | bool | True | Enable OpenTelemetry tracing | `experimental/ai/lexigram-ai-agents/src/lexigram/ai/agents/config.py:AgentConfig.enable_tracing` |
-| `LEX_AI_AGENTS__MAX_ITERATIONS` | int | 10 | Maximum reasoning iterations per execution | `experimental/ai/lexigram-ai-agents/src/lexigram/ai/agents/config.py:AgentConfig.max_iterations` |
-| `LEX_AI_AGENTS__TOOL_MAX_RETRIES` | int | 3 | Number of retries for transient tool execution errors (ConnectionError, Timeo... | `experimental/ai/lexigram-ai-agents/src/lexigram/ai/agents/config.py:AgentConfig.tool_max_retries` |
-
-### `lexigram-ai-evaluation` (9 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_AI_EVALUATION__DEFAULT_SEED` | int \| None | None | Default seed for reproducible experiment runs | `experimental/ai/lexigram-ai-evaluation/src/lexigram/ai/.../config.py:EvaluationConfig.default_seed` |
-| `LEX_AI_EVALUATION__DEFAULT_THRESHOLD` | float | 0.8 | Default score threshold for passing evaluations | `experimental/ai/lexigram-ai-evaluation/src/lexigram/ai/...ig.py:EvaluationConfig.default_threshold` |
-| `LEX_AI_EVALUATION__EMBEDDING_MODEL` | str | 'text-embedding-3-small' | Model to use for embedding-based evaluations | `experimental/ai/lexigram-ai-evaluation/src/lexigram/ai/...nfig.py:EvaluationConfig.embedding_model` |
-| `LEX_AI_EVALUATION__ENABLED` | bool | True | Enable the AI evaluation subsystem | `experimental/ai/lexigram-ai-evaluation/src/lexigram/ai/evaluation/config.py:EvaluationConfig.enabled` |
-| `LEX_AI_EVALUATION__EXPERIMENT_DIR` | str \| None | None | Base directory for experiment tracking and checkpoint artifacts | `experimental/ai/lexigram-ai-evaluation/src/lexigram/ai/...onfig.py:EvaluationConfig.experiment_dir` |
-| `LEX_AI_EVALUATION__INCLUDE_METADATA` | bool | True | Whether to include metadata in run reports | `experimental/ai/lexigram-ai-evaluation/src/lexigram/ai/...fig.py:EvaluationConfig.include_metadata` |
-| `LEX_AI_EVALUATION__MAX_RETRIES` | int | 3 | Maximum retries for failed evaluations | `experimental/ai/lexigram-ai-evaluation/src/lexigram/ai/...n/config.py:EvaluationConfig.max_retries` |
-| `LEX_AI_EVALUATION__MAX_SAMPLES` | int \| None | None | Maximum number of samples per evaluation run | `experimental/ai/lexigram-ai-evaluation/src/lexigram/ai/...n/config.py:EvaluationConfig.max_samples` |
-| `LEX_AI_EVALUATION__TIMEOUT_SECONDS` | int | 30 | Timeout for evaluation execution in seconds | `experimental/ai/lexigram-ai-evaluation/src/lexigram/ai/...nfig.py:EvaluationConfig.timeout_seconds` |
-
-### `lexigram-ai-feedback` (3 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_AI_FEEDBACK__ASYNC_PROCESSING` | bool | True | Process feedback handlers asynchronously in the background | `experimental/ai/lexigram-ai-feedback/src/lexigram/ai/fe...onfig.py:FeedbackConfig.async_processing` |
-| `LEX_AI_FEEDBACK__ENABLED` | bool | True | Master on/off switch for all feedback collection | `experimental/ai/lexigram-ai-feedback/src/lexigram/ai/feedback/config.py:FeedbackConfig.enabled` |
-| `LEX_AI_FEEDBACK__STORE_RAW_PAYLOADS` | bool | False | Persist raw incoming feedback payloads for auditing | `experimental/ai/lexigram-ai-feedback/src/lexigram/ai/fe...fig.py:FeedbackConfig.store_raw_payloads` |
-
-### `lexigram-ai-governance` (11 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_AI_GOVERNANCE__ENABLED` | bool | True | Enable AI governance | `experimental/ai/lexigram-ai-governance/src/lexigram/ai/governance/config.py:GovernanceConfig.enabled` |
-| `LEX_AI_GOVERNANCE__ENFORCE_BUDGET` | bool | True | Enforce budget limits | `experimental/ai/lexigram-ai-governance/src/lexigram/ai/...onfig.py:GovernanceConfig.enforce_budget` |
-| `LEX_AI_GOVERNANCE__FAIL_OPEN_ON_PERSISTENCE_ERROR` | bool | False | Allow requests when the persistence backend is unavailable. When False (defau... | `experimental/ai/lexigram-ai-governance/src/lexigram/ai/...nceConfig.fail_open_on_persistence_error` |
-| `LEX_AI_GOVERNANCE__MAX_REQUEST_COST` | float \| None | None | Maximum cost in dollars for a single request. Requests with an estimated cost... | `experimental/ai/lexigram-ai-governance/src/lexigram/ai/...fig.py:GovernanceConfig.max_request_cost` |
-| `LEX_AI_GOVERNANCE__MAX_TOKENS_PER_REQUEST` | int \| None | None | Max tokens per request | `experimental/ai/lexigram-ai-governance/src/lexigram/ai/...:GovernanceConfig.max_tokens_per_request` |
-| `LEX_AI_GOVERNANCE__MONTHLY_BUDGET` | float \| None | None | Monthly budget in dollars | `experimental/ai/lexigram-ai-governance/src/lexigram/ai/...onfig.py:GovernanceConfig.monthly_budget` |
-| `LEX_AI_GOVERNANCE__RESOURCE_UNITS` | list | — | Resource units this governance instance tracks. Per-tenant limits are configu... | `experimental/ai/lexigram-ai-governance/src/lexigram/ai/...onfig.py:GovernanceConfig.resource_units` |
-| `LEX_AI_GOVERNANCE__RESTRICTED_MODELS` | list[str] | — | List of restricted models | `experimental/ai/lexigram-ai-governance/src/lexigram/ai/...ig.py:GovernanceConfig.restricted_models` |
-| `LEX_AI_GOVERNANCE__RPM_LIMIT` | int \| None | None | Requests Per Minute limit | `experimental/ai/lexigram-ai-governance/src/lexigram/ai/...nce/config.py:GovernanceConfig.rpm_limit` |
-| `LEX_AI_GOVERNANCE__SOFT_LIMIT_PCT` | float \| None | None | Fraction of monthly_budget at which to emit a soft-limit warning (e.g. 0.8 = ... | `experimental/ai/lexigram-ai-governance/src/lexigram/ai/...onfig.py:GovernanceConfig.soft_limit_pct` |
-| `LEX_AI_GOVERNANCE__TPM_LIMIT` | int \| None | None | Tokens Per Minute limit | `experimental/ai/lexigram-ai-governance/src/lexigram/ai/...nce/config.py:GovernanceConfig.tpm_limit` |
-
-### `lexigram-ai-guard` (17 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_AI_GUARD__ENABLED` | bool | True | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.enabled` |
-| `LEX_AI_GUARD__ENABLE_LLM_GUARDS` | bool | False | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.enable_llm_guards` |
-| `LEX_AI_GUARD__GUARD_MODEL` | str | 'gpt-4o-mini' | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.guard_model` |
-| `LEX_AI_GUARD__INJECTION_ACTION` | str | 'block' | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.injection_action` |
-| `LEX_AI_GUARD__INJECTION_DETECTION` | bool | True | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.injection_detection` |
-| `LEX_AI_GUARD__LENGTH_ACTION` | str | 'block' | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.length_action` |
-| `LEX_AI_GUARD__LLM_GUARD_FAIL_OPEN` | bool | False | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.llm_guard_fail_open` |
-| `LEX_AI_GUARD__LLM_GUARD_THRESHOLD` | float | 0.7 | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.llm_guard_threshold` |
-| `LEX_AI_GUARD__MAX_INPUT_CHARS` | int | 0 | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.max_input_chars` |
-| `LEX_AI_GUARD__MAX_OUTPUT_CHARS` | int | 0 | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.max_output_chars` |
-| `LEX_AI_GUARD__PARALLEL_EXECUTION` | bool | False | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.parallel_execution` |
-| `LEX_AI_GUARD__PII_ACTION` | str | 'redact' | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.pii_action` |
-| `LEX_AI_GUARD__PII_DETECTION` | bool | True | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.pii_detection` |
-| `LEX_AI_GUARD__PII_ENTITIES` | list[str] | (complex) | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.pii_entities` |
-| `LEX_AI_GUARD__PII_REDACTION_OUTPUT` | bool | True | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.pii_redaction_output` |
-| `LEX_AI_GUARD__RESTRICTED_TOPICS` | list[str] | (complex) | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.restricted_topics` |
-| `LEX_AI_GUARD__SENSITIVITY_LEVEL` | str | 'medium' | — | `experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py:GuardConfig.sensitivity_level` |
-
-### `lexigram-ai-llm` (20 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_AI_LLM__API_BASE` | str \| None | None | Custom API base URL (for Azure, local, or proxied endpoints). | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.api_base` |
-| `LEX_AI_LLM__API_KEY` | SecretStr \| None | None | API key for the chosen provider. | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.api_key` |
-| `LEX_AI_LLM__CACHE_TTL` | int | 3600 | Cache TTL in seconds. | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.cache_ttl` |
-| `LEX_AI_LLM__ENABLED` | bool | True | Enable the LLM subsystem | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.enabled` |
-| `LEX_AI_LLM__ENABLE_CACHE` | bool | False | Enable response caching (requires CacheBackendProtocol in container). | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.enable_cache` |
-| `LEX_AI_LLM__EXTRA` | dict[str, Any] | — | Provider-specific extra parameters passed verbatim. | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.extra` |
-| `LEX_AI_LLM__MAX_TOKENS` | int \| None | None | Maximum tokens in response. | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.max_tokens` |
-| `LEX_AI_LLM__MODEL` | str | 'gpt-4-turbo' | Model name or identifier. | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.model` |
-| `LEX_AI_LLM__PIN_POLICY` | ModelPinPolicy | ModelPinPolicy.LATEST | Policy for enforcing the model revision pin. | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.pin_policy` |
-| `LEX_AI_LLM__PRICING__CACHE_TTL` | int | 86400 | Pricing cache TTL in seconds (default: 24 hours). | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.pricing.cache_ttl` |
-| `LEX_AI_LLM__PRICING__ENABLED` | bool | True | Register pricing manager and cost estimator. | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.pricing.enabled` |
-| `LEX_AI_LLM__PRICING__ENABLE_FUZZY_MATCH` | bool | True | Allow substring matching of model names to prices. | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/con...:ClientConfig.pricing.enable_fuzzy_match` |
-| `LEX_AI_LLM__PRICING__SOURCES` | list[PricingSourceConfig] | — | Pricing sources in priority order. | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.pricing.sources` |
-| `LEX_AI_LLM__PROVIDER` | ModelProvider | ModelProvider.OPENAI | LLM provider name. | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.provider` |
-| `LEX_AI_LLM__TEMPERATURE` | float | 0.7 | Sampling temperature. | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.temperature` |
-| `LEX_AI_LLM__THINKING__BUDGET_TOKENS` | int | 10000 | — | `core/lexigram-contracts/src/lexigram/contracts/ai/thinking.py:ClientConfig.thinking.budget_tokens` |
-| `LEX_AI_LLM__THINKING__EFFORT` | str \| None | None | — | `core/lexigram-contracts/src/lexigram/contracts/ai/thinking.py:ClientConfig.thinking.effort` |
-| `LEX_AI_LLM__THINKING__LEVEL` | str \| None | None | — | `core/lexigram-contracts/src/lexigram/contracts/ai/thinking.py:ClientConfig.thinking.level` |
-| `LEX_AI_LLM__THINKING__SUPPRESS` | bool | False | — | `core/lexigram-contracts/src/lexigram/contracts/ai/thinking.py:ClientConfig.thinking.suppress` |
-| `LEX_AI_LLM__TIMEOUT` | float | 60.0 | Request timeout in seconds. | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py:ClientConfig.timeout` |
-
-### `lexigram-ai-mcp` (14 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_AI_MCP__ALLOW_UNAUTHENTICATED` | bool | False | — | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.allow_unauthenticated` |
-| `LEX_AI_MCP__CLIENT_STDIO_COMMAND` | list[str] | (complex) | — | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.client_stdio_command` |
-| `LEX_AI_MCP__CLIENT_URL` | str \| None | None | — | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.client_url` |
-| `LEX_AI_MCP__CORS_ORIGINS` | list[str] | (complex) | — | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.cors_origins` |
-| `LEX_AI_MCP__ENABLED` | bool | True | Enable the MCP server subsystem | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.enabled` |
-| `LEX_AI_MCP__ENABLE_SSE` | bool | True | — | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.enable_sse` |
-| `LEX_AI_MCP__HOST` | str | '0.0.0.0' | — | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.host` |
-| `LEX_AI_MCP__MAX_REQUEST_SIZE` | int | 1024 * 1024 | — | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.max_request_size` |
-| `LEX_AI_MCP__PATH` | str | '/mcp' | — | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.path` |
-| `LEX_AI_MCP__PORT` | int | 8080 | — | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.port` |
-| `LEX_AI_MCP__REQUEST_TIMEOUT` | float | 30.0 | — | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.request_timeout` |
-| `LEX_AI_MCP__SERVER_NAME` | str | 'lexigram-mcp' | — | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.server_name` |
-| `LEX_AI_MCP__SERVER_VERSION` | str | '1.0.0' | — | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.server_version` |
-| `LEX_AI_MCP__STDIO_MODE` | bool | False | — | `experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/config.py:MCPConfig.stdio_mode` |
-
-### `lexigram-ai-memory` (21 vars)
+### `oridecon-ai` (9 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_AI_MEMORY__CONSOLIDATION__AGE_THRESHOLD_HOURS` | float | const.DEFAULT_CONSOLIDATION_AGE_THRESHOLD_HOURS | Minimum entry age (hours) before it can be consolidated | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...Config.consolidation.age_threshold_hours` |
-| `LEX_AI_MEMORY__CONSOLIDATION__BATCH_SIZE` | int | const.DEFAULT_CONSOLIDATION_BATCH_SIZE | Maximum entries processed per consolidation pass | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...py:MemoryConfig.consolidation.batch_size` |
-| `LEX_AI_MEMORY__CONSOLIDATION__ENABLED` | bool | True | Whether automatic background consolidation is active | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...ig.py:MemoryConfig.consolidation.enabled` |
-| `LEX_AI_MEMORY__CONSOLIDATION__IMPORTANCE_PRUNE_THRESHOLD` | float | const.DEFAULT_CONSOLIDATION_IMPORTANCE_PRUNE | Entries below this importance score are eligible for pruning | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...consolidation.importance_prune_threshold` |
-| `LEX_AI_MEMORY__CONSOLIDATION__INTERVAL_SECONDS` | float | const.DEFAULT_CONSOLIDATION_INTERVAL_S | How often to run a consolidation pass (seconds) | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...oryConfig.consolidation.interval_seconds` |
-| `LEX_AI_MEMORY__DEFAULT_BACKEND` | str | const.DEFAULT_BACKEND | Backend type to use ('in_memory', 'cache', 'database', 'vector') | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memory/config.py:MemoryConfig.default_backend` |
-| `LEX_AI_MEMORY__ENABLED` | bool | True | Enable the AI memory subsystem | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memory/config.py:MemoryConfig.enabled` |
-| `LEX_AI_MEMORY__EPISODIC__DEFAULT_TOP_K` | int | const.DEFAULT_EPISODIC_TOP_K | Default number of episodes to retrieve | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...g.py:MemoryConfig.episodic.default_top_k` |
-| `LEX_AI_MEMORY__EPISODIC__IMPORTANCE_WEIGHT` | float | const.DEFAULT_IMPORTANCE_WEIGHT | Weight applied to entry importance during scoring | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...:MemoryConfig.episodic.importance_weight` |
-| `LEX_AI_MEMORY__EPISODIC__RECENCY_WEIGHT` | float | const.DEFAULT_RECENCY_WEIGHT | Weight applied to temporal recency during scoring | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo....py:MemoryConfig.episodic.recency_weight` |
-| `LEX_AI_MEMORY__EPISODIC__RELEVANCE_WEIGHT` | float | const.DEFAULT_RELEVANCE_WEIGHT | Weight applied to semantic similarity during scoring | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...y:MemoryConfig.episodic.relevance_weight` |
-| `LEX_AI_MEMORY__EPISODIC__TTL_SECONDS` | int | const.DEFAULT_EPISODIC_TTL_SECONDS | Time-to-live for entries in seconds (0 = never expire) | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...fig.py:MemoryConfig.episodic.ttl_seconds` |
-| `LEX_AI_MEMORY__SEMANTIC__MAX_FACTS_PER_ENTITY` | int | const.DEFAULT_MAX_FACTS_PER_ENTITY | Hard cap on stored facts per entity | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...moryConfig.semantic.max_facts_per_entity` |
-| `LEX_AI_MEMORY__SEMANTIC__MIN_CONFIDENCE` | float | const.DEFAULT_MIN_CONFIDENCE | Minimum confidence score required to store a fact | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo....py:MemoryConfig.semantic.min_confidence` |
-| `LEX_AI_MEMORY__TTL_SECONDS` | int | const.DEFAULT_TTL_SECONDS | Default entry TTL in seconds (0 = never expire) | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memory/config.py:MemoryConfig.ttl_seconds` |
-| `LEX_AI_MEMORY__WORKING__EPISODIC_FRACTION` | float | const.DEFAULT_EPISODIC_FRACTION | Fraction of remaining budget for episodic recall | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...y:MemoryConfig.working.episodic_fraction` |
-| `LEX_AI_MEMORY__WORKING__MAX_RECENT_TURNS` | int | const.DEFAULT_MAX_RECENT_TURNS | Hard cap on recent turns regardless of budget | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...py:MemoryConfig.working.max_recent_turns` |
-| `LEX_AI_MEMORY__WORKING__RECENT_TURNS_FRACTION` | float | const.DEFAULT_RECENT_TURNS_FRACTION | Fraction of remaining budget for recent turns | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...moryConfig.working.recent_turns_fraction` |
-| `LEX_AI_MEMORY__WORKING__SEMANTIC_FRACTION` | float | const.DEFAULT_SEMANTIC_FRACTION | Fraction of remaining budget for semantic facts | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...y:MemoryConfig.working.semantic_fraction` |
-| `LEX_AI_MEMORY__WORKING__SYSTEM_PROMPT_TOKENS` | int | const.DEFAULT_SYSTEM_PROMPT_TOKENS | Fixed token allocation for system prompt | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...emoryConfig.working.system_prompt_tokens` |
-| `LEX_AI_MEMORY__WORKING__TOOL_DESCRIPTIONS_FRACTION` | float | const.DEFAULT_TOOL_DESC_FRACTION | Fraction of remaining budget for tool descriptions | `experimental/ai/lexigram-ai-memory/src/lexigram/ai/memo...onfig.working.tool_descriptions_fraction` |
+| `ORI_AI__ENABLED` | bool | True | Enable AI features | `experimental/ai/oridecon-ai/src/oridecon/ai/config.py:AIConfig.enabled` |
+| `ORI_AI__GOVERNANCE` | Any | — | AI governance configuration | `experimental/ai/oridecon-ai/src/oridecon/ai/config.py:AIConfig.governance` |
+| `ORI_AI__LLM` | Any \| None | None | LLM configuration (optional) | `experimental/ai/oridecon-ai/src/oridecon/ai/config.py:AIConfig.llm` |
+| `ORI_AI__NAME` | str | 'ai' | Configuration name | `experimental/ai/oridecon-ai/src/oridecon/ai/config.py:AIConfig.name` |
+| `ORI_AI__OBSERVABILITY` | Any | — | AI observability configuration (tracing and metrics) | `experimental/ai/oridecon-ai/src/oridecon/ai/config.py:AIConfig.observability` |
+| `ORI_AI__RAG` | Any \| None | None | RAG pipeline configuration (optional) | `experimental/ai/oridecon-ai/src/oridecon/ai/config.py:AIConfig.rag` |
+| `ORI_AI__SUBSYSTEMS` | dict[str, dict[str, Any]] | — | Dynamic configuration for third-party AI subsystems discovered via entry poin... | `experimental/ai/oridecon-ai/src/oridecon/ai/config.py:AIConfig.subsystems` |
+| `ORI_AI__VECTOR` | Any \| None | None | Vector store configuration | `experimental/ai/oridecon-ai/src/oridecon/ai/config.py:AIConfig.vector` |
+| `ORI_ENV` | str | — | — | `experimental/ai/oridecon-ai/src/oridecon/ai/config.py *(direct env access; not config-derived)*` |
 
-### `lexigram-ai-observability` (6 vars)
+### `oridecon-ai-agents` (7 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_AI_OBSERVABILITY__ENABLED` | bool | True | Master on/off switch for all observability | `experimental/ai/lexigram-ai-observability/src/lexigram/...ty/config.py:ObservabilityConfig.enabled` |
-| `LEX_AI_OBSERVABILITY__HEALTH_CHECKS_ENABLED` | bool | True | Enable background health checking for AI components | `experimental/ai/lexigram-ai-observability/src/lexigram/...bservabilityConfig.health_checks_enabled` |
-| `LEX_AI_OBSERVABILITY__METRICS_ENABLED` | bool | True | Enable metrics collection | `experimental/ai/lexigram-ai-observability/src/lexigram/...g.py:ObservabilityConfig.metrics_enabled` |
-| `LEX_AI_OBSERVABILITY__TRACE_MAX_ATTRIBUTE_LENGTH` | int | 0 | Cap on string attribute values written to trace spans, in characters. 0 disab... | `experimental/ai/lexigram-ai-observability/src/lexigram/...abilityConfig.trace_max_attribute_length` |
-| `LEX_AI_OBSERVABILITY__TRACE_REDACTION_ENABLED` | bool | False | Redact secret-shaped keys (e.g. token, password, api_key) from trace span att... | `experimental/ai/lexigram-ai-observability/src/lexigram/...ervabilityConfig.trace_redaction_enabled` |
-| `LEX_AI_OBSERVABILITY__TRACING_ENABLED` | bool | True | Enable distributed tracing | `experimental/ai/lexigram-ai-observability/src/lexigram/...g.py:ObservabilityConfig.tracing_enabled` |
+| `ORI_AI_AGENTS__DEFAULT_MAX_TOKENS` | int | 2048 | Default max tokens for LLM responses | `experimental/ai/oridecon-ai-agents/src/oridecon/ai/agents/config.py:AgentConfig.default_max_tokens` |
+| `ORI_AI_AGENTS__DEFAULT_TEMPERATURE` | float | 0.7 | Default temperature for LLM calls | `experimental/ai/oridecon-ai-agents/src/oridecon/ai/agents/config.py:AgentConfig.default_temperature` |
+| `ORI_AI_AGENTS__ENABLED` | bool | True | Enable the AI agents subsystem | `experimental/ai/oridecon-ai-agents/src/oridecon/ai/agents/config.py:AgentConfig.enabled` |
+| `ORI_AI_AGENTS__ENABLE_METRICS` | bool | True | Enable Prometheus metrics | `experimental/ai/oridecon-ai-agents/src/oridecon/ai/agents/config.py:AgentConfig.enable_metrics` |
+| `ORI_AI_AGENTS__ENABLE_TRACING` | bool | True | Enable OpenTelemetry tracing | `experimental/ai/oridecon-ai-agents/src/oridecon/ai/agents/config.py:AgentConfig.enable_tracing` |
+| `ORI_AI_AGENTS__MAX_ITERATIONS` | int | 10 | Maximum reasoning iterations per execution | `experimental/ai/oridecon-ai-agents/src/oridecon/ai/agents/config.py:AgentConfig.max_iterations` |
+| `ORI_AI_AGENTS__TOOL_MAX_RETRIES` | int | 3 | Number of retries for transient tool execution errors (ConnectionError, Timeo... | `experimental/ai/oridecon-ai-agents/src/oridecon/ai/agents/config.py:AgentConfig.tool_max_retries` |
 
-### `lexigram-ai-prompt` (5 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_AI_PROMPT__DEFAULT_FORMAT` | RenderFormat | DEFAULT_RENDER_FORMAT | — | `experimental/ai/lexigram-ai-prompt/src/lexigram/ai/prompt/config.py:PromptConfig.default_format` |
-| `LEX_AI_PROMPT__ENABLED` | bool | True | Enable the AI prompt subsystem | `experimental/ai/lexigram-ai-prompt/src/lexigram/ai/prompt/config.py:PromptConfig.enabled` |
-| `LEX_AI_PROMPT__MAX_VARIABLE_LENGTH` | int | 0 | — | `experimental/ai/lexigram-ai-prompt/src/lexigram/ai/prompt/config.py:PromptConfig.max_variable_length` |
-| `LEX_AI_PROMPT__SANITIZE_INPUTS` | bool | True | — | `experimental/ai/lexigram-ai-prompt/src/lexigram/ai/prompt/config.py:PromptConfig.sanitize_inputs` |
-| `LEX_AI_PROMPT__STRICT_SANITIZER` | bool | True | — | `experimental/ai/lexigram-ai-prompt/src/lexigram/ai/prompt/config.py:PromptConfig.strict_sanitizer` |
-
-### `lexigram-ai-rag` (23 vars)
+### `oridecon-ai-evaluation` (9 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_AI_RAG__CACHE_TTL` | int | 3600 | Cache TTL in seconds (default: 1 hour) | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.cache_ttl` |
-| `LEX_AI_RAG__CHUNKING_STRATEGY` | str | 'recursive' | Chunking strategy (recursive, semantic, token) | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.chunking_strategy` |
-| `LEX_AI_RAG__CHUNK_OVERLAP` | int | 50 | Overlap between consecutive chunks | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.chunk_overlap` |
-| `LEX_AI_RAG__CHUNK_SIZE` | int | 512 | Text chunk size in tokens | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.chunk_size` |
-| `LEX_AI_RAG__CITATION_STYLE` | str | 'inline' | Citation style (inline, footnote, numbered) | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.citation_style` |
-| `LEX_AI_RAG__COLLECTION_NAME` | str | 'default' | Collection/index name for vector store | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.collection_name` |
-| `LEX_AI_RAG__EMBEDDING_MODEL` | str \| None | None | Embedding model identifier. Must be set explicitly — no vendor-specific default. | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.embedding_model` |
-| `LEX_AI_RAG__EMBEDDING_PROVIDER` | str | 'openai' | Embedding provider (openai, cohere, etc.) | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.embedding_provider` |
-| `LEX_AI_RAG__ENABLED` | bool | True | Enable the RAG pipeline | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.enabled` |
-| `LEX_AI_RAG__ENABLE_CACHING` | bool | True | Enable caching for RAG queries | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.enable_caching` |
-| `LEX_AI_RAG__ENABLE_CITATIONS` | bool | True | Include source citations in responses | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.enable_citations` |
-| `LEX_AI_RAG__ENABLE_HALLUCINATION_DETECTION` | bool | True | Enable hallucination detection for AI responses | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/con...RAGConfig.enable_hallucination_detection` |
-| `LEX_AI_RAG__ENABLE_HYDE` | bool | False | Enable HyDE (Hypothetical Document Embeddings) | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.enable_hyde` |
-| `LEX_AI_RAG__ENABLE_QUERY_EXPANSION` | bool | True | Enable query expansion techniques | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.enable_query_expansion` |
-| `LEX_AI_RAG__MIN_CITATION_CONFIDENCE` | float | 0.6 | Minimum confidence for citation inclusion | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.min_citation_confidence` |
-| `LEX_AI_RAG__PERSIST_DIRECTORY` | str \| None | None | Local directory path for vector store persistence (e.g. Chroma) | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.persist_directory` |
-| `LEX_AI_RAG__SIMILARITY_THRESHOLD` | float | 0.7 | Minimum similarity score threshold | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.similarity_threshold` |
-| `LEX_AI_RAG__SYNTHESIS_STRATEGY` | str | 'hybrid' | Synthesis strategy (direct, extractive, abstractive, hybrid) | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.synthesis_strategy` |
-| `LEX_AI_RAG__TENANCY__ENABLED` | bool | False | Enable tenant-aware collection resolution in RAG pipeline | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.tenancy.enabled` |
-| `LEX_AI_RAG__TOP_K` | int | 5 | Number of documents to retrieve | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.top_k` |
-| `LEX_AI_RAG__USE_HYBRID_SEARCH` | bool | True | Enable hybrid search (semantic + keyword) | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.use_hybrid_search` |
-| `LEX_AI_RAG__VECTOR_DIMENSION` | int | 1536 | Embedding vector dimension (1536 for OpenAI ada-002) | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.vector_dimension` |
-| `LEX_AI_RAG__VECTOR_STORE_TYPE` | str | 'pgvector' | Vector store backend (pgvector, chroma, qdrant, mock) | `experimental/ai/lexigram-ai-rag/src/lexigram/ai/rag/config.py:RAGConfig.vector_store_type` |
+| `ORI_AI_EVALUATION__DEFAULT_SEED` | int \| None | None | Default seed for reproducible experiment runs | `experimental/ai/oridecon-ai-evaluation/src/oridecon/ai/.../config.py:EvaluationConfig.default_seed` |
+| `ORI_AI_EVALUATION__DEFAULT_THRESHOLD` | float | 0.8 | Default score threshold for passing evaluations | `experimental/ai/oridecon-ai-evaluation/src/oridecon/ai/...ig.py:EvaluationConfig.default_threshold` |
+| `ORI_AI_EVALUATION__EMBEDDING_MODEL` | str | 'text-embedding-3-small' | Model to use for embedding-based evaluations | `experimental/ai/oridecon-ai-evaluation/src/oridecon/ai/...nfig.py:EvaluationConfig.embedding_model` |
+| `ORI_AI_EVALUATION__ENABLED` | bool | True | Enable the AI evaluation subsystem | `experimental/ai/oridecon-ai-evaluation/src/oridecon/ai/evaluation/config.py:EvaluationConfig.enabled` |
+| `ORI_AI_EVALUATION__EXPERIMENT_DIR` | str \| None | None | Base directory for experiment tracking and checkpoint artifacts | `experimental/ai/oridecon-ai-evaluation/src/oridecon/ai/...onfig.py:EvaluationConfig.experiment_dir` |
+| `ORI_AI_EVALUATION__INCLUDE_METADATA` | bool | True | Whether to include metadata in run reports | `experimental/ai/oridecon-ai-evaluation/src/oridecon/ai/...fig.py:EvaluationConfig.include_metadata` |
+| `ORI_AI_EVALUATION__MAX_RETRIES` | int | 3 | Maximum retries for failed evaluations | `experimental/ai/oridecon-ai-evaluation/src/oridecon/ai/...n/config.py:EvaluationConfig.max_retries` |
+| `ORI_AI_EVALUATION__MAX_SAMPLES` | int \| None | None | Maximum number of samples per evaluation run | `experimental/ai/oridecon-ai-evaluation/src/oridecon/ai/...n/config.py:EvaluationConfig.max_samples` |
+| `ORI_AI_EVALUATION__TIMEOUT_SECONDS` | int | 30 | Timeout for evaluation execution in seconds | `experimental/ai/oridecon-ai-evaluation/src/oridecon/ai/...nfig.py:EvaluationConfig.timeout_seconds` |
 
-### `lexigram-ai-session` (16 vars)
+### `oridecon-ai-feedback` (3 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_AI_SESSION__AUTO_CHECKPOINT_INTERVAL` | int \| None | const.DEFAULT_AUTO_CHECKPOINT_INTERVAL | Checkpoint every N turns; None to disable | `experimental/ai/lexigram-ai-session/src/lexigram/ai/ses...y:SessionConfig.auto_checkpoint_interval` |
-| `LEX_AI_SESSION__BACKEND` | str | const.DEFAULT_BACKEND | Persistence backend (in_memory, cache, database) | `experimental/ai/lexigram-ai-session/src/lexigram/ai/session/config.py:SessionConfig.backend` |
-| `LEX_AI_SESSION__CLEANUP_INTERVAL_S` | int | const.DEFAULT_CLEANUP_INTERVAL_S | How often the cleanup scheduler sweeps for expired sessions | `experimental/ai/lexigram-ai-session/src/lexigram/ai/ses...nfig.py:SessionConfig.cleanup_interval_s` |
-| `LEX_AI_SESSION__CONSOLIDATE_ON_CLOSE` | bool | const.DEFAULT_CONSOLIDATE_ON_CLOSE | Whether to trigger memory consolidation on session close | `experimental/ai/lexigram-ai-session/src/lexigram/ai/ses...ig.py:SessionConfig.consolidate_on_close` |
-| `LEX_AI_SESSION__COOKIE_NAME` | str \| None | const.DEFAULT_COOKIE_NAME | Cookie name for web session ID; None disables cookies | `experimental/ai/lexigram-ai-session/src/lexigram/ai/session/config.py:SessionConfig.cookie_name` |
-| `LEX_AI_SESSION__DEFAULT_SYSTEM_PROMPT` | str \| None | None | System prompt injected into every new session | `experimental/ai/lexigram-ai-session/src/lexigram/ai/ses...g.py:SessionConfig.default_system_prompt` |
-| `LEX_AI_SESSION__DEFAULT_TURN_STRATEGY` | str | const.DEFAULT_TURN_STRATEGY | Default turn-selection strategy (round_robin, priority, llm_directed) | `experimental/ai/lexigram-ai-session/src/lexigram/ai/ses...g.py:SessionConfig.default_turn_strategy` |
-| `LEX_AI_SESSION__ENABLED` | bool | True | Enable the AI session subsystem | `experimental/ai/lexigram-ai-session/src/lexigram/ai/session/config.py:SessionConfig.enabled` |
-| `LEX_AI_SESSION__HEADER_NAME` | str | const.DEFAULT_HEADER_NAME | HTTP header name for session ID pass-through | `experimental/ai/lexigram-ai-session/src/lexigram/ai/session/config.py:SessionConfig.header_name` |
-| `LEX_AI_SESSION__MAX_AGENTS_PER_GROUP` | int | const.DEFAULT_MAX_AGENTS | Maximum agents in a multi-agent group session | `experimental/ai/lexigram-ai-session/src/lexigram/ai/ses...ig.py:SessionConfig.max_agents_per_group` |
-| `LEX_AI_SESSION__MAX_BRANCHES_PER_SESSION` | int | const.DEFAULT_MAX_BRANCHES | Maximum forked branches per session | `experimental/ai/lexigram-ai-session/src/lexigram/ai/ses...y:SessionConfig.max_branches_per_session` |
-| `LEX_AI_SESSION__MAX_CHECKPOINTS_PER_SESSION` | int | const.DEFAULT_MAX_CHECKPOINTS | Maximum retained checkpoints per session | `experimental/ai/lexigram-ai-session/src/lexigram/ai/ses...essionConfig.max_checkpoints_per_session` |
-| `LEX_AI_SESSION__MAX_SESSIONS_PER_USER` | int | const.DEFAULT_MAX_SESSIONS_PER_USER | Maximum concurrent sessions per user | `experimental/ai/lexigram-ai-session/src/lexigram/ai/ses...g.py:SessionConfig.max_sessions_per_user` |
-| `LEX_AI_SESSION__MAX_TURNS_PER_SESSION` | int | const.DEFAULT_MAX_TURNS | Hard cap on turns before the session is closed | `experimental/ai/lexigram-ai-session/src/lexigram/ai/ses...g.py:SessionConfig.max_turns_per_session` |
-| `LEX_AI_SESSION__NAME` | str | 'ai-session' | Logical name used for DI registration keys | `experimental/ai/lexigram-ai-session/src/lexigram/ai/session/config.py:SessionConfig.name` |
-| `LEX_AI_SESSION__SESSION_TTL` | int | const.DEFAULT_SESSION_TTL_S | Maximum age of a session in seconds (0 to disable) | `experimental/ai/lexigram-ai-session/src/lexigram/ai/session/config.py:SessionConfig.session_ttl` |
+| `ORI_AI_FEEDBACK__ASYNC_PROCESSING` | bool | True | Process feedback handlers asynchronously in the background | `experimental/ai/oridecon-ai-feedback/src/oridecon/ai/fe...onfig.py:FeedbackConfig.async_processing` |
+| `ORI_AI_FEEDBACK__ENABLED` | bool | True | Master on/off switch for all feedback collection | `experimental/ai/oridecon-ai-feedback/src/oridecon/ai/feedback/config.py:FeedbackConfig.enabled` |
+| `ORI_AI_FEEDBACK__STORE_RAW_PAYLOADS` | bool | False | Persist raw incoming feedback payloads for auditing | `experimental/ai/oridecon-ai-feedback/src/oridecon/ai/fe...fig.py:FeedbackConfig.store_raw_payloads` |
 
-### `lexigram-ai-skills` (18 vars)
+### `oridecon-ai-governance` (11 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_AI_SKILLS__ALLOWED_SCRIPT_TYPES` | list[str] | — | Allowed script types (py, sh, js) | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skil...fig.py:SkillsConfig.allowed_script_types` |
-| `LEX_AI_SKILLS__AUTO_DISCOVER` | bool | const.DEFAULT_AUTO_DISCOVER | Whether to auto-scan packages for skills on boot | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skills/config.py:SkillsConfig.auto_discover` |
-| `LEX_AI_SKILLS__BUILTIN_SKILLS` | list[str] | — | Names of built-in skills to register | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skills/config.py:SkillsConfig.builtin_skills` |
-| `LEX_AI_SKILLS__CACHE_BACKEND` | str | const.DEFAULT_CACHE_BACKEND | Which cache backend to use (in_memory, cache) | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skills/config.py:SkillsConfig.cache_backend` |
-| `LEX_AI_SKILLS__CACHE_ENABLED` | bool | const.DEFAULT_CACHE_ENABLED | Whether result caching is globally enabled | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skills/config.py:SkillsConfig.cache_enabled` |
-| `LEX_AI_SKILLS__CACHE_TTL_SECONDS` | int | const.DEFAULT_CACHE_TTL_S | Default TTL for cached skill results (seconds) | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skills/config.py:SkillsConfig.cache_ttl_seconds` |
-| `LEX_AI_SKILLS__DEFAULT_TIMEOUT_SECONDS` | float | const.DEFAULT_TIMEOUT_S | Default execution timeout per skill (seconds) | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skil....py:SkillsConfig.default_timeout_seconds` |
-| `LEX_AI_SKILLS__ENABLED_DIRECTORIES` | list[str] | — | Which skill directories to enable (claude_code, opencode, cursor, etc.) | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skills/config.py:SkillsConfig.enabled_directories` |
-| `LEX_AI_SKILLS__ENABLE_BUILTIN` | bool | const.DEFAULT_ENABLE_BUILTIN | Whether built-in skills are registered on boot | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skills/config.py:SkillsConfig.enable_builtin` |
-| `LEX_AI_SKILLS__ENABLE_SKILL_SOURCES` | bool | True | Whether to scan for external skill sources on boot | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skil...fig.py:SkillsConfig.enable_skill_sources` |
-| `LEX_AI_SKILLS__ENFORCE_PERMISSIONS` | bool | const.DEFAULT_ENFORCE_PERMISSIONS | Whether permission checks are enforced | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skills/config.py:SkillsConfig.enforce_permissions` |
-| `LEX_AI_SKILLS__LAZY_LOAD_CONTEXT` | bool | const.DEFAULT_LAZY_LOAD_CONTEXT | Whether to lazily load skill context files | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skills/config.py:SkillsConfig.lazy_load_context` |
-| `LEX_AI_SKILLS__MAX_CONCURRENT_EXECUTIONS` | int | const.DEFAULT_MAX_CONCURRENT | Semaphore cap on concurrent skill executions | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skil...y:SkillsConfig.max_concurrent_executions` |
-| `LEX_AI_SKILLS__MAX_RETRIES` | int | const.DEFAULT_MAX_RETRIES | Default maximum retry attempts for skill execution | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skills/config.py:SkillsConfig.max_retries` |
-| `LEX_AI_SKILLS__NAME` | str | 'ai-skills' | Logical name used for DI registration keys | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skills/config.py:SkillsConfig.name` |
-| `LEX_AI_SKILLS__SCAN_PACKAGES` | list[str] | — | Fully-qualified package names to scan for skills | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skills/config.py:SkillsConfig.scan_packages` |
-| `LEX_AI_SKILLS__SCRIPT_TIMEOUT_SECONDS` | int | const.DEFAULT_SCRIPT_TIMEOUT_SECONDS | Timeout for skill script execution (seconds) | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skil...g.py:SkillsConfig.script_timeout_seconds` |
-| `LEX_AI_SKILLS__SKILL_PATHS` | list[str] | — | Paths to scan for skills (SKILL.md folders) | `experimental/ai/lexigram-ai-skills/src/lexigram/ai/skills/config.py:SkillsConfig.skill_paths` |
+| `ORI_AI_GOVERNANCE__ENABLED` | bool | True | Enable AI governance | `experimental/ai/oridecon-ai-governance/src/oridecon/ai/governance/config.py:GovernanceConfig.enabled` |
+| `ORI_AI_GOVERNANCE__ENFORCE_BUDGET` | bool | True | Enforce budget limits | `experimental/ai/oridecon-ai-governance/src/oridecon/ai/...onfig.py:GovernanceConfig.enforce_budget` |
+| `ORI_AI_GOVERNANCE__FAIL_OPEN_ON_PERSISTENCE_ERROR` | bool | False | Allow requests when the persistence backend is unavailable. When False (defau... | `experimental/ai/oridecon-ai-governance/src/oridecon/ai/...nceConfig.fail_open_on_persistence_error` |
+| `ORI_AI_GOVERNANCE__MAX_REQUEST_COST` | float \| None | None | Maximum cost in dollars for a single request. Requests with an estimated cost... | `experimental/ai/oridecon-ai-governance/src/oridecon/ai/...fig.py:GovernanceConfig.max_request_cost` |
+| `ORI_AI_GOVERNANCE__MAX_TOKENS_PER_REQUEST` | int \| None | None | Max tokens per request | `experimental/ai/oridecon-ai-governance/src/oridecon/ai/...:GovernanceConfig.max_tokens_per_request` |
+| `ORI_AI_GOVERNANCE__MONTHLY_BUDGET` | float \| None | None | Monthly budget in dollars | `experimental/ai/oridecon-ai-governance/src/oridecon/ai/...onfig.py:GovernanceConfig.monthly_budget` |
+| `ORI_AI_GOVERNANCE__RESOURCE_UNITS` | list | — | Resource units this governance instance tracks. Per-tenant limits are configu... | `experimental/ai/oridecon-ai-governance/src/oridecon/ai/...onfig.py:GovernanceConfig.resource_units` |
+| `ORI_AI_GOVERNANCE__RESTRICTED_MODELS` | list[str] | — | List of restricted models | `experimental/ai/oridecon-ai-governance/src/oridecon/ai/...ig.py:GovernanceConfig.restricted_models` |
+| `ORI_AI_GOVERNANCE__RPM_LIMIT` | int \| None | None | Requests Per Minute limit | `experimental/ai/oridecon-ai-governance/src/oridecon/ai/...nce/config.py:GovernanceConfig.rpm_limit` |
+| `ORI_AI_GOVERNANCE__SOFT_LIMIT_PCT` | float \| None | None | Fraction of monthly_budget at which to emit a soft-limit warning (e.g. 0.8 = ... | `experimental/ai/oridecon-ai-governance/src/oridecon/ai/...onfig.py:GovernanceConfig.soft_limit_pct` |
+| `ORI_AI_GOVERNANCE__TPM_LIMIT` | int \| None | None | Tokens Per Minute limit | `experimental/ai/oridecon-ai-governance/src/oridecon/ai/...nce/config.py:GovernanceConfig.tpm_limit` |
 
-### `lexigram-ai-workers` (5 vars)
+### `oridecon-ai-guard` (17 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_AI_WORKERS__BATCH_EMBEDDING_CONCURRENCY` | int | 3 | Concurrency level for batch embedding execution | `experimental/ai/lexigram-ai-workers/src/lexigram/ai/wor...orkersConfig.batch_embedding_concurrency` |
-| `LEX_AI_WORKERS__DLQ_CHECK_INTERVAL` | int | 60 | Interval in seconds for DLQ recovery sweeps | `experimental/ai/lexigram-ai-workers/src/lexigram/ai/wor...nfig.py:WorkersConfig.dlq_check_interval` |
-| `LEX_AI_WORKERS__DOCUMENT_INGESTION_CONCURRENCY` | int | 3 | Concurrency level for document parsing and chunking | `experimental/ai/lexigram-ai-workers/src/lexigram/ai/wor...ersConfig.document_ingestion_concurrency` |
-| `LEX_AI_WORKERS__ENABLED` | bool | True | Master on/off switch for all background workers | `experimental/ai/lexigram-ai-workers/src/lexigram/ai/workers/config.py:WorkersConfig.enabled` |
-| `LEX_AI_WORKERS__ENABLE_MAINTENANCE` | bool | True | Enable vector store and cache maintenance tasks | `experimental/ai/lexigram-ai-workers/src/lexigram/ai/wor...nfig.py:WorkersConfig.enable_maintenance` |
+| `ORI_AI_GUARD__ENABLED` | bool | True | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.enabled` |
+| `ORI_AI_GUARD__ENABLE_LLM_GUARDS` | bool | False | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.enable_llm_guards` |
+| `ORI_AI_GUARD__GUARD_MODEL` | str | 'gpt-4o-mini' | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.guard_model` |
+| `ORI_AI_GUARD__INJECTION_ACTION` | str | 'block' | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.injection_action` |
+| `ORI_AI_GUARD__INJECTION_DETECTION` | bool | True | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.injection_detection` |
+| `ORI_AI_GUARD__LENGTH_ACTION` | str | 'block' | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.length_action` |
+| `ORI_AI_GUARD__LLM_GUARD_FAIL_OPEN` | bool | False | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.llm_guard_fail_open` |
+| `ORI_AI_GUARD__LLM_GUARD_THRESHOLD` | float | 0.7 | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.llm_guard_threshold` |
+| `ORI_AI_GUARD__MAX_INPUT_CHARS` | int | 0 | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.max_input_chars` |
+| `ORI_AI_GUARD__MAX_OUTPUT_CHARS` | int | 0 | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.max_output_chars` |
+| `ORI_AI_GUARD__PARALLEL_EXECUTION` | bool | False | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.parallel_execution` |
+| `ORI_AI_GUARD__PII_ACTION` | str | 'redact' | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.pii_action` |
+| `ORI_AI_GUARD__PII_DETECTION` | bool | True | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.pii_detection` |
+| `ORI_AI_GUARD__PII_ENTITIES` | list[str] | (complex) | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.pii_entities` |
+| `ORI_AI_GUARD__PII_REDACTION_OUTPUT` | bool | True | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.pii_redaction_output` |
+| `ORI_AI_GUARD__RESTRICTED_TOPICS` | list[str] | (complex) | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.restricted_topics` |
+| `ORI_AI_GUARD__SENSITIVITY_LEVEL` | str | 'medium' | — | `experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py:GuardConfig.sensitivity_level` |
 
-### `lexigram-audit` (7 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_AUDIT__ENABLE_ADMIN` | bool | — | Whether to register the AuditAdminContributor | `packages/lexigram-audit/src/lexigram/audit/config.py:AuditConfig.enable_admin` |
-| `LEX_AUDIT__HMAC_KEY` | bytes \| None | — | HMAC key for checksum computation | `packages/lexigram-audit/src/lexigram/audit/config.py:AuditConfig.hmac_key` |
-| `LEX_AUDIT__RETENTION_POLICY` | RetentionPolicy | — | Retention rules | `packages/lexigram-audit/src/lexigram/audit/config.py:AuditConfig.retention_policy` |
-| `LEX_AUDIT__STORE_BACKEND` | str | — | Backend type — 'sql' or 'memory' | `packages/lexigram-audit/src/lexigram/audit/config.py:AuditConfig.store_backend` |
-| `LEX_AUDIT__TABLE_NAME` | str | — | SQL table name for the unified audit store | `packages/lexigram-audit/src/lexigram/audit/config.py:AuditConfig.table_name` |
-| `LEX_AUDIT__VERIFICATION_BATCH_SIZE` | int | — | Entries to verify per verification run | `packages/lexigram-audit/src/lexigram/audit/config.py:AuditConfig.verification_batch_size` |
-| `LEX_AUDIT__VERIFICATION_SCHEDULE` | str | — | Cron expression for scheduled verification | `packages/lexigram-audit/src/lexigram/audit/config.py:AuditConfig.verification_schedule` |
-
-### `lexigram-auth` (44 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_AUTH__ADMIN_EMAIL` | str \| None | None | Initial admin email | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.admin_email` |
-| `LEX_AUTH__ADMIN_PASSWORD` | str \| None | None | Initial admin password | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.admin_password` |
-| `LEX_AUTH__ENABLED` | bool | True | — | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.enabled` |
-| `LEX_AUTH__LOGIN_RATE_LIMIT` | str | '5/minute' | Default rate limit | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.login_rate_limit` |
-| `LEX_AUTH__MAX_SESSIONS_PER_USER` | int \| None | None | Maximum number of concurrent sessions allowed per user. ``None`` (the default... | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.max_sessions_per_user` |
-| `LEX_AUTH__MIDDLEWARE__BACKEND` | str | 'session' | Auth backend type | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.middleware.backend` |
-| `LEX_AUTH__MIDDLEWARE__EXCLUDE_PATHS` | list[str] | — | Paths excluded from auth | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.middleware.exclude_paths` |
-| `LEX_AUTH__MIDDLEWARE__EXCLUDE_PREFIXES` | list[str] | — | Path prefixes excluded | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.middleware.exclude_prefixes` |
-| `LEX_AUTH__MIDDLEWARE__HEADER_NAME` | str | 'Authorization' | Header name for token | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.middleware.header_name` |
-| `LEX_AUTH__MIDDLEWARE__LOGIN_RATE_LIMIT` | str | '5/minute' | Rate limit for auth endpoints | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.middleware.login_rate_limit` |
-| `LEX_AUTH__MIDDLEWARE__LOGIN_URL` | str \| None | None | URL to redirect for login | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.middleware.login_url` |
-| `LEX_AUTH__MIDDLEWARE__OPTIONAL_AUTH` | bool | False | Whether authentication is optional | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.middleware.optional_auth` |
-| `LEX_AUTH__MIDDLEWARE__PERMISSIONS_REQUIRED` | list[str] | — | Permissions required | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.middleware.permissions_required` |
-| `LEX_AUTH__MIDDLEWARE__ROLES_REQUIRED` | list[str] | — | Roles required | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.middleware.roles_required` |
-| `LEX_AUTH__MIDDLEWARE__SCHEME` | str | const.DEFAULT_TOKEN_TYPE | Token scheme | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.middleware.scheme` |
-| `LEX_AUTH__NAME` | str | "auth" | — | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.name` |
-| `LEX_AUTH__OAUTH2_PROVIDERS` | dict[str, dict[str, str]] | — | OAuth2 configs | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.oauth2_providers` |
-| `LEX_AUTH__PASSWORD__ARGON2_MEMORY_COST` | int | 65536 | Argon2id memory cost in KiB (OWASP floor is 19456) | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.password.argon2_memory_cost` |
-| `LEX_AUTH__PASSWORD__ARGON2_PARALLELISM` | int | 4 | Argon2id parallelism | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.password.argon2_parallelism` |
-| `LEX_AUTH__PASSWORD__ARGON2_TIME_COST` | int | 3 | Argon2id time cost | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.password.argon2_time_cost` |
-| `LEX_AUTH__PASSWORD__BANNED_PATTERNS` | list[str] | — | Substrings that must not appear in the password (case-insensitive). Use to re... | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.password.banned_patterns` |
-| `LEX_AUTH__PASSWORD__BCRYPT_ROUNDS` | int | 12 | bcrypt cost factor for new hashes (minimum 12 in production) | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.password.bcrypt_rounds` |
-| `LEX_AUTH__PASSWORD__MAX_LENGTH` | int | 128 | Maximum password length | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.password.max_length` |
-| `LEX_AUTH__PASSWORD__MIN_LENGTH` | int | 12 | Minimum password length | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.password.min_length` |
-| `LEX_AUTH__PASSWORD__REQUIRE_DIGITS` | bool | True | Require at least one digit | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.password.require_digits` |
-| `LEX_AUTH__PASSWORD__REQUIRE_LOWERCASE` | bool | False | Require at least one lowercase letter | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.password.require_lowercase` |
-| `LEX_AUTH__PASSWORD__REQUIRE_SPECIAL` | bool | False | Require at least one special character (non-alphanumeric) | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.password.require_special` |
-| `LEX_AUTH__PASSWORD__REQUIRE_UPPERCASE` | bool | True | Require at least one uppercase letter | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.password.require_uppercase` |
-| `LEX_AUTH__RBAC__CACHE_PERMISSIONS` | bool | True | Cache resolved permissions | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.rbac.cache_permissions` |
-| `LEX_AUTH__RBAC__DEFAULT_ROLE` | str | 'viewer' | Default role for new users | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.rbac.default_role` |
-| `LEX_AUTH__RBAC__ENABLED` | bool | True | Enable RBAC enforcement | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.rbac.enabled` |
-| `LEX_AUTH__RBAC__PERMISSION_CACHE_TTL` | int | 300 | Permission cache TTL in seconds | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.rbac.permission_cache_ttl` |
-| `LEX_AUTH__RBAC__SUPERUSER_BYPASS` | bool | True | Allow superuser role to bypass all checks | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.rbac.superuser_bypass` |
-| `LEX_AUTH__RELAY_VERIFICATION` | bool | False | Enable binding ``RelayAuthVerifierProtocol`` for the relay gateway's inbound ... | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.relay_verification` |
-| `LEX_AUTH__ROLES` | dict[str, AuthRoleConfig] | — | Role definitions | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.roles` |
-| `LEX_AUTH__SECRET_KEY` | str | — | Secret key for signing | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.secret_key` |
-| `LEX_AUTH__TOKEN__ACCESS_TOKEN_EXPIRE` | Duration | Duration.minutes(const.DEFAULT_ACCESS_TOKEN_EXPIRE_MINUTES) | Access token expiry duration | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.token.access_token_expire` |
-| `LEX_AUTH__TOKEN__ALGORITHM` | str | const.DEFAULT_TOKEN_ALGORITHM | Algorithm | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.token.algorithm` |
-| `LEX_AUTH__TOKEN__ID_TOKEN_EXPIRE` | Duration | Duration.hours(1) | ID token expiry duration | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.token.id_token_expire` |
-| `LEX_AUTH__TOKEN__KEY_ROTATION_GRACE_PERIOD` | Duration | Duration.seconds(const.DEFAULT_JWT_KEY_ROTATION_GRACE_PERIOD_SECONDS) | Duration during which tokens signed by a rotated-out key remain accepted. Pre... | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.token.key_rotation_grace_period` |
-| `LEX_AUTH__TOKEN__REFRESH_TOKEN_EXPIRE` | Duration | Duration.days(const.DEFAULT_REFRESH_TOKEN_EXPIRE_DAYS) | Refresh token expiry duration | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.token.refresh_token_expire` |
-| `LEX_AUTH__TOKEN__REQUIRED_AUDIENCE` | str \| None | None | Expected ``aud`` claim for every token verified by this service. When set, to... | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.token.required_audience` |
-| `LEX_AUTH__TOKEN__SECRET_KEY` | SecretStr | — | Secret key for signing tokens | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.token.secret_key` |
-| `LEX_AUTH__USERS` | list[AuthUserConfig] | — | Initial users | `packages/lexigram-auth/src/lexigram/auth/config.py:AuthConfig.users` |
-
-### `lexigram-cache` (17 vars)
+### `oridecon-ai-llm` (20 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_CACHE__BACKENDS` | list[CacheBackendConfig] | — | Backend configs | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.backends` |
-| `LEX_CACHE__DEBUG` | bool | — | Debug mode | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.debug` |
-| `LEX_CACHE__ENABLED` | bool | — | Whether cache is enabled | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.enabled` |
-| `LEX_CACHE__ENV` | str \| None | — | Environment (development/staging/production) | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.env` |
-| `LEX_CACHE__ENVIRONMENT` | str | — | Environment | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.environment` |
-| `LEX_CACHE__NAME` | str | — | Provider name | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.name` |
-| `LEX_CACHE__SERVICE__CIRCUIT_BREAKER_ENABLED` | bool | — | Enable circuit breaker | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.service.circuit_breaker_enabled` |
-| `LEX_CACHE__SERVICE__CIRCUIT_BREAKER_THRESHOLD` | int | — | Circuit breaker threshold | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.service.circuit_breaker_threshold` |
-| `LEX_CACHE__SERVICE__DEFAULT_BACKEND` | str \| None | — | Default backend name | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.service.default_backend` |
-| `LEX_CACHE__SERVICE__DEFAULT_SERIALIZER` | str | — | Default serializer | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.service.default_serializer` |
-| `LEX_CACHE__SERVICE__ENABLE_HEALTH_CHECKS` | bool | — | Enable health checks | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.service.enable_health_checks` |
-| `LEX_CACHE__SERVICE__ENABLE_METRICS` | bool | — | Enable metrics | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.service.enable_metrics` |
-| `LEX_CACHE__SERVICE__ENABLE_PROTECTION` | bool | — | Enable stampede protection | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.service.enable_protection` |
-| `LEX_CACHE__SERVICE__PROTECTION_LOCK_TTL` | int | — | Protection lock TTL | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.service.protection_lock_ttl` |
-| `LEX_CACHE__SERVICE__PROTECTION_MAX_WAIT` | float | — | Max wait for locks | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.service.protection_max_wait` |
-| `LEX_CACHE__SERVICE__PROTECTION_RETRY_INTERVAL` | float | — | Lock retry interval | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.service.protection_retry_interval` |
-| `LEX_CACHE__VERSION` | str | — | Config version | `packages/lexigram-cache/src/lexigram/cache/config.py:CacheConfig.version` |
+| `ORI_AI_LLM__API_BASE` | str \| None | None | Custom API base URL (for Azure, local, or proxied endpoints). | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.api_base` |
+| `ORI_AI_LLM__API_KEY` | SecretStr \| None | None | API key for the chosen provider. | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.api_key` |
+| `ORI_AI_LLM__CACHE_TTL` | int | 3600 | Cache TTL in seconds. | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.cache_ttl` |
+| `ORI_AI_LLM__ENABLED` | bool | True | Enable the LLM subsystem | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.enabled` |
+| `ORI_AI_LLM__ENABLE_CACHE` | bool | False | Enable response caching (requires CacheBackendProtocol in container). | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.enable_cache` |
+| `ORI_AI_LLM__EXTRA` | dict[str, Any] | — | Provider-specific extra parameters passed verbatim. | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.extra` |
+| `ORI_AI_LLM__MAX_TOKENS` | int \| None | None | Maximum tokens in response. | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.max_tokens` |
+| `ORI_AI_LLM__MODEL` | str | 'gpt-4-turbo' | Model name or identifier. | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.model` |
+| `ORI_AI_LLM__PIN_POLICY` | ModelPinPolicy | ModelPinPolicy.LATEST | Policy for enforcing the model revision pin. | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.pin_policy` |
+| `ORI_AI_LLM__PRICING__CACHE_TTL` | int | 86400 | Pricing cache TTL in seconds (default: 24 hours). | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.pricing.cache_ttl` |
+| `ORI_AI_LLM__PRICING__ENABLED` | bool | True | Register pricing manager and cost estimator. | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.pricing.enabled` |
+| `ORI_AI_LLM__PRICING__ENABLE_FUZZY_MATCH` | bool | True | Allow substring matching of model names to prices. | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/con...:ClientConfig.pricing.enable_fuzzy_match` |
+| `ORI_AI_LLM__PRICING__SOURCES` | list[PricingSourceConfig] | — | Pricing sources in priority order. | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.pricing.sources` |
+| `ORI_AI_LLM__PROVIDER` | ModelProvider | ModelProvider.OPENAI | LLM provider name. | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.provider` |
+| `ORI_AI_LLM__TEMPERATURE` | float | 0.7 | Sampling temperature. | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.temperature` |
+| `ORI_AI_LLM__THINKING__BUDGET_TOKENS` | int | 10000 | — | `core/oridecon-contracts/src/oridecon/contracts/ai/thinking.py:ClientConfig.thinking.budget_tokens` |
+| `ORI_AI_LLM__THINKING__EFFORT` | str \| None | None | — | `core/oridecon-contracts/src/oridecon/contracts/ai/thinking.py:ClientConfig.thinking.effort` |
+| `ORI_AI_LLM__THINKING__LEVEL` | str \| None | None | — | `core/oridecon-contracts/src/oridecon/contracts/ai/thinking.py:ClientConfig.thinking.level` |
+| `ORI_AI_LLM__THINKING__SUPPRESS` | bool | False | — | `core/oridecon-contracts/src/oridecon/contracts/ai/thinking.py:ClientConfig.thinking.suppress` |
+| `ORI_AI_LLM__TIMEOUT` | float | 60.0 | Request timeout in seconds. | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py:ClientConfig.timeout` |
 
-### `lexigram-cli` (5 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_CLI__COLOR` | bool | True | — | `experimental/apps/lexigram-cli/src/lexigram/cli/config.py:CLIConfig.color` |
-| `LEX_CLI__DEFAULT_DATABASE` | str | 'postgres' | — | `experimental/apps/lexigram-cli/src/lexigram/cli/config.py:CLIConfig.default_database` |
-| `LEX_CLI__DEFAULT_TEMPLATE` | str | 'web-api' | — | `experimental/apps/lexigram-cli/src/lexigram/cli/config.py:CLIConfig.default_template` |
-| `LEX_CLI__VERBOSE` | bool | False | — | `experimental/apps/lexigram-cli/src/lexigram/cli/config.py:CLIConfig.verbose` |
-| `LEX_CONFIG` | str | — | — | `experimental/apps/lexigram-cli/src/lexigram/cli/lib/config_loader.py *(direct env access; not config-derived)*` |
-
-### `lexigram-events` (93 vars)
+### `oridecon-ai-mcp` (14 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_EVENTS__COMMAND_BUS__ENABLE_LOGGING` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.command_bus.enable_logging` |
-| `LEX_EVENTS__COMMAND_BUS__ENABLE_METRICS` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.command_bus.enable_metrics` |
-| `LEX_EVENTS__COMMAND_BUS__ENABLE_VALIDATION` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.command_bus.enable_validation` |
-| `LEX_EVENTS__COMMAND_BUS__MAX_RETRIES` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.command_bus.max_retries` |
-| `LEX_EVENTS__COMMAND_BUS__RETRY_DELAY_SECONDS` | float | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.command_bus.retry_delay_seconds` |
-| `LEX_EVENTS__COMMAND_BUS__TIMEOUT_SECONDS` | float | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.command_bus.timeout_seconds` |
-| `LEX_EVENTS__DEBUG` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.debug` |
-| `LEX_EVENTS__ENABLED` | bool | True | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.enabled` |
-| `LEX_EVENTS__ENV` | str \| None | — | Environment (development/staging/production) | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.env` |
-| `LEX_EVENTS__EVENT_BUS__ALLOW_NO_HANDLERS` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.event_bus.allow_no_handlers` |
-| `LEX_EVENTS__EVENT_BUS__CONTINUE_ON_ERROR` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.event_bus.continue_on_error` |
-| `LEX_EVENTS__EVENT_BUS__ENABLE_DEAD_LETTER` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.event_bus.enable_dead_letter` |
-| `LEX_EVENTS__EVENT_BUS__HANDLER_TIMEOUT_SECONDS` | float | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...Config.event_bus.handler_timeout_seconds` |
-| `LEX_EVENTS__EVENT_BUS__MAX_CONCURRENT_HANDLERS` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...Config.event_bus.max_concurrent_handlers` |
-| `LEX_EVENTS__EVENT_BUS__MAX_HANDLER_RETRIES` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.event_bus.max_handler_retries` |
-| `LEX_EVENTS__EVENT_BUS__MAX_QUEUE_PER_SUBSCRIBER` | int | — | Maximum number of events queued per event type before backpressure is applied... | `packages/lexigram-events/src/lexigram/events/config.py:...onfig.event_bus.max_queue_per_subscriber` |
-| `LEX_EVENTS__EVENT_BUS__PARALLEL_DISPATCH` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.event_bus.parallel_dispatch` |
-| `LEX_EVENTS__EVENT_BUS__RETRY_FAILED_HANDLERS` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.event_bus.retry_failed_handlers` |
-| `LEX_EVENTS__EVENT_STORE_BACKEND` | EventStoreBackend | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.event_store_backend` |
-| `LEX_EVENTS__KAFKA__AUTO_OFFSET_RESET` | str | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.kafka.auto_offset_reset` |
-| `LEX_EVENTS__KAFKA__BOOTSTRAP_SERVERS` | str | — | Kafka bootstrap servers | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.kafka.bootstrap_servers` |
-| `LEX_EVENTS__KAFKA__CONSUMER_GROUP` | str | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.kafka.consumer_group` |
-| `LEX_EVENTS__KAFKA__ENABLE_AUTO_COMMIT` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.kafka.enable_auto_commit` |
-| `LEX_EVENTS__KAFKA__TOPIC_PREFIX` | str | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.kafka.topic_prefix` |
-| `LEX_EVENTS__LOGGING_MIDDLEWARE__ENABLED` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.logging_middleware.enabled` |
-| `LEX_EVENTS__LOGGING_MIDDLEWARE__INCLUDE_PAYLOAD` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...onfig.logging_middleware.include_payload` |
-| `LEX_EVENTS__LOGGING_MIDDLEWARE__LOG_LEVEL` | str | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.logging_middleware.log_level` |
-| `LEX_EVENTS__LOGGING_MIDDLEWARE__MAX_PAYLOAD_LENGTH` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...ig.logging_middleware.max_payload_length` |
-| `LEX_EVENTS__MEMORY__ENABLE_SNAPSHOTS` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.memory.enable_snapshots` |
-| `LEX_EVENTS__MEMORY__MAX_EVENTS_PER_STREAM` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.memory.max_events_per_stream` |
-| `LEX_EVENTS__METRICS_MIDDLEWARE__ENABLED` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.metrics_middleware.enabled` |
-| `LEX_EVENTS__METRICS_MIDDLEWARE__HISTOGRAM_BUCKETS` | list[float] | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...fig.metrics_middleware.histogram_buckets` |
-| `LEX_EVENTS__METRICS_MIDDLEWARE__INCLUDE_HISTOGRAMS` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...ig.metrics_middleware.include_histograms` |
-| `LEX_EVENTS__METRICS_MIDDLEWARE__PREFIX` | str | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.metrics_middleware.prefix` |
-| `LEX_EVENTS__MONGODB__CONNECTION_STRING` | SecretStr | — | MongoDB connection string | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.mongodb.connection_string` |
-| `LEX_EVENTS__MONGODB__DATABASE_NAME` | str | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.mongodb.database_name` |
-| `LEX_EVENTS__MONGODB__EVENTS_COLLECTION` | str | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.mongodb.events_collection` |
-| `LEX_EVENTS__MONGODB__MAX_POOL_SIZE` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.mongodb.max_pool_size` |
-| `LEX_EVENTS__MONGODB__SERVER_SELECTION_TIMEOUT` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.mongodb.server_selection_timeout` |
-| `LEX_EVENTS__MONGODB__SNAPSHOTS_COLLECTION` | str | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.mongodb.snapshots_collection` |
-| `LEX_EVENTS__NAME` | str | "events" | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.name` |
-| `LEX_EVENTS__POSTGRES__AUTO_CREATE_TABLES` | bool | True | — | `packages/lexigram-events/src/lexigram/events/stores/pos...EventsConfig.postgres.auto_create_tables` |
-| `LEX_EVENTS__POSTGRES__COMMAND_TIMEOUT` | float | 60.0 | — | `packages/lexigram-events/src/lexigram/events/stores/pos...py:EventsConfig.postgres.command_timeout` |
-| `LEX_EVENTS__POSTGRES__DSN` | SecretStr \| None | None | PostgreSQL connection string. Optional when a DatabaseProviderProtocol is inj... | `packages/lexigram-events/src/lexigram/events/stores/postgres/config.py:EventsConfig.postgres.dsn` |
-| `LEX_EVENTS__POSTGRES__EVENTS_TABLE` | str | 'events' | — | `packages/lexigram-events/src/lexigram/events/stores/pos...ig.py:EventsConfig.postgres.events_table` |
-| `LEX_EVENTS__POSTGRES__POOL_MAX_SIZE` | int | 20 | — | `packages/lexigram-events/src/lexigram/events/stores/pos...g.py:EventsConfig.postgres.pool_max_size` |
-| `LEX_EVENTS__POSTGRES__POOL_MIN_SIZE` | int | 5 | — | `packages/lexigram-events/src/lexigram/events/stores/pos...g.py:EventsConfig.postgres.pool_min_size` |
-| `LEX_EVENTS__POSTGRES__SNAPSHOTS_TABLE` | str | 'snapshots' | — | `packages/lexigram-events/src/lexigram/events/stores/pos...py:EventsConfig.postgres.snapshots_table` |
-| `LEX_EVENTS__PROJECTION__BATCH_SIZE` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.projection.batch_size` |
-| `LEX_EVENTS__PROJECTION__CHECKPOINT_INTERVAL` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.projection.checkpoint_interval` |
-| `LEX_EVENTS__PROJECTION__ENABLE_PARALLEL_PROJECTIONS` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...g.projection.enable_parallel_projections` |
-| `LEX_EVENTS__PROJECTION__MAX_CATCH_UP_EVENTS` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.projection.max_catch_up_events` |
-| `LEX_EVENTS__PROJECTION__REBUILD_BATCH_SIZE` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.projection.rebuild_batch_size` |
-| `LEX_EVENTS__QUERY_BUS__ENABLE_LOGGING` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.query_bus.enable_logging` |
-| `LEX_EVENTS__QUERY_BUS__ENABLE_METRICS` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.query_bus.enable_metrics` |
-| `LEX_EVENTS__QUERY_BUS__TIMEOUT_SECONDS` | float | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.query_bus.timeout_seconds` |
-| `LEX_EVENTS__RABBITMQ__DURABLE` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.rabbitmq.durable` |
-| `LEX_EVENTS__RABBITMQ__EXCHANGE_NAME` | str | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.rabbitmq.exchange_name` |
-| `LEX_EVENTS__RABBITMQ__PREFETCH_COUNT` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.rabbitmq.prefetch_count` |
-| `LEX_EVENTS__RABBITMQ__QUEUE_PREFIX` | str | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.rabbitmq.queue_prefix` |
-| `LEX_EVENTS__RABBITMQ__URL` | SecretStr | — | AMQP connection URL | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.rabbitmq.url` |
-| `LEX_EVENTS__RETRY_MIDDLEWARE__ENABLED` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.retry_middleware.enabled` |
-| `LEX_EVENTS__RETRY_MIDDLEWARE__EXPONENTIAL_BASE` | float | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...Config.retry_middleware.exponential_base` |
-| `LEX_EVENTS__RETRY_MIDDLEWARE__INITIAL_DELAY_SECONDS` | float | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...g.retry_middleware.initial_delay_seconds` |
-| `LEX_EVENTS__RETRY_MIDDLEWARE__MAX_DELAY_SECONDS` | float | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...onfig.retry_middleware.max_delay_seconds` |
-| `LEX_EVENTS__RETRY_MIDDLEWARE__MAX_RETRIES` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.retry_middleware.max_retries` |
-| `LEX_EVENTS__SAGA__CLEANUP_COMPLETED_AFTER_HOURS` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...onfig.saga.cleanup_completed_after_hours` |
-| `LEX_EVENTS__SAGA__DEFAULT_TIMEOUT_SECONDS` | float | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.saga.default_timeout_seconds` |
-| `LEX_EVENTS__SAGA__ENABLE_COMPENSATION` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.saga.enable_compensation` |
-| `LEX_EVENTS__SAGA__MAX_RETRIES_PER_STEP` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.saga.max_retries_per_step` |
-| `LEX_EVENTS__SAGA__PERSIST_STATE` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.saga.persist_state` |
-| `LEX_EVENTS__SAGA__RETRY_DELAY_SECONDS` | float | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.saga.retry_delay_seconds` |
-| `LEX_EVENTS__SNAPSHOTS__ENABLED` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.snapshots.enabled` |
-| `LEX_EVENTS__SNAPSHOTS__EVENT_COUNT_THRESHOLD` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.snapshots.event_count_threshold` |
-| `LEX_EVENTS__SNAPSHOTS__MAX_SNAPSHOTS_PER_AGGREGATE` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...ig.snapshots.max_snapshots_per_aggregate` |
-| `LEX_EVENTS__SNAPSHOTS__STRATEGY` | SnapshotStrategy | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.snapshots.strategy` |
-| `LEX_EVENTS__SNAPSHOTS__TIME_THRESHOLD_SECONDS` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.snapshots.time_threshold_seconds` |
-| `LEX_EVENTS__SQLITE__DATABASE` | str | './events.db' | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.sqlite.database` |
-| `LEX_EVENTS__SQLITE__JOURNAL_MODE` | str | 'WAL' | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.sqlite.journal_mode` |
-| `LEX_EVENTS__SQLITE__PRAGMAS` | dict[str, str] | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.sqlite.pragmas` |
-| `LEX_EVENTS__SQLITE__WAL_MODE` | bool | True | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.sqlite.wal_mode` |
-| `LEX_EVENTS__STREAMING__BATCH_SIZE` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.streaming.batch_size` |
-| `LEX_EVENTS__STREAMING__BUFFER_SIZE` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.streaming.buffer_size` |
-| `LEX_EVENTS__STREAMING__ENABLE_WEBSOCKET` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.streaming.enable_websocket` |
-| `LEX_EVENTS__STREAMING__MAX_SUBSCRIBERS` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.streaming.max_subscribers` |
-| `LEX_EVENTS__STREAMING__POLL_INTERVAL_MS` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.streaming.poll_interval_ms` |
-| `LEX_EVENTS__STREAMING__WEBSOCKET_PING_INTERVAL` | int | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...Config.streaming.websocket_ping_interval` |
-| `LEX_EVENTS__TRANSACTION_MIDDLEWARE__ENABLED` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.transaction_middleware.enabled` |
-| `LEX_EVENTS__TRANSACTION_MIDDLEWARE__ISOLATION_LEVEL` | str | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...g.transaction_middleware.isolation_level` |
-| `LEX_EVENTS__TRANSACTION_MIDDLEWARE__TIMEOUT_SECONDS` | float | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...g.transaction_middleware.timeout_seconds` |
-| `LEX_EVENTS__VALIDATION_MIDDLEWARE__ENABLED` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.validation_middleware.enabled` |
-| `LEX_EVENTS__VALIDATION_MIDDLEWARE__STRICT_MODE` | bool | — | — | `packages/lexigram-events/src/lexigram/events/config.py:...Config.validation_middleware.strict_mode` |
-| `LEX_EVENTS__VERSION_SKEW_ALERTS_ENABLED` | bool | True | — | `packages/lexigram-events/src/lexigram/events/config.py:EventsConfig.version_skew_alerts_enabled` |
+| `ORI_AI_MCP__ALLOW_UNAUTHENTICATED` | bool | False | — | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.allow_unauthenticated` |
+| `ORI_AI_MCP__CLIENT_STDIO_COMMAND` | list[str] | (complex) | — | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.client_stdio_command` |
+| `ORI_AI_MCP__CLIENT_URL` | str \| None | None | — | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.client_url` |
+| `ORI_AI_MCP__CORS_ORIGINS` | list[str] | (complex) | — | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.cors_origins` |
+| `ORI_AI_MCP__ENABLED` | bool | True | Enable the MCP server subsystem | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.enabled` |
+| `ORI_AI_MCP__ENABLE_SSE` | bool | True | — | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.enable_sse` |
+| `ORI_AI_MCP__HOST` | str | '0.0.0.0' | — | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.host` |
+| `ORI_AI_MCP__MAX_REQUEST_SIZE` | int | 1024 * 1024 | — | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.max_request_size` |
+| `ORI_AI_MCP__PATH` | str | '/mcp' | — | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.path` |
+| `ORI_AI_MCP__PORT` | int | 8080 | — | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.port` |
+| `ORI_AI_MCP__REQUEST_TIMEOUT` | float | 30.0 | — | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.request_timeout` |
+| `ORI_AI_MCP__SERVER_NAME` | str | 'oridecon-mcp' | — | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.server_name` |
+| `ORI_AI_MCP__SERVER_VERSION` | str | '1.0.0' | — | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.server_version` |
+| `ORI_AI_MCP__STDIO_MODE` | bool | False | — | `experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/config.py:MCPConfig.stdio_mode` |
 
-### `lexigram-features` (5 vars)
+### `oridecon-ai-memory` (21 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_FEATURES__CACHE_TTL` | int | DEFAULT_CACHE_TTL | Seconds to cache flag evaluations (0 = disabled). | `packages/lexigram-features/src/lexigram/features/config.py:FeatureFlagsConfig.cache_ttl` |
-| `LEX_FEATURES__DEFAULT_ENABLED` | bool | DEFAULT_ENABLED | Default value when a flag is not found in the provider. | `packages/lexigram-features/src/lexigram/features/config.py:FeatureFlagsConfig.default_enabled` |
-| `LEX_FEATURES__ENABLED` | bool | True | Enable the feature flags subsystem | `packages/lexigram-features/src/lexigram/features/config.py:FeatureFlagsConfig.enabled` |
-| `LEX_FEATURES__FLAG_ENV_PREFIX` | str | FLAG_ENV_PREFIX | Env var prefix used by EnvProvider when reading flag values. | `packages/lexigram-features/src/lexigram/features/config.py:FeatureFlagsConfig.flag_env_prefix` |
-| `LEX_FEATURES__INITIAL_FLAGS` | dict[str, bool] | — | Seed flags for the in-memory provider (name -> enabled). | `packages/lexigram-features/src/lexigram/features/config.py:FeatureFlagsConfig.initial_flags` |
+| `ORI_AI_MEMORY__CONSOLIDATION__AGE_THRESHOLD_HOURS` | float | const.DEFAULT_CONSOLIDATION_AGE_THRESHOLD_HOURS | Minimum entry age (hours) before it can be consolidated | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...Config.consolidation.age_threshold_hours` |
+| `ORI_AI_MEMORY__CONSOLIDATION__BATCH_SIZE` | int | const.DEFAULT_CONSOLIDATION_BATCH_SIZE | Maximum entries processed per consolidation pass | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...py:MemoryConfig.consolidation.batch_size` |
+| `ORI_AI_MEMORY__CONSOLIDATION__ENABLED` | bool | True | Whether automatic background consolidation is active | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...ig.py:MemoryConfig.consolidation.enabled` |
+| `ORI_AI_MEMORY__CONSOLIDATION__IMPORTANCE_PRUNE_THRESHOLD` | float | const.DEFAULT_CONSOLIDATION_IMPORTANCE_PRUNE | Entries below this importance score are eligible for pruning | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...consolidation.importance_prune_threshold` |
+| `ORI_AI_MEMORY__CONSOLIDATION__INTERVAL_SECONDS` | float | const.DEFAULT_CONSOLIDATION_INTERVAL_S | How often to run a consolidation pass (seconds) | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...oryConfig.consolidation.interval_seconds` |
+| `ORI_AI_MEMORY__DEFAULT_BACKEND` | str | const.DEFAULT_BACKEND | Backend type to use ('in_memory', 'cache', 'database', 'vector') | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memory/config.py:MemoryConfig.default_backend` |
+| `ORI_AI_MEMORY__ENABLED` | bool | True | Enable the AI memory subsystem | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memory/config.py:MemoryConfig.enabled` |
+| `ORI_AI_MEMORY__EPISODIC__DEFAULT_TOP_K` | int | const.DEFAULT_EPISODIC_TOP_K | Default number of episodes to retrieve | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...g.py:MemoryConfig.episodic.default_top_k` |
+| `ORI_AI_MEMORY__EPISODIC__IMPORTANCE_WEIGHT` | float | const.DEFAULT_IMPORTANCE_WEIGHT | Weight applied to entry importance during scoring | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...:MemoryConfig.episodic.importance_weight` |
+| `ORI_AI_MEMORY__EPISODIC__RECENCY_WEIGHT` | float | const.DEFAULT_RECENCY_WEIGHT | Weight applied to temporal recency during scoring | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo....py:MemoryConfig.episodic.recency_weight` |
+| `ORI_AI_MEMORY__EPISODIC__RELEVANCE_WEIGHT` | float | const.DEFAULT_RELEVANCE_WEIGHT | Weight applied to semantic similarity during scoring | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...y:MemoryConfig.episodic.relevance_weight` |
+| `ORI_AI_MEMORY__EPISODIC__TTL_SECONDS` | int | const.DEFAULT_EPISODIC_TTL_SECONDS | Time-to-live for entries in seconds (0 = never expire) | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...fig.py:MemoryConfig.episodic.ttl_seconds` |
+| `ORI_AI_MEMORY__SEMANTIC__MAX_FACTS_PER_ENTITY` | int | const.DEFAULT_MAX_FACTS_PER_ENTITY | Hard cap on stored facts per entity | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...moryConfig.semantic.max_facts_per_entity` |
+| `ORI_AI_MEMORY__SEMANTIC__MIN_CONFIDENCE` | float | const.DEFAULT_MIN_CONFIDENCE | Minimum confidence score required to store a fact | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo....py:MemoryConfig.semantic.min_confidence` |
+| `ORI_AI_MEMORY__TTL_SECONDS` | int | const.DEFAULT_TTL_SECONDS | Default entry TTL in seconds (0 = never expire) | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memory/config.py:MemoryConfig.ttl_seconds` |
+| `ORI_AI_MEMORY__WORKING__EPISODIC_FRACTION` | float | const.DEFAULT_EPISODIC_FRACTION | Fraction of remaining budget for episodic recall | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...y:MemoryConfig.working.episodic_fraction` |
+| `ORI_AI_MEMORY__WORKING__MAX_RECENT_TURNS` | int | const.DEFAULT_MAX_RECENT_TURNS | Hard cap on recent turns regardless of budget | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...py:MemoryConfig.working.max_recent_turns` |
+| `ORI_AI_MEMORY__WORKING__RECENT_TURNS_FRACTION` | float | const.DEFAULT_RECENT_TURNS_FRACTION | Fraction of remaining budget for recent turns | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...moryConfig.working.recent_turns_fraction` |
+| `ORI_AI_MEMORY__WORKING__SEMANTIC_FRACTION` | float | const.DEFAULT_SEMANTIC_FRACTION | Fraction of remaining budget for semantic facts | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...y:MemoryConfig.working.semantic_fraction` |
+| `ORI_AI_MEMORY__WORKING__SYSTEM_PROMPT_TOKENS` | int | const.DEFAULT_SYSTEM_PROMPT_TOKENS | Fixed token allocation for system prompt | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...emoryConfig.working.system_prompt_tokens` |
+| `ORI_AI_MEMORY__WORKING__TOOL_DESCRIPTIONS_FRACTION` | float | const.DEFAULT_TOOL_DESC_FRACTION | Fraction of remaining budget for tool descriptions | `experimental/ai/oridecon-ai-memory/src/oridecon/ai/memo...onfig.working.tool_descriptions_fraction` |
 
-### `lexigram-graph` (22 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_GRAPH__BACKEND` | str | const.BACKEND_MEMORY | Graph store backend to use | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.backend` |
-| `LEX_GRAPH__BULK_BATCH_SIZE` | int | const.DEFAULT_BULK_BATCH_SIZE | Batch size for bulk operations | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.bulk_batch_size` |
-| `LEX_GRAPH__DEFAULT_QUERY_LIMIT` | int | const.DEFAULT_QUERY_LIMIT | Default limit for query results | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.default_query_limit` |
-| `LEX_GRAPH__DEFAULT_TRAVERSAL_MAX_DEPTH` | int | const.DEFAULT_TRAVERSAL_MAX_DEPTH | Default maximum depth for traversals | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.default_traversal_max_depth` |
-| `LEX_GRAPH__ENABLED` | bool | True | Enable the graph store subsystem | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.enabled` |
-| `LEX_GRAPH__MAX_RETRIES` | int | const.DEFAULT_MAX_RETRIES | Maximum number of retries for operations | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.max_retries` |
-| `LEX_GRAPH__MEMORY__MAX_EDGES` | int | const.DEFAULT_MEMORY_MAX_EDGES | Maximum number of edges in memory | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.memory.max_edges` |
-| `LEX_GRAPH__MEMORY__MAX_NODES` | int | const.DEFAULT_MEMORY_MAX_NODES | Maximum number of nodes in memory | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.memory.max_nodes` |
-| `LEX_GRAPH__NEO4J__CONNECTION_TIMEOUT` | float | const.DEFAULT_CONNECT_TIMEOUT | Connection timeout in seconds | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.neo4j.connection_timeout` |
-| `LEX_GRAPH__NEO4J__DATABASE` | str | const.DEFAULT_NEO4J_DATABASE | Target database name | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.neo4j.database` |
-| `LEX_GRAPH__NEO4J__ENCRYPTED` | bool | False | Whether to use SSL/TLS encryption | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.neo4j.encrypted` |
-| `LEX_GRAPH__NEO4J__FETCH_SIZE` | int | const.DEFAULT_NEO4J_FETCH_SIZE | Default fetch size for results | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.neo4j.fetch_size` |
-| `LEX_GRAPH__NEO4J__MAX_CONNECTION_POOL_SIZE` | int | const.DEFAULT_NEO4J_MAX_POOL_SIZE | Maximum number of connections in the pool | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.neo4j.max_connection_pool_size` |
-| `LEX_GRAPH__NEO4J__MAX_TRANSACTION_RETRY_TIME` | float | 30.0 | Maximum time for transaction retries | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.neo4j.max_transaction_retry_time` |
-| `LEX_GRAPH__NEO4J__PASSWORD` | SecretStr | — | Neo4j password | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.neo4j.password` |
-| `LEX_GRAPH__NEO4J__TRUST` | str | 'TRUST_SYSTEM_CA_SIGNED_CERTIFICATES' | Trust strategy for SSL | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.neo4j.trust` |
-| `LEX_GRAPH__NEO4J__URI` | str | 'bolt://localhost:7687' | Neo4j BOLT URI | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.neo4j.uri` |
-| `LEX_GRAPH__NEO4J__USERNAME` | str | 'neo4j' | Neo4j username | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.neo4j.username` |
-| `LEX_GRAPH__RETRY_DELAY` | float | const.DEFAULT_RETRY_DELAY | Delay between retries in seconds | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.retry_delay` |
-| `LEX_GRAPH__TENANCY__ENABLED` | bool | False | Enable tenant-aware graph resolution | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.tenancy.enabled` |
-| `LEX_GRAPH__TENANCY__STRATEGY` | str | 'node_property' | Which tenancy strategy to use. One of ``"node_property"`` or ``"graph_per_ten... | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.tenancy.strategy` |
-| `LEX_GRAPH__TENANCY__TEMPLATE` | str | '{logical}_t_{tenant}' | Collection name template for ``GRAPH_PER_TENANT`` strategy. Supports ``{logic... | `packages/lexigram-graph/src/lexigram/graph/config.py:GraphConfig.tenancy.template` |
-
-### `lexigram-graphql` (56 vars)
+### `oridecon-ai-observability` (6 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_GRAPHQL__ALIAS_LIMIT__ENABLED` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.alias_limit.enabled` |
-| `LEX_GRAPHQL__ALIAS_LIMIT__MAX_ALIASES` | int | const.DEFAULT_MAX_ALIASES | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.alias_limit.max_aliases` |
-| `LEX_GRAPHQL__BATCH__ENABLED` | bool | False | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.batch.enabled` |
-| `LEX_GRAPHQL__BATCH__MAX_BATCH_SIZE` | int | 10 | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.batch.max_batch_size` |
-| `LEX_GRAPHQL__CACHE__DEFAULT_MAX_AGE` | Duration \| int | const.DEFAULT_CACHE_MAX_AGE | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.cache.default_max_age` |
-| `LEX_GRAPHQL__CACHE__DEFAULT_SCOPE` | CacheScope | CacheScope.PUBLIC | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.cache.default_scope` |
-| `LEX_GRAPHQL__CACHE__ENABLED` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.cache.enabled` |
-| `LEX_GRAPHQL__CACHE__VARY_HEADERS` | list[str] | — | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.cache.vary_headers` |
-| `LEX_GRAPHQL__COMPLEXITY__DEFAULT_FIELD_COST` | float | 1.0 | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.complexity.default_field_cost` |
-| `LEX_GRAPHQL__COMPLEXITY__DEFAULT_LIST_COST` | float | 10.0 | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.complexity.default_list_cost` |
-| `LEX_GRAPHQL__COMPLEXITY__ENABLED` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.complexity.enabled` |
-| `LEX_GRAPHQL__COMPLEXITY__MAX_COMPLEXITY` | int | const.DEFAULT_MAX_COMPLEXITY | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.complexity.max_complexity` |
-| `LEX_GRAPHQL__DATALOADER__BATCH_DELAY_MS` | float | 2.0 | Delay in milliseconds before executing a DataLoaderProtocol batch. A small no... | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.dataloader.batch_delay_ms` |
-| `LEX_GRAPHQL__DATALOADER__BATCH_ENABLED` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.dataloader.batch_enabled` |
-| `LEX_GRAPHQL__DATALOADER__CACHE_ENABLED` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.dataloader.cache_enabled` |
-| `LEX_GRAPHQL__DATALOADER__ENABLED` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.dataloader.enabled` |
-| `LEX_GRAPHQL__DATALOADER__MAX_BATCH_SIZE` | int | 100 | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.dataloader.max_batch_size` |
-| `LEX_GRAPHQL__DEBUG` | bool | False | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.debug` |
-| `LEX_GRAPHQL__DEPTH_LIMIT__ENABLED` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.depth_limit.enabled` |
-| `LEX_GRAPHQL__DEPTH_LIMIT__IGNORE_INTROSPECTION` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.p...LConfig.depth_limit.ignore_introspection` |
-| `LEX_GRAPHQL__DEPTH_LIMIT__MAX_DEPTH` | int | const.DEFAULT_MAX_DEPTH | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.depth_limit.max_depth` |
-| `LEX_GRAPHQL__ENABLED` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.enabled` |
-| `LEX_GRAPHQL__ENABLE_IDENTITY_RESOLUTION` | bool | False | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.enable_identity_resolution` |
-| `LEX_GRAPHQL__ENV` | str \| None | None | Environment (development/staging/production) | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.env` |
-| `LEX_GRAPHQL__ERRORS__DEBUG_MODE` | bool | False | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.errors.debug_mode` |
-| `LEX_GRAPHQL__ERRORS__INCLUDE_STACKTRACE` | bool | False | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.errors.include_stacktrace` |
-| `LEX_GRAPHQL__ERRORS__LOG_ERRORS` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.errors.log_errors` |
-| `LEX_GRAPHQL__ERRORS__MASK_ERRORS` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.errors.mask_errors` |
-| `LEX_GRAPHQL__INTROSPECTION__ALLOWED_ENVIRONMENTS` | set[str] | — | — | `packages/lexigram-graphql/src/lexigram/graphql/config.p...onfig.introspection.allowed_environments` |
-| `LEX_GRAPHQL__INTROSPECTION__ENABLED` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.introspection.enabled` |
-| `LEX_GRAPHQL__METRICS__ENABLED` | bool | False | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.metrics.enabled` |
-| `LEX_GRAPHQL__METRICS__HISTOGRAM_BUCKETS` | list[float] | — | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.metrics.histogram_buckets` |
-| `LEX_GRAPHQL__METRICS__INCLUDE_LABELS` | list[str] | — | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.metrics.include_labels` |
-| `LEX_GRAPHQL__METRICS__NAMESPACE` | str | "lexigram_graphql" | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.metrics.namespace` |
-| `LEX_GRAPHQL__NAME` | str | "graphql" | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.name` |
-| `LEX_GRAPHQL__PATH` | str | const.DEFAULT_GRAPHQL_PATH | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.path` |
-| `LEX_GRAPHQL__PERSISTED_QUERIES__ENABLED` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.persisted_queries.enabled` |
-| `LEX_GRAPHQL__PERSISTED_QUERIES__STORE_TYPE` | str | "memory" | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.persisted_queries.store_type` |
-| `LEX_GRAPHQL__PERSISTED_QUERIES__TTL_SECONDS` | Duration \| int | 86400 | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.persisted_queries.ttl_seconds` |
-| `LEX_GRAPHQL__PLAYGROUND__ENABLED` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.playground.enabled` |
-| `LEX_GRAPHQL__PLAYGROUND__PATH` | str | const.DEFAULT_PLAYGROUND_PATH | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.playground.path` |
-| `LEX_GRAPHQL__PLAYGROUND__TITLE` | str | "Lexigram GraphQL Playground" | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.playground.title` |
-| `LEX_GRAPHQL__RATE_LIMIT__BURST_LIMIT` | int | 10 | — | `packages/lexigram-graphql/src/lexigram/graphql/security....py:GraphQLConfig.rate_limit.burst_limit` |
-| `LEX_GRAPHQL__RATE_LIMIT__ENABLED` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/security...imit.py:GraphQLConfig.rate_limit.enabled` |
-| `LEX_GRAPHQL__RATE_LIMIT__REQUESTS_PER_MINUTE` | int | 60 | — | `packages/lexigram-graphql/src/lexigram/graphql/security...hQLConfig.rate_limit.requests_per_minute` |
-| `LEX_GRAPHQL__SCHEMA_BASELINE_PATH` | str \| None | None | Path to a GraphQL SDL (.graphql) file containing the baseline schema. When se... | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.schema_baseline_path` |
-| `LEX_GRAPHQL__SUBSCRIPTIONS__CONNECTION_TIMEOUT` | Duration \| int | 60 | — | `packages/lexigram-graphql/src/lexigram/graphql/config.p...LConfig.subscriptions.connection_timeout` |
-| `LEX_GRAPHQL__SUBSCRIPTIONS__ENABLED` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.subscriptions.enabled` |
-| `LEX_GRAPHQL__SUBSCRIPTIONS__KEEPALIVE_INTERVAL` | Duration \| int | const.DEFAULT_SUBSCRIPTION_KEEPALIVE | — | `packages/lexigram-graphql/src/lexigram/graphql/config.p...LConfig.subscriptions.keepalive_interval` |
-| `LEX_GRAPHQL__SUBSCRIPTIONS__PATH` | str | const.DEFAULT_SUBSCRIPTIONS_PATH | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.subscriptions.path` |
-| `LEX_GRAPHQL__SUBSCRIPTIONS__PROTOCOL` | SubscriptionProtocol | SubscriptionProtocol.GRAPHQL_TRANSPORT_WS | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.subscriptions.protocol` |
-| `LEX_GRAPHQL__TRACING__ENABLED` | bool | False | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.tracing.enabled` |
-| `LEX_GRAPHQL__TRACING__SAMPLE_RATE` | float | 1.0 | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.tracing.sample_rate` |
-| `LEX_GRAPHQL__TRACING__SERVICE_NAME` | str | "lexigram-graphql" | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.tracing.service_name` |
-| `LEX_GRAPHQL__TRACING__TRACE_DATALOADERS` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.tracing.trace_dataloaders` |
-| `LEX_GRAPHQL__TRACING__TRACE_RESOLVERS` | bool | True | — | `packages/lexigram-graphql/src/lexigram/graphql/config.py:GraphQLConfig.tracing.trace_resolvers` |
+| `ORI_AI_OBSERVABILITY__ENABLED` | bool | True | Master on/off switch for all observability | `experimental/ai/oridecon-ai-observability/src/oridecon/...ty/config.py:ObservabilityConfig.enabled` |
+| `ORI_AI_OBSERVABILITY__HEALTH_CHECKS_ENABLED` | bool | True | Enable background health checking for AI components | `experimental/ai/oridecon-ai-observability/src/oridecon/...bservabilityConfig.health_checks_enabled` |
+| `ORI_AI_OBSERVABILITY__METRICS_ENABLED` | bool | True | Enable metrics collection | `experimental/ai/oridecon-ai-observability/src/oridecon/...g.py:ObservabilityConfig.metrics_enabled` |
+| `ORI_AI_OBSERVABILITY__TRACE_MAX_ATTRIBUTE_LENGTH` | int | 0 | Cap on string attribute values written to trace spans, in characters. 0 disab... | `experimental/ai/oridecon-ai-observability/src/oridecon/...abilityConfig.trace_max_attribute_length` |
+| `ORI_AI_OBSERVABILITY__TRACE_REDACTION_ENABLED` | bool | False | Redact secret-shaped keys (e.g. token, password, api_key) from trace span att... | `experimental/ai/oridecon-ai-observability/src/oridecon/...ervabilityConfig.trace_redaction_enabled` |
+| `ORI_AI_OBSERVABILITY__TRACING_ENABLED` | bool | True | Enable distributed tracing | `experimental/ai/oridecon-ai-observability/src/oridecon/...g.py:ObservabilityConfig.tracing_enabled` |
 
-### `lexigram-http` (11 vars)
+### `oridecon-ai-prompt` (5 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_HTTP__COOKIE_JAR` | bool | True | — | `packages/lexigram-http/src/lexigram/http/config.py:HTTPClientConfig.cookie_jar` |
-| `LEX_HTTP__ENFORCE_URL_SAFETY` | bool | True | — | `packages/lexigram-http/src/lexigram/http/config.py:HTTPClientConfig.enforce_url_safety` |
-| `LEX_HTTP__MAX_REDIRECTS` | int | 5 | — | `packages/lexigram-http/src/lexigram/http/config.py:HTTPClientConfig.max_redirects` |
-| `LEX_HTTP__POOL__FORCE_CLOSE` | bool | False | — | `packages/lexigram-http/src/lexigram/http/config.py:HTTPClientConfig.pool.force_close` |
-| `LEX_HTTP__POOL__MAX_CONNECTIONS` | int | DEFAULT_MAX_CONNECTIONS | — | `packages/lexigram-http/src/lexigram/http/config.py:HTTPClientConfig.pool.max_connections` |
-| `LEX_HTTP__POOL__MAX_CONNECTIONS_PER_HOST` | int | DEFAULT_MAX_CONNECTIONS_PER_HOST | — | `packages/lexigram-http/src/lexigram/http/config.py:HTTPClientConfig.pool.max_connections_per_host` |
-| `LEX_HTTP__POOL__MAX_KEEPALIVE_CONNECTIONS` | int | DEFAULT_MAX_KEEPALIVE_CONNECTIONS | — | `packages/lexigram-http/src/lexigram/http/config.py:HTTPClientConfig.pool.max_keepalive_connections` |
-| `LEX_HTTP__POOL__TIMEOUT` | float | DEFAULT_TIMEOUT | — | `packages/lexigram-http/src/lexigram/http/config.py:HTTPClientConfig.pool.timeout` |
-| `LEX_HTTP__POOL__TTL_DNS_CACHE` | int | DEFAULT_TTL_DNS_CACHE | — | `packages/lexigram-http/src/lexigram/http/config.py:HTTPClientConfig.pool.ttl_dns_cache` |
-| `LEX_HTTP__PROXY` | str \| None | None | — | `packages/lexigram-http/src/lexigram/http/config.py:HTTPClientConfig.proxy` |
-| `LEX_HTTP__TRUST_ENV` | bool | True | — | `packages/lexigram-http/src/lexigram/http/config.py:HTTPClientConfig.trust_env` |
+| `ORI_AI_PROMPT__DEFAULT_FORMAT` | RenderFormat | DEFAULT_RENDER_FORMAT | — | `experimental/ai/oridecon-ai-prompt/src/oridecon/ai/prompt/config.py:PromptConfig.default_format` |
+| `ORI_AI_PROMPT__ENABLED` | bool | True | Enable the AI prompt subsystem | `experimental/ai/oridecon-ai-prompt/src/oridecon/ai/prompt/config.py:PromptConfig.enabled` |
+| `ORI_AI_PROMPT__MAX_VARIABLE_LENGTH` | int | 0 | — | `experimental/ai/oridecon-ai-prompt/src/oridecon/ai/prompt/config.py:PromptConfig.max_variable_length` |
+| `ORI_AI_PROMPT__SANITIZE_INPUTS` | bool | True | — | `experimental/ai/oridecon-ai-prompt/src/oridecon/ai/prompt/config.py:PromptConfig.sanitize_inputs` |
+| `ORI_AI_PROMPT__STRICT_SANITIZER` | bool | True | — | `experimental/ai/oridecon-ai-prompt/src/oridecon/ai/prompt/config.py:PromptConfig.strict_sanitizer` |
 
-### `lexigram-monitor` (56 vars)
+### `oridecon-ai-rag` (23 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_MONITOR__BACKEND_TYPE` | BackendType | — | Monitoring backend type | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.backend_type` |
-| `LEX_MONITOR__DEBUG` | bool | — | Enable debug mode | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.debug` |
-| `LEX_MONITOR__ENABLED` | bool | — | Enable monitoring | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.enabled` |
-| `LEX_MONITOR__ENV` | str \| None | — | Environment (development/staging/production) | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.env` |
-| `LEX_MONITOR__ENVIRONMENT` | Environment | — | Deployment environment | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.environment` |
-| `LEX_MONITOR__ERROR_TRACKING__DSN` | SecretStr \| None | — | Sentry DSN; error tracking is a no-op when unset | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.error_tracking.dsn` |
-| `LEX_MONITOR__ERROR_TRACKING__ENVIRONMENT` | Any | — | Environment tag for captured events | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.error_tracking.environment` |
-| `LEX_MONITOR__ERROR_TRACKING__SEND_DEFAULT_PII` | bool | — | Send default PII fields to the error tracker | `packages/lexigram-monitor/src/lexigram/monitor/config.p...orConfig.error_tracking.send_default_pii` |
-| `LEX_MONITOR__ERROR_TRACKING__TRACES_SAMPLE_RATE` | float | — | Traces sample rate (0.0 to 1.0) | `packages/lexigram-monitor/src/lexigram/monitor/config.p...Config.error_tracking.traces_sample_rate` |
-| `LEX_MONITOR__HEALTH__CHECKS` | list[str] | — | List of health check names to run | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.health.checks` |
-| `LEX_MONITOR__HEALTH__ENABLED` | bool | — | Enable health checks | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.health.enabled` |
-| `LEX_MONITOR__HEALTH__INCLUDE_DETAILS` | bool | — | Include detailed health info in response | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.health.include_details` |
-| `LEX_MONITOR__HEALTH__INTERVAL` | int | — | Health check interval in seconds | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.health.interval` |
-| `LEX_MONITOR__HEALTH__PATH` | str | — | Health endpoint path | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.health.path` |
-| `LEX_MONITOR__HEALTH__TIMEOUT` | float | — | Health check timeout in seconds | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.health.timeout` |
-| `LEX_MONITOR__METRICS__COLLECTION_INTERVAL` | float | — | Metrics collection interval in seconds | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.metrics.collection_interval` |
-| `LEX_MONITOR__METRICS__DEFAULT_LABELS` | dict[str, str] | — | Default labels for all metrics | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.metrics.default_labels` |
-| `LEX_MONITOR__METRICS__ENABLED` | bool | — | Enable metrics collection | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.metrics.enabled` |
-| `LEX_MONITOR__METRICS__HISTOGRAM_BUCKETS` | list[float] | — | Default histogram bucket boundaries | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.metrics.histogram_buckets` |
-| `LEX_MONITOR__METRICS__PREFIX` | str | — | MetricProtocol name prefix | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.metrics.prefix` |
-| `LEX_MONITOR__NAME` | str | — | Provider name | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.name` |
-| `LEX_MONITOR__OPENTELEMETRY__BATCH_SIZE` | int | — | Export batch size | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.opentelemetry.batch_size` |
-| `LEX_MONITOR__OPENTELEMETRY__COMPRESSION` | str | — | Compression type (none, gzip) | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.opentelemetry.compression` |
-| `LEX_MONITOR__OPENTELEMETRY__ENDPOINT` | str \| None | — | OTLP endpoint URL | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.opentelemetry.endpoint` |
-| `LEX_MONITOR__OPENTELEMETRY__EXPORT_INTERVAL` | float | — | Export interval seconds | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.opentelemetry.export_interval` |
-| `LEX_MONITOR__OPENTELEMETRY__HEADERS` | dict[str, str] | — | OTLP request headers | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.opentelemetry.headers` |
-| `LEX_MONITOR__OPENTELEMETRY__INSECURE` | bool | — | Use insecure connection | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.opentelemetry.insecure` |
-| `LEX_MONITOR__OPENTELEMETRY__METRICS_EXPORTERS` | list[OTelExporterConfig] | — | List of metrics exporters to build. | `packages/lexigram-monitor/src/lexigram/monitor/config.p...orConfig.opentelemetry.metrics_exporters` |
-| `LEX_MONITOR__OPENTELEMETRY__TIMEOUT` | float | — | Export timeout seconds | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.opentelemetry.timeout` |
-| `LEX_MONITOR__OPENTELEMETRY__TRACING_EXPORTERS` | list[OTelExporterConfig] | — | List of tracing exporters to build. | `packages/lexigram-monitor/src/lexigram/monitor/config.p...orConfig.opentelemetry.tracing_exporters` |
-| `LEX_MONITOR__PROMETHEUS__ENABLE_DEFAULT_METRICS` | bool | — | Enable default process metrics | `packages/lexigram-monitor/src/lexigram/monitor/config.p...Config.prometheus.enable_default_metrics` |
-| `LEX_MONITOR__PROMETHEUS__METRICS_TABLE` | str | — | Table name for metrics samples | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.prometheus.metrics_table` |
-| `LEX_MONITOR__PROMETHEUS__PATH` | str | — | Metrics endpoint path | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.prometheus.path` |
-| `LEX_MONITOR__PROMETHEUS__PORT` | int | — | Metrics server port | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.prometheus.port` |
-| `LEX_MONITOR__PROMETHEUS__PUSHGATEWAY_URL` | str \| None | — | Pushgateway URL for push-based metrics | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.prometheus.pushgateway_url` |
-| `LEX_MONITOR__PROMETHEUS__PUSH_INTERVAL` | float | — | Push interval for Pushgateway | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.prometheus.push_interval` |
-| `LEX_MONITOR__PROMETHEUS__STORE_IN_DB` | bool | — | Persist metrics observations to DB | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.prometheus.store_in_db` |
-| `LEX_MONITOR__SLO__ALERT_CHANNELS` | list[str] | — | Alert channel names for SLO violation dispatch | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.slo.alert_channels` |
-| `LEX_MONITOR__SLO__ENABLED` | bool | — | Enable periodic SLO evaluation worker | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.slo.enabled` |
-| `LEX_MONITOR__SLO__EVALUATION_INTERVAL` | float | — | SLO evaluation interval in seconds | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.slo.evaluation_interval` |
-| `LEX_MONITOR__SLO__SUPPRESSION_WINDOW_SECONDS` | int | — | Alert suppression window in seconds | `packages/lexigram-monitor/src/lexigram/monitor/config.p...torConfig.slo.suppression_window_seconds` |
-| `LEX_MONITOR__TRACING__ENABLED` | bool | — | Enable tracing | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.tracing.enabled` |
-| `LEX_MONITOR__TRACING__MAX_ATTRIBUTES` | int | — | Max attributes per span | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.tracing.max_attributes` |
-| `LEX_MONITOR__TRACING__MAX_EVENTS` | int | — | Max events per span | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.tracing.max_events` |
-| `LEX_MONITOR__TRACING__MAX_LINKS` | int | — | Max links per span | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.tracing.max_links` |
-| `LEX_MONITOR__TRACING__MAX_SPANS` | int | — | Max number of spans to keep in memory | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.tracing.max_spans` |
-| `LEX_MONITOR__TRACING__MAX_TRACES_PER_SECOND` | int | — | Max traces to sample per second | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.tracing.max_traces_per_second` |
-| `LEX_MONITOR__TRACING__PROPAGATION_FORMATS` | list[str] | — | Propagation format list | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.tracing.propagation_formats` |
-| `LEX_MONITOR__TRACING__SAMPLER_TYPE` | SamplerType | — | Tracing sampler type | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.tracing.sampler_type` |
-| `LEX_MONITOR__TRACING__SAMPLE_RATE` | float | — | Sample rate (0.0 to 1.0) | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.tracing.sample_rate` |
-| `LEX_MONITOR__TRACING__SERVICE_NAME` | str | — | Service name for traces | `packages/lexigram-monitor/src/lexigram/monitor/config.py:MonitorConfig.tracing.service_name` |
+| `ORI_AI_RAG__CACHE_TTL` | int | 3600 | Cache TTL in seconds (default: 1 hour) | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.cache_ttl` |
+| `ORI_AI_RAG__CHUNKING_STRATEGY` | str | 'recursive' | Chunking strategy (recursive, semantic, token) | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.chunking_strategy` |
+| `ORI_AI_RAG__CHUNK_OVERLAP` | int | 50 | Overlap between consecutive chunks | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.chunk_overlap` |
+| `ORI_AI_RAG__CHUNK_SIZE` | int | 512 | Text chunk size in tokens | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.chunk_size` |
+| `ORI_AI_RAG__CITATION_STYLE` | str | 'inline' | Citation style (inline, footnote, numbered) | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.citation_style` |
+| `ORI_AI_RAG__COLLECTION_NAME` | str | 'default' | Collection/index name for vector store | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.collection_name` |
+| `ORI_AI_RAG__EMBEDDING_MODEL` | str \| None | None | Embedding model identifier. Must be set explicitly — no vendor-specific default. | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.embedding_model` |
+| `ORI_AI_RAG__EMBEDDING_PROVIDER` | str | 'openai' | Embedding provider (openai, cohere, etc.) | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.embedding_provider` |
+| `ORI_AI_RAG__ENABLED` | bool | True | Enable the RAG pipeline | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.enabled` |
+| `ORI_AI_RAG__ENABLE_CACHING` | bool | True | Enable caching for RAG queries | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.enable_caching` |
+| `ORI_AI_RAG__ENABLE_CITATIONS` | bool | True | Include source citations in responses | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.enable_citations` |
+| `ORI_AI_RAG__ENABLE_HALLUCINATION_DETECTION` | bool | True | Enable hallucination detection for AI responses | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/con...RAGConfig.enable_hallucination_detection` |
+| `ORI_AI_RAG__ENABLE_HYDE` | bool | False | Enable HyDE (Hypothetical Document Embeddings) | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.enable_hyde` |
+| `ORI_AI_RAG__ENABLE_QUERY_EXPANSION` | bool | True | Enable query expansion techniques | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.enable_query_expansion` |
+| `ORI_AI_RAG__MIN_CITATION_CONFIDENCE` | float | 0.6 | Minimum confidence for citation inclusion | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.min_citation_confidence` |
+| `ORI_AI_RAG__PERSIST_DIRECTORY` | str \| None | None | Local directory path for vector store persistence (e.g. Chroma) | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.persist_directory` |
+| `ORI_AI_RAG__SIMILARITY_THRESHOLD` | float | 0.7 | Minimum similarity score threshold | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.similarity_threshold` |
+| `ORI_AI_RAG__SYNTHESIS_STRATEGY` | str | 'hybrid' | Synthesis strategy (direct, extractive, abstractive, hybrid) | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.synthesis_strategy` |
+| `ORI_AI_RAG__TENANCY__ENABLED` | bool | False | Enable tenant-aware collection resolution in RAG pipeline | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.tenancy.enabled` |
+| `ORI_AI_RAG__TOP_K` | int | 5 | Number of documents to retrieve | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.top_k` |
+| `ORI_AI_RAG__USE_HYBRID_SEARCH` | bool | True | Enable hybrid search (semantic + keyword) | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.use_hybrid_search` |
+| `ORI_AI_RAG__VECTOR_DIMENSION` | int | 1536 | Embedding vector dimension (1536 for OpenAI ada-002) | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.vector_dimension` |
+| `ORI_AI_RAG__VECTOR_STORE_TYPE` | str | 'pgvector' | Vector store backend (pgvector, chroma, qdrant, mock) | `experimental/ai/oridecon-ai-rag/src/oridecon/ai/rag/config.py:RAGConfig.vector_store_type` |
 
-### `lexigram-multimedia` (73 vars)
+### `oridecon-ai-session` (16 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_MULTIMEDIA__BEAT__BACKEND` | Literal['librosa', 'madmom'] | "librosa" | — | `experimental/multimedia/lexigram-multimedia-beat/src/le.../config.py:MultimediaConfig.beat.backend` |
-| `LEX_MULTIMEDIA__BEAT__LIBROSA_SAMPLE_RATE` | int | 22050 | — | `experimental/multimedia/lexigram-multimedia-beat/src/le...ultimediaConfig.beat.librosa_sample_rate` |
-| `LEX_MULTIMEDIA__BEAT__MADMOM_BASE_URL` | str | "http://localhost:5600" | — | `experimental/multimedia/lexigram-multimedia-beat/src/le...py:MultimediaConfig.beat.madmom_base_url` |
-| `LEX_MULTIMEDIA__BEAT__MAX_ANALYZE_SAMPLES` | int | 60000000 | — | `experimental/multimedia/lexigram-multimedia-beat/src/le...ultimediaConfig.beat.max_analyze_samples` |
-| `LEX_MULTIMEDIA__BEAT__MAX_ASSET_BYTES` | int | 25 * 1024 * 1024 | — | `experimental/multimedia/lexigram-multimedia-beat/src/le...py:MultimediaConfig.beat.max_asset_bytes` |
-| `LEX_MULTIMEDIA__BEAT__TIMEOUT` | float | 30.0 | — | `experimental/multimedia/lexigram-multimedia-beat/src/le.../config.py:MultimediaConfig.beat.timeout` |
-| `LEX_MULTIMEDIA__CACHE_RESULTS` | bool | False | — | `experimental/multimedia/lexigram-multimedia/src/lexigra...config.py:MultimediaConfig.cache_results` |
-| `LEX_MULTIMEDIA__IMAGE__BACKEND` | Literal['local-http', 'stability', 'openai', 'comfyui'] | "local-http" | — | `experimental/multimedia/lexigram-multimedia-image/src/l...config.py:MultimediaConfig.image.backend` |
-| `LEX_MULTIMEDIA__IMAGE__COMFYUI_BASE_URL` | str | "http://localhost:8188" | — | `experimental/multimedia/lexigram-multimedia-image/src/l...:MultimediaConfig.image.comfyui_base_url` |
-| `LEX_MULTIMEDIA__IMAGE__COMFYUI_CFG_SCALE` | float | 7.0 | — | `experimental/multimedia/lexigram-multimedia-image/src/l...MultimediaConfig.image.comfyui_cfg_scale` |
-| `LEX_MULTIMEDIA__IMAGE__COMFYUI_CHECKPOINT` | str | "sd_xl_base_1.0.safetensors" | — | `experimental/multimedia/lexigram-multimedia-image/src/l...ultimediaConfig.image.comfyui_checkpoint` |
-| `LEX_MULTIMEDIA__IMAGE__COMFYUI_POLL_INTERVAL` | float | 1.0 | — | `experimental/multimedia/lexigram-multimedia-image/src/l...imediaConfig.image.comfyui_poll_interval` |
-| `LEX_MULTIMEDIA__IMAGE__COMFYUI_STEPS` | int | 20 | — | `experimental/multimedia/lexigram-multimedia-image/src/l....py:MultimediaConfig.image.comfyui_steps` |
-| `LEX_MULTIMEDIA__IMAGE__COMFYUI_WORKFLOW_PATH` | str \| None | None | — | `experimental/multimedia/lexigram-multimedia-image/src/l...imediaConfig.image.comfyui_workflow_path` |
-| `LEX_MULTIMEDIA__IMAGE__LOCAL_HTTP_BASE_URL` | str | "http://localhost:5005" | — | `experimental/multimedia/lexigram-multimedia-image/src/l...ltimediaConfig.image.local_http_base_url` |
-| `LEX_MULTIMEDIA__IMAGE__OPENAI_API_KEY_SECRET_NAME` | str | "openai_api_key" | — | `experimental/multimedia/lexigram-multimedia-image/src/l...aConfig.image.openai_api_key_secret_name` |
-| `LEX_MULTIMEDIA__IMAGE__OPENAI_BASE_URL` | str | "https://api.openai.com" | — | `experimental/multimedia/lexigram-multimedia-image/src/l...y:MultimediaConfig.image.openai_base_url` |
-| `LEX_MULTIMEDIA__IMAGE__OPENAI_MODEL` | str | "dall-e-3" | — | `experimental/multimedia/lexigram-multimedia-image/src/l...g.py:MultimediaConfig.image.openai_model` |
-| `LEX_MULTIMEDIA__IMAGE__STABILITY_API_KEY_SECRET_NAME` | str | "stability_api_key" | — | `experimental/multimedia/lexigram-multimedia-image/src/l...nfig.image.stability_api_key_secret_name` |
-| `LEX_MULTIMEDIA__IMAGE__TIMEOUT` | float | 60.0 | — | `experimental/multimedia/lexigram-multimedia-image/src/l...config.py:MultimediaConfig.image.timeout` |
-| `LEX_MULTIMEDIA__INTERPOLATE__BACKEND` | Literal['rife'] | "rife" | — | `experimental/multimedia/lexigram-multimedia-interpolate....py:MultimediaConfig.interpolate.backend` |
-| `LEX_MULTIMEDIA__INTERPOLATE__RIFE_BASE_URL` | str | "http://localhost:5500" | — | `experimental/multimedia/lexigram-multimedia-interpolate...ltimediaConfig.interpolate.rife_base_url` |
-| `LEX_MULTIMEDIA__INTERPOLATE__TIMEOUT` | float | 15.0 | — | `experimental/multimedia/lexigram-multimedia-interpolate....py:MultimediaConfig.interpolate.timeout` |
-| `LEX_MULTIMEDIA__MUSIC__ACE_STEP_BASE_URL` | str | "http://localhost:5300" | — | `experimental/multimedia/lexigram-multimedia-music/src/l...MultimediaConfig.music.ace_step_base_url` |
-| `LEX_MULTIMEDIA__MUSIC__BACKEND` | Literal['local-http', 'stability-audio', 'ace-step', 'stable-audio-open'] | "local-http" | — | `experimental/multimedia/lexigram-multimedia-music/src/l...config.py:MultimediaConfig.music.backend` |
-| `LEX_MULTIMEDIA__MUSIC__LOCAL_HTTP_BASE_URL` | str | "http://localhost:5003" | — | `experimental/multimedia/lexigram-multimedia-music/src/l...ltimediaConfig.music.local_http_base_url` |
-| `LEX_MULTIMEDIA__MUSIC__STABILITY_API_KEY_SECRET_NAME` | str | "stability_api_key" | — | `experimental/multimedia/lexigram-multimedia-music/src/l...nfig.music.stability_api_key_secret_name` |
-| `LEX_MULTIMEDIA__MUSIC__STABLE_AUDIO_OPEN_BASE_URL` | str | "http://localhost:5301" | — | `experimental/multimedia/lexigram-multimedia-music/src/l...aConfig.music.stable_audio_open_base_url` |
-| `LEX_MULTIMEDIA__MUSIC__TIMEOUT` | float | 60.0 | — | `experimental/multimedia/lexigram-multimedia-music/src/l...config.py:MultimediaConfig.music.timeout` |
-| `LEX_MULTIMEDIA__STORAGE_PATH_PREFIX` | str | "multimedia/" | — | `experimental/multimedia/lexigram-multimedia/src/lexigra....py:MultimediaConfig.storage_path_prefix` |
-| `LEX_MULTIMEDIA__TTS__BACKEND` | Literal['local-http', 'elevenlabs', 'openai', 'chatterbox', 'kokoro', 'f5-tts', 'piper'] | "local-http" | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...s/config.py:MultimediaConfig.tts.backend` |
-| `LEX_MULTIMEDIA__TTS__CHATTERBOX_BASE_URL` | str | "http://localhost:5100" | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...MultimediaConfig.tts.chatterbox_base_url` |
-| `LEX_MULTIMEDIA__TTS__CHATTERBOX_CFG_WEIGHT` | float | 0.5 | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...ltimediaConfig.tts.chatterbox_cfg_weight` |
-| `LEX_MULTIMEDIA__TTS__CHATTERBOX_EXAGGERATION` | float | 0.5 | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...imediaConfig.tts.chatterbox_exaggeration` |
-| `LEX_MULTIMEDIA__TTS__CHATTERBOX_TEMPERATURE` | float | 0.85 | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...timediaConfig.tts.chatterbox_temperature` |
-| `LEX_MULTIMEDIA__TTS__ELEVENLABS_API_KEY_SECRET_NAME` | str | "elevenlabs_api_key" | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...onfig.tts.elevenlabs_api_key_secret_name` |
-| `LEX_MULTIMEDIA__TTS__ELEVENLABS_VOICE_ID` | str \| None | None | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...MultimediaConfig.tts.elevenlabs_voice_id` |
-| `LEX_MULTIMEDIA__TTS__F5_TTS_BASE_URL` | str | "http://localhost:5102" | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex....py:MultimediaConfig.tts.f5_tts_base_url` |
-| `LEX_MULTIMEDIA__TTS__KOKORO_BASE_URL` | str | "http://localhost:5101" | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex....py:MultimediaConfig.tts.kokoro_base_url` |
-| `LEX_MULTIMEDIA__TTS__KOKORO_DEFAULT_VOICE` | str | "af_heart" | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...ultimediaConfig.tts.kokoro_default_voice` |
-| `LEX_MULTIMEDIA__TTS__LOCAL_HTTP_BASE_URL` | str | "http://localhost:5002" | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...MultimediaConfig.tts.local_http_base_url` |
-| `LEX_MULTIMEDIA__TTS__OPENAI_API_KEY_SECRET_NAME` | str | "openai_api_key" | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...diaConfig.tts.openai_api_key_secret_name` |
-| `LEX_MULTIMEDIA__TTS__OPENAI_BASE_URL` | str | "https://api.openai.com" | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex....py:MultimediaConfig.tts.openai_base_url` |
-| `LEX_MULTIMEDIA__TTS__OPENAI_MODEL` | str | "tts-1" | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...fig.py:MultimediaConfig.tts.openai_model` |
-| `LEX_MULTIMEDIA__TTS__OPENAI_VOICE` | str | "alloy" | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...fig.py:MultimediaConfig.tts.openai_voice` |
-| `LEX_MULTIMEDIA__TTS__PIPER_BASE_URL` | str | "http://localhost:5103" | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...g.py:MultimediaConfig.tts.piper_base_url` |
-| `LEX_MULTIMEDIA__TTS__PIPER_DEFAULT_VOICE` | str | "en_US-lessac-medium" | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...MultimediaConfig.tts.piper_default_voice` |
-| `LEX_MULTIMEDIA__TTS__TIMEOUT` | float | 60.0 | — | `experimental/multimedia/lexigram-multimedia-tts/src/lex...s/config.py:MultimediaConfig.tts.timeout` |
-| `LEX_MULTIMEDIA__UPSCALE__BACKEND` | Literal['real-esrgan', 'hat'] | "real-esrgan" | — | `experimental/multimedia/lexigram-multimedia-upscale/src...nfig.py:MultimediaConfig.upscale.backend` |
-| `LEX_MULTIMEDIA__UPSCALE__HAT_BASE_URL` | str | "http://localhost:5401" | — | `experimental/multimedia/lexigram-multimedia-upscale/src...py:MultimediaConfig.upscale.hat_base_url` |
-| `LEX_MULTIMEDIA__UPSCALE__REAL_ESRGAN_BASE_URL` | str | "http://localhost:5400" | — | `experimental/multimedia/lexigram-multimedia-upscale/src...mediaConfig.upscale.real_esrgan_base_url` |
-| `LEX_MULTIMEDIA__UPSCALE__TIMEOUT` | float | 30.0 | — | `experimental/multimedia/lexigram-multimedia-upscale/src...nfig.py:MultimediaConfig.upscale.timeout` |
-| `LEX_MULTIMEDIA__VIDEO__BACKEND` | Literal['local-http', 'runway', 'openai', 'wan22', 'cogvideox', 'svd', 'comfyui'] | "local-http" | — | `experimental/multimedia/lexigram-multimedia-video/src/l...config.py:MultimediaConfig.video.backend` |
-| `LEX_MULTIMEDIA__VIDEO__COGVIDEOX_BASE_URL` | str | "http://localhost:5201" | — | `experimental/multimedia/lexigram-multimedia-video/src/l...ultimediaConfig.video.cogvideox_base_url` |
-| `LEX_MULTIMEDIA__VIDEO__COMFYUI_BASE_URL` | str | "http://localhost:8188" | — | `experimental/multimedia/lexigram-multimedia-video/src/l...:MultimediaConfig.video.comfyui_base_url` |
-| `LEX_MULTIMEDIA__VIDEO__COMFYUI_CHECKPOINT` | str | "svd_xt_1_1.safetensors" | — | `experimental/multimedia/lexigram-multimedia-video/src/l...ultimediaConfig.video.comfyui_checkpoint` |
-| `LEX_MULTIMEDIA__VIDEO__COMFYUI_FPS` | int | 6 | — | `experimental/multimedia/lexigram-multimedia-video/src/l...ig.py:MultimediaConfig.video.comfyui_fps` |
-| `LEX_MULTIMEDIA__VIDEO__COMFYUI_MOTION_BUCKET_ID` | int | 127 | — | `experimental/multimedia/lexigram-multimedia-video/src/l...diaConfig.video.comfyui_motion_bucket_id` |
-| `LEX_MULTIMEDIA__VIDEO__COMFYUI_POLL_INTERVAL` | float | 1.0 | — | `experimental/multimedia/lexigram-multimedia-video/src/l...imediaConfig.video.comfyui_poll_interval` |
-| `LEX_MULTIMEDIA__VIDEO__COMFYUI_WORKFLOW_PATH` | str \| None | None | — | `experimental/multimedia/lexigram-multimedia-video/src/l...imediaConfig.video.comfyui_workflow_path` |
-| `LEX_MULTIMEDIA__VIDEO__LOCAL_HTTP_BASE_URL` | str | "http://localhost:5004" | — | `experimental/multimedia/lexigram-multimedia-video/src/l...ltimediaConfig.video.local_http_base_url` |
-| `LEX_MULTIMEDIA__VIDEO__OPENAI_API_KEY_SECRET_NAME` | str | "openai_api_key" | — | `experimental/multimedia/lexigram-multimedia-video/src/l...aConfig.video.openai_api_key_secret_name` |
-| `LEX_MULTIMEDIA__VIDEO__OPENAI_BASE_URL` | str | "https://api.openai.com" | — | `experimental/multimedia/lexigram-multimedia-video/src/l...y:MultimediaConfig.video.openai_base_url` |
-| `LEX_MULTIMEDIA__VIDEO__OPENAI_MODEL` | str | "sora-2" | — | `experimental/multimedia/lexigram-multimedia-video/src/l...g.py:MultimediaConfig.video.openai_model` |
-| `LEX_MULTIMEDIA__VIDEO__PROCESSING__FFMPEG_BINARY` | str | "ffmpeg" | — | `experimental/multimedia/lexigram-multimedia-video/src/l...diaConfig.video.processing.ffmpeg_binary` |
-| `LEX_MULTIMEDIA__VIDEO__PROCESSING__MAX_ASSET_BYTES` | int | 25 * 1024 * 1024 | — | `experimental/multimedia/lexigram-multimedia-video/src/l...aConfig.video.processing.max_asset_bytes` |
-| `LEX_MULTIMEDIA__VIDEO__PROCESSING__MAX_CONCURRENT_JOBS` | int | 2 | — | `experimental/multimedia/lexigram-multimedia-video/src/l...fig.video.processing.max_concurrent_jobs` |
-| `LEX_MULTIMEDIA__VIDEO__PROCESSING__TEMP_DIR` | str \| None | None | — | `experimental/multimedia/lexigram-multimedia-video/src/l...ltimediaConfig.video.processing.temp_dir` |
-| `LEX_MULTIMEDIA__VIDEO__PROCESSING__TIMEOUT` | float | 300.0 | — | `experimental/multimedia/lexigram-multimedia-video/src/l...ultimediaConfig.video.processing.timeout` |
-| `LEX_MULTIMEDIA__VIDEO__RUNWAY_API_KEY_SECRET_NAME` | str | "runway_api_key" | — | `experimental/multimedia/lexigram-multimedia-video/src/l...aConfig.video.runway_api_key_secret_name` |
-| `LEX_MULTIMEDIA__VIDEO__SVD_BASE_URL` | str | "http://localhost:5202" | — | `experimental/multimedia/lexigram-multimedia-video/src/l...g.py:MultimediaConfig.video.svd_base_url` |
-| `LEX_MULTIMEDIA__VIDEO__TIMEOUT` | float \| None | None | — | `experimental/multimedia/lexigram-multimedia-video/src/l...config.py:MultimediaConfig.video.timeout` |
-| `LEX_MULTIMEDIA__VIDEO__WAN22_BASE_URL` | str | "http://localhost:5200" | — | `experimental/multimedia/lexigram-multimedia-video/src/l...py:MultimediaConfig.video.wan22_base_url` |
+| `ORI_AI_SESSION__AUTO_CHECKPOINT_INTERVAL` | int \| None | const.DEFAULT_AUTO_CHECKPOINT_INTERVAL | Checkpoint every N turns; None to disable | `experimental/ai/oridecon-ai-session/src/oridecon/ai/ses...y:SessionConfig.auto_checkpoint_interval` |
+| `ORI_AI_SESSION__BACKEND` | str | const.DEFAULT_BACKEND | Persistence backend (in_memory, cache, database) | `experimental/ai/oridecon-ai-session/src/oridecon/ai/session/config.py:SessionConfig.backend` |
+| `ORI_AI_SESSION__CLEANUP_INTERVAL_S` | int | const.DEFAULT_CLEANUP_INTERVAL_S | How often the cleanup scheduler sweeps for expired sessions | `experimental/ai/oridecon-ai-session/src/oridecon/ai/ses...nfig.py:SessionConfig.cleanup_interval_s` |
+| `ORI_AI_SESSION__CONSOLIDATE_ON_CLOSE` | bool | const.DEFAULT_CONSOLIDATE_ON_CLOSE | Whether to trigger memory consolidation on session close | `experimental/ai/oridecon-ai-session/src/oridecon/ai/ses...ig.py:SessionConfig.consolidate_on_close` |
+| `ORI_AI_SESSION__COOKIE_NAME` | str \| None | const.DEFAULT_COOKIE_NAME | Cookie name for web session ID; None disables cookies | `experimental/ai/oridecon-ai-session/src/oridecon/ai/session/config.py:SessionConfig.cookie_name` |
+| `ORI_AI_SESSION__DEFAULT_SYSTEM_PROMPT` | str \| None | None | System prompt injected into every new session | `experimental/ai/oridecon-ai-session/src/oridecon/ai/ses...g.py:SessionConfig.default_system_prompt` |
+| `ORI_AI_SESSION__DEFAULT_TURN_STRATEGY` | str | const.DEFAULT_TURN_STRATEGY | Default turn-selection strategy (round_robin, priority, llm_directed) | `experimental/ai/oridecon-ai-session/src/oridecon/ai/ses...g.py:SessionConfig.default_turn_strategy` |
+| `ORI_AI_SESSION__ENABLED` | bool | True | Enable the AI session subsystem | `experimental/ai/oridecon-ai-session/src/oridecon/ai/session/config.py:SessionConfig.enabled` |
+| `ORI_AI_SESSION__HEADER_NAME` | str | const.DEFAULT_HEADER_NAME | HTTP header name for session ID pass-through | `experimental/ai/oridecon-ai-session/src/oridecon/ai/session/config.py:SessionConfig.header_name` |
+| `ORI_AI_SESSION__MAX_AGENTS_PER_GROUP` | int | const.DEFAULT_MAX_AGENTS | Maximum agents in a multi-agent group session | `experimental/ai/oridecon-ai-session/src/oridecon/ai/ses...ig.py:SessionConfig.max_agents_per_group` |
+| `ORI_AI_SESSION__MAX_BRANCHES_PER_SESSION` | int | const.DEFAULT_MAX_BRANCHES | Maximum forked branches per session | `experimental/ai/oridecon-ai-session/src/oridecon/ai/ses...y:SessionConfig.max_branches_per_session` |
+| `ORI_AI_SESSION__MAX_CHECKPOINTS_PER_SESSION` | int | const.DEFAULT_MAX_CHECKPOINTS | Maximum retained checkpoints per session | `experimental/ai/oridecon-ai-session/src/oridecon/ai/ses...essionConfig.max_checkpoints_per_session` |
+| `ORI_AI_SESSION__MAX_SESSIONS_PER_USER` | int | const.DEFAULT_MAX_SESSIONS_PER_USER | Maximum concurrent sessions per user | `experimental/ai/oridecon-ai-session/src/oridecon/ai/ses...g.py:SessionConfig.max_sessions_per_user` |
+| `ORI_AI_SESSION__MAX_TURNS_PER_SESSION` | int | const.DEFAULT_MAX_TURNS | Hard cap on turns before the session is closed | `experimental/ai/oridecon-ai-session/src/oridecon/ai/ses...g.py:SessionConfig.max_turns_per_session` |
+| `ORI_AI_SESSION__NAME` | str | 'ai-session' | Logical name used for DI registration keys | `experimental/ai/oridecon-ai-session/src/oridecon/ai/session/config.py:SessionConfig.name` |
+| `ORI_AI_SESSION__SESSION_TTL` | int | const.DEFAULT_SESSION_TTL_S | Maximum age of a session in seconds (0 to disable) | `experimental/ai/oridecon-ai-session/src/oridecon/ai/session/config.py:SessionConfig.session_ttl` |
 
-### `lexigram-nosql` (18 vars)
+### `oridecon-ai-skills` (18 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_NOSQL__BACKENDS` | list[NamedNoSQLConfig] | — | Named NoSQL backends for multi-store support. When non-empty, the provider re... | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.backends` |
-| `LEX_NOSQL__DRIVER` | str | 'mongodb' | NoSQL driver name | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.driver` |
-| `LEX_NOSQL__ENABLED` | bool | True | Enable NoSQL support | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.enabled` |
-| `LEX_NOSQL__FIRESTORE__CREDENTIALS_JSON` | str \| None | None | Path to a service account JSON key file, or the raw JSON string. When ``None`... | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.firestore.credentials_json` |
-| `LEX_NOSQL__FIRESTORE__DATABASE_ID` | str | '(default)' | Firestore database ID (use '(default)' for the default database) | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.firestore.database_id` |
-| `LEX_NOSQL__FIRESTORE__PROJECT_ID` | str | — | Google Cloud project ID | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.firestore.project_id` |
-| `LEX_NOSQL__MONGODB__AUTH_SOURCE` | str | 'admin' | Authentication database | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.mongodb.auth_source` |
-| `LEX_NOSQL__MONGODB__CONNECT_TIMEOUT_MS` | int | 10000 | Connection timeout (ms) | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.mongodb.connect_timeout_ms` |
-| `LEX_NOSQL__MONGODB__DATABASE` | str | 'lexigram' | Database name | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.mongodb.database` |
-| `LEX_NOSQL__MONGODB__MAX_POOL_SIZE` | int | 100 | Maximum connection pool size | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.mongodb.max_pool_size` |
-| `LEX_NOSQL__MONGODB__MIN_POOL_SIZE` | int | 10 | Minimum connection pool size | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.mongodb.min_pool_size` |
-| `LEX_NOSQL__MONGODB__READ_PREFERENCE` | str | 'primaryPreferred' | Read preference mode | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.mongodb.read_preference` |
-| `LEX_NOSQL__MONGODB__RETRY_READS` | bool | True | Enable read retries | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.mongodb.retry_reads` |
-| `LEX_NOSQL__MONGODB__RETRY_WRITES` | bool | True | Enable write retries | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.mongodb.retry_writes` |
-| `LEX_NOSQL__MONGODB__SERVER_SELECTION_TIMEOUT_MS` | int | 5000 | Server selection timeout (ms) | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.mongodb.server_selection_timeout_ms` |
-| `LEX_NOSQL__MONGODB__SOCKET_TIMEOUT_MS` | int | 30000 | Socket timeout (ms) | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.mongodb.socket_timeout_ms` |
-| `LEX_NOSQL__MONGODB__URI` | str | 'mongodb://localhost:27017' | MongoDB connection URI | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.mongodb.uri` |
-| `LEX_NOSQL__MONGODB__WRITE_CONCERN_W` | str \| int | 'majority' | Write concern level | `packages/lexigram-nosql/src/lexigram/nosql/config.py:NoSQLConfig.mongodb.write_concern_w` |
+| `ORI_AI_SKILLS__ALLOWED_SCRIPT_TYPES` | list[str] | — | Allowed script types (py, sh, js) | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skil...fig.py:SkillsConfig.allowed_script_types` |
+| `ORI_AI_SKILLS__AUTO_DISCOVER` | bool | const.DEFAULT_AUTO_DISCOVER | Whether to auto-scan packages for skills on boot | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skills/config.py:SkillsConfig.auto_discover` |
+| `ORI_AI_SKILLS__BUILTIN_SKILLS` | list[str] | — | Names of built-in skills to register | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skills/config.py:SkillsConfig.builtin_skills` |
+| `ORI_AI_SKILLS__CACHE_BACKEND` | str | const.DEFAULT_CACHE_BACKEND | Which cache backend to use (in_memory, cache) | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skills/config.py:SkillsConfig.cache_backend` |
+| `ORI_AI_SKILLS__CACHE_ENABLED` | bool | const.DEFAULT_CACHE_ENABLED | Whether result caching is globally enabled | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skills/config.py:SkillsConfig.cache_enabled` |
+| `ORI_AI_SKILLS__CACHE_TTL_SECONDS` | int | const.DEFAULT_CACHE_TTL_S | Default TTL for cached skill results (seconds) | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skills/config.py:SkillsConfig.cache_ttl_seconds` |
+| `ORI_AI_SKILLS__DEFAULT_TIMEOUT_SECONDS` | float | const.DEFAULT_TIMEOUT_S | Default execution timeout per skill (seconds) | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skil....py:SkillsConfig.default_timeout_seconds` |
+| `ORI_AI_SKILLS__ENABLED_DIRECTORIES` | list[str] | — | Which skill directories to enable (claude_code, opencode, cursor, etc.) | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skills/config.py:SkillsConfig.enabled_directories` |
+| `ORI_AI_SKILLS__ENABLE_BUILTIN` | bool | const.DEFAULT_ENABLE_BUILTIN | Whether built-in skills are registered on boot | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skills/config.py:SkillsConfig.enable_builtin` |
+| `ORI_AI_SKILLS__ENABLE_SKILL_SOURCES` | bool | True | Whether to scan for external skill sources on boot | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skil...fig.py:SkillsConfig.enable_skill_sources` |
+| `ORI_AI_SKILLS__ENFORCE_PERMISSIONS` | bool | const.DEFAULT_ENFORCE_PERMISSIONS | Whether permission checks are enforced | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skills/config.py:SkillsConfig.enforce_permissions` |
+| `ORI_AI_SKILLS__LAZY_LOAD_CONTEXT` | bool | const.DEFAULT_LAZY_LOAD_CONTEXT | Whether to lazily load skill context files | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skills/config.py:SkillsConfig.lazy_load_context` |
+| `ORI_AI_SKILLS__MAX_CONCURRENT_EXECUTIONS` | int | const.DEFAULT_MAX_CONCURRENT | Semaphore cap on concurrent skill executions | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skil...y:SkillsConfig.max_concurrent_executions` |
+| `ORI_AI_SKILLS__MAX_RETRIES` | int | const.DEFAULT_MAX_RETRIES | Default maximum retry attempts for skill execution | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skills/config.py:SkillsConfig.max_retries` |
+| `ORI_AI_SKILLS__NAME` | str | 'ai-skills' | Logical name used for DI registration keys | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skills/config.py:SkillsConfig.name` |
+| `ORI_AI_SKILLS__SCAN_PACKAGES` | list[str] | — | Fully-qualified package names to scan for skills | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skills/config.py:SkillsConfig.scan_packages` |
+| `ORI_AI_SKILLS__SCRIPT_TIMEOUT_SECONDS` | int | const.DEFAULT_SCRIPT_TIMEOUT_SECONDS | Timeout for skill script execution (seconds) | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skil...g.py:SkillsConfig.script_timeout_seconds` |
+| `ORI_AI_SKILLS__SKILL_PATHS` | list[str] | — | Paths to scan for skills (SKILL.md folders) | `experimental/ai/oridecon-ai-skills/src/oridecon/ai/skills/config.py:SkillsConfig.skill_paths` |
 
-### `lexigram-notification` (2 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_NOTIFICATION__PUSH_BACKENDS` | list[NamedPushConfig] | — | Named push notification backends for multi-backend support. When non-empty, t... | `packages/lexigram-notification/src/lexigram/notification/config.py:NotificationConfig.push_backends` |
-| `LEX_NOTIFICATION__SMS_BACKENDS` | list[NamedSMSConfig] | — | Named SMS backends for multi-backend support. When non-empty, the provider re... | `packages/lexigram-notification/src/lexigram/notification/config.py:NotificationConfig.sms_backends` |
-
-### `lexigram-queue` (1 vars)
+### `oridecon-ai-workers` (5 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_QUEUE__BACKENDS` | list[NamedQueueConfig] | — | Named queue backends for multi-backend support. When non-empty, the provider ... | `packages/lexigram-queue/src/lexigram/queue/config.py:QueueConfig.backends` |
+| `ORI_AI_WORKERS__BATCH_EMBEDDING_CONCURRENCY` | int | 3 | Concurrency level for batch embedding execution | `experimental/ai/oridecon-ai-workers/src/oridecon/ai/wor...orkersConfig.batch_embedding_concurrency` |
+| `ORI_AI_WORKERS__DLQ_CHECK_INTERVAL` | int | 60 | Interval in seconds for DLQ recovery sweeps | `experimental/ai/oridecon-ai-workers/src/oridecon/ai/wor...nfig.py:WorkersConfig.dlq_check_interval` |
+| `ORI_AI_WORKERS__DOCUMENT_INGESTION_CONCURRENCY` | int | 3 | Concurrency level for document parsing and chunking | `experimental/ai/oridecon-ai-workers/src/oridecon/ai/wor...ersConfig.document_ingestion_concurrency` |
+| `ORI_AI_WORKERS__ENABLED` | bool | True | Master on/off switch for all background workers | `experimental/ai/oridecon-ai-workers/src/oridecon/ai/workers/config.py:WorkersConfig.enabled` |
+| `ORI_AI_WORKERS__ENABLE_MAINTENANCE` | bool | True | Enable vector store and cache maintenance tasks | `experimental/ai/oridecon-ai-workers/src/oridecon/ai/wor...nfig.py:WorkersConfig.enable_maintenance` |
 
-### `lexigram-resilience` (20 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_RESILIENCE__BULKHEAD__MAX_CONCURRENT` | int | 10 | Max concurrent requests | `packages/lexigram-resilience/src/lexigram/resilience/co...ResilienceConfig.bulkhead.max_concurrent` |
-| `LEX_RESILIENCE__BULKHEAD__NAME` | str | '' | Bulkhead name | `packages/lexigram-resilience/src/lexigram/resilience/config.py:ResilienceConfig.bulkhead.name` |
-| `LEX_RESILIENCE__BULKHEAD__QUEUE_SIZE` | int | 100 | Max queue size | `packages/lexigram-resilience/src/lexigram/resilience/config.py:ResilienceConfig.bulkhead.queue_size` |
-| `LEX_RESILIENCE__BULKHEAD__TIMEOUT` | float | 30.0 | Execution timeout | `packages/lexigram-resilience/src/lexigram/resilience/config.py:ResilienceConfig.bulkhead.timeout` |
-| `LEX_RESILIENCE__CIRCUIT_BREAKER` | CircuitBreakerConfig | (complex) | — | `packages/lexigram-resilience/src/lexigram/resilience/config.py:ResilienceConfig.circuit_breaker` |
-| `LEX_RESILIENCE__RETRY__ABORT_IF` | Callable[[Any], bool] \| None | None | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...odels.py:ResilienceConfig.retry.abort_if` |
-| `LEX_RESILIENCE__RETRY__ABORT_ON` | tuple[type[Exception], ...] | (complex) | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...odels.py:ResilienceConfig.retry.abort_on` |
-| `LEX_RESILIENCE__RETRY__BACKOFF_FACTOR` | float | 2.0 | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...py:ResilienceConfig.retry.backoff_factor` |
-| `LEX_RESILIENCE__RETRY__BASE_DELAY` | float | 1.0 | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...els.py:ResilienceConfig.retry.base_delay` |
-| `LEX_RESILIENCE__RETRY__IDEMPOTENT_METHODS_ONLY` | bool | True | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...enceConfig.retry.idempotent_methods_only` |
-| `LEX_RESILIENCE__RETRY__JITTER` | bool \| float | True | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re.../models.py:ResilienceConfig.retry.jitter` |
-| `LEX_RESILIENCE__RETRY__MAX_ATTEMPTS` | int | 3 | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...s.py:ResilienceConfig.retry.max_attempts` |
-| `LEX_RESILIENCE__RETRY__MAX_DELAY` | float | 60.0 | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...dels.py:ResilienceConfig.retry.max_delay` |
-| `LEX_RESILIENCE__RETRY__ON_RETRY` | Callable[[int, Exception \| None], None] \| None | None | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...odels.py:ResilienceConfig.retry.on_retry` |
-| `LEX_RESILIENCE__RETRY__RETRY_IF` | Callable[[Exception], bool] \| None | None | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...odels.py:ResilienceConfig.retry.retry_if` |
-| `LEX_RESILIENCE__RETRY__RETRY_ON` | tuple[type[Exception], ...] | (complex) | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...odels.py:ResilienceConfig.retry.retry_on` |
-| `LEX_RESILIENCE__RETRY__RETRY_ON_RESULT` | Callable[[Any], bool] \| None | None | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...y:ResilienceConfig.retry.retry_on_result` |
-| `LEX_RESILIENCE__RETRY__RETRY_SYNC` | bool | False | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...els.py:ResilienceConfig.retry.retry_sync` |
-| `LEX_RESILIENCE__TIMEOUT__TIMEOUT` | float | 30.0 | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...dels.py:ResilienceConfig.timeout.timeout` |
-| `LEX_RESILIENCE__TIMEOUT__TIMEOUT_MESSAGE` | str | "Operation timed out" | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...ResilienceConfig.timeout.timeout_message` |
-
-### `lexigram-search` (60 vars)
+### `oridecon-audit` (7 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_SEARCH__BACKENDS` | list[NamedSearchConfig] | — | Named search backends for multi-backend support. When non-empty, the provider... | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.backends` |
-| `LEX_SEARCH__BACKEND_TYPE` | BackendType | — | Search backend type | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.backend_type` |
-| `LEX_SEARCH__DATABASE` | str \| None | None | Named database to use for DB-backed backends (postgres/mysql). References a n... | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.database` |
-| `LEX_SEARCH__ELASTICSEARCH__API_KEY` | SecretStr \| None | None | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.elasticsearch.api_key` |
-| `LEX_SEARCH__ELASTICSEARCH__HOSTS` | list[str] | — | Elasticsearch hosts | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.elasticsearch.hosts` |
-| `LEX_SEARCH__ELASTICSEARCH__INDEX_PREFIX` | str | 'lexigram_search_' | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.elasticsearch.index_prefix` |
-| `LEX_SEARCH__ELASTICSEARCH__NUMBER_OF_REPLICAS` | int | 0 | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.elasticsearch.number_of_replicas` |
-| `LEX_SEARCH__ELASTICSEARCH__NUMBER_OF_SHARDS` | int | 1 | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.elasticsearch.number_of_shards` |
-| `LEX_SEARCH__ELASTICSEARCH__PASSWORD` | SecretStr \| None | None | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.elasticsearch.password` |
-| `LEX_SEARCH__ELASTICSEARCH__USERNAME` | str \| None | None | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.elasticsearch.username` |
-| `LEX_SEARCH__ELASTICSEARCH__USE_SSL` | bool | False | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.elasticsearch.use_ssl` |
-| `LEX_SEARCH__ELASTICSEARCH__VERIFY_CERTS` | bool | True | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.elasticsearch.verify_certs` |
-| `LEX_SEARCH__ENABLED` | bool | True | Enable the search subsystem | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.enabled` |
-| `LEX_SEARCH__MEILISEARCH__API_KEY` | SecretStr \| None | None | MeiliSearch API key | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.meilisearch.api_key` |
-| `LEX_SEARCH__MEILISEARCH__DISPLAYED_ATTRIBUTES` | list[str] | — | Fields to return in results | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.meilisearch.displayed_attributes` |
-| `LEX_SEARCH__MEILISEARCH__FILTERABLE_ATTRIBUTES` | list[str] | — | Attributes that can be filtered | `packages/lexigram-search/src/lexigram/search/config.py:...Config.meilisearch.filterable_attributes` |
-| `LEX_SEARCH__MEILISEARCH__MAX_CONNECTIONS` | int | 10 | Maximum number of connections | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.meilisearch.max_connections` |
-| `LEX_SEARCH__MEILISEARCH__MIN_WORD_SIZE_FOR_TYPOS` | dict[str, int] | — | Minimum word size for typo tolerance | `packages/lexigram-search/src/lexigram/search/config.py:...nfig.meilisearch.min_word_size_for_typos` |
-| `LEX_SEARCH__MEILISEARCH__RANKING_RULES` | list[str] | — | Ranking rules in order | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.meilisearch.ranking_rules` |
-| `LEX_SEARCH__MEILISEARCH__SEARCHABLE_ATTRIBUTES` | list[str] | — | Fields to search in | `packages/lexigram-search/src/lexigram/search/config.py:...Config.meilisearch.searchable_attributes` |
-| `LEX_SEARCH__MEILISEARCH__SORTABLE_ATTRIBUTES` | list[str] | — | Attributes that can be sorted | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.meilisearch.sortable_attributes` |
-| `LEX_SEARCH__MEILISEARCH__TIMEOUT` | int | 30 | Request timeout in seconds | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.meilisearch.timeout` |
-| `LEX_SEARCH__MEILISEARCH__TYPO_TOLERANCE_ENABLED` | bool | True | Enable typo tolerance | `packages/lexigram-search/src/lexigram/search/config.py:...onfig.meilisearch.typo_tolerance_enabled` |
-| `LEX_SEARCH__MEILISEARCH__URL` | str | 'http://localhost:7700' | MeiliSearch server URL | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.meilisearch.url` |
-| `LEX_SEARCH__MONGO__CONNECTION_STRING` | SecretStr | SecretStr('') | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.mongo.connection_string` |
-| `LEX_SEARCH__MONGO__DATABASE_NAME` | str | 'search' | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.mongo.database_name` |
-| `LEX_SEARCH__MONGO__USE_ATLAS_SEARCH` | bool | False | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.mongo.use_atlas_search` |
-| `LEX_SEARCH__MYSQL__CONNECTION_STRING` | SecretStr | SecretStr('') | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.mysql.connection_string` |
-| `LEX_SEARCH__MYSQL__FULLTEXT_MODE` | str | 'natural_language' | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.mysql.fulltext_mode` |
-| `LEX_SEARCH__MYSQL__MIN_WORD_LENGTH` | int | 3 | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.mysql.min_word_length` |
-| `LEX_SEARCH__OPENSEARCH__HOSTS` | list[str] | — | OpenSearch hosts | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.opensearch.hosts` |
-| `LEX_SEARCH__OPENSEARCH__INDEX_PREFIX` | str | 'lexigram_search_' | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.opensearch.index_prefix` |
-| `LEX_SEARCH__OPENSEARCH__PASSWORD` | str \| None | None | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.opensearch.password` |
-| `LEX_SEARCH__OPENSEARCH__TIMEOUT` | int | 30 | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.opensearch.timeout` |
-| `LEX_SEARCH__OPENSEARCH__USERNAME` | str \| None | None | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.opensearch.username` |
-| `LEX_SEARCH__OPENSEARCH__USE_SSL` | bool | False | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.opensearch.use_ssl` |
-| `LEX_SEARCH__OPENSEARCH__VERIFY_SSL` | bool | True | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.opensearch.verify_ssl` |
-| `LEX_SEARCH__OPERATIONS__BULK_CHUNK_SIZE` | int | — | Bulk request chunk size | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.operations.bulk_chunk_size` |
-| `LEX_SEARCH__OPERATIONS__MAX_RETRIES` | int | — | Max retry attempts | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.operations.max_retries` |
-| `LEX_SEARCH__OPERATIONS__REQUEST_TIMEOUT` | float | — | Request timeout seconds | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.operations.request_timeout` |
-| `LEX_SEARCH__OPERATIONS__RETRY_BACKOFF` | float | — | Retry backoff multiplier | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.operations.retry_backoff` |
-| `LEX_SEARCH__POSTGRES__AUTO_CREATE_TABLES` | bool | True | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.postgres.auto_create_tables` |
-| `LEX_SEARCH__POSTGRES__CONNECTION_STRING` | SecretStr | SecretStr('') | PostgreSQL connection string | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.postgres.connection_string` |
-| `LEX_SEARCH__POSTGRES__ENABLE_TRIGRAM` | bool | True | Enable pg_trgm fuzzy matching | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.postgres.enable_trigram` |
-| `LEX_SEARCH__POSTGRES__TEXT_SEARCH_CONFIG` | str | 'english' | PostgreSQL text search config | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.postgres.text_search_config` |
-| `LEX_SEARCH__QUERY__DEFAULT_LIMIT` | int | search_const.DEFAULT_PAGE_SIZE | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.query.default_limit` |
-| `LEX_SEARCH__QUERY__ENABLE_AGGREGATIONS` | bool | False | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.query.enable_aggregations` |
-| `LEX_SEARCH__QUERY__ENABLE_FACETING` | bool | True | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.query.enable_faceting` |
-| `LEX_SEARCH__QUERY__ENABLE_HIGHLIGHTING` | bool | True | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.query.enable_highlighting` |
-| `LEX_SEARCH__QUERY__FUZZY_THRESHOLD` | float | 0.8 | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.query.fuzzy_threshold` |
-| `LEX_SEARCH__QUERY__MAX_LIMIT` | int | search_const.DEFAULT_MAX_RESULTS | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.query.max_limit` |
-| `LEX_SEARCH__QUERY__STRATEGY` | str | 'fuzzy' | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.query.strategy` |
-| `LEX_SEARCH__SQLITE__AUTO_CREATE_TABLES` | bool | True | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.sqlite.auto_create_tables` |
-| `LEX_SEARCH__SQLITE__DB_PATH` | str | ':memory:' | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.sqlite.db_path` |
-| `LEX_SEARCH__SQLITE__TOKENIZER` | str | 'porter unicode61' | — | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.sqlite.tokenizer` |
-| `LEX_SEARCH__TIMEOUT` | float | — | Default request timeout seconds | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.timeout` |
-| `LEX_SEARCH__TYPESENSE__API_KEY` | SecretStr \| None | None | Typesense API key | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.typesense.api_key` |
-| `LEX_SEARCH__TYPESENSE__CONNECTION_TIMEOUT` | int | 30 | Connection timeout | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.typesense.connection_timeout` |
-| `LEX_SEARCH__TYPESENSE__HEALTH_CHECK_INTERVAL` | int | 60 | Health check interval | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.typesense.health_check_interval` |
-| `LEX_SEARCH__TYPESENSE__NODES` | list[dict[str, str]] | — | Typesense node connections | `packages/lexigram-search/src/lexigram/search/config.py:SearchConfig.typesense.nodes` |
+| `ORI_AUDIT__ENABLE_ADMIN` | bool | — | Whether to register the AuditAdminContributor | `packages/oridecon-audit/src/oridecon/audit/config.py:AuditConfig.enable_admin` |
+| `ORI_AUDIT__HMAC_KEY` | bytes \| None | — | HMAC key for checksum computation | `packages/oridecon-audit/src/oridecon/audit/config.py:AuditConfig.hmac_key` |
+| `ORI_AUDIT__RETENTION_POLICY` | RetentionPolicy | — | Retention rules | `packages/oridecon-audit/src/oridecon/audit/config.py:AuditConfig.retention_policy` |
+| `ORI_AUDIT__STORE_BACKEND` | str | — | Backend type — 'sql' or 'memory' | `packages/oridecon-audit/src/oridecon/audit/config.py:AuditConfig.store_backend` |
+| `ORI_AUDIT__TABLE_NAME` | str | — | SQL table name for the unified audit store | `packages/oridecon-audit/src/oridecon/audit/config.py:AuditConfig.table_name` |
+| `ORI_AUDIT__VERIFICATION_BATCH_SIZE` | int | — | Entries to verify per verification run | `packages/oridecon-audit/src/oridecon/audit/config.py:AuditConfig.verification_batch_size` |
+| `ORI_AUDIT__VERIFICATION_SCHEDULE` | str | — | Cron expression for scheduled verification | `packages/oridecon-audit/src/oridecon/audit/config.py:AuditConfig.verification_schedule` |
 
-### `lexigram-secrets` (8 vars)
+### `oridecon-auth` (44 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_SECRETS__AUDIT_ACTOR_ID` | str | — | Actor identifier for audit log entries | `packages/lexigram-secrets/src/lexigram/secrets/config.py:SecretsConfig.audit_actor_id` |
-| `LEX_SECRETS__BACKEND_OPTIONS` | dict | — | Keyword arguments for backend constructor | `packages/lexigram-secrets/src/lexigram/secrets/config.py:SecretsConfig.backend_options` |
-| `LEX_SECRETS__BACKEND_TYPE` | str | — | Backend store type (memory, vault, ...) | `packages/lexigram-secrets/src/lexigram/secrets/config.py:SecretsConfig.backend_type` |
-| `LEX_SECRETS__ENABLED` | bool | — | Whether secrets subsystem is enabled | `packages/lexigram-secrets/src/lexigram/secrets/config.py:SecretsConfig.enabled` |
-| `LEX_SECRETS__MAX_AGE_SECONDS` | float | — | Seconds before automatic rotation | `packages/lexigram-secrets/src/lexigram/secrets/config.py:SecretsConfig.max_age_seconds` |
-| `LEX_SECRETS__NAME` | str | — | Configuration name | `packages/lexigram-secrets/src/lexigram/secrets/config.py:SecretsConfig.name` |
-| `LEX_SECRETS__TENANT_ID` | str \| None | — | Optional tenant namespace | `packages/lexigram-secrets/src/lexigram/secrets/config.py:SecretsConfig.tenant_id` |
-| `LEX_SECRETS__WARNING_BEFORE_SECONDS` | float | — | Seconds before expiry to warn | `packages/lexigram-secrets/src/lexigram/secrets/config.py:SecretsConfig.warning_before_seconds` |
+| `ORI_AUTH__ADMIN_EMAIL` | str \| None | None | Initial admin email | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.admin_email` |
+| `ORI_AUTH__ADMIN_PASSWORD` | str \| None | None | Initial admin password | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.admin_password` |
+| `ORI_AUTH__ENABLED` | bool | True | — | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.enabled` |
+| `ORI_AUTH__LOGIN_RATE_LIMIT` | str | '5/minute' | Default rate limit | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.login_rate_limit` |
+| `ORI_AUTH__MAX_SESSIONS_PER_USER` | int \| None | None | Maximum number of concurrent sessions allowed per user. ``None`` (the default... | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.max_sessions_per_user` |
+| `ORI_AUTH__MIDDLEWARE__BACKEND` | str | 'session' | Auth backend type | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.middleware.backend` |
+| `ORI_AUTH__MIDDLEWARE__EXCLUDE_PATHS` | list[str] | — | Paths excluded from auth | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.middleware.exclude_paths` |
+| `ORI_AUTH__MIDDLEWARE__EXCLUDE_PREFIXES` | list[str] | — | Path prefixes excluded | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.middleware.exclude_prefixes` |
+| `ORI_AUTH__MIDDLEWARE__HEADER_NAME` | str | 'Authorization' | Header name for token | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.middleware.header_name` |
+| `ORI_AUTH__MIDDLEWARE__LOGIN_RATE_LIMIT` | str | '5/minute' | Rate limit for auth endpoints | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.middleware.login_rate_limit` |
+| `ORI_AUTH__MIDDLEWARE__LOGIN_URL` | str \| None | None | URL to redirect for login | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.middleware.login_url` |
+| `ORI_AUTH__MIDDLEWARE__OPTIONAL_AUTH` | bool | False | Whether authentication is optional | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.middleware.optional_auth` |
+| `ORI_AUTH__MIDDLEWARE__PERMISSIONS_REQUIRED` | list[str] | — | Permissions required | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.middleware.permissions_required` |
+| `ORI_AUTH__MIDDLEWARE__ROLES_REQUIRED` | list[str] | — | Roles required | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.middleware.roles_required` |
+| `ORI_AUTH__MIDDLEWARE__SCHEME` | str | const.DEFAULT_TOKEN_TYPE | Token scheme | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.middleware.scheme` |
+| `ORI_AUTH__NAME` | str | "auth" | — | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.name` |
+| `ORI_AUTH__OAUTH2_PROVIDERS` | dict[str, dict[str, str]] | — | OAuth2 configs | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.oauth2_providers` |
+| `ORI_AUTH__PASSWORD__ARGON2_MEMORY_COST` | int | 65536 | Argon2id memory cost in KiB (OWASP floor is 19456) | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.password.argon2_memory_cost` |
+| `ORI_AUTH__PASSWORD__ARGON2_PARALLELISM` | int | 4 | Argon2id parallelism | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.password.argon2_parallelism` |
+| `ORI_AUTH__PASSWORD__ARGON2_TIME_COST` | int | 3 | Argon2id time cost | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.password.argon2_time_cost` |
+| `ORI_AUTH__PASSWORD__BANNED_PATTERNS` | list[str] | — | Substrings that must not appear in the password (case-insensitive). Use to re... | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.password.banned_patterns` |
+| `ORI_AUTH__PASSWORD__BCRYPT_ROUNDS` | int | 12 | bcrypt cost factor for new hashes (minimum 12 in production) | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.password.bcrypt_rounds` |
+| `ORI_AUTH__PASSWORD__MAX_LENGTH` | int | 128 | Maximum password length | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.password.max_length` |
+| `ORI_AUTH__PASSWORD__MIN_LENGTH` | int | 12 | Minimum password length | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.password.min_length` |
+| `ORI_AUTH__PASSWORD__REQUIRE_DIGITS` | bool | True | Require at least one digit | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.password.require_digits` |
+| `ORI_AUTH__PASSWORD__REQUIRE_LOWERCASE` | bool | False | Require at least one lowercase letter | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.password.require_lowercase` |
+| `ORI_AUTH__PASSWORD__REQUIRE_SPECIAL` | bool | False | Require at least one special character (non-alphanumeric) | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.password.require_special` |
+| `ORI_AUTH__PASSWORD__REQUIRE_UPPERCASE` | bool | True | Require at least one uppercase letter | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.password.require_uppercase` |
+| `ORI_AUTH__RBAC__CACHE_PERMISSIONS` | bool | True | Cache resolved permissions | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.rbac.cache_permissions` |
+| `ORI_AUTH__RBAC__DEFAULT_ROLE` | str | 'viewer' | Default role for new users | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.rbac.default_role` |
+| `ORI_AUTH__RBAC__ENABLED` | bool | True | Enable RBAC enforcement | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.rbac.enabled` |
+| `ORI_AUTH__RBAC__PERMISSION_CACHE_TTL` | int | 300 | Permission cache TTL in seconds | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.rbac.permission_cache_ttl` |
+| `ORI_AUTH__RBAC__SUPERUSER_BYPASS` | bool | True | Allow superuser role to bypass all checks | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.rbac.superuser_bypass` |
+| `ORI_AUTH__RELAY_VERIFICATION` | bool | False | Enable binding ``RelayAuthVerifierProtocol`` for the relay gateway's inbound ... | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.relay_verification` |
+| `ORI_AUTH__ROLES` | dict[str, AuthRoleConfig] | — | Role definitions | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.roles` |
+| `ORI_AUTH__SECRET_KEY` | str | — | Secret key for signing | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.secret_key` |
+| `ORI_AUTH__TOKEN__ACCESS_TOKEN_EXPIRE` | Duration | Duration.minutes(const.DEFAULT_ACCESS_TOKEN_EXPIRE_MINUTES) | Access token expiry duration | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.token.access_token_expire` |
+| `ORI_AUTH__TOKEN__ALGORITHM` | str | const.DEFAULT_TOKEN_ALGORITHM | Algorithm | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.token.algorithm` |
+| `ORI_AUTH__TOKEN__ID_TOKEN_EXPIRE` | Duration | Duration.hours(1) | ID token expiry duration | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.token.id_token_expire` |
+| `ORI_AUTH__TOKEN__KEY_ROTATION_GRACE_PERIOD` | Duration | Duration.seconds(const.DEFAULT_JWT_KEY_ROTATION_GRACE_PERIOD_SECONDS) | Duration during which tokens signed by a rotated-out key remain accepted. Pre... | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.token.key_rotation_grace_period` |
+| `ORI_AUTH__TOKEN__REFRESH_TOKEN_EXPIRE` | Duration | Duration.days(const.DEFAULT_REFRESH_TOKEN_EXPIRE_DAYS) | Refresh token expiry duration | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.token.refresh_token_expire` |
+| `ORI_AUTH__TOKEN__REQUIRED_AUDIENCE` | str \| None | None | Expected ``aud`` claim for every token verified by this service. When set, to... | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.token.required_audience` |
+| `ORI_AUTH__TOKEN__SECRET_KEY` | SecretStr | — | Secret key for signing tokens | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.token.secret_key` |
+| `ORI_AUTH__USERS` | list[AuthUserConfig] | — | Initial users | `packages/oridecon-auth/src/oridecon/auth/config.py:AuthConfig.users` |
 
-### `lexigram-sql` (19 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_SQL__AUDIT_HMAC_KEY` | str \| None | None | HMAC key for audit checksum signing. Plain text or base64. | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.audit_hmac_key` |
-| `LEX_SQL__BACKENDS` | list[NamedDatabaseConfig] | — | Multi-database backends list. When non-empty, drives multi-DB mode. The entry... | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.backends` |
-| `LEX_SQL__BACKEND__URL` | SecretStr | — | Database connection URL (may contain credentials) | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.backend.url` |
-| `LEX_SQL__ENABLED` | bool | True | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.enabled` |
-| `LEX_SQL__MIGRATIONS__LOCK_TIMEOUT` | Duration | Duration.seconds(30) | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.migrations.lock_timeout` |
-| `LEX_SQL__NAME` | str | "database" | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.name` |
-| `LEX_SQL__OPERATIONS__ECHO` | bool | False | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.operations.echo` |
-| `LEX_SQL__OPERATIONS__STATEMENT_TIMEOUT` | Duration | Duration.seconds(60) | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.operations.statement_timeout` |
-| `LEX_SQL__OUTBOX__BATCH_MAX_AGE` | Duration | Duration.seconds(30) | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.outbox.batch_max_age` |
-| `LEX_SQL__OUTBOX__ENABLED` | bool | True | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.outbox.enabled` |
-| `LEX_SQL__OUTBOX__POLL_INTERVAL` | Duration | Duration.seconds(5) | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.outbox.poll_interval` |
-| `LEX_SQL__POOL__ACQUIRE_TIMEOUT` | Duration | Duration.seconds(30) | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.pool.acquire_timeout` |
-| `LEX_SQL__POOL__IDLE_TIMEOUT` | Duration | Duration.minutes(5) | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.pool.idle_timeout` |
-| `LEX_SQL__POOL__MAX_LIFETIME` | Duration | Duration.hours(1) | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.pool.max_lifetime` |
-| `LEX_SQL__POOL__MAX_OVERFLOW` | int | 5 | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.pool.max_overflow` |
-| `LEX_SQL__POOL__MAX_SIZE` | int | const.DEFAULT_POOL_MAX_SIZE | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.pool.max_size` |
-| `LEX_SQL__POOL__MIN_SIZE` | int | const.DEFAULT_POOL_MIN_SIZE | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.pool.min_size` |
-| `LEX_SQL__POOL__RECYCLE` | int | 3600 | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.pool.recycle` |
-| `LEX_SQL__POOL__TIMEOUT` | float | const.DEFAULT_POOL_TIMEOUT | — | `packages/lexigram-sql/src/lexigram/sql/config.py:DatabaseConfig.pool.timeout` |
-
-### `lexigram-storage` (9 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_STORAGE__BACKENDS` | list[NamedStorageConfig] | — | Named storage backends for multi-store support. When non-empty, the provider ... | `packages/lexigram-storage/src/lexigram/storage/config.py:StorageConfig.backends` |
-| `LEX_STORAGE__DEFAULT_DRIVER` | Literal['local', 's3', 'gcs', 'azure', 'memory', 'r2'] | storage_const.DEFAULT_DRIVER | Default storage driver to use | `packages/lexigram-storage/src/lexigram/storage/config.py:StorageConfig.default_driver` |
-| `LEX_STORAGE__DRIVERS` | dict[str, StorageLocalConfig \| StorageS3Config \| StorageGCSConfig \| StorageAzureConfig \| StorageMemoryConfig \| StorageR2Config] | — | Driver-specific configurations | `packages/lexigram-storage/src/lexigram/storage/config.py:StorageConfig.drivers` |
-| `LEX_STORAGE__ENABLED` | bool | True | — | `packages/lexigram-storage/src/lexigram/storage/config.py:StorageConfig.enabled` |
-| `LEX_STORAGE__ENV` | str \| None | — | Environment (development/staging/production) | `packages/lexigram-storage/src/lexigram/storage/config.py:StorageConfig.env` |
-| `LEX_STORAGE__HEALTH_CHECK_TIMEOUT` | float | 5.0 | Timeout in seconds for the startup health check in StorageProvider.boot() | `packages/lexigram-storage/src/lexigram/storage/config.py:StorageConfig.health_check_timeout` |
-| `LEX_STORAGE__NAME` | str | "storage" | — | `packages/lexigram-storage/src/lexigram/storage/config.py:StorageConfig.name` |
-| `LEX_STORAGE__SERVICE__ALLOWED_MIME_TYPES` | list[str] | — | Allowed MIME types for upload validation. Defaults to a safe set of common im... | `packages/lexigram-storage/src/lexigram/storage/config.py:StorageConfig.service.allowed_mime_types` |
-| `LEX_STORAGE__SERVICE__MAX_FILE_SIZE_MB` | int | storage_const.DEFAULT_MAX_FILE_SIZE_MB | Maximum file size in MB | `packages/lexigram-storage/src/lexigram/storage/config.py:StorageConfig.service.max_file_size_mb` |
-
-### `lexigram-tasks` (40 vars)
+### `oridecon-cache` (17 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_TASKS__BACKENDS` | list[NamedTaskConfig] | — | Named task queue backends for multi-queue support. When non-empty, the provid... | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.backends` |
-| `LEX_TASKS__BACKEND__AMQP_URL` | SecretStr | SecretStr(tasks_const.DEFAULT_AMQP_URL) | AMQP connection URL (may contain credentials). | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.backend.amqp_url` |
-| `LEX_TASKS__BACKEND__POSTGRES_DSN` | SecretStr \| None | None | Postgres DSN (required when type="postgres"; may contain credentials). | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.backend.postgres_dsn` |
-| `LEX_TASKS__BACKEND__QUEUE_NAME` | str | tasks_const.DEFAULT_QUEUE_NAME | Name of the task queue | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.backend.queue_name` |
-| `LEX_TASKS__BACKEND__REDIS_URL` | SecretStr | SecretStr(tasks_const.DEFAULT_REDIS_URL) | Redis connection URL (may contain credentials). | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.backend.redis_url` |
-| `LEX_TASKS__BACKEND__TYPE` | str | tasks_const.DEFAULT_BACKEND | Queue backend type | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.backend.type` |
-| `LEX_TASKS__ENABLED` | bool | True | Whether tasks module is enabled | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.enabled` |
-| `LEX_TASKS__ENV` | str \| None | — | Environment (development/staging/production) | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.env` |
-| `LEX_TASKS__EXTRA` | dict[str, Any] | — | — | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.extra` |
-| `LEX_TASKS__NAME` | str | 'tasks' | Configuration name | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.name` |
-| `LEX_TASKS__RATE_LIMIT__BURST` | int \| None | None | Maximum burst size | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.rate_limit.burst` |
-| `LEX_TASKS__RATE_LIMIT__ENABLED` | bool | False | Whether rate limiting is enabled | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.rate_limit.enabled` |
-| `LEX_TASKS__RATE_LIMIT__PER` | float | 1.0 | Time period in seconds | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.rate_limit.per` |
-| `LEX_TASKS__RATE_LIMIT__RATE` | int | 100 | Number of tasks allowed per time period | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.rate_limit.rate` |
-| `LEX_TASKS__RETRY__ABORT_IF` | Callable[[Any], bool] \| None | None | — | `core/lexigram-contracts/src/lexigram/contracts/infra/resilience/models.py:TaskConfig.retry.abort_if` |
-| `LEX_TASKS__RETRY__ABORT_ON` | tuple[type[Exception], ...] | (complex) | — | `core/lexigram-contracts/src/lexigram/contracts/infra/resilience/models.py:TaskConfig.retry.abort_on` |
-| `LEX_TASKS__RETRY__BACKOFF_FACTOR` | float | 2.0 | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...odels.py:TaskConfig.retry.backoff_factor` |
-| `LEX_TASKS__RETRY__BASE_DELAY` | float | 1.0 | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...ce/models.py:TaskConfig.retry.base_delay` |
-| `LEX_TASKS__RETRY__IDEMPOTENT_METHODS_ONLY` | bool | True | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...TaskConfig.retry.idempotent_methods_only` |
-| `LEX_TASKS__RETRY__JITTER` | bool \| float | True | — | `core/lexigram-contracts/src/lexigram/contracts/infra/resilience/models.py:TaskConfig.retry.jitter` |
-| `LEX_TASKS__RETRY__MAX_ATTEMPTS` | int | 3 | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re.../models.py:TaskConfig.retry.max_attempts` |
-| `LEX_TASKS__RETRY__MAX_DELAY` | float | 60.0 | — | `core/lexigram-contracts/src/lexigram/contracts/infra/resilience/models.py:TaskConfig.retry.max_delay` |
-| `LEX_TASKS__RETRY__ON_RETRY` | Callable[[int, Exception \| None], None] \| None | None | — | `core/lexigram-contracts/src/lexigram/contracts/infra/resilience/models.py:TaskConfig.retry.on_retry` |
-| `LEX_TASKS__RETRY__RETRY_IF` | Callable[[Exception], bool] \| None | None | — | `core/lexigram-contracts/src/lexigram/contracts/infra/resilience/models.py:TaskConfig.retry.retry_if` |
-| `LEX_TASKS__RETRY__RETRY_ON` | tuple[type[Exception], ...] | (complex) | — | `core/lexigram-contracts/src/lexigram/contracts/infra/resilience/models.py:TaskConfig.retry.retry_on` |
-| `LEX_TASKS__RETRY__RETRY_ON_RESULT` | Callable[[Any], bool] \| None | None | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...dels.py:TaskConfig.retry.retry_on_result` |
-| `LEX_TASKS__RETRY__RETRY_SYNC` | bool | False | — | `core/lexigram-contracts/src/lexigram/contracts/infra/re...ce/models.py:TaskConfig.retry.retry_sync` |
-| `LEX_TASKS__SCHEDULER__CHECK_INTERVAL` | float | tasks_const.DEFAULT_SCHEDULER_CHECK_INTERVAL | Interval between schedule checks (seconds) | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.scheduler.check_interval` |
-| `LEX_TASKS__SCHEDULER__ENABLED` | bool | True | Whether scheduling is enabled | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.scheduler.enabled` |
-| `LEX_TASKS__SCHEDULER__TIMEZONE` | str | tasks_const.DEFAULT_SCHEDULER_TIMEZONE | Timezone for cron expressions | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.scheduler.timezone` |
-| `LEX_TASKS__TIMEOUT__DEFAULT_TIMEOUT` | float | tasks_const.DEFAULT_TASK_TIMEOUT | Default timeout | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.timeout.default_timeout` |
-| `LEX_TASKS__TIMEOUT__ENFORCE_TIMEOUT` | bool | True | Enforce timeouts | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.timeout.enforce_timeout` |
-| `LEX_TASKS__TIMEOUT__MAX_TIMEOUT` | float | tasks_const.DEFAULT_MAX_TIMEOUT | Maximum allowed timeout | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.timeout.max_timeout` |
-| `LEX_TASKS__WORKER__DEFAULT_TIMEOUT` | float | tasks_const.DEFAULT_TASK_TIMEOUT | Default timeout for tasks without an explicit timeout (seconds) | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.worker.default_timeout` |
-| `LEX_TASKS__WORKER__ENFORCE_TIMEOUT` | bool | True | Whether to enforce timeouts on all tasks | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.worker.enforce_timeout` |
-| `LEX_TASKS__WORKER__MAX_CONCURRENT_TASKS` | int | tasks_const.DEFAULT_MAX_CONCURRENT_TASKS | Maximum concurrent tasks per worker | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.worker.max_concurrent_tasks` |
-| `LEX_TASKS__WORKER__MAX_TIMEOUT` | float | tasks_const.DEFAULT_MAX_TIMEOUT | Maximum allowed timeout for any task (seconds) | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.worker.max_timeout` |
-| `LEX_TASKS__WORKER__POLL_INTERVAL` | float | tasks_const.DEFAULT_POLL_INTERVAL | Interval between queue polls (seconds) | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.worker.poll_interval` |
-| `LEX_TASKS__WORKER__SHUTDOWN_TIMEOUT` | float | tasks_const.DEFAULT_SHUTDOWN_TIMEOUT | Timeout for graceful shutdown (seconds) | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.worker.shutdown_timeout` |
-| `LEX_TASKS__WORKER__WORKER_COUNT` | int | tasks_const.DEFAULT_WORKER_COUNT | Number of worker instances | `packages/lexigram-tasks/src/lexigram/tasks/config.py:TaskConfig.worker.worker_count` |
+| `ORI_CACHE__BACKENDS` | list[CacheBackendConfig] | — | Backend configs | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.backends` |
+| `ORI_CACHE__DEBUG` | bool | — | Debug mode | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.debug` |
+| `ORI_CACHE__ENABLED` | bool | — | Whether cache is enabled | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.enabled` |
+| `ORI_CACHE__ENV` | str \| None | — | Environment (development/staging/production) | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.env` |
+| `ORI_CACHE__ENVIRONMENT` | str | — | Environment | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.environment` |
+| `ORI_CACHE__NAME` | str | — | Provider name | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.name` |
+| `ORI_CACHE__SERVICE__CIRCUIT_BREAKER_ENABLED` | bool | — | Enable circuit breaker | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.service.circuit_breaker_enabled` |
+| `ORI_CACHE__SERVICE__CIRCUIT_BREAKER_THRESHOLD` | int | — | Circuit breaker threshold | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.service.circuit_breaker_threshold` |
+| `ORI_CACHE__SERVICE__DEFAULT_BACKEND` | str \| None | — | Default backend name | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.service.default_backend` |
+| `ORI_CACHE__SERVICE__DEFAULT_SERIALIZER` | str | — | Default serializer | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.service.default_serializer` |
+| `ORI_CACHE__SERVICE__ENABLE_HEALTH_CHECKS` | bool | — | Enable health checks | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.service.enable_health_checks` |
+| `ORI_CACHE__SERVICE__ENABLE_METRICS` | bool | — | Enable metrics | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.service.enable_metrics` |
+| `ORI_CACHE__SERVICE__ENABLE_PROTECTION` | bool | — | Enable stampede protection | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.service.enable_protection` |
+| `ORI_CACHE__SERVICE__PROTECTION_LOCK_TTL` | int | — | Protection lock TTL | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.service.protection_lock_ttl` |
+| `ORI_CACHE__SERVICE__PROTECTION_MAX_WAIT` | float | — | Max wait for locks | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.service.protection_max_wait` |
+| `ORI_CACHE__SERVICE__PROTECTION_RETRY_INTERVAL` | float | — | Lock retry interval | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.service.protection_retry_interval` |
+| `ORI_CACHE__VERSION` | str | — | Config version | `packages/oridecon-cache/src/oridecon/cache/config.py:CacheConfig.version` |
 
-### `lexigram-tenancy` (13 vars)
+### `oridecon-cli` (5 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_TENANCY__INTEGRATION__CACHE_KEY_PREFIX` | bool | True | — | `packages/lexigram-tenancy/src/lexigram/tenancy/config.py:TenancyConfig.integration.cache_key_prefix` |
-| `LEX_TENANCY__INTEGRATION__SQL_CONTEXT_BRIDGE` | bool | True | — | `packages/lexigram-tenancy/src/lexigram/tenancy/config.p...ncyConfig.integration.sql_context_bridge` |
-| `LEX_TENANCY__LIFECYCLE__AUTO_PROVISION_ISOLATION` | bool | True | — | `packages/lexigram-tenancy/src/lexigram/tenancy/config.p...onfig.lifecycle.auto_provision_isolation` |
-| `LEX_TENANCY__LIFECYCLE__ISOLATION_STRATEGY` | str | "row_level" | — | `packages/lexigram-tenancy/src/lexigram/tenancy/config.py:TenancyConfig.lifecycle.isolation_strategy` |
-| `LEX_TENANCY__OVERRIDES__CACHE_TTL` | int | DEFAULT_CONFIG_CACHE_TTL | — | `packages/lexigram-tenancy/src/lexigram/tenancy/config.py:TenancyConfig.overrides.cache_ttl` |
-| `LEX_TENANCY__RESOLUTION__HEADER_NAME` | str | DEFAULT_HEADER_NAME | — | `packages/lexigram-tenancy/src/lexigram/tenancy/config.py:TenancyConfig.resolution.header_name` |
-| `LEX_TENANCY__RESOLUTION__JWT_CLAIM_KEY` | str | DEFAULT_JWT_CLAIM_KEY | — | `packages/lexigram-tenancy/src/lexigram/tenancy/config.py:TenancyConfig.resolution.jwt_claim_key` |
-| `LEX_TENANCY__RESOLUTION__PATH_PATTERN` | str \| None | DEFAULT_PATH_PATTERN | — | `packages/lexigram-tenancy/src/lexigram/tenancy/config.py:TenancyConfig.resolution.path_pattern` |
-| `LEX_TENANCY__RESOLUTION__RESOLVERS` | list[str] | (complex) | — | `packages/lexigram-tenancy/src/lexigram/tenancy/config.py:TenancyConfig.resolution.resolvers` |
-| `LEX_TENANCY__RESOLUTION__STRICT_MEMBERSHIP` | bool | True | — | `packages/lexigram-tenancy/src/lexigram/tenancy/config.py:TenancyConfig.resolution.strict_membership` |
-| `LEX_TENANCY__RESOLUTION__SUBDOMAIN_PATTERN` | str \| None | None | — | `packages/lexigram-tenancy/src/lexigram/tenancy/config.py:TenancyConfig.resolution.subdomain_pattern` |
-| `LEX_TENANCY__RESOLUTION__TRUSTED_RESOLVERS` | list[str] | (complex) | — | `packages/lexigram-tenancy/src/lexigram/tenancy/config.py:TenancyConfig.resolution.trusted_resolvers` |
-| `LEX_TENANCY__RESOLUTION__VALIDATOR_CACHE_TTL` | int | DEFAULT_VALIDATOR_CACHE_TTL | — | `packages/lexigram-tenancy/src/lexigram/tenancy/config.p...ncyConfig.resolution.validator_cache_ttl` |
+| `ORI_CLI__COLOR` | bool | True | — | `experimental/apps/oridecon-cli/src/oridecon/cli/config.py:CLIConfig.color` |
+| `ORI_CLI__DEFAULT_DATABASE` | str | 'postgres' | — | `experimental/apps/oridecon-cli/src/oridecon/cli/config.py:CLIConfig.default_database` |
+| `ORI_CLI__DEFAULT_TEMPLATE` | str | 'web-api' | — | `experimental/apps/oridecon-cli/src/oridecon/cli/config.py:CLIConfig.default_template` |
+| `ORI_CLI__VERBOSE` | bool | False | — | `experimental/apps/oridecon-cli/src/oridecon/cli/config.py:CLIConfig.verbose` |
+| `ORI_CONFIG` | str | — | — | `experimental/apps/oridecon-cli/src/oridecon/cli/lib/config_loader.py *(direct env access; not config-derived)*` |
 
-### `lexigram-testing` (12 vars)
+### `oridecon-events` (93 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_TEST_ELASTICSEARCH_URL` | str | — | — | `packages/lexigram-testing/src/lexigram/testing/integration/config.py *(direct env access; not config-derived)*` |
-| `LEX_TEST_KAFKA_BOOTSTRAP` | str | — | — | `packages/lexigram-testing/src/lexigram/testing/integration/config.py *(direct env access; not config-derived)*` |
-| `LEX_TEST_MINIO_ACCESS_KEY` | str | — | — | `packages/lexigram-testing/src/lexigram/testing/integration/config.py *(direct env access; not config-derived)*` |
-| `LEX_TEST_MINIO_ENDPOINT` | str | — | — | `packages/lexigram-testing/src/lexigram/testing/integration/config.py *(direct env access; not config-derived)*` |
-| `LEX_TEST_MINIO_SECRET_KEY` | str | — | — | `packages/lexigram-testing/src/lexigram/testing/integration/config.py *(direct env access; not config-derived)*` |
-| `LEX_TEST_MONGODB_DSN` | str | — | — | `packages/lexigram-testing/src/lexigram/testing/integration/config.py *(direct env access; not config-derived)*` |
-| `LEX_TEST_NEO4J_AUTH` | str | — | — | `packages/lexigram-testing/src/lexigram/testing/integration/config.py *(direct env access; not config-derived)*` |
-| `LEX_TEST_NEO4J_URL` | str | — | — | `packages/lexigram-testing/src/lexigram/testing/integration/config.py *(direct env access; not config-derived)*` |
-| `LEX_TEST_POSTGRES_DSN` | str | — | — | `packages/lexigram-testing/src/lexigram/testing/integration/config.py *(direct env access; not config-derived)*` |
-| `LEX_TEST_POSTGRES_DSN_RAW` | str | — | — | `packages/lexigram-testing/src/lexigram/testing/integration/config.py *(direct env access; not config-derived)*` |
-| `LEX_TEST_QDRANT_URL` | str | — | — | `packages/lexigram-testing/src/lexigram/testing/integration/config.py *(direct env access; not config-derived)*` |
-| `LEX_TEST_REDIS_URL` | str | — | — | `packages/lexigram-testing/src/lexigram/testing/integration/config.py *(direct env access; not config-derived)*` |
+| `ORI_EVENTS__COMMAND_BUS__ENABLE_LOGGING` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.command_bus.enable_logging` |
+| `ORI_EVENTS__COMMAND_BUS__ENABLE_METRICS` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.command_bus.enable_metrics` |
+| `ORI_EVENTS__COMMAND_BUS__ENABLE_VALIDATION` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.command_bus.enable_validation` |
+| `ORI_EVENTS__COMMAND_BUS__MAX_RETRIES` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.command_bus.max_retries` |
+| `ORI_EVENTS__COMMAND_BUS__RETRY_DELAY_SECONDS` | float | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.command_bus.retry_delay_seconds` |
+| `ORI_EVENTS__COMMAND_BUS__TIMEOUT_SECONDS` | float | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.command_bus.timeout_seconds` |
+| `ORI_EVENTS__DEBUG` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.debug` |
+| `ORI_EVENTS__ENABLED` | bool | True | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.enabled` |
+| `ORI_EVENTS__ENV` | str \| None | — | Environment (development/staging/production) | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.env` |
+| `ORI_EVENTS__EVENT_BUS__ALLOW_NO_HANDLERS` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.event_bus.allow_no_handlers` |
+| `ORI_EVENTS__EVENT_BUS__CONTINUE_ON_ERROR` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.event_bus.continue_on_error` |
+| `ORI_EVENTS__EVENT_BUS__ENABLE_DEAD_LETTER` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.event_bus.enable_dead_letter` |
+| `ORI_EVENTS__EVENT_BUS__HANDLER_TIMEOUT_SECONDS` | float | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...Config.event_bus.handler_timeout_seconds` |
+| `ORI_EVENTS__EVENT_BUS__MAX_CONCURRENT_HANDLERS` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...Config.event_bus.max_concurrent_handlers` |
+| `ORI_EVENTS__EVENT_BUS__MAX_HANDLER_RETRIES` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.event_bus.max_handler_retries` |
+| `ORI_EVENTS__EVENT_BUS__MAX_QUEUE_PER_SUBSCRIBER` | int | — | Maximum number of events queued per event type before backpressure is applied... | `packages/oridecon-events/src/oridecon/events/config.py:...onfig.event_bus.max_queue_per_subscriber` |
+| `ORI_EVENTS__EVENT_BUS__PARALLEL_DISPATCH` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.event_bus.parallel_dispatch` |
+| `ORI_EVENTS__EVENT_BUS__RETRY_FAILED_HANDLERS` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.event_bus.retry_failed_handlers` |
+| `ORI_EVENTS__EVENT_STORE_BACKEND` | EventStoreBackend | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.event_store_backend` |
+| `ORI_EVENTS__KAFKA__AUTO_OFFSET_RESET` | str | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.kafka.auto_offset_reset` |
+| `ORI_EVENTS__KAFKA__BOOTSTRAP_SERVERS` | str | — | Kafka bootstrap servers | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.kafka.bootstrap_servers` |
+| `ORI_EVENTS__KAFKA__CONSUMER_GROUP` | str | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.kafka.consumer_group` |
+| `ORI_EVENTS__KAFKA__ENABLE_AUTO_COMMIT` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.kafka.enable_auto_commit` |
+| `ORI_EVENTS__KAFKA__TOPIC_PREFIX` | str | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.kafka.topic_prefix` |
+| `ORI_EVENTS__LOGGING_MIDDLEWARE__ENABLED` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.logging_middleware.enabled` |
+| `ORI_EVENTS__LOGGING_MIDDLEWARE__INCLUDE_PAYLOAD` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...onfig.logging_middleware.include_payload` |
+| `ORI_EVENTS__LOGGING_MIDDLEWARE__LOG_LEVEL` | str | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.logging_middleware.log_level` |
+| `ORI_EVENTS__LOGGING_MIDDLEWARE__MAX_PAYLOAD_LENGTH` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...ig.logging_middleware.max_payload_length` |
+| `ORI_EVENTS__MEMORY__ENABLE_SNAPSHOTS` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.memory.enable_snapshots` |
+| `ORI_EVENTS__MEMORY__MAX_EVENTS_PER_STREAM` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.memory.max_events_per_stream` |
+| `ORI_EVENTS__METRICS_MIDDLEWARE__ENABLED` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.metrics_middleware.enabled` |
+| `ORI_EVENTS__METRICS_MIDDLEWARE__HISTOGRAM_BUCKETS` | list[float] | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...fig.metrics_middleware.histogram_buckets` |
+| `ORI_EVENTS__METRICS_MIDDLEWARE__INCLUDE_HISTOGRAMS` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...ig.metrics_middleware.include_histograms` |
+| `ORI_EVENTS__METRICS_MIDDLEWARE__PREFIX` | str | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.metrics_middleware.prefix` |
+| `ORI_EVENTS__MONGODB__CONNECTION_STRING` | SecretStr | — | MongoDB connection string | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.mongodb.connection_string` |
+| `ORI_EVENTS__MONGODB__DATABASE_NAME` | str | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.mongodb.database_name` |
+| `ORI_EVENTS__MONGODB__EVENTS_COLLECTION` | str | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.mongodb.events_collection` |
+| `ORI_EVENTS__MONGODB__MAX_POOL_SIZE` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.mongodb.max_pool_size` |
+| `ORI_EVENTS__MONGODB__SERVER_SELECTION_TIMEOUT` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.mongodb.server_selection_timeout` |
+| `ORI_EVENTS__MONGODB__SNAPSHOTS_COLLECTION` | str | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.mongodb.snapshots_collection` |
+| `ORI_EVENTS__NAME` | str | "events" | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.name` |
+| `ORI_EVENTS__POSTGRES__AUTO_CREATE_TABLES` | bool | True | — | `packages/oridecon-events/src/oridecon/events/stores/pos...EventsConfig.postgres.auto_create_tables` |
+| `ORI_EVENTS__POSTGRES__COMMAND_TIMEOUT` | float | 60.0 | — | `packages/oridecon-events/src/oridecon/events/stores/pos...py:EventsConfig.postgres.command_timeout` |
+| `ORI_EVENTS__POSTGRES__DSN` | SecretStr \| None | None | PostgreSQL connection string. Optional when a DatabaseProviderProtocol is inj... | `packages/oridecon-events/src/oridecon/events/stores/postgres/config.py:EventsConfig.postgres.dsn` |
+| `ORI_EVENTS__POSTGRES__EVENTS_TABLE` | str | 'events' | — | `packages/oridecon-events/src/oridecon/events/stores/pos...ig.py:EventsConfig.postgres.events_table` |
+| `ORI_EVENTS__POSTGRES__POOL_MAX_SIZE` | int | 20 | — | `packages/oridecon-events/src/oridecon/events/stores/pos...g.py:EventsConfig.postgres.pool_max_size` |
+| `ORI_EVENTS__POSTGRES__POOL_MIN_SIZE` | int | 5 | — | `packages/oridecon-events/src/oridecon/events/stores/pos...g.py:EventsConfig.postgres.pool_min_size` |
+| `ORI_EVENTS__POSTGRES__SNAPSHOTS_TABLE` | str | 'snapshots' | — | `packages/oridecon-events/src/oridecon/events/stores/pos...py:EventsConfig.postgres.snapshots_table` |
+| `ORI_EVENTS__PROJECTION__BATCH_SIZE` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.projection.batch_size` |
+| `ORI_EVENTS__PROJECTION__CHECKPOINT_INTERVAL` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.projection.checkpoint_interval` |
+| `ORI_EVENTS__PROJECTION__ENABLE_PARALLEL_PROJECTIONS` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...g.projection.enable_parallel_projections` |
+| `ORI_EVENTS__PROJECTION__MAX_CATCH_UP_EVENTS` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.projection.max_catch_up_events` |
+| `ORI_EVENTS__PROJECTION__REBUILD_BATCH_SIZE` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.projection.rebuild_batch_size` |
+| `ORI_EVENTS__QUERY_BUS__ENABLE_LOGGING` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.query_bus.enable_logging` |
+| `ORI_EVENTS__QUERY_BUS__ENABLE_METRICS` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.query_bus.enable_metrics` |
+| `ORI_EVENTS__QUERY_BUS__TIMEOUT_SECONDS` | float | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.query_bus.timeout_seconds` |
+| `ORI_EVENTS__RABBITMQ__DURABLE` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.rabbitmq.durable` |
+| `ORI_EVENTS__RABBITMQ__EXCHANGE_NAME` | str | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.rabbitmq.exchange_name` |
+| `ORI_EVENTS__RABBITMQ__PREFETCH_COUNT` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.rabbitmq.prefetch_count` |
+| `ORI_EVENTS__RABBITMQ__QUEUE_PREFIX` | str | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.rabbitmq.queue_prefix` |
+| `ORI_EVENTS__RABBITMQ__URL` | SecretStr | — | AMQP connection URL | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.rabbitmq.url` |
+| `ORI_EVENTS__RETRY_MIDDLEWARE__ENABLED` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.retry_middleware.enabled` |
+| `ORI_EVENTS__RETRY_MIDDLEWARE__EXPONENTIAL_BASE` | float | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...Config.retry_middleware.exponential_base` |
+| `ORI_EVENTS__RETRY_MIDDLEWARE__INITIAL_DELAY_SECONDS` | float | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...g.retry_middleware.initial_delay_seconds` |
+| `ORI_EVENTS__RETRY_MIDDLEWARE__MAX_DELAY_SECONDS` | float | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...onfig.retry_middleware.max_delay_seconds` |
+| `ORI_EVENTS__RETRY_MIDDLEWARE__MAX_RETRIES` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.retry_middleware.max_retries` |
+| `ORI_EVENTS__SAGA__CLEANUP_COMPLETED_AFTER_HOURS` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...onfig.saga.cleanup_completed_after_hours` |
+| `ORI_EVENTS__SAGA__DEFAULT_TIMEOUT_SECONDS` | float | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.saga.default_timeout_seconds` |
+| `ORI_EVENTS__SAGA__ENABLE_COMPENSATION` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.saga.enable_compensation` |
+| `ORI_EVENTS__SAGA__MAX_RETRIES_PER_STEP` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.saga.max_retries_per_step` |
+| `ORI_EVENTS__SAGA__PERSIST_STATE` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.saga.persist_state` |
+| `ORI_EVENTS__SAGA__RETRY_DELAY_SECONDS` | float | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.saga.retry_delay_seconds` |
+| `ORI_EVENTS__SNAPSHOTS__ENABLED` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.snapshots.enabled` |
+| `ORI_EVENTS__SNAPSHOTS__EVENT_COUNT_THRESHOLD` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.snapshots.event_count_threshold` |
+| `ORI_EVENTS__SNAPSHOTS__MAX_SNAPSHOTS_PER_AGGREGATE` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...ig.snapshots.max_snapshots_per_aggregate` |
+| `ORI_EVENTS__SNAPSHOTS__STRATEGY` | SnapshotStrategy | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.snapshots.strategy` |
+| `ORI_EVENTS__SNAPSHOTS__TIME_THRESHOLD_SECONDS` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.snapshots.time_threshold_seconds` |
+| `ORI_EVENTS__SQLITE__DATABASE` | str | './events.db' | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.sqlite.database` |
+| `ORI_EVENTS__SQLITE__JOURNAL_MODE` | str | 'WAL' | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.sqlite.journal_mode` |
+| `ORI_EVENTS__SQLITE__PRAGMAS` | dict[str, str] | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.sqlite.pragmas` |
+| `ORI_EVENTS__SQLITE__WAL_MODE` | bool | True | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.sqlite.wal_mode` |
+| `ORI_EVENTS__STREAMING__BATCH_SIZE` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.streaming.batch_size` |
+| `ORI_EVENTS__STREAMING__BUFFER_SIZE` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.streaming.buffer_size` |
+| `ORI_EVENTS__STREAMING__ENABLE_WEBSOCKET` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.streaming.enable_websocket` |
+| `ORI_EVENTS__STREAMING__MAX_SUBSCRIBERS` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.streaming.max_subscribers` |
+| `ORI_EVENTS__STREAMING__POLL_INTERVAL_MS` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.streaming.poll_interval_ms` |
+| `ORI_EVENTS__STREAMING__WEBSOCKET_PING_INTERVAL` | int | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...Config.streaming.websocket_ping_interval` |
+| `ORI_EVENTS__TRANSACTION_MIDDLEWARE__ENABLED` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.transaction_middleware.enabled` |
+| `ORI_EVENTS__TRANSACTION_MIDDLEWARE__ISOLATION_LEVEL` | str | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...g.transaction_middleware.isolation_level` |
+| `ORI_EVENTS__TRANSACTION_MIDDLEWARE__TIMEOUT_SECONDS` | float | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...g.transaction_middleware.timeout_seconds` |
+| `ORI_EVENTS__VALIDATION_MIDDLEWARE__ENABLED` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.validation_middleware.enabled` |
+| `ORI_EVENTS__VALIDATION_MIDDLEWARE__STRICT_MODE` | bool | — | — | `packages/oridecon-events/src/oridecon/events/config.py:...Config.validation_middleware.strict_mode` |
+| `ORI_EVENTS__VERSION_SKEW_ALERTS_ENABLED` | bool | True | — | `packages/oridecon-events/src/oridecon/events/config.py:EventsConfig.version_skew_alerts_enabled` |
 
-### `lexigram-ui` (7 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_UI__AUTO_ESCAPE` | bool | True | HTML-escape user strings by default. | `experimental/apps/lexigram-ui/src/lexigram/ui/config.py:UIConfig.auto_escape` |
-| `LEX_UI__DEBUG_COMPONENTS` | bool | False | Render data-component debug attributes. | `experimental/apps/lexigram-ui/src/lexigram/ui/config.py:UIConfig.debug_components` |
-| `LEX_UI__DEFAULT_THEME` | str | 'default' | Default CSS theme name. | `experimental/apps/lexigram-ui/src/lexigram/ui/config.py:UIConfig.default_theme` |
-| `LEX_UI__ENABLE_REALTIME` | bool | False | Enable realtime update features. | `experimental/apps/lexigram-ui/src/lexigram/ui/config.py:UIConfig.enable_realtime` |
-| `LEX_UI__ENABLE_SSE` | bool | False | Enable Server-Sent Events support. | `experimental/apps/lexigram-ui/src/lexigram/ui/config.py:UIConfig.enable_sse` |
-| `LEX_UI__HTMX_VERSION` | str | '2.0.4' | HTMX CDN version. | `experimental/apps/lexigram-ui/src/lexigram/ui/config.py:UIConfig.htmx_version` |
-| `LEX_UI__THEME` | str | 'light' | Active UI theme. | `experimental/apps/lexigram-ui/src/lexigram/ui/config.py:UIConfig.theme` |
-
-### `lexigram-vector` (39 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_VECTOR__BACKEND` | str | const.BACKEND_MEMORY | Vector store backend to use | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.backend` |
-| `LEX_VECTOR__BACKENDS` | list[NamedVectorConfig] | — | Named vector store backends for multi-store support. When non-empty, the prov... | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.backends` |
-| `LEX_VECTOR__CACHE_TTL` | int | 86400 | Cache TTL in seconds (default: 24 hours) | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.cache_ttl` |
-| `LEX_VECTOR__COLLECTION_NAME` | str | 'default' | Default collection name for AI-layer operations | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.collection_name` |
-| `LEX_VECTOR__DEFAULT_DIMENSION` | int | 1536 | Default vector dimension | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.default_dimension` |
-| `LEX_VECTOR__DEFAULT_DISTANCE_METRIC` | DistanceMetric | DistanceMetric.COSINE | Default distance metric for new collections | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.default_distance_metric` |
-| `LEX_VECTOR__DEFAULT_INDEX_TYPE` | IndexType | IndexType.HNSW | Default index type for new collections | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.default_index_type` |
-| `LEX_VECTOR__EMBEDDING_MODEL` | str | 'text-embedding-3-small' | Embedding model name for AI-layer embedding generation | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.embedding_model` |
-| `LEX_VECTOR__ENABLED` | bool | True | Enable the vector store subsystem | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.enabled` |
-| `LEX_VECTOR__ENABLE_CACHE` | bool | False | Enable embedding caching (requires a CacheBackend binding) | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.enable_cache` |
-| `LEX_VECTOR__MAX_RETRIES` | int | const.DEFAULT_MAX_RETRIES | Maximum number of retries for operations | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.max_retries` |
-| `LEX_VECTOR__MEMORY__MAX_COLLECTIONS` | int | 100 | Maximum number of collections in memory | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.memory.max_collections` |
-| `LEX_VECTOR__MEMORY__MAX_VECTORS_PER_COLLECTION` | int | 100000 | Maximum number of vectors per collection | `packages/lexigram-vector/src/lexigram/vector/config.py:...Config.memory.max_vectors_per_collection` |
-| `LEX_VECTOR__PGVECTOR__CREATE_EXTENSION` | bool | True | Whether to create pgvector extension if missing | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.pgvector.create_extension` |
-| `LEX_VECTOR__PGVECTOR__DATABASE` | str | 'primary' | Name of the database backend from db.backends to use for pgvector. Matches a ... | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.pgvector.database` |
-| `LEX_VECTOR__PGVECTOR__DEFAULT_EF_SEARCH` | int | const.PGVECTOR_DEFAULT_EF_SEARCH | Default ef_search for HNSW index | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.pgvector.default_ef_search` |
-| `LEX_VECTOR__PGVECTOR__DEFAULT_LISTS` | int | const.PGVECTOR_DEFAULT_LISTS | Default number of lists for IVFFlat index | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.pgvector.default_lists` |
-| `LEX_VECTOR__PGVECTOR__DEFAULT_PROBES` | int | const.PGVECTOR_DEFAULT_PROBES | Default number of probes for IVFFlat index | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.pgvector.default_probes` |
-| `LEX_VECTOR__PGVECTOR__SCHEMA` | str | 'public' | Database schema for vector tables | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.pgvector.schema` |
-| `LEX_VECTOR__PGVECTOR__TABLE_PREFIX` | str | 'vec_' | Prefix for vector storage tables | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.pgvector.table_prefix` |
-| `LEX_VECTOR__PINECONE__API_KEY` | SecretStr | SecretStr('') | Pinecone API key | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.pinecone.api_key` |
-| `LEX_VECTOR__PINECONE__ENVIRONMENT` | str | '' | Pinecone environment (e.g. 'us-west1-gcp') | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.pinecone.environment` |
-| `LEX_VECTOR__PINECONE__INDEX_NAME` | str | '' | Name of the Pinecone index | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.pinecone.index_name` |
-| `LEX_VECTOR__PINECONE__NAMESPACE` | str | '' | Default namespace for the index | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.pinecone.namespace` |
-| `LEX_VECTOR__PINECONE__POOL_THREADS` | int | 4 | Number of threads for the connection pool | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.pinecone.pool_threads` |
-| `LEX_VECTOR__PINECONE__TIMEOUT` | float | const.DEFAULT_REQUEST_TIMEOUT | Request timeout in seconds | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.pinecone.timeout` |
-| `LEX_VECTOR__QDRANT__API_KEY` | SecretStr \| None | None | Qdrant API key | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.qdrant.api_key` |
-| `LEX_VECTOR__QDRANT__GRPC_PORT` | int | 6334 | gRPC port for Qdrant | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.qdrant.grpc_port` |
-| `LEX_VECTOR__QDRANT__PREFER_GRPC` | bool | True | Whether to prefer gRPC over HTTP | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.qdrant.prefer_grpc` |
-| `LEX_VECTOR__QDRANT__TIMEOUT` | float | const.DEFAULT_REQUEST_TIMEOUT | Request timeout in seconds | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.qdrant.timeout` |
-| `LEX_VECTOR__QDRANT__URL` | str | 'http://localhost:6333' | Qdrant server URL | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.qdrant.url` |
-| `LEX_VECTOR__RETRY_DELAY` | float | const.DEFAULT_RETRY_DELAY | Delay between retries in seconds | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.retry_delay` |
-| `LEX_VECTOR__TENANCY__ENABLED` | bool | False | Enable tenant-aware collection name resolution | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.tenancy.enabled` |
-| `LEX_VECTOR__TENANCY__RESOLVER_KIND` | str | 'templated' | Which ``TenantCollectionResolver`` to use. One of ``"templated"`` or ``"pinec... | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.tenancy.resolver_kind` |
-| `LEX_VECTOR__UPSERT_BATCH_SIZE` | int | const.DEFAULT_UPSERT_BATCH_SIZE | Number of vectors per upsert batch | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.upsert_batch_size` |
-| `LEX_VECTOR__WEAVIATE__API_KEY` | SecretStr \| None | None | Weaviate API key for authenticated clusters | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.weaviate.api_key` |
-| `LEX_VECTOR__WEAVIATE__GRPC_PORT` | int | 50051 | gRPC port for the Weaviate cluster | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.weaviate.grpc_port` |
-| `LEX_VECTOR__WEAVIATE__TIMEOUT` | float | const.DEFAULT_REQUEST_TIMEOUT | Request timeout in seconds | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.weaviate.timeout` |
-| `LEX_VECTOR__WEAVIATE__URL` | str | 'http://localhost:8080' | Weaviate cluster URL (HTTP) | `packages/lexigram-vector/src/lexigram/vector/config.py:VectorConfig.weaviate.url` |
-
-### `lexigram-web` (86 vars)
-
-| Env Var | Type | Default | Description | Source |
-|---------|------|---------|-------------|--------|
-| `LEX_WEB__API_DOCS__ENABLED` | bool | True | Enable API documentation endpoints (/docs, /redoc) and auto-configure CSP for... | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.api_docs.enabled` |
-| `LEX_WEB__API_DOCS__PROVIDER` | str | 'both' | Documentation provider: 'swagger', 'redoc', or 'both' | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.api_docs.provider` |
-| `LEX_WEB__AUTH_EXCLUDE_PATHS` | list[str] | — | Paths to exclude from authentication | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.auth_exclude_paths` |
-| `LEX_WEB__COMPRESSION_ENABLED` | bool | True | — | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.compression_enabled` |
-| `LEX_WEB__CORS` | CORSConfig | — | — | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.cors` |
-| `LEX_WEB__DEBUG_ROUTES` | bool | False | Enable debug routes | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.debug_routes` |
-| `LEX_WEB__DEBUG_ROUTES_TOKEN` | SecretStr \| None | None | Token required to access debug routes (sent as X-Debug-Token header). | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.debug_routes_token` |
-| `LEX_WEB__ENABLED` | bool | True | — | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.enabled` |
-| `LEX_WEB__ENABLE_AUTH` | bool | False | Enable built-in authentication middleware. Requires authenticators to be regi... | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.enable_auth` |
-| `LEX_WEB__ENABLE_DEBUG_ROUTES_ENV_GATE` | bool | False | Require explicit opt-in for debug route registration. | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.enable_debug_routes_env_gate` |
-| `LEX_WEB__ENABLE_IDENTITY_RESOLUTION` | bool | False | Automatically resolve OAuth external IDs to internal UUIDs in authenticated r... | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.enable_identity_resolution` |
-| `LEX_WEB__ENV` | str \| None | None | Environment (development/staging/production) | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.env` |
-| `LEX_WEB__MAX_BODY_SIZE` | int \| None | 10 * 1024 * 1024 | Maximum allowed request body size in bytes. Requests with a Content-Length he... | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.max_body_size` |
-| `LEX_WEB__NAME` | str | "web" | — | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.name` |
-| `LEX_WEB__OPENAPI_TITLE` | str | 'API' | OpenAPI Title | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.openapi_title` |
-| `LEX_WEB__OPENAPI_URL` | str \| None | const.DEFAULT_OPENAPI_PATH | — | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.openapi_url` |
-| `LEX_WEB__OPENAPI_VERSION` | str | '1.0.0' | OpenAPI Version | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.openapi_version` |
-| `LEX_WEB__RATE_LIMIT__DEFAULT_LIMIT` | int | const.DEFAULT_RATE_LIMIT_REQUESTS | Max requests per window | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.rate_limit.default_limit` |
-| `LEX_WEB__RATE_LIMIT__DEFAULT_WINDOW` | int | const.DEFAULT_RATE_LIMIT_WINDOW | Window size in seconds | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.rate_limit.default_window` |
-| `LEX_WEB__RATE_LIMIT__ENABLED` | bool | True | Enable rate limiting. When true, RateLimitMiddleware enforces the matched per... | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.rate_limit.enabled` |
-| `LEX_WEB__RATE_LIMIT__RULES` | dict[str, RateLimitRuleConfig] | — | Per-path rate limit rules; longest-prefix match wins | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.rate_limit.rules` |
-| `LEX_WEB__RATE_LIMIT__STORAGE_BACKEND` | str | 'memory' | Storage backend (memory/redis) | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.rate_limit.storage_backend` |
-| `LEX_WEB__RATE_LIMIT__WHITELIST_IPS` | list[str] | — | Exempt IP addresses | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.rate_limit.whitelist_ips` |
-| `LEX_WEB__REDOC_JS_URL` | str \| None | None | — | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.redoc_js_url` |
-| `LEX_WEB__REDOC_URL` | str \| None | '/redoc' | — | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.redoc_url` |
-| `LEX_WEB__ROLE_GUARD__RULES` | list[RoleGuardRuleConfig] | — | Role guard rules in declaration order | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.role_guard.rules` |
-| `LEX_WEB__SECURITY__ALLOWED_HOSTS` | list[str] | — | Hostnames permitted to reach the application. Empty by default; must be confi... | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.allowed_hosts` |
-| `LEX_WEB__SECURITY__CORS__ALLOWED_ORIGINS` | list[str] | — | Allowed origins (use ['*'] to allow all) | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.cors.allowed_origins` |
-| `LEX_WEB__SECURITY__CORS__ALLOW_CREDENTIALS` | bool | False | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.cors.allow_credentials` |
-| `LEX_WEB__SECURITY__CORS__ALLOW_HEADERS` | list[str] | — | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.cors.allow_headers` |
-| `LEX_WEB__SECURITY__CORS__ALLOW_METHODS` | list[str] | — | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.cors.allow_methods` |
-| `LEX_WEB__SECURITY__CORS__ALLOW_ORIGIN_REGEX` | str \| None | None | Regex pattern for allowed origins (matched when not in allowed_origins) | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.cors.allow_origin_regex` |
-| `LEX_WEB__SECURITY__CORS__DEBUG_PERMISSIVE` | bool | False | When True and debug mode is active, allow any origin via wildcard (explicit o... | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.cors.debug_permissive` |
-| `LEX_WEB__SECURITY__CORS__ENABLED` | bool | True | Enable CORS | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.cors.enabled` |
-| `LEX_WEB__SECURITY__CORS__EXPOSE_HEADERS` | list[str] | — | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.cors.expose_headers` |
-| `LEX_WEB__SECURITY__CORS__MAX_AGE` | int | 600 | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.cors.max_age` |
-| `LEX_WEB__SECURITY__CROSS_ORIGIN__EMBEDDER_POLICY` | str | 'require-corp' | Cross-Origin-Embedder-Policy header value | `packages/lexigram-web/src/lexigram/web/security/config....ig.security.cross_origin.embedder_policy` |
-| `LEX_WEB__SECURITY__CROSS_ORIGIN__ENABLED` | bool | False | Emit cross-origin isolation headers | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.cross_origin.enabled` |
-| `LEX_WEB__SECURITY__CROSS_ORIGIN__OPENER_POLICY` | str | 'same-origin' | Cross-Origin-Opener-Policy header value | `packages/lexigram-web/src/lexigram/web/security/config....nfig.security.cross_origin.opener_policy` |
-| `LEX_WEB__SECURITY__CROSS_ORIGIN__RESOURCE_POLICY` | str | 'same-origin' | Cross-Origin-Resource-Policy header value | `packages/lexigram-web/src/lexigram/web/security/config....ig.security.cross_origin.resource_policy` |
-| `LEX_WEB__SECURITY__CSP__ENABLED` | bool | True | Emit the Content-Security-Policy header | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.csp.enabled` |
-| `LEX_WEB__SECURITY__CSRF__COOKIE_DOMAIN` | str \| None | None | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.csrf.cookie_domain` |
-| `LEX_WEB__SECURITY__CSRF__COOKIE_HTTPONLY` | bool | True | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.csrf.cookie_httponly` |
-| `LEX_WEB__SECURITY__CSRF__COOKIE_NAME` | str | 'csrf_token' | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.csrf.cookie_name` |
-| `LEX_WEB__SECURITY__CSRF__COOKIE_PATH` | str | '/' | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.csrf.cookie_path` |
-| `LEX_WEB__SECURITY__CSRF__COOKIE_SAMESITE` | str | 'Lax' | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.csrf.cookie_samesite` |
-| `LEX_WEB__SECURITY__CSRF__COOKIE_SECURE` | bool | True | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.csrf.cookie_secure` |
-| `LEX_WEB__SECURITY__CSRF__ENABLED` | bool | False | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.csrf.enabled` |
-| `LEX_WEB__SECURITY__CSRF__EXCLUDED_PATHS` | list[str] | — | URL path prefixes exempt from CSRF validation for cookie-less requests; cooki... | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.csrf.excluded_paths` |
-| `LEX_WEB__SECURITY__CSRF__EXCLUDE_AUTH_SCHEMES` | list[str] | — | Authorization header schemes that bypass CSRF validation (explicit opt-in). | `packages/lexigram-web/src/lexigram/web/security/config....onfig.security.csrf.exclude_auth_schemes` |
-| `LEX_WEB__SECURITY__CSRF__EXCLUDE_CONTENT_TYPES` | list[str] | — | Content-Type values that bypass CSRF validation (explicit opt-in — JSON reque... | `packages/lexigram-web/src/lexigram/web/security/config....nfig.security.csrf.exclude_content_types` |
-| `LEX_WEB__SECURITY__CSRF__HEADER_NAME` | str | 'X-CSRF-Token' | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.csrf.header_name` |
-| `LEX_WEB__SECURITY__CSRF__SECRET_KEY` | SecretStr \| None | None | HMAC secret used to sign and verify CSRF tokens (populated via LEX_WEB__SECUR... | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.csrf.secret_key` |
-| `LEX_WEB__SECURITY__CSRF__TOKEN_LENGTH` | int | 32 | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.csrf.token_length` |
-| `LEX_WEB__SECURITY__CSRF__TOKEN_TTL` | int | 3600 | TTL in seconds for synchronizer-mode tokens stored in cache. | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.csrf.token_ttl` |
-| `LEX_WEB__SECURITY__CUSTOM_HEADERS` | dict[str, str] | — | Additional HTTP response headers emitted verbatim | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.custom_headers` |
-| `LEX_WEB__SECURITY__ENABLED` | bool | True | Enable the security subsystem | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.enabled` |
-| `LEX_WEB__SECURITY__ENABLE_CORS` | bool | True | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.enable_cors` |
-| `LEX_WEB__SECURITY__ENABLE_CSRF` | bool | True | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.enable_csrf` |
-| `LEX_WEB__SECURITY__HEADERS__CONTENT_TYPE_NOSNIFF` | bool | True | — | `packages/lexigram-web/src/lexigram/web/security/config....ig.security.headers.content_type_nosniff` |
-| `LEX_WEB__SECURITY__HEADERS__CSP` | str \| None | None | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.headers.csp` |
-| `LEX_WEB__SECURITY__HEADERS__FRAME_OPTIONS` | str | 'DENY' | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.headers.frame_options` |
-| `LEX_WEB__SECURITY__HEADERS__HSTS_INCLUDE_SUBDOMAINS` | bool | True | — | `packages/lexigram-web/src/lexigram/web/security/config....security.headers.hsts_include_subdomains` |
-| `LEX_WEB__SECURITY__HEADERS__HSTS_MAX_AGE` | int | 31536000 | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.headers.hsts_max_age` |
-| `LEX_WEB__SECURITY__HEADERS__PERMISSIONS_POLICY` | str \| None | None | — | `packages/lexigram-web/src/lexigram/web/security/config....nfig.security.headers.permissions_policy` |
-| `LEX_WEB__SECURITY__HEADERS__REFERRER_POLICY` | str | 'strict-origin-when-cross-origin' | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.headers.referrer_policy` |
-| `LEX_WEB__SECURITY__HEADERS__XSS_PROTECTION` | str | '1; mode=block' | — | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.headers.xss_protection` |
-| `LEX_WEB__SECURITY__HSTS__ENABLED` | bool | False | Emit the Strict-Transport-Security header | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.hsts.enabled` |
-| `LEX_WEB__SECURITY__HSTS__INCLUDE_SUBDOMAINS` | bool | True | Apply HSTS to all subdomains | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.hsts.include_subdomains` |
-| `LEX_WEB__SECURITY__HSTS__MAX_AGE` | int | 31536000 | HSTS max-age in seconds (default 1 year) | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.hsts.max_age` |
-| `LEX_WEB__SECURITY__HSTS__PRELOAD` | bool | False | Include site in HSTS preload list | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.hsts.preload` |
-| `LEX_WEB__SECURITY__PERMISSIONS_POLICY` | dict[str, str] | — | Permissions-Policy directive map | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.permissions_policy` |
-| `LEX_WEB__SECURITY__REFERRER_POLICY` | str | 'strict-origin-when-cross-origin' | Referrer-Policy header value | `packages/lexigram-web/src/lexigram/web/security/config.py:WebConfig.security.referrer_policy` |
-| `LEX_WEB__SERVER__DEBUG` | bool | False | Enable debug mode | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.server.debug` |
-| `LEX_WEB__SERVER__HOST` | str | const.DEFAULT_HOST | Bind host | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.server.host` |
-| `LEX_WEB__SERVER__PORT` | int | const.DEFAULT_PORT | Bind port | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.server.port` |
-| `LEX_WEB__SERVER__RELOAD` | bool | const.DEFAULT_RELOAD | Enable auto-reload | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.server.reload` |
-| `LEX_WEB__SERVER__WORKERS` | int | const.DEFAULT_WORKERS | Number of workers | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.server.workers` |
-| `LEX_WEB__STATIC__DIRECTORY` | str | 'static' | Directory to serve | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.static.directory` |
-| `LEX_WEB__STATIC__ENABLED` | bool | False | Enable static file serving | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.static.enabled` |
-| `LEX_WEB__STATIC__HTML` | bool | False | Serve HTML files (SPA mode) | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.static.html` |
-| `LEX_WEB__STATIC__PREFIX` | str | '/static' | URL prefix for static files | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.static.prefix` |
-| `LEX_WEB__SWAGGER_CSS_URL` | str \| None | None | — | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.swagger_css_url` |
-| `LEX_WEB__SWAGGER_JS_URL` | str \| None | None | — | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.swagger_js_url` |
-| `LEX_WEB__SWAGGER_UI_URL` | str \| None | const.DEFAULT_DOCS_PATH | — | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.swagger_ui_url` |
-| `LEX_WEB__TEMPLATE_DIRECTORY` | str | 'templates' | Directory for Jinja2 templates | `packages/lexigram-web/src/lexigram/web/config.py:WebConfig.template_directory` |
-
-### `lexigram-webhook` (18 vars)
+### `oridecon-features` (5 vars)
 
 | Env Var | Type | Default | Description | Source |
 |---------|------|---------|-------------|--------|
-| `LEX_WEBHOOK__ALLOW_PRIVATE_URLS` | bool | — | Allow registering and delivering webhooks to private, loopback, or link-local... | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.allow_private_urls` |
-| `LEX_WEBHOOK__DELIVERY_LOG_RETENTION_DAYS` | int | — | Days to retain delivery log (0 = indefinite) | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.delivery_log_retention_days` |
-| `LEX_WEBHOOK__DELIVERY_TIMEOUT_SECONDS` | float | — | HTTP request timeout per delivery attempt | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.delivery_timeout_seconds` |
-| `LEX_WEBHOOK__DISABLE_AFTER_CONSECUTIVE_FAILURES` | int | — | Auto-disable threshold | `packages/lexigram-webhook/src/lexigram/webhook/config.p...onfig.disable_after_consecutive_failures` |
-| `LEX_WEBHOOK__ENABLE_ADMIN` | bool | — | Whether to register the admin contributor | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.enable_admin` |
-| `LEX_WEBHOOK__EVENT_ID_HEADER` | str | — | HTTP header for the event ID | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.event_id_header` |
-| `LEX_WEBHOOK__EVENT_TYPE_HEADER` | str | — | HTTP header for the event type | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.event_type_header` |
-| `LEX_WEBHOOK__FAILURE_WINDOW_HOURS` | int | — | Window for counting consecutive failures | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.failure_window_hours` |
-| `LEX_WEBHOOK__RETRY_BACKOFF_FACTOR` | float | — | Exponential backoff multiplier | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.retry_backoff_factor` |
-| `LEX_WEBHOOK__RETRY_BASE_DELAY` | float | — | Initial retry delay in seconds | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.retry_base_delay` |
-| `LEX_WEBHOOK__RETRY_MAX_ATTEMPTS` | int | — | Maximum delivery attempts before dead-letter | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.retry_max_attempts` |
-| `LEX_WEBHOOK__RETRY_MAX_DELAY` | float | — | Maximum retry delay ceiling in seconds | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.retry_max_delay` |
-| `LEX_WEBHOOK__SECRET_LENGTH` | int | — | Secret length in bytes (hex-encoded output is 2x) | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.secret_length` |
-| `LEX_WEBHOOK__SECRET_ROTATION_GRACE_HOURS` | int | — | Hours both old and new secrets are accepted | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.secret_rotation_grace_hours` |
-| `LEX_WEBHOOK__SIGNATURE_ALGORITHM` | str | — | HMAC algorithm name | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.signature_algorithm` |
-| `LEX_WEBHOOK__SIGNATURE_HEADER` | str | — | HTTP header for the HMAC signature | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.signature_header` |
-| `LEX_WEBHOOK__STORE_BACKEND` | str | — | Persistence backend ('sql' requires lexigram-webhook[sql]) | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.store_backend` |
-| `LEX_WEBHOOK__TIMESTAMP_HEADER` | str | — | HTTP header for the delivery timestamp | `packages/lexigram-webhook/src/lexigram/webhook/config.py:WebhookConfig.timestamp_header` |
+| `ORI_FEATURES__CACHE_TTL` | int | DEFAULT_CACHE_TTL | Seconds to cache flag evaluations (0 = disabled). | `packages/oridecon-features/src/oridecon/features/config.py:FeatureFlagsConfig.cache_ttl` |
+| `ORI_FEATURES__DEFAULT_ENABLED` | bool | DEFAULT_ENABLED | Default value when a flag is not found in the provider. | `packages/oridecon-features/src/oridecon/features/config.py:FeatureFlagsConfig.default_enabled` |
+| `ORI_FEATURES__ENABLED` | bool | True | Enable the feature flags subsystem | `packages/oridecon-features/src/oridecon/features/config.py:FeatureFlagsConfig.enabled` |
+| `ORI_FEATURES__FLAG_ENV_PREFIX` | str | FLAG_ENV_PREFIX | Env var prefix used by EnvProvider when reading flag values. | `packages/oridecon-features/src/oridecon/features/config.py:FeatureFlagsConfig.flag_env_prefix` |
+| `ORI_FEATURES__INITIAL_FLAGS` | dict[str, bool] | — | Seed flags for the in-memory provider (name -> enabled). | `packages/oridecon-features/src/oridecon/features/config.py:FeatureFlagsConfig.initial_flags` |
+
+### `oridecon-graph` (22 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_GRAPH__BACKEND` | str | const.BACKEND_MEMORY | Graph store backend to use | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.backend` |
+| `ORI_GRAPH__BULK_BATCH_SIZE` | int | const.DEFAULT_BULK_BATCH_SIZE | Batch size for bulk operations | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.bulk_batch_size` |
+| `ORI_GRAPH__DEFAULT_QUERY_LIMIT` | int | const.DEFAULT_QUERY_LIMIT | Default limit for query results | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.default_query_limit` |
+| `ORI_GRAPH__DEFAULT_TRAVERSAL_MAX_DEPTH` | int | const.DEFAULT_TRAVERSAL_MAX_DEPTH | Default maximum depth for traversals | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.default_traversal_max_depth` |
+| `ORI_GRAPH__ENABLED` | bool | True | Enable the graph store subsystem | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.enabled` |
+| `ORI_GRAPH__MAX_RETRIES` | int | const.DEFAULT_MAX_RETRIES | Maximum number of retries for operations | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.max_retries` |
+| `ORI_GRAPH__MEMORY__MAX_EDGES` | int | const.DEFAULT_MEMORY_MAX_EDGES | Maximum number of edges in memory | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.memory.max_edges` |
+| `ORI_GRAPH__MEMORY__MAX_NODES` | int | const.DEFAULT_MEMORY_MAX_NODES | Maximum number of nodes in memory | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.memory.max_nodes` |
+| `ORI_GRAPH__NEO4J__CONNECTION_TIMEOUT` | float | const.DEFAULT_CONNECT_TIMEOUT | Connection timeout in seconds | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.neo4j.connection_timeout` |
+| `ORI_GRAPH__NEO4J__DATABASE` | str | const.DEFAULT_NEO4J_DATABASE | Target database name | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.neo4j.database` |
+| `ORI_GRAPH__NEO4J__ENCRYPTED` | bool | False | Whether to use SSL/TLS encryption | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.neo4j.encrypted` |
+| `ORI_GRAPH__NEO4J__FETCH_SIZE` | int | const.DEFAULT_NEO4J_FETCH_SIZE | Default fetch size for results | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.neo4j.fetch_size` |
+| `ORI_GRAPH__NEO4J__MAX_CONNECTION_POOL_SIZE` | int | const.DEFAULT_NEO4J_MAX_POOL_SIZE | Maximum number of connections in the pool | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.neo4j.max_connection_pool_size` |
+| `ORI_GRAPH__NEO4J__MAX_TRANSACTION_RETRY_TIME` | float | 30.0 | Maximum time for transaction retries | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.neo4j.max_transaction_retry_time` |
+| `ORI_GRAPH__NEO4J__PASSWORD` | SecretStr | — | Neo4j password | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.neo4j.password` |
+| `ORI_GRAPH__NEO4J__TRUST` | str | 'TRUST_SYSTEM_CA_SIGNED_CERTIFICATES' | Trust strategy for SSL | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.neo4j.trust` |
+| `ORI_GRAPH__NEO4J__URI` | str | 'bolt://localhost:7687' | Neo4j BOLT URI | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.neo4j.uri` |
+| `ORI_GRAPH__NEO4J__USERNAME` | str | 'neo4j' | Neo4j username | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.neo4j.username` |
+| `ORI_GRAPH__RETRY_DELAY` | float | const.DEFAULT_RETRY_DELAY | Delay between retries in seconds | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.retry_delay` |
+| `ORI_GRAPH__TENANCY__ENABLED` | bool | False | Enable tenant-aware graph resolution | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.tenancy.enabled` |
+| `ORI_GRAPH__TENANCY__STRATEGY` | str | 'node_property' | Which tenancy strategy to use. One of ``"node_property"`` or ``"graph_per_ten... | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.tenancy.strategy` |
+| `ORI_GRAPH__TENANCY__TEMPLATE` | str | '{logical}_t_{tenant}' | Collection name template for ``GRAPH_PER_TENANT`` strategy. Supports ``{logic... | `packages/oridecon-graph/src/oridecon/graph/config.py:GraphConfig.tenancy.template` |
+
+### `oridecon-graphql` (56 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_GRAPHQL__ALIAS_LIMIT__ENABLED` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.alias_limit.enabled` |
+| `ORI_GRAPHQL__ALIAS_LIMIT__MAX_ALIASES` | int | const.DEFAULT_MAX_ALIASES | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.alias_limit.max_aliases` |
+| `ORI_GRAPHQL__BATCH__ENABLED` | bool | False | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.batch.enabled` |
+| `ORI_GRAPHQL__BATCH__MAX_BATCH_SIZE` | int | 10 | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.batch.max_batch_size` |
+| `ORI_GRAPHQL__CACHE__DEFAULT_MAX_AGE` | Duration \| int | const.DEFAULT_CACHE_MAX_AGE | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.cache.default_max_age` |
+| `ORI_GRAPHQL__CACHE__DEFAULT_SCOPE` | CacheScope | CacheScope.PUBLIC | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.cache.default_scope` |
+| `ORI_GRAPHQL__CACHE__ENABLED` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.cache.enabled` |
+| `ORI_GRAPHQL__CACHE__VARY_HEADERS` | list[str] | — | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.cache.vary_headers` |
+| `ORI_GRAPHQL__COMPLEXITY__DEFAULT_FIELD_COST` | float | 1.0 | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.complexity.default_field_cost` |
+| `ORI_GRAPHQL__COMPLEXITY__DEFAULT_LIST_COST` | float | 10.0 | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.complexity.default_list_cost` |
+| `ORI_GRAPHQL__COMPLEXITY__ENABLED` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.complexity.enabled` |
+| `ORI_GRAPHQL__COMPLEXITY__MAX_COMPLEXITY` | int | const.DEFAULT_MAX_COMPLEXITY | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.complexity.max_complexity` |
+| `ORI_GRAPHQL__DATALOADER__BATCH_DELAY_MS` | float | 2.0 | Delay in milliseconds before executing a DataLoaderProtocol batch. A small no... | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.dataloader.batch_delay_ms` |
+| `ORI_GRAPHQL__DATALOADER__BATCH_ENABLED` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.dataloader.batch_enabled` |
+| `ORI_GRAPHQL__DATALOADER__CACHE_ENABLED` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.dataloader.cache_enabled` |
+| `ORI_GRAPHQL__DATALOADER__ENABLED` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.dataloader.enabled` |
+| `ORI_GRAPHQL__DATALOADER__MAX_BATCH_SIZE` | int | 100 | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.dataloader.max_batch_size` |
+| `ORI_GRAPHQL__DEBUG` | bool | False | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.debug` |
+| `ORI_GRAPHQL__DEPTH_LIMIT__ENABLED` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.depth_limit.enabled` |
+| `ORI_GRAPHQL__DEPTH_LIMIT__IGNORE_INTROSPECTION` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.p...LConfig.depth_limit.ignore_introspection` |
+| `ORI_GRAPHQL__DEPTH_LIMIT__MAX_DEPTH` | int | const.DEFAULT_MAX_DEPTH | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.depth_limit.max_depth` |
+| `ORI_GRAPHQL__ENABLED` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.enabled` |
+| `ORI_GRAPHQL__ENABLE_IDENTITY_RESOLUTION` | bool | False | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.enable_identity_resolution` |
+| `ORI_GRAPHQL__ENV` | str \| None | None | Environment (development/staging/production) | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.env` |
+| `ORI_GRAPHQL__ERRORS__DEBUG_MODE` | bool | False | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.errors.debug_mode` |
+| `ORI_GRAPHQL__ERRORS__INCLUDE_STACKTRACE` | bool | False | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.errors.include_stacktrace` |
+| `ORI_GRAPHQL__ERRORS__LOG_ERRORS` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.errors.log_errors` |
+| `ORI_GRAPHQL__ERRORS__MASK_ERRORS` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.errors.mask_errors` |
+| `ORI_GRAPHQL__INTROSPECTION__ALLOWED_ENVIRONMENTS` | set[str] | — | — | `packages/oridecon-graphql/src/oridecon/graphql/config.p...onfig.introspection.allowed_environments` |
+| `ORI_GRAPHQL__INTROSPECTION__ENABLED` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.introspection.enabled` |
+| `ORI_GRAPHQL__METRICS__ENABLED` | bool | False | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.metrics.enabled` |
+| `ORI_GRAPHQL__METRICS__HISTOGRAM_BUCKETS` | list[float] | — | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.metrics.histogram_buckets` |
+| `ORI_GRAPHQL__METRICS__INCLUDE_LABELS` | list[str] | — | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.metrics.include_labels` |
+| `ORI_GRAPHQL__METRICS__NAMESPACE` | str | "oridecon_graphql" | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.metrics.namespace` |
+| `ORI_GRAPHQL__NAME` | str | "graphql" | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.name` |
+| `ORI_GRAPHQL__PATH` | str | const.DEFAULT_GRAPHQL_PATH | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.path` |
+| `ORI_GRAPHQL__PERSISTED_QUERIES__ENABLED` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.persisted_queries.enabled` |
+| `ORI_GRAPHQL__PERSISTED_QUERIES__STORE_TYPE` | str | "memory" | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.persisted_queries.store_type` |
+| `ORI_GRAPHQL__PERSISTED_QUERIES__TTL_SECONDS` | Duration \| int | 86400 | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.persisted_queries.ttl_seconds` |
+| `ORI_GRAPHQL__PLAYGROUND__ENABLED` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.playground.enabled` |
+| `ORI_GRAPHQL__PLAYGROUND__PATH` | str | const.DEFAULT_PLAYGROUND_PATH | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.playground.path` |
+| `ORI_GRAPHQL__PLAYGROUND__TITLE` | str | "Oridecon GraphQL Playground" | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.playground.title` |
+| `ORI_GRAPHQL__RATE_LIMIT__BURST_LIMIT` | int | 10 | — | `packages/oridecon-graphql/src/oridecon/graphql/security....py:GraphQLConfig.rate_limit.burst_limit` |
+| `ORI_GRAPHQL__RATE_LIMIT__ENABLED` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/security...imit.py:GraphQLConfig.rate_limit.enabled` |
+| `ORI_GRAPHQL__RATE_LIMIT__REQUESTS_PER_MINUTE` | int | 60 | — | `packages/oridecon-graphql/src/oridecon/graphql/security...hQLConfig.rate_limit.requests_per_minute` |
+| `ORI_GRAPHQL__SCHEMA_BASELINE_PATH` | str \| None | None | Path to a GraphQL SDL (.graphql) file containing the baseline schema. When se... | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.schema_baseline_path` |
+| `ORI_GRAPHQL__SUBSCRIPTIONS__CONNECTION_TIMEOUT` | Duration \| int | 60 | — | `packages/oridecon-graphql/src/oridecon/graphql/config.p...LConfig.subscriptions.connection_timeout` |
+| `ORI_GRAPHQL__SUBSCRIPTIONS__ENABLED` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.subscriptions.enabled` |
+| `ORI_GRAPHQL__SUBSCRIPTIONS__KEEPALIVE_INTERVAL` | Duration \| int | const.DEFAULT_SUBSCRIPTION_KEEPALIVE | — | `packages/oridecon-graphql/src/oridecon/graphql/config.p...LConfig.subscriptions.keepalive_interval` |
+| `ORI_GRAPHQL__SUBSCRIPTIONS__PATH` | str | const.DEFAULT_SUBSCRIPTIONS_PATH | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.subscriptions.path` |
+| `ORI_GRAPHQL__SUBSCRIPTIONS__PROTOCOL` | SubscriptionProtocol | SubscriptionProtocol.GRAPHQL_TRANSPORT_WS | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.subscriptions.protocol` |
+| `ORI_GRAPHQL__TRACING__ENABLED` | bool | False | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.tracing.enabled` |
+| `ORI_GRAPHQL__TRACING__SAMPLE_RATE` | float | 1.0 | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.tracing.sample_rate` |
+| `ORI_GRAPHQL__TRACING__SERVICE_NAME` | str | "oridecon-graphql" | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.tracing.service_name` |
+| `ORI_GRAPHQL__TRACING__TRACE_DATALOADERS` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.tracing.trace_dataloaders` |
+| `ORI_GRAPHQL__TRACING__TRACE_RESOLVERS` | bool | True | — | `packages/oridecon-graphql/src/oridecon/graphql/config.py:GraphQLConfig.tracing.trace_resolvers` |
+
+### `oridecon-http` (11 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_HTTP__COOKIE_JAR` | bool | True | — | `packages/oridecon-http/src/oridecon/http/config.py:HTTPClientConfig.cookie_jar` |
+| `ORI_HTTP__ENFORCE_URL_SAFETY` | bool | True | — | `packages/oridecon-http/src/oridecon/http/config.py:HTTPClientConfig.enforce_url_safety` |
+| `ORI_HTTP__MAX_REDIRECTS` | int | 5 | — | `packages/oridecon-http/src/oridecon/http/config.py:HTTPClientConfig.max_redirects` |
+| `ORI_HTTP__POOL__FORCE_CLOSE` | bool | False | — | `packages/oridecon-http/src/oridecon/http/config.py:HTTPClientConfig.pool.force_close` |
+| `ORI_HTTP__POOL__MAX_CONNECTIONS` | int | DEFAULT_MAX_CONNECTIONS | — | `packages/oridecon-http/src/oridecon/http/config.py:HTTPClientConfig.pool.max_connections` |
+| `ORI_HTTP__POOL__MAX_CONNECTIONS_PER_HOST` | int | DEFAULT_MAX_CONNECTIONS_PER_HOST | — | `packages/oridecon-http/src/oridecon/http/config.py:HTTPClientConfig.pool.max_connections_per_host` |
+| `ORI_HTTP__POOL__MAX_KEEPALIVE_CONNECTIONS` | int | DEFAULT_MAX_KEEPALIVE_CONNECTIONS | — | `packages/oridecon-http/src/oridecon/http/config.py:HTTPClientConfig.pool.max_keepalive_connections` |
+| `ORI_HTTP__POOL__TIMEOUT` | float | DEFAULT_TIMEOUT | — | `packages/oridecon-http/src/oridecon/http/config.py:HTTPClientConfig.pool.timeout` |
+| `ORI_HTTP__POOL__TTL_DNS_CACHE` | int | DEFAULT_TTL_DNS_CACHE | — | `packages/oridecon-http/src/oridecon/http/config.py:HTTPClientConfig.pool.ttl_dns_cache` |
+| `ORI_HTTP__PROXY` | str \| None | None | — | `packages/oridecon-http/src/oridecon/http/config.py:HTTPClientConfig.proxy` |
+| `ORI_HTTP__TRUST_ENV` | bool | True | — | `packages/oridecon-http/src/oridecon/http/config.py:HTTPClientConfig.trust_env` |
+
+### `oridecon-monitor` (56 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_MONITOR__BACKEND_TYPE` | BackendType | — | Monitoring backend type | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.backend_type` |
+| `ORI_MONITOR__DEBUG` | bool | — | Enable debug mode | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.debug` |
+| `ORI_MONITOR__ENABLED` | bool | — | Enable monitoring | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.enabled` |
+| `ORI_MONITOR__ENV` | str \| None | — | Environment (development/staging/production) | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.env` |
+| `ORI_MONITOR__ENVIRONMENT` | Environment | — | Deployment environment | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.environment` |
+| `ORI_MONITOR__ERROR_TRACKING__DSN` | SecretStr \| None | — | Sentry DSN; error tracking is a no-op when unset | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.error_tracking.dsn` |
+| `ORI_MONITOR__ERROR_TRACKING__ENVIRONMENT` | Any | — | Environment tag for captured events | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.error_tracking.environment` |
+| `ORI_MONITOR__ERROR_TRACKING__SEND_DEFAULT_PII` | bool | — | Send default PII fields to the error tracker | `packages/oridecon-monitor/src/oridecon/monitor/config.p...orConfig.error_tracking.send_default_pii` |
+| `ORI_MONITOR__ERROR_TRACKING__TRACES_SAMPLE_RATE` | float | — | Traces sample rate (0.0 to 1.0) | `packages/oridecon-monitor/src/oridecon/monitor/config.p...Config.error_tracking.traces_sample_rate` |
+| `ORI_MONITOR__HEALTH__CHECKS` | list[str] | — | List of health check names to run | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.health.checks` |
+| `ORI_MONITOR__HEALTH__ENABLED` | bool | — | Enable health checks | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.health.enabled` |
+| `ORI_MONITOR__HEALTH__INCLUDE_DETAILS` | bool | — | Include detailed health info in response | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.health.include_details` |
+| `ORI_MONITOR__HEALTH__INTERVAL` | int | — | Health check interval in seconds | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.health.interval` |
+| `ORI_MONITOR__HEALTH__PATH` | str | — | Health endpoint path | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.health.path` |
+| `ORI_MONITOR__HEALTH__TIMEOUT` | float | — | Health check timeout in seconds | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.health.timeout` |
+| `ORI_MONITOR__METRICS__COLLECTION_INTERVAL` | float | — | Metrics collection interval in seconds | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.metrics.collection_interval` |
+| `ORI_MONITOR__METRICS__DEFAULT_LABELS` | dict[str, str] | — | Default labels for all metrics | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.metrics.default_labels` |
+| `ORI_MONITOR__METRICS__ENABLED` | bool | — | Enable metrics collection | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.metrics.enabled` |
+| `ORI_MONITOR__METRICS__HISTOGRAM_BUCKETS` | list[float] | — | Default histogram bucket boundaries | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.metrics.histogram_buckets` |
+| `ORI_MONITOR__METRICS__PREFIX` | str | — | MetricProtocol name prefix | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.metrics.prefix` |
+| `ORI_MONITOR__NAME` | str | — | Provider name | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.name` |
+| `ORI_MONITOR__OPENTELEMETRY__BATCH_SIZE` | int | — | Export batch size | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.opentelemetry.batch_size` |
+| `ORI_MONITOR__OPENTELEMETRY__COMPRESSION` | str | — | Compression type (none, gzip) | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.opentelemetry.compression` |
+| `ORI_MONITOR__OPENTELEMETRY__ENDPOINT` | str \| None | — | OTLP endpoint URL | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.opentelemetry.endpoint` |
+| `ORI_MONITOR__OPENTELEMETRY__EXPORT_INTERVAL` | float | — | Export interval seconds | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.opentelemetry.export_interval` |
+| `ORI_MONITOR__OPENTELEMETRY__HEADERS` | dict[str, str] | — | OTLP request headers | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.opentelemetry.headers` |
+| `ORI_MONITOR__OPENTELEMETRY__INSECURE` | bool | — | Use insecure connection | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.opentelemetry.insecure` |
+| `ORI_MONITOR__OPENTELEMETRY__METRICS_EXPORTERS` | list[OTelExporterConfig] | — | List of metrics exporters to build. | `packages/oridecon-monitor/src/oridecon/monitor/config.p...orConfig.opentelemetry.metrics_exporters` |
+| `ORI_MONITOR__OPENTELEMETRY__TIMEOUT` | float | — | Export timeout seconds | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.opentelemetry.timeout` |
+| `ORI_MONITOR__OPENTELEMETRY__TRACING_EXPORTERS` | list[OTelExporterConfig] | — | List of tracing exporters to build. | `packages/oridecon-monitor/src/oridecon/monitor/config.p...orConfig.opentelemetry.tracing_exporters` |
+| `ORI_MONITOR__PROMETHEUS__ENABLE_DEFAULT_METRICS` | bool | — | Enable default process metrics | `packages/oridecon-monitor/src/oridecon/monitor/config.p...Config.prometheus.enable_default_metrics` |
+| `ORI_MONITOR__PROMETHEUS__METRICS_TABLE` | str | — | Table name for metrics samples | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.prometheus.metrics_table` |
+| `ORI_MONITOR__PROMETHEUS__PATH` | str | — | Metrics endpoint path | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.prometheus.path` |
+| `ORI_MONITOR__PROMETHEUS__PORT` | int | — | Metrics server port | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.prometheus.port` |
+| `ORI_MONITOR__PROMETHEUS__PUSHGATEWAY_URL` | str \| None | — | Pushgateway URL for push-based metrics | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.prometheus.pushgateway_url` |
+| `ORI_MONITOR__PROMETHEUS__PUSH_INTERVAL` | float | — | Push interval for Pushgateway | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.prometheus.push_interval` |
+| `ORI_MONITOR__PROMETHEUS__STORE_IN_DB` | bool | — | Persist metrics observations to DB | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.prometheus.store_in_db` |
+| `ORI_MONITOR__SLO__ALERT_CHANNELS` | list[str] | — | Alert channel names for SLO violation dispatch | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.slo.alert_channels` |
+| `ORI_MONITOR__SLO__ENABLED` | bool | — | Enable periodic SLO evaluation worker | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.slo.enabled` |
+| `ORI_MONITOR__SLO__EVALUATION_INTERVAL` | float | — | SLO evaluation interval in seconds | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.slo.evaluation_interval` |
+| `ORI_MONITOR__SLO__SUPPRESSION_WINDOW_SECONDS` | int | — | Alert suppression window in seconds | `packages/oridecon-monitor/src/oridecon/monitor/config.p...torConfig.slo.suppression_window_seconds` |
+| `ORI_MONITOR__TRACING__ENABLED` | bool | — | Enable tracing | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.tracing.enabled` |
+| `ORI_MONITOR__TRACING__MAX_ATTRIBUTES` | int | — | Max attributes per span | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.tracing.max_attributes` |
+| `ORI_MONITOR__TRACING__MAX_EVENTS` | int | — | Max events per span | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.tracing.max_events` |
+| `ORI_MONITOR__TRACING__MAX_LINKS` | int | — | Max links per span | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.tracing.max_links` |
+| `ORI_MONITOR__TRACING__MAX_SPANS` | int | — | Max number of spans to keep in memory | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.tracing.max_spans` |
+| `ORI_MONITOR__TRACING__MAX_TRACES_PER_SECOND` | int | — | Max traces to sample per second | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.tracing.max_traces_per_second` |
+| `ORI_MONITOR__TRACING__PROPAGATION_FORMATS` | list[str] | — | Propagation format list | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.tracing.propagation_formats` |
+| `ORI_MONITOR__TRACING__SAMPLER_TYPE` | SamplerType | — | Tracing sampler type | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.tracing.sampler_type` |
+| `ORI_MONITOR__TRACING__SAMPLE_RATE` | float | — | Sample rate (0.0 to 1.0) | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.tracing.sample_rate` |
+| `ORI_MONITOR__TRACING__SERVICE_NAME` | str | — | Service name for traces | `packages/oridecon-monitor/src/oridecon/monitor/config.py:MonitorConfig.tracing.service_name` |
+
+### `oridecon-multimedia` (73 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_MULTIMEDIA__BEAT__BACKEND` | Literal['librosa', 'madmom'] | "librosa" | — | `experimental/multimedia/oridecon-multimedia-beat/src/le.../config.py:MultimediaConfig.beat.backend` |
+| `ORI_MULTIMEDIA__BEAT__LIBROSA_SAMPLE_RATE` | int | 22050 | — | `experimental/multimedia/oridecon-multimedia-beat/src/le...ultimediaConfig.beat.librosa_sample_rate` |
+| `ORI_MULTIMEDIA__BEAT__MADMOM_BASE_URL` | str | "http://localhost:5600" | — | `experimental/multimedia/oridecon-multimedia-beat/src/le...py:MultimediaConfig.beat.madmom_base_url` |
+| `ORI_MULTIMEDIA__BEAT__MAX_ANALYZE_SAMPLES` | int | 60000000 | — | `experimental/multimedia/oridecon-multimedia-beat/src/le...ultimediaConfig.beat.max_analyze_samples` |
+| `ORI_MULTIMEDIA__BEAT__MAX_ASSET_BYTES` | int | 25 * 1024 * 1024 | — | `experimental/multimedia/oridecon-multimedia-beat/src/le...py:MultimediaConfig.beat.max_asset_bytes` |
+| `ORI_MULTIMEDIA__BEAT__TIMEOUT` | float | 30.0 | — | `experimental/multimedia/oridecon-multimedia-beat/src/le.../config.py:MultimediaConfig.beat.timeout` |
+| `ORI_MULTIMEDIA__CACHE_RESULTS` | bool | False | — | `experimental/multimedia/oridecon-multimedia/src/lexigra...config.py:MultimediaConfig.cache_results` |
+| `ORI_MULTIMEDIA__IMAGE__BACKEND` | Literal['local-http', 'stability', 'openai', 'comfyui'] | "local-http" | — | `experimental/multimedia/oridecon-multimedia-image/src/l...config.py:MultimediaConfig.image.backend` |
+| `ORI_MULTIMEDIA__IMAGE__COMFYUI_BASE_URL` | str | "http://localhost:8188" | — | `experimental/multimedia/oridecon-multimedia-image/src/l...:MultimediaConfig.image.comfyui_base_url` |
+| `ORI_MULTIMEDIA__IMAGE__COMFYUI_CFG_SCALE` | float | 7.0 | — | `experimental/multimedia/oridecon-multimedia-image/src/l...MultimediaConfig.image.comfyui_cfg_scale` |
+| `ORI_MULTIMEDIA__IMAGE__COMFYUI_CHECKPOINT` | str | "sd_xl_base_1.0.safetensors" | — | `experimental/multimedia/oridecon-multimedia-image/src/l...ultimediaConfig.image.comfyui_checkpoint` |
+| `ORI_MULTIMEDIA__IMAGE__COMFYUI_POLL_INTERVAL` | float | 1.0 | — | `experimental/multimedia/oridecon-multimedia-image/src/l...imediaConfig.image.comfyui_poll_interval` |
+| `ORI_MULTIMEDIA__IMAGE__COMFYUI_STEPS` | int | 20 | — | `experimental/multimedia/oridecon-multimedia-image/src/l....py:MultimediaConfig.image.comfyui_steps` |
+| `ORI_MULTIMEDIA__IMAGE__COMFYUI_WORKFLOW_PATH` | str \| None | None | — | `experimental/multimedia/oridecon-multimedia-image/src/l...imediaConfig.image.comfyui_workflow_path` |
+| `ORI_MULTIMEDIA__IMAGE__LOCAL_HTTP_BASE_URL` | str | "http://localhost:5005" | — | `experimental/multimedia/oridecon-multimedia-image/src/l...ltimediaConfig.image.local_http_base_url` |
+| `ORI_MULTIMEDIA__IMAGE__OPENAI_API_KEY_SECRET_NAME` | str | "openai_api_key" | — | `experimental/multimedia/oridecon-multimedia-image/src/l...aConfig.image.openai_api_key_secret_name` |
+| `ORI_MULTIMEDIA__IMAGE__OPENAI_BASE_URL` | str | "https://api.openai.com" | — | `experimental/multimedia/oridecon-multimedia-image/src/l...y:MultimediaConfig.image.openai_base_url` |
+| `ORI_MULTIMEDIA__IMAGE__OPENAI_MODEL` | str | "dall-e-3" | — | `experimental/multimedia/oridecon-multimedia-image/src/l...g.py:MultimediaConfig.image.openai_model` |
+| `ORI_MULTIMEDIA__IMAGE__STABILITY_API_KEY_SECRET_NAME` | str | "stability_api_key" | — | `experimental/multimedia/oridecon-multimedia-image/src/l...nfig.image.stability_api_key_secret_name` |
+| `ORI_MULTIMEDIA__IMAGE__TIMEOUT` | float | 60.0 | — | `experimental/multimedia/oridecon-multimedia-image/src/l...config.py:MultimediaConfig.image.timeout` |
+| `ORI_MULTIMEDIA__INTERPOLATE__BACKEND` | Literal['rife'] | "rife" | — | `experimental/multimedia/oridecon-multimedia-interpolate....py:MultimediaConfig.interpolate.backend` |
+| `ORI_MULTIMEDIA__INTERPOLATE__RIFE_BASE_URL` | str | "http://localhost:5500" | — | `experimental/multimedia/oridecon-multimedia-interpolate...ltimediaConfig.interpolate.rife_base_url` |
+| `ORI_MULTIMEDIA__INTERPOLATE__TIMEOUT` | float | 15.0 | — | `experimental/multimedia/oridecon-multimedia-interpolate....py:MultimediaConfig.interpolate.timeout` |
+| `ORI_MULTIMEDIA__MUSIC__ACE_STEP_BASE_URL` | str | "http://localhost:5300" | — | `experimental/multimedia/oridecon-multimedia-music/src/l...MultimediaConfig.music.ace_step_base_url` |
+| `ORI_MULTIMEDIA__MUSIC__BACKEND` | Literal['local-http', 'stability-audio', 'ace-step', 'stable-audio-open'] | "local-http" | — | `experimental/multimedia/oridecon-multimedia-music/src/l...config.py:MultimediaConfig.music.backend` |
+| `ORI_MULTIMEDIA__MUSIC__LOCAL_HTTP_BASE_URL` | str | "http://localhost:5003" | — | `experimental/multimedia/oridecon-multimedia-music/src/l...ltimediaConfig.music.local_http_base_url` |
+| `ORI_MULTIMEDIA__MUSIC__STABILITY_API_KEY_SECRET_NAME` | str | "stability_api_key" | — | `experimental/multimedia/oridecon-multimedia-music/src/l...nfig.music.stability_api_key_secret_name` |
+| `ORI_MULTIMEDIA__MUSIC__STABLE_AUDIO_OPEN_BASE_URL` | str | "http://localhost:5301" | — | `experimental/multimedia/oridecon-multimedia-music/src/l...aConfig.music.stable_audio_open_base_url` |
+| `ORI_MULTIMEDIA__MUSIC__TIMEOUT` | float | 60.0 | — | `experimental/multimedia/oridecon-multimedia-music/src/l...config.py:MultimediaConfig.music.timeout` |
+| `ORI_MULTIMEDIA__STORAGE_PATH_PREFIX` | str | "multimedia/" | — | `experimental/multimedia/oridecon-multimedia/src/lexigra....py:MultimediaConfig.storage_path_prefix` |
+| `ORI_MULTIMEDIA__TTS__BACKEND` | Literal['local-http', 'elevenlabs', 'openai', 'chatterbox', 'kokoro', 'f5-tts', 'piper'] | "local-http" | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...s/config.py:MultimediaConfig.tts.backend` |
+| `ORI_MULTIMEDIA__TTS__CHATTERBOX_BASE_URL` | str | "http://localhost:5100" | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...MultimediaConfig.tts.chatterbox_base_url` |
+| `ORI_MULTIMEDIA__TTS__CHATTERBOX_CFG_WEIGHT` | float | 0.5 | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...ltimediaConfig.tts.chatterbox_cfg_weight` |
+| `ORI_MULTIMEDIA__TTS__CHATTERBOX_EXAGGERATION` | float | 0.5 | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...imediaConfig.tts.chatterbox_exaggeration` |
+| `ORI_MULTIMEDIA__TTS__CHATTERBOX_TEMPERATURE` | float | 0.85 | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...timediaConfig.tts.chatterbox_temperature` |
+| `ORI_MULTIMEDIA__TTS__ELEVENLABS_API_KEY_SECRET_NAME` | str | "elevenlabs_api_key" | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...onfig.tts.elevenlabs_api_key_secret_name` |
+| `ORI_MULTIMEDIA__TTS__ELEVENLABS_VOICE_ID` | str \| None | None | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...MultimediaConfig.tts.elevenlabs_voice_id` |
+| `ORI_MULTIMEDIA__TTS__F5_TTS_BASE_URL` | str | "http://localhost:5102" | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex....py:MultimediaConfig.tts.f5_tts_base_url` |
+| `ORI_MULTIMEDIA__TTS__KOKORO_BASE_URL` | str | "http://localhost:5101" | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex....py:MultimediaConfig.tts.kokoro_base_url` |
+| `ORI_MULTIMEDIA__TTS__KOKORO_DEFAULT_VOICE` | str | "af_heart" | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...ultimediaConfig.tts.kokoro_default_voice` |
+| `ORI_MULTIMEDIA__TTS__LOCAL_HTTP_BASE_URL` | str | "http://localhost:5002" | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...MultimediaConfig.tts.local_http_base_url` |
+| `ORI_MULTIMEDIA__TTS__OPENAI_API_KEY_SECRET_NAME` | str | "openai_api_key" | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...diaConfig.tts.openai_api_key_secret_name` |
+| `ORI_MULTIMEDIA__TTS__OPENAI_BASE_URL` | str | "https://api.openai.com" | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex....py:MultimediaConfig.tts.openai_base_url` |
+| `ORI_MULTIMEDIA__TTS__OPENAI_MODEL` | str | "tts-1" | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...fig.py:MultimediaConfig.tts.openai_model` |
+| `ORI_MULTIMEDIA__TTS__OPENAI_VOICE` | str | "alloy" | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...fig.py:MultimediaConfig.tts.openai_voice` |
+| `ORI_MULTIMEDIA__TTS__PIPER_BASE_URL` | str | "http://localhost:5103" | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...g.py:MultimediaConfig.tts.piper_base_url` |
+| `ORI_MULTIMEDIA__TTS__PIPER_DEFAULT_VOICE` | str | "en_US-lessac-medium" | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...MultimediaConfig.tts.piper_default_voice` |
+| `ORI_MULTIMEDIA__TTS__TIMEOUT` | float | 60.0 | — | `experimental/multimedia/oridecon-multimedia-tts/src/lex...s/config.py:MultimediaConfig.tts.timeout` |
+| `ORI_MULTIMEDIA__UPSCALE__BACKEND` | Literal['real-esrgan', 'hat'] | "real-esrgan" | — | `experimental/multimedia/oridecon-multimedia-upscale/src...nfig.py:MultimediaConfig.upscale.backend` |
+| `ORI_MULTIMEDIA__UPSCALE__HAT_BASE_URL` | str | "http://localhost:5401" | — | `experimental/multimedia/oridecon-multimedia-upscale/src...py:MultimediaConfig.upscale.hat_base_url` |
+| `ORI_MULTIMEDIA__UPSCALE__REAL_ESRGAN_BASE_URL` | str | "http://localhost:5400" | — | `experimental/multimedia/oridecon-multimedia-upscale/src...mediaConfig.upscale.real_esrgan_base_url` |
+| `ORI_MULTIMEDIA__UPSCALE__TIMEOUT` | float | 30.0 | — | `experimental/multimedia/oridecon-multimedia-upscale/src...nfig.py:MultimediaConfig.upscale.timeout` |
+| `ORI_MULTIMEDIA__VIDEO__BACKEND` | Literal['local-http', 'runway', 'openai', 'wan22', 'cogvideox', 'svd', 'comfyui'] | "local-http" | — | `experimental/multimedia/oridecon-multimedia-video/src/l...config.py:MultimediaConfig.video.backend` |
+| `ORI_MULTIMEDIA__VIDEO__COGVIDEOX_BASE_URL` | str | "http://localhost:5201" | — | `experimental/multimedia/oridecon-multimedia-video/src/l...ultimediaConfig.video.cogvideox_base_url` |
+| `ORI_MULTIMEDIA__VIDEO__COMFYUI_BASE_URL` | str | "http://localhost:8188" | — | `experimental/multimedia/oridecon-multimedia-video/src/l...:MultimediaConfig.video.comfyui_base_url` |
+| `ORI_MULTIMEDIA__VIDEO__COMFYUI_CHECKPOINT` | str | "svd_xt_1_1.safetensors" | — | `experimental/multimedia/oridecon-multimedia-video/src/l...ultimediaConfig.video.comfyui_checkpoint` |
+| `ORI_MULTIMEDIA__VIDEO__COMFYUI_FPS` | int | 6 | — | `experimental/multimedia/oridecon-multimedia-video/src/l...ig.py:MultimediaConfig.video.comfyui_fps` |
+| `ORI_MULTIMEDIA__VIDEO__COMFYUI_MOTION_BUCKET_ID` | int | 127 | — | `experimental/multimedia/oridecon-multimedia-video/src/l...diaConfig.video.comfyui_motion_bucket_id` |
+| `ORI_MULTIMEDIA__VIDEO__COMFYUI_POLL_INTERVAL` | float | 1.0 | — | `experimental/multimedia/oridecon-multimedia-video/src/l...imediaConfig.video.comfyui_poll_interval` |
+| `ORI_MULTIMEDIA__VIDEO__COMFYUI_WORKFLOW_PATH` | str \| None | None | — | `experimental/multimedia/oridecon-multimedia-video/src/l...imediaConfig.video.comfyui_workflow_path` |
+| `ORI_MULTIMEDIA__VIDEO__LOCAL_HTTP_BASE_URL` | str | "http://localhost:5004" | — | `experimental/multimedia/oridecon-multimedia-video/src/l...ltimediaConfig.video.local_http_base_url` |
+| `ORI_MULTIMEDIA__VIDEO__OPENAI_API_KEY_SECRET_NAME` | str | "openai_api_key" | — | `experimental/multimedia/oridecon-multimedia-video/src/l...aConfig.video.openai_api_key_secret_name` |
+| `ORI_MULTIMEDIA__VIDEO__OPENAI_BASE_URL` | str | "https://api.openai.com" | — | `experimental/multimedia/oridecon-multimedia-video/src/l...y:MultimediaConfig.video.openai_base_url` |
+| `ORI_MULTIMEDIA__VIDEO__OPENAI_MODEL` | str | "sora-2" | — | `experimental/multimedia/oridecon-multimedia-video/src/l...g.py:MultimediaConfig.video.openai_model` |
+| `ORI_MULTIMEDIA__VIDEO__PROCESSING__FFMPEG_BINARY` | str | "ffmpeg" | — | `experimental/multimedia/oridecon-multimedia-video/src/l...diaConfig.video.processing.ffmpeg_binary` |
+| `ORI_MULTIMEDIA__VIDEO__PROCESSING__MAX_ASSET_BYTES` | int | 25 * 1024 * 1024 | — | `experimental/multimedia/oridecon-multimedia-video/src/l...aConfig.video.processing.max_asset_bytes` |
+| `ORI_MULTIMEDIA__VIDEO__PROCESSING__MAX_CONCURRENT_JOBS` | int | 2 | — | `experimental/multimedia/oridecon-multimedia-video/src/l...fig.video.processing.max_concurrent_jobs` |
+| `ORI_MULTIMEDIA__VIDEO__PROCESSING__TEMP_DIR` | str \| None | None | — | `experimental/multimedia/oridecon-multimedia-video/src/l...ltimediaConfig.video.processing.temp_dir` |
+| `ORI_MULTIMEDIA__VIDEO__PROCESSING__TIMEOUT` | float | 300.0 | — | `experimental/multimedia/oridecon-multimedia-video/src/l...ultimediaConfig.video.processing.timeout` |
+| `ORI_MULTIMEDIA__VIDEO__RUNWAY_API_KEY_SECRET_NAME` | str | "runway_api_key" | — | `experimental/multimedia/oridecon-multimedia-video/src/l...aConfig.video.runway_api_key_secret_name` |
+| `ORI_MULTIMEDIA__VIDEO__SVD_BASE_URL` | str | "http://localhost:5202" | — | `experimental/multimedia/oridecon-multimedia-video/src/l...g.py:MultimediaConfig.video.svd_base_url` |
+| `ORI_MULTIMEDIA__VIDEO__TIMEOUT` | float \| None | None | — | `experimental/multimedia/oridecon-multimedia-video/src/l...config.py:MultimediaConfig.video.timeout` |
+| `ORI_MULTIMEDIA__VIDEO__WAN22_BASE_URL` | str | "http://localhost:5200" | — | `experimental/multimedia/oridecon-multimedia-video/src/l...py:MultimediaConfig.video.wan22_base_url` |
+
+### `oridecon-nosql` (18 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_NOSQL__BACKENDS` | list[NamedNoSQLConfig] | — | Named NoSQL backends for multi-store support. When non-empty, the provider re... | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.backends` |
+| `ORI_NOSQL__DRIVER` | str | 'mongodb' | NoSQL driver name | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.driver` |
+| `ORI_NOSQL__ENABLED` | bool | True | Enable NoSQL support | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.enabled` |
+| `ORI_NOSQL__FIRESTORE__CREDENTIALS_JSON` | str \| None | None | Path to a service account JSON key file, or the raw JSON string. When ``None`... | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.firestore.credentials_json` |
+| `ORI_NOSQL__FIRESTORE__DATABASE_ID` | str | '(default)' | Firestore database ID (use '(default)' for the default database) | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.firestore.database_id` |
+| `ORI_NOSQL__FIRESTORE__PROJECT_ID` | str | — | Google Cloud project ID | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.firestore.project_id` |
+| `ORI_NOSQL__MONGODB__AUTH_SOURCE` | str | 'admin' | Authentication database | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.mongodb.auth_source` |
+| `ORI_NOSQL__MONGODB__CONNECT_TIMEOUT_MS` | int | 10000 | Connection timeout (ms) | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.mongodb.connect_timeout_ms` |
+| `ORI_NOSQL__MONGODB__DATABASE` | str | 'oridecon' | Database name | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.mongodb.database` |
+| `ORI_NOSQL__MONGODB__MAX_POOL_SIZE` | int | 100 | Maximum connection pool size | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.mongodb.max_pool_size` |
+| `ORI_NOSQL__MONGODB__MIN_POOL_SIZE` | int | 10 | Minimum connection pool size | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.mongodb.min_pool_size` |
+| `ORI_NOSQL__MONGODB__READ_PREFERENCE` | str | 'primaryPreferred' | Read preference mode | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.mongodb.read_preference` |
+| `ORI_NOSQL__MONGODB__RETRY_READS` | bool | True | Enable read retries | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.mongodb.retry_reads` |
+| `ORI_NOSQL__MONGODB__RETRY_WRITES` | bool | True | Enable write retries | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.mongodb.retry_writes` |
+| `ORI_NOSQL__MONGODB__SERVER_SELECTION_TIMEOUT_MS` | int | 5000 | Server selection timeout (ms) | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.mongodb.server_selection_timeout_ms` |
+| `ORI_NOSQL__MONGODB__SOCKET_TIMEOUT_MS` | int | 30000 | Socket timeout (ms) | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.mongodb.socket_timeout_ms` |
+| `ORI_NOSQL__MONGODB__URI` | str | 'mongodb://localhost:27017' | MongoDB connection URI | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.mongodb.uri` |
+| `ORI_NOSQL__MONGODB__WRITE_CONCERN_W` | str \| int | 'majority' | Write concern level | `packages/oridecon-nosql/src/oridecon/nosql/config.py:NoSQLConfig.mongodb.write_concern_w` |
+
+### `oridecon-notification` (2 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_NOTIFICATION__PUSH_BACKENDS` | list[NamedPushConfig] | — | Named push notification backends for multi-backend support. When non-empty, t... | `packages/oridecon-notification/src/oridecon/notification/config.py:NotificationConfig.push_backends` |
+| `ORI_NOTIFICATION__SMS_BACKENDS` | list[NamedSMSConfig] | — | Named SMS backends for multi-backend support. When non-empty, the provider re... | `packages/oridecon-notification/src/oridecon/notification/config.py:NotificationConfig.sms_backends` |
+
+### `oridecon-queue` (1 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_QUEUE__BACKENDS` | list[NamedQueueConfig] | — | Named queue backends for multi-backend support. When non-empty, the provider ... | `packages/oridecon-queue/src/oridecon/queue/config.py:QueueConfig.backends` |
+
+### `oridecon-resilience` (20 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_RESILIENCE__BULKHEAD__MAX_CONCURRENT` | int | 10 | Max concurrent requests | `packages/oridecon-resilience/src/oridecon/resilience/co...ResilienceConfig.bulkhead.max_concurrent` |
+| `ORI_RESILIENCE__BULKHEAD__NAME` | str | '' | Bulkhead name | `packages/oridecon-resilience/src/oridecon/resilience/config.py:ResilienceConfig.bulkhead.name` |
+| `ORI_RESILIENCE__BULKHEAD__QUEUE_SIZE` | int | 100 | Max queue size | `packages/oridecon-resilience/src/oridecon/resilience/config.py:ResilienceConfig.bulkhead.queue_size` |
+| `ORI_RESILIENCE__BULKHEAD__TIMEOUT` | float | 30.0 | Execution timeout | `packages/oridecon-resilience/src/oridecon/resilience/config.py:ResilienceConfig.bulkhead.timeout` |
+| `ORI_RESILIENCE__CIRCUIT_BREAKER` | CircuitBreakerConfig | (complex) | — | `packages/oridecon-resilience/src/oridecon/resilience/config.py:ResilienceConfig.circuit_breaker` |
+| `ORI_RESILIENCE__RETRY__ABORT_IF` | Callable[[Any], bool] \| None | None | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...odels.py:ResilienceConfig.retry.abort_if` |
+| `ORI_RESILIENCE__RETRY__ABORT_ON` | tuple[type[Exception], ...] | (complex) | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...odels.py:ResilienceConfig.retry.abort_on` |
+| `ORI_RESILIENCE__RETRY__BACKOFF_FACTOR` | float | 2.0 | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...py:ResilienceConfig.retry.backoff_factor` |
+| `ORI_RESILIENCE__RETRY__BASE_DELAY` | float | 1.0 | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...els.py:ResilienceConfig.retry.base_delay` |
+| `ORI_RESILIENCE__RETRY__IDEMPOTENT_METHODS_ONLY` | bool | True | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...enceConfig.retry.idempotent_methods_only` |
+| `ORI_RESILIENCE__RETRY__JITTER` | bool \| float | True | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re.../models.py:ResilienceConfig.retry.jitter` |
+| `ORI_RESILIENCE__RETRY__MAX_ATTEMPTS` | int | 3 | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...s.py:ResilienceConfig.retry.max_attempts` |
+| `ORI_RESILIENCE__RETRY__MAX_DELAY` | float | 60.0 | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...dels.py:ResilienceConfig.retry.max_delay` |
+| `ORI_RESILIENCE__RETRY__ON_RETRY` | Callable[[int, Exception \| None], None] \| None | None | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...odels.py:ResilienceConfig.retry.on_retry` |
+| `ORI_RESILIENCE__RETRY__RETRY_IF` | Callable[[Exception], bool] \| None | None | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...odels.py:ResilienceConfig.retry.retry_if` |
+| `ORI_RESILIENCE__RETRY__RETRY_ON` | tuple[type[Exception], ...] | (complex) | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...odels.py:ResilienceConfig.retry.retry_on` |
+| `ORI_RESILIENCE__RETRY__RETRY_ON_RESULT` | Callable[[Any], bool] \| None | None | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...y:ResilienceConfig.retry.retry_on_result` |
+| `ORI_RESILIENCE__RETRY__RETRY_SYNC` | bool | False | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...els.py:ResilienceConfig.retry.retry_sync` |
+| `ORI_RESILIENCE__TIMEOUT__TIMEOUT` | float | 30.0 | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...dels.py:ResilienceConfig.timeout.timeout` |
+| `ORI_RESILIENCE__TIMEOUT__TIMEOUT_MESSAGE` | str | "Operation timed out" | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...ResilienceConfig.timeout.timeout_message` |
+
+### `oridecon-search` (60 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_SEARCH__BACKENDS` | list[NamedSearchConfig] | — | Named search backends for multi-backend support. When non-empty, the provider... | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.backends` |
+| `ORI_SEARCH__BACKEND_TYPE` | BackendType | — | Search backend type | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.backend_type` |
+| `ORI_SEARCH__DATABASE` | str \| None | None | Named database to use for DB-backed backends (postgres/mysql). References a n... | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.database` |
+| `ORI_SEARCH__ELASTICSEARCH__API_KEY` | SecretStr \| None | None | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.elasticsearch.api_key` |
+| `ORI_SEARCH__ELASTICSEARCH__HOSTS` | list[str] | — | Elasticsearch hosts | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.elasticsearch.hosts` |
+| `ORI_SEARCH__ELASTICSEARCH__INDEX_PREFIX` | str | 'oridecon_search_' | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.elasticsearch.index_prefix` |
+| `ORI_SEARCH__ELASTICSEARCH__NUMBER_OF_REPLICAS` | int | 0 | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.elasticsearch.number_of_replicas` |
+| `ORI_SEARCH__ELASTICSEARCH__NUMBER_OF_SHARDS` | int | 1 | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.elasticsearch.number_of_shards` |
+| `ORI_SEARCH__ELASTICSEARCH__PASSWORD` | SecretStr \| None | None | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.elasticsearch.password` |
+| `ORI_SEARCH__ELASTICSEARCH__USERNAME` | str \| None | None | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.elasticsearch.username` |
+| `ORI_SEARCH__ELASTICSEARCH__USE_SSL` | bool | False | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.elasticsearch.use_ssl` |
+| `ORI_SEARCH__ELASTICSEARCH__VERIFY_CERTS` | bool | True | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.elasticsearch.verify_certs` |
+| `ORI_SEARCH__ENABLED` | bool | True | Enable the search subsystem | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.enabled` |
+| `ORI_SEARCH__MEILISEARCH__API_KEY` | SecretStr \| None | None | MeiliSearch API key | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.meilisearch.api_key` |
+| `ORI_SEARCH__MEILISEARCH__DISPLAYED_ATTRIBUTES` | list[str] | — | Fields to return in results | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.meilisearch.displayed_attributes` |
+| `ORI_SEARCH__MEILISEARCH__FILTERABLE_ATTRIBUTES` | list[str] | — | Attributes that can be filtered | `packages/oridecon-search/src/oridecon/search/config.py:...Config.meilisearch.filterable_attributes` |
+| `ORI_SEARCH__MEILISEARCH__MAX_CONNECTIONS` | int | 10 | Maximum number of connections | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.meilisearch.max_connections` |
+| `ORI_SEARCH__MEILISEARCH__MIN_WORD_SIZE_FOR_TYPOS` | dict[str, int] | — | Minimum word size for typo tolerance | `packages/oridecon-search/src/oridecon/search/config.py:...nfig.meilisearch.min_word_size_for_typos` |
+| `ORI_SEARCH__MEILISEARCH__RANKING_RULES` | list[str] | — | Ranking rules in order | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.meilisearch.ranking_rules` |
+| `ORI_SEARCH__MEILISEARCH__SEARCHABLE_ATTRIBUTES` | list[str] | — | Fields to search in | `packages/oridecon-search/src/oridecon/search/config.py:...Config.meilisearch.searchable_attributes` |
+| `ORI_SEARCH__MEILISEARCH__SORTABLE_ATTRIBUTES` | list[str] | — | Attributes that can be sorted | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.meilisearch.sortable_attributes` |
+| `ORI_SEARCH__MEILISEARCH__TIMEOUT` | int | 30 | Request timeout in seconds | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.meilisearch.timeout` |
+| `ORI_SEARCH__MEILISEARCH__TYPO_TOLERANCE_ENABLED` | bool | True | Enable typo tolerance | `packages/oridecon-search/src/oridecon/search/config.py:...onfig.meilisearch.typo_tolerance_enabled` |
+| `ORI_SEARCH__MEILISEARCH__URL` | str | 'http://localhost:7700' | MeiliSearch server URL | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.meilisearch.url` |
+| `ORI_SEARCH__MONGO__CONNECTION_STRING` | SecretStr | SecretStr('') | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.mongo.connection_string` |
+| `ORI_SEARCH__MONGO__DATABASE_NAME` | str | 'search' | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.mongo.database_name` |
+| `ORI_SEARCH__MONGO__USE_ATLAS_SEARCH` | bool | False | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.mongo.use_atlas_search` |
+| `ORI_SEARCH__MYSQL__CONNECTION_STRING` | SecretStr | SecretStr('') | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.mysql.connection_string` |
+| `ORI_SEARCH__MYSQL__FULLTEXT_MODE` | str | 'natural_language' | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.mysql.fulltext_mode` |
+| `ORI_SEARCH__MYSQL__MIN_WORD_LENGTH` | int | 3 | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.mysql.min_word_length` |
+| `ORI_SEARCH__OPENSEARCH__HOSTS` | list[str] | — | OpenSearch hosts | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.opensearch.hosts` |
+| `ORI_SEARCH__OPENSEARCH__INDEX_PREFIX` | str | 'oridecon_search_' | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.opensearch.index_prefix` |
+| `ORI_SEARCH__OPENSEARCH__PASSWORD` | str \| None | None | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.opensearch.password` |
+| `ORI_SEARCH__OPENSEARCH__TIMEOUT` | int | 30 | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.opensearch.timeout` |
+| `ORI_SEARCH__OPENSEARCH__USERNAME` | str \| None | None | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.opensearch.username` |
+| `ORI_SEARCH__OPENSEARCH__USE_SSL` | bool | False | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.opensearch.use_ssl` |
+| `ORI_SEARCH__OPENSEARCH__VERIFY_SSL` | bool | True | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.opensearch.verify_ssl` |
+| `ORI_SEARCH__OPERATIONS__BULK_CHUNK_SIZE` | int | — | Bulk request chunk size | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.operations.bulk_chunk_size` |
+| `ORI_SEARCH__OPERATIONS__MAX_RETRIES` | int | — | Max retry attempts | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.operations.max_retries` |
+| `ORI_SEARCH__OPERATIONS__REQUEST_TIMEOUT` | float | — | Request timeout seconds | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.operations.request_timeout` |
+| `ORI_SEARCH__OPERATIONS__RETRY_BACKOFF` | float | — | Retry backoff multiplier | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.operations.retry_backoff` |
+| `ORI_SEARCH__POSTGRES__AUTO_CREATE_TABLES` | bool | True | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.postgres.auto_create_tables` |
+| `ORI_SEARCH__POSTGRES__CONNECTION_STRING` | SecretStr | SecretStr('') | PostgreSQL connection string | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.postgres.connection_string` |
+| `ORI_SEARCH__POSTGRES__ENABLE_TRIGRAM` | bool | True | Enable pg_trgm fuzzy matching | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.postgres.enable_trigram` |
+| `ORI_SEARCH__POSTGRES__TEXT_SEARCH_CONFIG` | str | 'english' | PostgreSQL text search config | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.postgres.text_search_config` |
+| `ORI_SEARCH__QUERY__DEFAULT_LIMIT` | int | search_const.DEFAULT_PAGE_SIZE | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.query.default_limit` |
+| `ORI_SEARCH__QUERY__ENABLE_AGGREGATIONS` | bool | False | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.query.enable_aggregations` |
+| `ORI_SEARCH__QUERY__ENABLE_FACETING` | bool | True | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.query.enable_faceting` |
+| `ORI_SEARCH__QUERY__ENABLE_HIGHLIGHTING` | bool | True | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.query.enable_highlighting` |
+| `ORI_SEARCH__QUERY__FUZZY_THRESHOLD` | float | 0.8 | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.query.fuzzy_threshold` |
+| `ORI_SEARCH__QUERY__MAX_LIMIT` | int | search_const.DEFAULT_MAX_RESULTS | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.query.max_limit` |
+| `ORI_SEARCH__QUERY__STRATEGY` | str | 'fuzzy' | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.query.strategy` |
+| `ORI_SEARCH__SQLITE__AUTO_CREATE_TABLES` | bool | True | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.sqlite.auto_create_tables` |
+| `ORI_SEARCH__SQLITE__DB_PATH` | str | ':memory:' | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.sqlite.db_path` |
+| `ORI_SEARCH__SQLITE__TOKENIZER` | str | 'porter unicode61' | — | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.sqlite.tokenizer` |
+| `ORI_SEARCH__TIMEOUT` | float | — | Default request timeout seconds | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.timeout` |
+| `ORI_SEARCH__TYPESENSE__API_KEY` | SecretStr \| None | None | Typesense API key | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.typesense.api_key` |
+| `ORI_SEARCH__TYPESENSE__CONNECTION_TIMEOUT` | int | 30 | Connection timeout | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.typesense.connection_timeout` |
+| `ORI_SEARCH__TYPESENSE__HEALTH_CHECK_INTERVAL` | int | 60 | Health check interval | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.typesense.health_check_interval` |
+| `ORI_SEARCH__TYPESENSE__NODES` | list[dict[str, str]] | — | Typesense node connections | `packages/oridecon-search/src/oridecon/search/config.py:SearchConfig.typesense.nodes` |
+
+### `oridecon-secrets` (8 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_SECRETS__AUDIT_ACTOR_ID` | str | — | Actor identifier for audit log entries | `packages/oridecon-secrets/src/oridecon/secrets/config.py:SecretsConfig.audit_actor_id` |
+| `ORI_SECRETS__BACKEND_OPTIONS` | dict | — | Keyword arguments for backend constructor | `packages/oridecon-secrets/src/oridecon/secrets/config.py:SecretsConfig.backend_options` |
+| `ORI_SECRETS__BACKEND_TYPE` | str | — | Backend store type (memory, vault, ...) | `packages/oridecon-secrets/src/oridecon/secrets/config.py:SecretsConfig.backend_type` |
+| `ORI_SECRETS__ENABLED` | bool | — | Whether secrets subsystem is enabled | `packages/oridecon-secrets/src/oridecon/secrets/config.py:SecretsConfig.enabled` |
+| `ORI_SECRETS__MAX_AGE_SECONDS` | float | — | Seconds before automatic rotation | `packages/oridecon-secrets/src/oridecon/secrets/config.py:SecretsConfig.max_age_seconds` |
+| `ORI_SECRETS__NAME` | str | — | Configuration name | `packages/oridecon-secrets/src/oridecon/secrets/config.py:SecretsConfig.name` |
+| `ORI_SECRETS__TENANT_ID` | str \| None | — | Optional tenant namespace | `packages/oridecon-secrets/src/oridecon/secrets/config.py:SecretsConfig.tenant_id` |
+| `ORI_SECRETS__WARNING_BEFORE_SECONDS` | float | — | Seconds before expiry to warn | `packages/oridecon-secrets/src/oridecon/secrets/config.py:SecretsConfig.warning_before_seconds` |
+
+### `oridecon-sql` (19 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_SQL__AUDIT_HMAC_KEY` | str \| None | None | HMAC key for audit checksum signing. Plain text or base64. | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.audit_hmac_key` |
+| `ORI_SQL__BACKENDS` | list[NamedDatabaseConfig] | — | Multi-database backends list. When non-empty, drives multi-DB mode. The entry... | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.backends` |
+| `ORI_SQL__BACKEND__URL` | SecretStr | — | Database connection URL (may contain credentials) | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.backend.url` |
+| `ORI_SQL__ENABLED` | bool | True | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.enabled` |
+| `ORI_SQL__MIGRATIONS__LOCK_TIMEOUT` | Duration | Duration.seconds(30) | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.migrations.lock_timeout` |
+| `ORI_SQL__NAME` | str | "database" | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.name` |
+| `ORI_SQL__OPERATIONS__ECHO` | bool | False | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.operations.echo` |
+| `ORI_SQL__OPERATIONS__STATEMENT_TIMEOUT` | Duration | Duration.seconds(60) | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.operations.statement_timeout` |
+| `ORI_SQL__OUTBOX__BATCH_MAX_AGE` | Duration | Duration.seconds(30) | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.outbox.batch_max_age` |
+| `ORI_SQL__OUTBOX__ENABLED` | bool | True | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.outbox.enabled` |
+| `ORI_SQL__OUTBOX__POLL_INTERVAL` | Duration | Duration.seconds(5) | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.outbox.poll_interval` |
+| `ORI_SQL__POOL__ACQUIRE_TIMEOUT` | Duration | Duration.seconds(30) | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.pool.acquire_timeout` |
+| `ORI_SQL__POOL__IDLE_TIMEOUT` | Duration | Duration.minutes(5) | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.pool.idle_timeout` |
+| `ORI_SQL__POOL__MAX_LIFETIME` | Duration | Duration.hours(1) | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.pool.max_lifetime` |
+| `ORI_SQL__POOL__MAX_OVERFLOW` | int | 5 | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.pool.max_overflow` |
+| `ORI_SQL__POOL__MAX_SIZE` | int | const.DEFAULT_POOL_MAX_SIZE | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.pool.max_size` |
+| `ORI_SQL__POOL__MIN_SIZE` | int | const.DEFAULT_POOL_MIN_SIZE | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.pool.min_size` |
+| `ORI_SQL__POOL__RECYCLE` | int | 3600 | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.pool.recycle` |
+| `ORI_SQL__POOL__TIMEOUT` | float | const.DEFAULT_POOL_TIMEOUT | — | `packages/oridecon-sql/src/oridecon/sql/config.py:DatabaseConfig.pool.timeout` |
+
+### `oridecon-storage` (9 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_STORAGE__BACKENDS` | list[NamedStorageConfig] | — | Named storage backends for multi-store support. When non-empty, the provider ... | `packages/oridecon-storage/src/oridecon/storage/config.py:StorageConfig.backends` |
+| `ORI_STORAGE__DEFAULT_DRIVER` | Literal['local', 's3', 'gcs', 'azure', 'memory', 'r2'] | storage_const.DEFAULT_DRIVER | Default storage driver to use | `packages/oridecon-storage/src/oridecon/storage/config.py:StorageConfig.default_driver` |
+| `ORI_STORAGE__DRIVERS` | dict[str, StorageLocalConfig \| StorageS3Config \| StorageGCSConfig \| StorageAzureConfig \| StorageMemoryConfig \| StorageR2Config] | — | Driver-specific configurations | `packages/oridecon-storage/src/oridecon/storage/config.py:StorageConfig.drivers` |
+| `ORI_STORAGE__ENABLED` | bool | True | — | `packages/oridecon-storage/src/oridecon/storage/config.py:StorageConfig.enabled` |
+| `ORI_STORAGE__ENV` | str \| None | — | Environment (development/staging/production) | `packages/oridecon-storage/src/oridecon/storage/config.py:StorageConfig.env` |
+| `ORI_STORAGE__HEALTH_CHECK_TIMEOUT` | float | 5.0 | Timeout in seconds for the startup health check in StorageProvider.boot() | `packages/oridecon-storage/src/oridecon/storage/config.py:StorageConfig.health_check_timeout` |
+| `ORI_STORAGE__NAME` | str | "storage" | — | `packages/oridecon-storage/src/oridecon/storage/config.py:StorageConfig.name` |
+| `ORI_STORAGE__SERVICE__ALLOWED_MIME_TYPES` | list[str] | — | Allowed MIME types for upload validation. Defaults to a safe set of common im... | `packages/oridecon-storage/src/oridecon/storage/config.py:StorageConfig.service.allowed_mime_types` |
+| `ORI_STORAGE__SERVICE__MAX_FILE_SIZE_MB` | int | storage_const.DEFAULT_MAX_FILE_SIZE_MB | Maximum file size in MB | `packages/oridecon-storage/src/oridecon/storage/config.py:StorageConfig.service.max_file_size_mb` |
+
+### `oridecon-tasks` (40 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_TASKS__BACKENDS` | list[NamedTaskConfig] | — | Named task queue backends for multi-queue support. When non-empty, the provid... | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.backends` |
+| `ORI_TASKS__BACKEND__AMQP_URL` | SecretStr | SecretStr(tasks_const.DEFAULT_AMQP_URL) | AMQP connection URL (may contain credentials). | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.backend.amqp_url` |
+| `ORI_TASKS__BACKEND__POSTGRES_DSN` | SecretStr \| None | None | Postgres DSN (required when type="postgres"; may contain credentials). | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.backend.postgres_dsn` |
+| `ORI_TASKS__BACKEND__QUEUE_NAME` | str | tasks_const.DEFAULT_QUEUE_NAME | Name of the task queue | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.backend.queue_name` |
+| `ORI_TASKS__BACKEND__REDIS_URL` | SecretStr | SecretStr(tasks_const.DEFAULT_REDIS_URL) | Redis connection URL (may contain credentials). | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.backend.redis_url` |
+| `ORI_TASKS__BACKEND__TYPE` | str | tasks_const.DEFAULT_BACKEND | Queue backend type | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.backend.type` |
+| `ORI_TASKS__ENABLED` | bool | True | Whether tasks module is enabled | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.enabled` |
+| `ORI_TASKS__ENV` | str \| None | — | Environment (development/staging/production) | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.env` |
+| `ORI_TASKS__EXTRA` | dict[str, Any] | — | — | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.extra` |
+| `ORI_TASKS__NAME` | str | 'tasks' | Configuration name | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.name` |
+| `ORI_TASKS__RATE_LIMIT__BURST` | int \| None | None | Maximum burst size | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.rate_limit.burst` |
+| `ORI_TASKS__RATE_LIMIT__ENABLED` | bool | False | Whether rate limiting is enabled | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.rate_limit.enabled` |
+| `ORI_TASKS__RATE_LIMIT__PER` | float | 1.0 | Time period in seconds | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.rate_limit.per` |
+| `ORI_TASKS__RATE_LIMIT__RATE` | int | 100 | Number of tasks allowed per time period | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.rate_limit.rate` |
+| `ORI_TASKS__RETRY__ABORT_IF` | Callable[[Any], bool] \| None | None | — | `core/oridecon-contracts/src/oridecon/contracts/infra/resilience/models.py:TaskConfig.retry.abort_if` |
+| `ORI_TASKS__RETRY__ABORT_ON` | tuple[type[Exception], ...] | (complex) | — | `core/oridecon-contracts/src/oridecon/contracts/infra/resilience/models.py:TaskConfig.retry.abort_on` |
+| `ORI_TASKS__RETRY__BACKOFF_FACTOR` | float | 2.0 | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...odels.py:TaskConfig.retry.backoff_factor` |
+| `ORI_TASKS__RETRY__BASE_DELAY` | float | 1.0 | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...ce/models.py:TaskConfig.retry.base_delay` |
+| `ORI_TASKS__RETRY__IDEMPOTENT_METHODS_ONLY` | bool | True | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...TaskConfig.retry.idempotent_methods_only` |
+| `ORI_TASKS__RETRY__JITTER` | bool \| float | True | — | `core/oridecon-contracts/src/oridecon/contracts/infra/resilience/models.py:TaskConfig.retry.jitter` |
+| `ORI_TASKS__RETRY__MAX_ATTEMPTS` | int | 3 | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re.../models.py:TaskConfig.retry.max_attempts` |
+| `ORI_TASKS__RETRY__MAX_DELAY` | float | 60.0 | — | `core/oridecon-contracts/src/oridecon/contracts/infra/resilience/models.py:TaskConfig.retry.max_delay` |
+| `ORI_TASKS__RETRY__ON_RETRY` | Callable[[int, Exception \| None], None] \| None | None | — | `core/oridecon-contracts/src/oridecon/contracts/infra/resilience/models.py:TaskConfig.retry.on_retry` |
+| `ORI_TASKS__RETRY__RETRY_IF` | Callable[[Exception], bool] \| None | None | — | `core/oridecon-contracts/src/oridecon/contracts/infra/resilience/models.py:TaskConfig.retry.retry_if` |
+| `ORI_TASKS__RETRY__RETRY_ON` | tuple[type[Exception], ...] | (complex) | — | `core/oridecon-contracts/src/oridecon/contracts/infra/resilience/models.py:TaskConfig.retry.retry_on` |
+| `ORI_TASKS__RETRY__RETRY_ON_RESULT` | Callable[[Any], bool] \| None | None | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...dels.py:TaskConfig.retry.retry_on_result` |
+| `ORI_TASKS__RETRY__RETRY_SYNC` | bool | False | — | `core/oridecon-contracts/src/oridecon/contracts/infra/re...ce/models.py:TaskConfig.retry.retry_sync` |
+| `ORI_TASKS__SCHEDULER__CHECK_INTERVAL` | float | tasks_const.DEFAULT_SCHEDULER_CHECK_INTERVAL | Interval between schedule checks (seconds) | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.scheduler.check_interval` |
+| `ORI_TASKS__SCHEDULER__ENABLED` | bool | True | Whether scheduling is enabled | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.scheduler.enabled` |
+| `ORI_TASKS__SCHEDULER__TIMEZONE` | str | tasks_const.DEFAULT_SCHEDULER_TIMEZONE | Timezone for cron expressions | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.scheduler.timezone` |
+| `ORI_TASKS__TIMEOUT__DEFAULT_TIMEOUT` | float | tasks_const.DEFAULT_TASK_TIMEOUT | Default timeout | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.timeout.default_timeout` |
+| `ORI_TASKS__TIMEOUT__ENFORCE_TIMEOUT` | bool | True | Enforce timeouts | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.timeout.enforce_timeout` |
+| `ORI_TASKS__TIMEOUT__MAX_TIMEOUT` | float | tasks_const.DEFAULT_MAX_TIMEOUT | Maximum allowed timeout | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.timeout.max_timeout` |
+| `ORI_TASKS__WORKER__DEFAULT_TIMEOUT` | float | tasks_const.DEFAULT_TASK_TIMEOUT | Default timeout for tasks without an explicit timeout (seconds) | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.worker.default_timeout` |
+| `ORI_TASKS__WORKER__ENFORCE_TIMEOUT` | bool | True | Whether to enforce timeouts on all tasks | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.worker.enforce_timeout` |
+| `ORI_TASKS__WORKER__MAX_CONCURRENT_TASKS` | int | tasks_const.DEFAULT_MAX_CONCURRENT_TASKS | Maximum concurrent tasks per worker | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.worker.max_concurrent_tasks` |
+| `ORI_TASKS__WORKER__MAX_TIMEOUT` | float | tasks_const.DEFAULT_MAX_TIMEOUT | Maximum allowed timeout for any task (seconds) | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.worker.max_timeout` |
+| `ORI_TASKS__WORKER__POLL_INTERVAL` | float | tasks_const.DEFAULT_POLL_INTERVAL | Interval between queue polls (seconds) | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.worker.poll_interval` |
+| `ORI_TASKS__WORKER__SHUTDOWN_TIMEOUT` | float | tasks_const.DEFAULT_SHUTDOWN_TIMEOUT | Timeout for graceful shutdown (seconds) | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.worker.shutdown_timeout` |
+| `ORI_TASKS__WORKER__WORKER_COUNT` | int | tasks_const.DEFAULT_WORKER_COUNT | Number of worker instances | `packages/oridecon-tasks/src/oridecon/tasks/config.py:TaskConfig.worker.worker_count` |
+
+### `oridecon-tenancy` (13 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_TENANCY__INTEGRATION__CACHE_KEY_PREFIX` | bool | True | — | `packages/oridecon-tenancy/src/oridecon/tenancy/config.py:TenancyConfig.integration.cache_key_prefix` |
+| `ORI_TENANCY__INTEGRATION__SQL_CONTEXT_BRIDGE` | bool | True | — | `packages/oridecon-tenancy/src/oridecon/tenancy/config.p...ncyConfig.integration.sql_context_bridge` |
+| `ORI_TENANCY__LIFECYCLE__AUTO_PROVISION_ISOLATION` | bool | True | — | `packages/oridecon-tenancy/src/oridecon/tenancy/config.p...onfig.lifecycle.auto_provision_isolation` |
+| `ORI_TENANCY__LIFECYCLE__ISOLATION_STRATEGY` | str | "row_level" | — | `packages/oridecon-tenancy/src/oridecon/tenancy/config.py:TenancyConfig.lifecycle.isolation_strategy` |
+| `ORI_TENANCY__OVERRIDES__CACHE_TTL` | int | DEFAULT_CONFIG_CACHE_TTL | — | `packages/oridecon-tenancy/src/oridecon/tenancy/config.py:TenancyConfig.overrides.cache_ttl` |
+| `ORI_TENANCY__RESOLUTION__HEADER_NAME` | str | DEFAULT_HEADER_NAME | — | `packages/oridecon-tenancy/src/oridecon/tenancy/config.py:TenancyConfig.resolution.header_name` |
+| `ORI_TENANCY__RESOLUTION__JWT_CLAIM_KEY` | str | DEFAULT_JWT_CLAIM_KEY | — | `packages/oridecon-tenancy/src/oridecon/tenancy/config.py:TenancyConfig.resolution.jwt_claim_key` |
+| `ORI_TENANCY__RESOLUTION__PATH_PATTERN` | str \| None | DEFAULT_PATH_PATTERN | — | `packages/oridecon-tenancy/src/oridecon/tenancy/config.py:TenancyConfig.resolution.path_pattern` |
+| `ORI_TENANCY__RESOLUTION__RESOLVERS` | list[str] | (complex) | — | `packages/oridecon-tenancy/src/oridecon/tenancy/config.py:TenancyConfig.resolution.resolvers` |
+| `ORI_TENANCY__RESOLUTION__STRICT_MEMBERSHIP` | bool | True | — | `packages/oridecon-tenancy/src/oridecon/tenancy/config.py:TenancyConfig.resolution.strict_membership` |
+| `ORI_TENANCY__RESOLUTION__SUBDOMAIN_PATTERN` | str \| None | None | — | `packages/oridecon-tenancy/src/oridecon/tenancy/config.py:TenancyConfig.resolution.subdomain_pattern` |
+| `ORI_TENANCY__RESOLUTION__TRUSTED_RESOLVERS` | list[str] | (complex) | — | `packages/oridecon-tenancy/src/oridecon/tenancy/config.py:TenancyConfig.resolution.trusted_resolvers` |
+| `ORI_TENANCY__RESOLUTION__VALIDATOR_CACHE_TTL` | int | DEFAULT_VALIDATOR_CACHE_TTL | — | `packages/oridecon-tenancy/src/oridecon/tenancy/config.p...ncyConfig.resolution.validator_cache_ttl` |
+
+### `oridecon-testing` (12 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_TEST_ELASTICSEARCH_URL` | str | — | — | `packages/oridecon-testing/src/oridecon/testing/integration/config.py *(direct env access; not config-derived)*` |
+| `ORI_TEST_KAFKA_BOOTSTRAP` | str | — | — | `packages/oridecon-testing/src/oridecon/testing/integration/config.py *(direct env access; not config-derived)*` |
+| `ORI_TEST_MINIO_ACCESS_KEY` | str | — | — | `packages/oridecon-testing/src/oridecon/testing/integration/config.py *(direct env access; not config-derived)*` |
+| `ORI_TEST_MINIO_ENDPOINT` | str | — | — | `packages/oridecon-testing/src/oridecon/testing/integration/config.py *(direct env access; not config-derived)*` |
+| `ORI_TEST_MINIO_SECRET_KEY` | str | — | — | `packages/oridecon-testing/src/oridecon/testing/integration/config.py *(direct env access; not config-derived)*` |
+| `ORI_TEST_MONGODB_DSN` | str | — | — | `packages/oridecon-testing/src/oridecon/testing/integration/config.py *(direct env access; not config-derived)*` |
+| `ORI_TEST_NEO4J_AUTH` | str | — | — | `packages/oridecon-testing/src/oridecon/testing/integration/config.py *(direct env access; not config-derived)*` |
+| `ORI_TEST_NEO4J_URL` | str | — | — | `packages/oridecon-testing/src/oridecon/testing/integration/config.py *(direct env access; not config-derived)*` |
+| `ORI_TEST_POSTGRES_DSN` | str | — | — | `packages/oridecon-testing/src/oridecon/testing/integration/config.py *(direct env access; not config-derived)*` |
+| `ORI_TEST_POSTGRES_DSN_RAW` | str | — | — | `packages/oridecon-testing/src/oridecon/testing/integration/config.py *(direct env access; not config-derived)*` |
+| `ORI_TEST_QDRANT_URL` | str | — | — | `packages/oridecon-testing/src/oridecon/testing/integration/config.py *(direct env access; not config-derived)*` |
+| `ORI_TEST_REDIS_URL` | str | — | — | `packages/oridecon-testing/src/oridecon/testing/integration/config.py *(direct env access; not config-derived)*` |
+
+### `oridecon-ui` (7 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_UI__AUTO_ESCAPE` | bool | True | HTML-escape user strings by default. | `experimental/apps/oridecon-ui/src/oridecon/ui/config.py:UIConfig.auto_escape` |
+| `ORI_UI__DEBUG_COMPONENTS` | bool | False | Render data-component debug attributes. | `experimental/apps/oridecon-ui/src/oridecon/ui/config.py:UIConfig.debug_components` |
+| `ORI_UI__DEFAULT_THEME` | str | 'default' | Default CSS theme name. | `experimental/apps/oridecon-ui/src/oridecon/ui/config.py:UIConfig.default_theme` |
+| `ORI_UI__ENABLE_REALTIME` | bool | False | Enable realtime update features. | `experimental/apps/oridecon-ui/src/oridecon/ui/config.py:UIConfig.enable_realtime` |
+| `ORI_UI__ENABLE_SSE` | bool | False | Enable Server-Sent Events support. | `experimental/apps/oridecon-ui/src/oridecon/ui/config.py:UIConfig.enable_sse` |
+| `ORI_UI__HTMX_VERSION` | str | '2.0.4' | HTMX CDN version. | `experimental/apps/oridecon-ui/src/oridecon/ui/config.py:UIConfig.htmx_version` |
+| `ORI_UI__THEME` | str | 'light' | Active UI theme. | `experimental/apps/oridecon-ui/src/oridecon/ui/config.py:UIConfig.theme` |
+
+### `oridecon-vector` (39 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_VECTOR__BACKEND` | str | const.BACKEND_MEMORY | Vector store backend to use | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.backend` |
+| `ORI_VECTOR__BACKENDS` | list[NamedVectorConfig] | — | Named vector store backends for multi-store support. When non-empty, the prov... | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.backends` |
+| `ORI_VECTOR__CACHE_TTL` | int | 86400 | Cache TTL in seconds (default: 24 hours) | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.cache_ttl` |
+| `ORI_VECTOR__COLLECTION_NAME` | str | 'default' | Default collection name for AI-layer operations | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.collection_name` |
+| `ORI_VECTOR__DEFAULT_DIMENSION` | int | 1536 | Default vector dimension | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.default_dimension` |
+| `ORI_VECTOR__DEFAULT_DISTANCE_METRIC` | DistanceMetric | DistanceMetric.COSINE | Default distance metric for new collections | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.default_distance_metric` |
+| `ORI_VECTOR__DEFAULT_INDEX_TYPE` | IndexType | IndexType.HNSW | Default index type for new collections | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.default_index_type` |
+| `ORI_VECTOR__EMBEDDING_MODEL` | str | 'text-embedding-3-small' | Embedding model name for AI-layer embedding generation | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.embedding_model` |
+| `ORI_VECTOR__ENABLED` | bool | True | Enable the vector store subsystem | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.enabled` |
+| `ORI_VECTOR__ENABLE_CACHE` | bool | False | Enable embedding caching (requires a CacheBackend binding) | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.enable_cache` |
+| `ORI_VECTOR__MAX_RETRIES` | int | const.DEFAULT_MAX_RETRIES | Maximum number of retries for operations | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.max_retries` |
+| `ORI_VECTOR__MEMORY__MAX_COLLECTIONS` | int | 100 | Maximum number of collections in memory | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.memory.max_collections` |
+| `ORI_VECTOR__MEMORY__MAX_VECTORS_PER_COLLECTION` | int | 100000 | Maximum number of vectors per collection | `packages/oridecon-vector/src/oridecon/vector/config.py:...Config.memory.max_vectors_per_collection` |
+| `ORI_VECTOR__PGVECTOR__CREATE_EXTENSION` | bool | True | Whether to create pgvector extension if missing | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.pgvector.create_extension` |
+| `ORI_VECTOR__PGVECTOR__DATABASE` | str | 'primary' | Name of the database backend from db.backends to use for pgvector. Matches a ... | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.pgvector.database` |
+| `ORI_VECTOR__PGVECTOR__DEFAULT_EF_SEARCH` | int | const.PGVECTOR_DEFAULT_EF_SEARCH | Default ef_search for HNSW index | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.pgvector.default_ef_search` |
+| `ORI_VECTOR__PGVECTOR__DEFAULT_LISTS` | int | const.PGVECTOR_DEFAULT_LISTS | Default number of lists for IVFFlat index | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.pgvector.default_lists` |
+| `ORI_VECTOR__PGVECTOR__DEFAULT_PROBES` | int | const.PGVECTOR_DEFAULT_PROBES | Default number of probes for IVFFlat index | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.pgvector.default_probes` |
+| `ORI_VECTOR__PGVECTOR__SCHEMA` | str | 'public' | Database schema for vector tables | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.pgvector.schema` |
+| `ORI_VECTOR__PGVECTOR__TABLE_PREFIX` | str | 'vec_' | Prefix for vector storage tables | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.pgvector.table_prefix` |
+| `ORI_VECTOR__PINECONE__API_KEY` | SecretStr | SecretStr('') | Pinecone API key | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.pinecone.api_key` |
+| `ORI_VECTOR__PINECONE__ENVIRONMENT` | str | '' | Pinecone environment (e.g. 'us-west1-gcp') | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.pinecone.environment` |
+| `ORI_VECTOR__PINECONE__INDEX_NAME` | str | '' | Name of the Pinecone index | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.pinecone.index_name` |
+| `ORI_VECTOR__PINECONE__NAMESPACE` | str | '' | Default namespace for the index | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.pinecone.namespace` |
+| `ORI_VECTOR__PINECONE__POOL_THREADS` | int | 4 | Number of threads for the connection pool | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.pinecone.pool_threads` |
+| `ORI_VECTOR__PINECONE__TIMEOUT` | float | const.DEFAULT_REQUEST_TIMEOUT | Request timeout in seconds | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.pinecone.timeout` |
+| `ORI_VECTOR__QDRANT__API_KEY` | SecretStr \| None | None | Qdrant API key | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.qdrant.api_key` |
+| `ORI_VECTOR__QDRANT__GRPC_PORT` | int | 6334 | gRPC port for Qdrant | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.qdrant.grpc_port` |
+| `ORI_VECTOR__QDRANT__PREFER_GRPC` | bool | True | Whether to prefer gRPC over HTTP | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.qdrant.prefer_grpc` |
+| `ORI_VECTOR__QDRANT__TIMEOUT` | float | const.DEFAULT_REQUEST_TIMEOUT | Request timeout in seconds | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.qdrant.timeout` |
+| `ORI_VECTOR__QDRANT__URL` | str | 'http://localhost:6333' | Qdrant server URL | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.qdrant.url` |
+| `ORI_VECTOR__RETRY_DELAY` | float | const.DEFAULT_RETRY_DELAY | Delay between retries in seconds | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.retry_delay` |
+| `ORI_VECTOR__TENANCY__ENABLED` | bool | False | Enable tenant-aware collection name resolution | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.tenancy.enabled` |
+| `ORI_VECTOR__TENANCY__RESOLVER_KIND` | str | 'templated' | Which ``TenantCollectionResolver`` to use. One of ``"templated"`` or ``"pinec... | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.tenancy.resolver_kind` |
+| `ORI_VECTOR__UPSERT_BATCH_SIZE` | int | const.DEFAULT_UPSERT_BATCH_SIZE | Number of vectors per upsert batch | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.upsert_batch_size` |
+| `ORI_VECTOR__WEAVIATE__API_KEY` | SecretStr \| None | None | Weaviate API key for authenticated clusters | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.weaviate.api_key` |
+| `ORI_VECTOR__WEAVIATE__GRPC_PORT` | int | 50051 | gRPC port for the Weaviate cluster | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.weaviate.grpc_port` |
+| `ORI_VECTOR__WEAVIATE__TIMEOUT` | float | const.DEFAULT_REQUEST_TIMEOUT | Request timeout in seconds | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.weaviate.timeout` |
+| `ORI_VECTOR__WEAVIATE__URL` | str | 'http://localhost:8080' | Weaviate cluster URL (HTTP) | `packages/oridecon-vector/src/oridecon/vector/config.py:VectorConfig.weaviate.url` |
+
+### `oridecon-web` (86 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_WEB__API_DOCS__ENABLED` | bool | True | Enable API documentation endpoints (/docs, /redoc) and auto-configure CSP for... | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.api_docs.enabled` |
+| `ORI_WEB__API_DOCS__PROVIDER` | str | 'both' | Documentation provider: 'swagger', 'redoc', or 'both' | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.api_docs.provider` |
+| `ORI_WEB__AUTH_EXCLUDE_PATHS` | list[str] | — | Paths to exclude from authentication | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.auth_exclude_paths` |
+| `ORI_WEB__COMPRESSION_ENABLED` | bool | True | — | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.compression_enabled` |
+| `ORI_WEB__CORS` | CORSConfig | — | — | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.cors` |
+| `ORI_WEB__DEBUG_ROUTES` | bool | False | Enable debug routes | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.debug_routes` |
+| `ORI_WEB__DEBUG_ROUTES_TOKEN` | SecretStr \| None | None | Token required to access debug routes (sent as X-Debug-Token header). | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.debug_routes_token` |
+| `ORI_WEB__ENABLED` | bool | True | — | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.enabled` |
+| `ORI_WEB__ENABLE_AUTH` | bool | False | Enable built-in authentication middleware. Requires authenticators to be regi... | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.enable_auth` |
+| `ORI_WEB__ENABLE_DEBUG_ROUTES_ENV_GATE` | bool | False | Require explicit opt-in for debug route registration. | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.enable_debug_routes_env_gate` |
+| `ORI_WEB__ENABLE_IDENTITY_RESOLUTION` | bool | False | Automatically resolve OAuth external IDs to internal UUIDs in authenticated r... | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.enable_identity_resolution` |
+| `ORI_WEB__ENV` | str \| None | None | Environment (development/staging/production) | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.env` |
+| `ORI_WEB__MAX_BODY_SIZE` | int \| None | 10 * 1024 * 1024 | Maximum allowed request body size in bytes. Requests with a Content-Length he... | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.max_body_size` |
+| `ORI_WEB__NAME` | str | "web" | — | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.name` |
+| `ORI_WEB__OPENAPI_TITLE` | str | 'API' | OpenAPI Title | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.openapi_title` |
+| `ORI_WEB__OPENAPI_URL` | str \| None | const.DEFAULT_OPENAPI_PATH | — | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.openapi_url` |
+| `ORI_WEB__OPENAPI_VERSION` | str | '1.0.0' | OpenAPI Version | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.openapi_version` |
+| `ORI_WEB__RATE_LIMIT__DEFAULT_LIMIT` | int | const.DEFAULT_RATE_LIMIT_REQUESTS | Max requests per window | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.rate_limit.default_limit` |
+| `ORI_WEB__RATE_LIMIT__DEFAULT_WINDOW` | int | const.DEFAULT_RATE_LIMIT_WINDOW | Window size in seconds | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.rate_limit.default_window` |
+| `ORI_WEB__RATE_LIMIT__ENABLED` | bool | True | Enable rate limiting. When true, RateLimitMiddleware enforces the matched per... | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.rate_limit.enabled` |
+| `ORI_WEB__RATE_LIMIT__RULES` | dict[str, RateLimitRuleConfig] | — | Per-path rate limit rules; longest-prefix match wins | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.rate_limit.rules` |
+| `ORI_WEB__RATE_LIMIT__STORAGE_BACKEND` | str | 'memory' | Storage backend (memory/redis) | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.rate_limit.storage_backend` |
+| `ORI_WEB__RATE_LIMIT__WHITELIST_IPS` | list[str] | — | Exempt IP addresses | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.rate_limit.whitelist_ips` |
+| `ORI_WEB__REDOC_JS_URL` | str \| None | None | — | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.redoc_js_url` |
+| `ORI_WEB__REDOC_URL` | str \| None | '/redoc' | — | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.redoc_url` |
+| `ORI_WEB__ROLE_GUARD__RULES` | list[RoleGuardRuleConfig] | — | Role guard rules in declaration order | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.role_guard.rules` |
+| `ORI_WEB__SECURITY__ALLOWED_HOSTS` | list[str] | — | Hostnames permitted to reach the application. Empty by default; must be confi... | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.allowed_hosts` |
+| `ORI_WEB__SECURITY__CORS__ALLOWED_ORIGINS` | list[str] | — | Allowed origins (use ['*'] to allow all) | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.cors.allowed_origins` |
+| `ORI_WEB__SECURITY__CORS__ALLOW_CREDENTIALS` | bool | False | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.cors.allow_credentials` |
+| `ORI_WEB__SECURITY__CORS__ALLOW_HEADERS` | list[str] | — | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.cors.allow_headers` |
+| `ORI_WEB__SECURITY__CORS__ALLOW_METHODS` | list[str] | — | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.cors.allow_methods` |
+| `ORI_WEB__SECURITY__CORS__ALLOW_ORIGIN_REGEX` | str \| None | None | Regex pattern for allowed origins (matched when not in allowed_origins) | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.cors.allow_origin_regex` |
+| `ORI_WEB__SECURITY__CORS__DEBUG_PERMISSIVE` | bool | False | When True and debug mode is active, allow any origin via wildcard (explicit o... | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.cors.debug_permissive` |
+| `ORI_WEB__SECURITY__CORS__ENABLED` | bool | True | Enable CORS | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.cors.enabled` |
+| `ORI_WEB__SECURITY__CORS__EXPOSE_HEADERS` | list[str] | — | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.cors.expose_headers` |
+| `ORI_WEB__SECURITY__CORS__MAX_AGE` | int | 600 | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.cors.max_age` |
+| `ORI_WEB__SECURITY__CROSS_ORIGIN__EMBEDDER_POLICY` | str | 'require-corp' | Cross-Origin-Embedder-Policy header value | `packages/oridecon-web/src/oridecon/web/security/config....ig.security.cross_origin.embedder_policy` |
+| `ORI_WEB__SECURITY__CROSS_ORIGIN__ENABLED` | bool | False | Emit cross-origin isolation headers | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.cross_origin.enabled` |
+| `ORI_WEB__SECURITY__CROSS_ORIGIN__OPENER_POLICY` | str | 'same-origin' | Cross-Origin-Opener-Policy header value | `packages/oridecon-web/src/oridecon/web/security/config....nfig.security.cross_origin.opener_policy` |
+| `ORI_WEB__SECURITY__CROSS_ORIGIN__RESOURCE_POLICY` | str | 'same-origin' | Cross-Origin-Resource-Policy header value | `packages/oridecon-web/src/oridecon/web/security/config....ig.security.cross_origin.resource_policy` |
+| `ORI_WEB__SECURITY__CSP__ENABLED` | bool | True | Emit the Content-Security-Policy header | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.csp.enabled` |
+| `ORI_WEB__SECURITY__CSRF__COOKIE_DOMAIN` | str \| None | None | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.csrf.cookie_domain` |
+| `ORI_WEB__SECURITY__CSRF__COOKIE_HTTPONLY` | bool | True | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.csrf.cookie_httponly` |
+| `ORI_WEB__SECURITY__CSRF__COOKIE_NAME` | str | 'csrf_token' | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.csrf.cookie_name` |
+| `ORI_WEB__SECURITY__CSRF__COOKIE_PATH` | str | '/' | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.csrf.cookie_path` |
+| `ORI_WEB__SECURITY__CSRF__COOKIE_SAMESITE` | str | 'Lax' | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.csrf.cookie_samesite` |
+| `ORI_WEB__SECURITY__CSRF__COOKIE_SECURE` | bool | True | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.csrf.cookie_secure` |
+| `ORI_WEB__SECURITY__CSRF__ENABLED` | bool | False | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.csrf.enabled` |
+| `ORI_WEB__SECURITY__CSRF__EXCLUDED_PATHS` | list[str] | — | URL path prefixes exempt from CSRF validation for cookie-less requests; cooki... | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.csrf.excluded_paths` |
+| `ORI_WEB__SECURITY__CSRF__EXCLUDE_AUTH_SCHEMES` | list[str] | — | Authorization header schemes that bypass CSRF validation (explicit opt-in). | `packages/oridecon-web/src/oridecon/web/security/config....onfig.security.csrf.exclude_auth_schemes` |
+| `ORI_WEB__SECURITY__CSRF__EXCLUDE_CONTENT_TYPES` | list[str] | — | Content-Type values that bypass CSRF validation (explicit opt-in — JSON reque... | `packages/oridecon-web/src/oridecon/web/security/config....nfig.security.csrf.exclude_content_types` |
+| `ORI_WEB__SECURITY__CSRF__HEADER_NAME` | str | 'X-CSRF-Token' | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.csrf.header_name` |
+| `ORI_WEB__SECURITY__CSRF__SECRET_KEY` | SecretStr \| None | None | HMAC secret used to sign and verify CSRF tokens (populated via ORI_WEB__SECUR... | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.csrf.secret_key` |
+| `ORI_WEB__SECURITY__CSRF__TOKEN_LENGTH` | int | 32 | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.csrf.token_length` |
+| `ORI_WEB__SECURITY__CSRF__TOKEN_TTL` | int | 3600 | TTL in seconds for synchronizer-mode tokens stored in cache. | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.csrf.token_ttl` |
+| `ORI_WEB__SECURITY__CUSTOM_HEADERS` | dict[str, str] | — | Additional HTTP response headers emitted verbatim | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.custom_headers` |
+| `ORI_WEB__SECURITY__ENABLED` | bool | True | Enable the security subsystem | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.enabled` |
+| `ORI_WEB__SECURITY__ENABLE_CORS` | bool | True | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.enable_cors` |
+| `ORI_WEB__SECURITY__ENABLE_CSRF` | bool | True | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.enable_csrf` |
+| `ORI_WEB__SECURITY__HEADERS__CONTENT_TYPE_NOSNIFF` | bool | True | — | `packages/oridecon-web/src/oridecon/web/security/config....ig.security.headers.content_type_nosniff` |
+| `ORI_WEB__SECURITY__HEADERS__CSP` | str \| None | None | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.headers.csp` |
+| `ORI_WEB__SECURITY__HEADERS__FRAME_OPTIONS` | str | 'DENY' | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.headers.frame_options` |
+| `ORI_WEB__SECURITY__HEADERS__HSTS_INCLUDE_SUBDOMAINS` | bool | True | — | `packages/oridecon-web/src/oridecon/web/security/config....security.headers.hsts_include_subdomains` |
+| `ORI_WEB__SECURITY__HEADERS__HSTS_MAX_AGE` | int | 31536000 | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.headers.hsts_max_age` |
+| `ORI_WEB__SECURITY__HEADERS__PERMISSIONS_POLICY` | str \| None | None | — | `packages/oridecon-web/src/oridecon/web/security/config....nfig.security.headers.permissions_policy` |
+| `ORI_WEB__SECURITY__HEADERS__REFERRER_POLICY` | str | 'strict-origin-when-cross-origin' | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.headers.referrer_policy` |
+| `ORI_WEB__SECURITY__HEADERS__XSS_PROTECTION` | str | '1; mode=block' | — | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.headers.xss_protection` |
+| `ORI_WEB__SECURITY__HSTS__ENABLED` | bool | False | Emit the Strict-Transport-Security header | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.hsts.enabled` |
+| `ORI_WEB__SECURITY__HSTS__INCLUDE_SUBDOMAINS` | bool | True | Apply HSTS to all subdomains | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.hsts.include_subdomains` |
+| `ORI_WEB__SECURITY__HSTS__MAX_AGE` | int | 31536000 | HSTS max-age in seconds (default 1 year) | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.hsts.max_age` |
+| `ORI_WEB__SECURITY__HSTS__PRELOAD` | bool | False | Include site in HSTS preload list | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.hsts.preload` |
+| `ORI_WEB__SECURITY__PERMISSIONS_POLICY` | dict[str, str] | — | Permissions-Policy directive map | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.permissions_policy` |
+| `ORI_WEB__SECURITY__REFERRER_POLICY` | str | 'strict-origin-when-cross-origin' | Referrer-Policy header value | `packages/oridecon-web/src/oridecon/web/security/config.py:WebConfig.security.referrer_policy` |
+| `ORI_WEB__SERVER__DEBUG` | bool | False | Enable debug mode | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.server.debug` |
+| `ORI_WEB__SERVER__HOST` | str | const.DEFAULT_HOST | Bind host | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.server.host` |
+| `ORI_WEB__SERVER__PORT` | int | const.DEFAULT_PORT | Bind port | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.server.port` |
+| `ORI_WEB__SERVER__RELOAD` | bool | const.DEFAULT_RELOAD | Enable auto-reload | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.server.reload` |
+| `ORI_WEB__SERVER__WORKERS` | int | const.DEFAULT_WORKERS | Number of workers | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.server.workers` |
+| `ORI_WEB__STATIC__DIRECTORY` | str | 'static' | Directory to serve | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.static.directory` |
+| `ORI_WEB__STATIC__ENABLED` | bool | False | Enable static file serving | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.static.enabled` |
+| `ORI_WEB__STATIC__HTML` | bool | False | Serve HTML files (SPA mode) | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.static.html` |
+| `ORI_WEB__STATIC__PREFIX` | str | '/static' | URL prefix for static files | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.static.prefix` |
+| `ORI_WEB__SWAGGER_CSS_URL` | str \| None | None | — | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.swagger_css_url` |
+| `ORI_WEB__SWAGGER_JS_URL` | str \| None | None | — | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.swagger_js_url` |
+| `ORI_WEB__SWAGGER_UI_URL` | str \| None | const.DEFAULT_DOCS_PATH | — | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.swagger_ui_url` |
+| `ORI_WEB__TEMPLATE_DIRECTORY` | str | 'templates' | Directory for Jinja2 templates | `packages/oridecon-web/src/oridecon/web/config.py:WebConfig.template_directory` |
+
+### `oridecon-webhook` (18 vars)
+
+| Env Var | Type | Default | Description | Source |
+|---------|------|---------|-------------|--------|
+| `ORI_WEBHOOK__ALLOW_PRIVATE_URLS` | bool | — | Allow registering and delivering webhooks to private, loopback, or link-local... | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.allow_private_urls` |
+| `ORI_WEBHOOK__DELIVERY_LOG_RETENTION_DAYS` | int | — | Days to retain delivery log (0 = indefinite) | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.delivery_log_retention_days` |
+| `ORI_WEBHOOK__DELIVERY_TIMEOUT_SECONDS` | float | — | HTTP request timeout per delivery attempt | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.delivery_timeout_seconds` |
+| `ORI_WEBHOOK__DISABLE_AFTER_CONSECUTIVE_FAILURES` | int | — | Auto-disable threshold | `packages/oridecon-webhook/src/oridecon/webhook/config.p...onfig.disable_after_consecutive_failures` |
+| `ORI_WEBHOOK__ENABLE_ADMIN` | bool | — | Whether to register the admin contributor | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.enable_admin` |
+| `ORI_WEBHOOK__EVENT_ID_HEADER` | str | — | HTTP header for the event ID | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.event_id_header` |
+| `ORI_WEBHOOK__EVENT_TYPE_HEADER` | str | — | HTTP header for the event type | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.event_type_header` |
+| `ORI_WEBHOOK__FAILURE_WINDOW_HOURS` | int | — | Window for counting consecutive failures | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.failure_window_hours` |
+| `ORI_WEBHOOK__RETRY_BACKOFF_FACTOR` | float | — | Exponential backoff multiplier | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.retry_backoff_factor` |
+| `ORI_WEBHOOK__RETRY_BASE_DELAY` | float | — | Initial retry delay in seconds | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.retry_base_delay` |
+| `ORI_WEBHOOK__RETRY_MAX_ATTEMPTS` | int | — | Maximum delivery attempts before dead-letter | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.retry_max_attempts` |
+| `ORI_WEBHOOK__RETRY_MAX_DELAY` | float | — | Maximum retry delay ceiling in seconds | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.retry_max_delay` |
+| `ORI_WEBHOOK__SECRET_LENGTH` | int | — | Secret length in bytes (hex-encoded output is 2x) | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.secret_length` |
+| `ORI_WEBHOOK__SECRET_ROTATION_GRACE_HOURS` | int | — | Hours both old and new secrets are accepted | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.secret_rotation_grace_hours` |
+| `ORI_WEBHOOK__SIGNATURE_ALGORITHM` | str | — | HMAC algorithm name | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.signature_algorithm` |
+| `ORI_WEBHOOK__SIGNATURE_HEADER` | str | — | HTTP header for the HMAC signature | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.signature_header` |
+| `ORI_WEBHOOK__STORE_BACKEND` | str | — | Persistence backend ('sql' requires oridecon-webhook[sql]) | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.store_backend` |
+| `ORI_WEBHOOK__TIMESTAMP_HEADER` | str | — | HTTP header for the delivery timestamp | `packages/oridecon-webhook/src/oridecon/webhook/config.py:WebhookConfig.timestamp_header` |
 

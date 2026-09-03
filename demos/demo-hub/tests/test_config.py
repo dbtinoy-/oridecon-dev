@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from lexigram.config.main import LexigramConfig
-from lexigram.web.config import WebConfig
+from oridecon.config.main import OrideconConfig
+from oridecon.web.config import WebConfig
 
 
 def _load_web_config() -> WebConfig:
@@ -13,7 +13,7 @@ def _load_web_config() -> WebConfig:
     from pathlib import Path
 
     yaml_path = Path(__file__).resolve().parent.parent / "application.yaml"
-    return LexigramConfig.from_yaml(yaml_path).get_section("web", WebConfig)
+    return OrideconConfig.from_yaml(yaml_path).get_section("web", WebConfig)
 
 
 def test_web_config_reads_server_and_security() -> None:
@@ -24,5 +24,5 @@ def test_web_config_reads_server_and_security() -> None:
 
 
 def test_env_override_wins(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("LEX_WEB__SERVER__PORT", "7077")
+    monkeypatch.setenv("ORI_WEB__SERVER__PORT", "7077")
     assert _load_web_config().server.port == 7077

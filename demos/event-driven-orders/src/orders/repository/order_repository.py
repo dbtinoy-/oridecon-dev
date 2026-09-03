@@ -2,7 +2,7 @@
 
 In-memory store for the order aggregate.  In production, swap for a
 database-backed implementation using ``DatabaseProviderProtocol`` from
-``lexigram-contracts``.  The repository owns the write-side state;
+``oridecon-contracts``.  The repository owns the write-side state;
 the read side is built by the ``OrdersView`` projection.
 
 Convention: repositories are simple data-access classes — no business

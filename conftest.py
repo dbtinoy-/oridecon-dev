@@ -1,4 +1,4 @@
-"""Root conftest.py — shared test fixtures for the Lexigram workspace."""
+"""Root conftest.py — shared test fixtures for the Oridecon workspace."""
 
 from __future__ import annotations
 
@@ -29,42 +29,42 @@ for _src in (
             sys.path.insert(0, _src_str)
 # Also add special test helpers paths
 for _extra in [
-    _ROOT / "experimental" / "ai" / "lexigram-ai-memory" / "tests" / "unit",
+    _ROOT / "experimental" / "ai" / "oridecon-ai-memory" / "tests" / "unit",
     # Sibling support modules imported by bare name from tests running under
     # --import-mode=importlib (root-level runs do not insert per-file dirs).
-    _ROOT / "packages" / "lexigram-web" / "tests" / "unit" / "security",
-    _ROOT / "experimental" / "ai" / "lexigram-ai-agents" / "tests" / "unit",
-    _ROOT / "experimental" / "ai" / "lexigram-ai" / "tests" / "unit",
-    _ROOT / "experimental" / "ai" / "lexigram-ai-rag" / "tests" / "unit",
+    _ROOT / "packages" / "oridecon-web" / "tests" / "unit" / "security",
+    _ROOT / "experimental" / "ai" / "oridecon-ai-agents" / "tests" / "unit",
+    _ROOT / "experimental" / "ai" / "oridecon-ai" / "tests" / "unit",
+    _ROOT / "experimental" / "ai" / "oridecon-ai-rag" / "tests" / "unit",
     # Admin app root so its `from tests.<subdir> import ...` namespace imports
     # resolve when the suite runs from the monorepo root.
-    _ROOT / "experimental" / "apps" / "lexigram-admin",
+    _ROOT / "experimental" / "apps" / "oridecon-admin",
 ]:
     _extra_str = str(_extra)
     if _extra.exists() and _extra_str not in sys.path:
         sys.path.insert(0, _extra_str)
 
 # Re-extend namespace package __path__ now that all src dirs are on sys.path.
-# This is necessary because namespace packages (lexigram, lexigram.ai) may have
+# This is necessary because namespace packages (oridecon, oridecon.ai) may have
 # been imported earlier (via .pth editable installs) with a limited sys.path,
 # freezing their __path__ before our workspace packages were added.
 # We also explicitly import these packages here to force them to be cached correctly
-# in sys.modules BEFORE sub-conftest files (e.g. lexigram/tests/conftest.py) run.
+# in sys.modules BEFORE sub-conftest files (e.g. oridecon/tests/conftest.py) run.
 from typing import TYPE_CHECKING, Any
 
-import lexigram as _lx  # noqa: E402 — must run after sys.path injection
-import lexigram.contracts as _lx_contracts  # noqa: E402
+import oridecon as _lx  # noqa: E402 — must run after sys.path injection
+import oridecon.contracts as _lx_contracts  # noqa: E402
 
 _pkg_imports: list[tuple[str, Any]] = [
-    ("lexigram", _lx),
-    ("lexigram.contracts", _lx_contracts),
+    ("oridecon", _lx),
+    ("oridecon.contracts", _lx_contracts),
 ]
 try:
-    import lexigram.ai as _lx_ai  # noqa: E402
+    import oridecon.ai as _lx_ai  # noqa: E402
 
-    _pkg_imports.append(("lexigram.ai", _lx_ai))
+    _pkg_imports.append(("oridecon.ai", _lx_ai))
 except ImportError:
-    pass  # lexigram-ai is an experimental package; absent from the public mirror
+    pass  # oridecon-ai is an experimental package; absent from the public mirror
 
 for _ns, _pkg in _pkg_imports:
     if hasattr(_pkg, "__path__"):
@@ -78,7 +78,7 @@ import pytest
 # integration test directories. Must be declared here (root conftest) — not in
 # sub-package conftests — to avoid "Plugin already registered" errors when
 # pytest collects multiple packages in a single run.
-pytest_plugins = ["lexigram.testing.integration.fixtures", "pytest_asyncio"]
+pytest_plugins = ["oridecon.testing.integration.fixtures", "pytest_asyncio"]
 
 
 def pytest_configure(config: pytest.Config) -> None:
@@ -177,8 +177,8 @@ def setup_container_context() -> Generator[Any, None, None]:
     - Explicit dependencies make tests clearer
     - Improves test performance for tests that don't need DI
     """
-    from lexigram.di import Container
-    from lexigram.primitives.context import create_default_context
+    from oridecon.di import Container
+    from oridecon.primitives.context import create_default_context
 
     container = Container()
     context = create_default_context()

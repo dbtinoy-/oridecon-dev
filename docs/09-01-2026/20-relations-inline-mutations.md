@@ -1,6 +1,6 @@
 # 20 — Relations Inline Mutations & Follow-ups (R24 / B32–B34) (Full Plan)
 
-**Date:** 2026-09-02 · **Status:** 🚧 In progress · **Branch:** `arena/01a05b98-lexigram`
+**Date:** 2026-09-02 · **Status:** 🚧 In progress · **Branch:** `arena/01a05b98-oridecon`
 
 ## 1. Findings
 

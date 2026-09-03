@@ -25,7 +25,7 @@ fixed format: `"(demo reply) You asked about: {snippet}"`. The demo proves
 the guard pipeline, governance gates, and audit trail work — not LLM
 quality. All outputs are deterministic and byte-stable across runs.
 
-## Lexigram patterns used
+## Oridecon patterns used
 
 | Pattern | Where | What to reuse |
 |---|---|---|
@@ -41,7 +41,7 @@ quality. All outputs are deterministic and byte-stable across runs.
 ## Layout — read it in this order
 
 Start at the composition root and follow the wiring outward.
-Each file has teaching comments explaining the Lexigram convention it follows.
+Each file has teaching comments explaining the Oridecon convention it follows.
 
 | # | File | Lesson |
 |---|------|--------|

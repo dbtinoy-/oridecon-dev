@@ -12,11 +12,11 @@ from typing import AsyncIterator
 
 import pytest
 
-from lexigram.app import Application
-from lexigram.contracts.events import EventBusProtocol
-from lexigram.contracts.exceptions import EventError
-from lexigram.events.buses.command import CommandBusImpl
-from lexigram.result import Err, Result
+from oridecon.app import Application
+from oridecon.contracts.events import EventBusProtocol
+from oridecon.contracts.exceptions import EventError
+from oridecon.events.buses.command import CommandBusImpl
+from oridecon.result import Err, Result
 
 from orders.commands import PayOrder, PlaceOrder, ShipOrder
 from orders.domain import OrderItem, OrderNotPaidError, OrderPlaced, OrderStatus
@@ -32,7 +32,7 @@ from orders.services.orders_api import OrdersApi
 def _freeze_logging_config(monkeypatch: pytest.MonkeyPatch) -> None:
     """Keep structlog processors stable so capture_logs sees lifecycle events."""
     monkeypatch.setattr(
-        "lexigram.app.base._apply_logging_config", lambda _cfg, **kwargs: None
+        "oridecon.app.base._apply_logging_config", lambda _cfg, **kwargs: None
     )
 
 

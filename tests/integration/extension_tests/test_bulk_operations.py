@@ -8,8 +8,8 @@ import time
 
 import pytest
 
-from lexigram.workflow.config import BulkOperationConfig
-from lexigram.workflow.bulk import (
+from oridecon.workflow.config import BulkOperationConfig
+from oridecon.workflow.bulk import (
     BulkOperation,
     BulkOperationError,
     BulkOperationState,

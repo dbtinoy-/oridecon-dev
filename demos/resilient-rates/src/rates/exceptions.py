@@ -1,11 +1,11 @@
 """Exceptions for the resilient rates demo.
 
 Convention followed: **Exception hierarchy** — base domain exceptions live
-in ``lexigram-contracts``, leaf exceptions live in the demo package.
+in ``oridecon-contracts``, leaf exceptions live in the demo package.
 The hierarchy is:
 
 ```
-InfrastructureError (lexigram-contracts)
+InfrastructureError (oridecon-contracts)
   └── RateProviderError
         ├── UpstreamTimeoutError
         ├── UpstreamUnavailableError
@@ -19,7 +19,7 @@ that knows the HTTP semantics.
 
 from __future__ import annotations
 
-from lexigram.contracts.exceptions import InfrastructureError
+from oridecon.contracts.exceptions import InfrastructureError
 
 
 class RateProviderError(InfrastructureError):

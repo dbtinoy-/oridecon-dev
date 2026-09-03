@@ -2,7 +2,7 @@
 
 > Module name: `mfa_console` — run with `PYTHONPATH=demos/auth-mfa/src uv run python -m mfa_console`
 
-Demonstrates **multi-factor authentication** from lexigram-auth through a
+Demonstrates **multi-factor authentication** from oridecon-auth through a
 real browser flow: password login issues a *pending* challenge for
 MFA-enabled users, a 6-digit TOTP code (or single-use backup code) upgrades
 it to a full session, and enrollment/disable live on the profile page.
@@ -11,7 +11,7 @@ Fully offline: the seeded `mfa@mfa.demo` account is enrolled at boot, and
 tests compute RFC 6238 codes directly from the framework's
 `generate_totp_code`.
 
-## Lexigram concepts used
+## Oridecon concepts used
 
 | Concept | Where in this demo | Your app |
 |---------|-------------------|----------|
@@ -26,7 +26,7 @@ tests compute RFC 6238 codes directly from the framework's
 
 ## What it shows
 
-| Piece | Where | Lexigram API used |
+| Piece | Where | Oridecon API used |
 |-------|-------|-------------------|
 | Pending challenge flow | `controllers/api.py` | pre-auth session row + `MFAManager.verify_totp(user_id, code)` |
 | Enrollment (secret + provisioning URI + backup codes) | `controllers/api.py` | `MFAManager.enable_totp(user_id, issuer)` — codes shown once |
@@ -65,7 +65,7 @@ Open http://127.0.0.1:8092.
 ## Layout — read it in this order
 
 Start at the composition root and follow the wiring outward.
-Each file has teaching comments explaining the Lexigram convention it follows.
+Each file has teaching comments explaining the Oridecon convention it follows.
 
 | # | File | Lesson |
 |---|------|--------|
@@ -89,7 +89,7 @@ demos/auth-mfa/
 │   ├── repository/
 │   │   └── session_repository.py  # SessionRepositoryProtocol impl
 │   └── ui/                    # pages controller + views/ + static/
-├── application.yaml           # web/auth sections (LEX_* overrides win)
+├── application.yaml           # web/auth sections (ORI_* overrides win)
 └── tests/                     # e2e flow via ASGITransport
 ```
 

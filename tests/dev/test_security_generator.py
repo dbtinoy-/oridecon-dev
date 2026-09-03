@@ -18,8 +18,8 @@ TRACKER_FIXTURE = """\
 
 RUFF_CLEAN = "All checks passed!\n"
 RUFF_DIRTY = (
-    "lexigram-web/src/lexigram/web/app.py:40:9: S608 Possible SQL injection vector through string-based query construction\n"
-    "lexigram/src/lexigram/dispatcher.py:12:5: S101 Use of `assert` detected\n"
+    "oridecon-web/src/oridecon/web/app.py:40:9: S608 Possible SQL injection vector through string-based query construction\n"
+    "oridecon/src/oridecon/dispatcher.py:12:5: S101 Use of `assert` detected\n"
     "Found 2 errors.\n"
 )
 PIP_CLEAN = "No known vulnerabilities found\n"
@@ -30,9 +30,9 @@ def _write_workspace(tmp_path: Path, *, tracker: bool = True) -> None:
     (tmp_path / "pyproject.toml").write_text(
         '[project]\nname = "workspace"\n', encoding="utf-8"
     )
-    (tmp_path / "lexigram").mkdir()
-    (tmp_path / "lexigram" / "pyproject.toml").write_text(
-        '[project]\nname = "lexigram"\n', encoding="utf-8"
+    (tmp_path / "oridecon").mkdir()
+    (tmp_path / "oridecon" / "pyproject.toml").write_text(
+        '[project]\nname = "oridecon"\n', encoding="utf-8"
     )
     if tracker:
         docs = tmp_path / "docs"
@@ -126,8 +126,8 @@ def test_security_generator_parses_ruff_and_pip_evidence(
             severity=RuleSeverity.CRITICAL,
             owner="security",
             rationale="verification must stay on",
-            package_name="lexigram",
-            path=Path("lexigram/src/lexigram/jwt.py"),
+            package_name="oridecon",
+            path=Path("oridecon/src/oridecon/jwt.py"),
             line=7,
             message="accepts the unsigned 'none' JWT algorithm.",
         )

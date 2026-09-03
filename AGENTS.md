@@ -1,4 +1,4 @@
-# Lexigram Framework — Implementation Guidelines
+# Oridecon Framework — Implementation Guidelines
 
 > **Version**: 3.1 (Current) | **Scope**: Framework implementation standards (architecture, contracts, style, DI, providers, modules, testing, code generation).
 
@@ -11,45 +11,45 @@
 
 ### 1.1 What This Repository Contains
 
-A monorepo for the **Lexigram Framework** — a contract-based, async-first,
+A monorepo for the **Oridecon Framework** — a contract-based, async-first,
 full-stack Python application platform built on DI, IoC, and the provider
 pattern.
 
 ### 1.2 Package Hierarchy (Inviolable)
 
 ```
-lexigram-contracts    Zero dependencies. Protocols, types, exceptions only.
+oridecon-contracts    Zero dependencies. Protocols, types, exceptions only.
     ↑   ↑
-    ↑ lexigram           Depends ONLY on lexigram-contracts. Core framework.
+    ↑ oridecon           Depends ONLY on oridecon-contracts. Core framework.
     ↑   ↑
-    lexigram-*         Extension packages. Depend on lexigram + lexigram-contracts.
+    oridecon-*         Extension packages. Depend on oridecon + oridecon-contracts.
 ```
 
 **Dependency rules:**
 
-- `lexigram-contracts` imports **nothing** from the ecosystem.
-- `lexigram` imports **only** from `lexigram-contracts`.
-- Extension packages import from `lexigram` and `lexigram-contracts` —
+- `oridecon-contracts` imports **nothing** from the ecosystem.
+- `oridecon` imports **only** from `oridecon-contracts`.
+- Extension packages import from `oridecon` and `oridecon-contracts` —
   normally **never from each other**.
 - Cross-extension communication goes through **contracts, the container,
   providers, and IoC** — never direct imports.
 
 **Documented Exceptions** (same-subsystem imports only):
 
-- **`lexigram-admin`** may import directly from
-  `lexigram-ui` (shared UI primitives).
-- **`lexigram-admin`** may import from `lexigram-auth`, `lexigram-cache`,
-  `lexigram-features`, and `lexigram-resilience` — these are fundamental to
+- **`oridecon-admin`** may import directly from
+  `oridecon-ui` (shared UI primitives).
+- **`oridecon-admin`** may import from `oridecon-auth`, `oridecon-cache`,
+  `oridecon-features`, and `oridecon-resilience` — these are fundamental to
   admin dashboard functionality and declared as explicit `pyproject.toml` deps.
-- **`lexigram-ai`** (orchestrator) may import from **any** `lexigram-ai-*`
-  subpackage and from `lexigram-vector` — all consumed packages must be
+- **`oridecon-ai`** (orchestrator) may import from **any** `oridecon-ai-*`
+  subpackage and from `oridecon-vector` — all consumed packages must be
   declared as explicit `pyproject.toml` deps.
-- **`lexigram-multimedia`** (orchestrator) may import from **any**
-  `lexigram-multimedia-*` subpackage — all consumed packages must be declared
+- **`oridecon-multimedia`** (orchestrator) may import from **any**
+  `oridecon-multimedia-*` subpackage — all consumed packages must be declared
   as explicit `pyproject.toml` deps.
-- **`lexigram-testing`** may import from any extension package — its purpose
+- **`oridecon-testing`** may import from any extension package — its purpose
   is cross-package test utilities; all used packages must be declared as optional
-  deps in `lexigram-testing/pyproject.toml`.
+  deps in `oridecon-testing/pyproject.toml`.
 
 **AI Subsystem Import Rules:**
 
@@ -57,27 +57,27 @@ The AI subsystem follows the **same IoC discipline** as the rest of the
 framework. There are **no** free-for-all exceptions for AI packages.
 
 ```
-lexigram-contracts     ← All protocols + shared value types
+oridecon-contracts     ← All protocols + shared value types
     ↑
-lexigram               ← Core framework
+oridecon               ← Core framework
     ↑
-lexigram-ai-*          ← Implementation packages (agents, llm, rag, memory, etc.)
-                          Depend ONLY on lexigram + lexigram-contracts
+oridecon-ai-*          ← Implementation packages (agents, llm, rag, memory, etc.)
+                          Depend ONLY on oridecon + oridecon-contracts
                           Do NOT import from each other
-                          Do NOT import from lexigram-ai
+                          Do NOT import from oridecon-ai
     ↑ (entry points)
-lexigram-ai            ← OPTIONAL orchestrator. Discovers sub-packages via
+oridecon-ai            ← OPTIONAL orchestrator. Discovers sub-packages via
                           entry points. Never imported by sub-packages.
 ```
 
-- All `lexigram-ai-*` packages depend **only** on `lexigram` and
-  `lexigram-contracts`.
-- `lexigram-ai-*` packages do **NOT** import from each other.
-- `lexigram-ai-*` packages do **NOT** import from `lexigram-ai`.
-- `lexigram-ai` discovers sub-packages via `lexigram.ai.subsystems`
+- All `oridecon-ai-*` packages depend **only** on `oridecon` and
+  `oridecon-contracts`.
+- `oridecon-ai-*` packages do **NOT** import from each other.
+- `oridecon-ai-*` packages do **NOT** import from `oridecon-ai`.
+- `oridecon-ai` discovers sub-packages via `oridecon.ai.subsystems`
   entry points.
 - Shared value types (`ChatMessage`, `Role`, `Document`, `SearchResult`)
-  live in `lexigram-contracts`.
+  live in `oridecon-contracts`.
 - Cross-AI-package communication goes through protocols resolved via the
   container.
 
@@ -86,13 +86,13 @@ lexigram-ai            ← OPTIONAL orchestrator. Discovers sub-packages via
 ## 2. Contracts Boundary Rules
 
 This section defines **what lives where** across the three layers:
-`lexigram-contracts`, `lexigram`, and extension packages. These rules
+`oridecon-contracts`, `oridecon`, and extension packages. These rules
 eliminate the duplication and drift discovered during architectural review.
 
 ### 2.1 The Golden Rule
 
 > **If two or more packages need to reference the same type, protocol,
-> or exception, it lives in `lexigram-contracts`. No exceptions.**
+> or exception, it lives in `oridecon-contracts`. No exceptions.**
 
 A type that starts in an extension package and later gets imported by a
 second extension package must be **moved to contracts** — never imported
@@ -107,26 +107,26 @@ entire dependency graph.
 
 ```
 Is this protocol consumed by more than one package?
-  → YES → lexigram-contracts (always)
+  → YES → oridecon-contracts (always)
 
 Is this protocol the contract for a service registered in the container?
-  → YES → lexigram-contracts (container bindings must resolve against contracts)
+  → YES → oridecon-contracts (container bindings must resolve against contracts)
 
 Is this protocol part of a pluggable backend system (multiple implementations)?
-  → YES → lexigram-contracts (backends are swappable across packages)
+  → YES → oridecon-contracts (backends are swappable across packages)
 
 Is this protocol strictly internal to one package, never exposed outside,
 and would not make semantic sense in contracts?
   → YES → Extension package (in a protocols.py file within the package)
-  → UNSURE → lexigram-contracts (err on the side of contracts)
+  → UNSURE → oridecon-contracts (err on the side of contracts)
 ```
 
-#### Where Protocols Live in `lexigram-contracts`
+#### Where Protocols Live in `oridecon-contracts`
 
 Protocols are organized by **domain**, not by AI-package name:
 
 ```
-lexigram-contracts/src/lexigram/contracts/
+oridecon-contracts/src/oridecon/contracts/
 ├── ai/
 │   ├── agents.py             # AgentProtocol, ToolProtocol, StrategyProtocol,
 │   │                         # AgentExecutorProtocol, ToolRegistryProtocol
@@ -175,7 +175,7 @@ lexigram-contracts/src/lexigram/contracts/
 | Protocol in extension package consumed by another extension | Forces cross-extension import; move to contracts |
 | Re-export wrapper that adds nothing | Indirection without value |
 | Protocol with implementation code | Contracts are interfaces only |
-| File named `protocols.py` in `lexigram-contracts` containing dataclasses | Separate types from protocols |
+| File named `protocols.py` in `oridecon-contracts` containing dataclasses | Separate types from protocols |
 
 ### 2.3 Shared Value Type Placement
 
@@ -186,7 +186,7 @@ because they appear in function signatures across the entire framework.
 #### Rule: Shared Types Live in Contracts
 
 Any value type that appears in a **protocol method signature** or is
-**used by more than one package** must live in `lexigram-contracts`.
+**used by more than one package** must live in `oridecon-contracts`.
 
 **Types that MUST be in contracts:**
 
@@ -218,16 +218,16 @@ Any value type that appears in a **protocol method signature** or is
 
 | Type | Location | Reason |
 |---|---|---|
-| `ConversationStats` | `lexigram-ai-llm` | LLM conversation management only |
-| `CacheEntry`, `CacheStats` | `lexigram-ai-llm` | LLM cache internals |
-| `PlanStep` | `lexigram-ai-agents` | Plan-and-execute strategy internal |
-| `Chunk` | `lexigram-ai-rag` | RAG chunking internal (contracts has `ChunkProtocol`) |
-| `HypotheticalDocument` | `lexigram-ai-rag` | HyDE internal |
-| `CompressionResult` | `lexigram-ai-rag` | Context compression internal |
-| `PipelineContext` | `lexigram-ai-rag` | Pipeline execution internal |
-| `PromptVariable` | `lexigram-ai-prompt` | Prompt template internal |
-| `FeedbackItem` | `lexigram-ai-feedback` | Feedback collection internal |
-| `StoredFact` | `lexigram-ai-memory` | Semantic memory internal |
+| `ConversationStats` | `oridecon-ai-llm` | LLM conversation management only |
+| `CacheEntry`, `CacheStats` | `oridecon-ai-llm` | LLM cache internals |
+| `PlanStep` | `oridecon-ai-agents` | Plan-and-execute strategy internal |
+| `Chunk` | `oridecon-ai-rag` | RAG chunking internal (contracts has `ChunkProtocol`) |
+| `HypotheticalDocument` | `oridecon-ai-rag` | HyDE internal |
+| `CompressionResult` | `oridecon-ai-rag` | Context compression internal |
+| `PipelineContext` | `oridecon-ai-rag` | Pipeline execution internal |
+| `PromptVariable` | `oridecon-ai-prompt` | Prompt template internal |
+| `FeedbackItem` | `oridecon-ai-feedback` | Feedback collection internal |
+| `StoredFact` | `oridecon-ai-memory` | Semantic memory internal |
 | Package config classes | Each package | Package-specific configuration |
 
 #### The Duplication Test
@@ -235,7 +235,7 @@ Any value type that appears in a **protocol method signature** or is
 Before adding a type to an extension package, ask:
 
 1. Does this type appear in any protocol signature in contracts? → **Contracts**
-2. Will another `lexigram-ai-*` package need to reference this type? → **Contracts**
+2. Will another `oridecon-ai-*` package need to reference this type? → **Contracts**
 3. Is this type a return value from a service resolved via the container? → **Contracts**
 4. Is this type purely internal to one package's implementation? → **Extension package**
 
@@ -251,32 +251,32 @@ contracts, **specific leaf exceptions** in extension packages.
 #### Hierarchy Structure
 
 ```
-lexigram-contracts                    Extension Package
+oridecon-contracts                    Extension Package
 ──────────────────                    ─────────────────
-LexigramError                        (never redefined)
+OrideconError                        (never redefined)
 ├── DomainError                      (never redefined)
 ├── InfrastructureError              (never redefined)
 ├── ContainerError                   (never redefined)
 │
-├── ai/exceptions.py:                lexigram-ai-llm/exceptions.py:
+├── ai/exceptions.py:                oridecon-ai-llm/exceptions.py:
 │   ├── AIError                      ├── LLMError(AIError)
 │   │                                ├── LLMRateLimitError(LLMError)
 │   │                                ├── LLMModelNotFoundError(LLMError)
 │   │                                ├── LLMContentFilterError(LLMError)
 │   │                                └── LLMAuthenticationError(LLMError)
 │   │
-│   │                                lexigram-ai-rag/exceptions.py:
+│   │                                oridecon-ai-rag/exceptions.py:
 │   │                                ├── RAGError(AIError)
 │   │                                ├── PreprocessingError(RAGError)
 │   │                                ├── RetrievalError(RAGError)
 │   │                                └── SynthesisError(RAGError)
 │   │
-│   │                                lexigram-ai-memory/exceptions.py:
+│   │                                oridecon-ai-memory/exceptions.py:
 │   │                                ├── MemorySystemError(AIError)
 │   │                                ├── MemoryStoreError(MemorySystemError)
 │   │                                └── ConsolidationError(MemorySystemError)
 │   │
-├── ai/agents.py:                    lexigram-ai-agents/exceptions.py:
+├── ai/agents.py:                    oridecon-ai-agents/exceptions.py:
 │   ├── AgentError                   ├── AgentConfigurationError(AgentError)
 │   ├── ToolError                    ├── AgentExecutionError(AgentError)
 │   └── StrategyError               ├── ToolNotFoundError(ToolError)
@@ -295,12 +295,12 @@ LexigramError                        (never redefined)
 | **Extension exceptions extend contracts base** | `LLMRateLimitError(LLMError)` where `LLMError` is from contracts |
 | **Package base exception required** | Every extension defines `<Domain>Error(ContractsBase)` as its catch-all |
 
-#### Where Exceptions Live in `lexigram-contracts`
+#### Where Exceptions Live in `oridecon-contracts`
 
 ```
-lexigram-contracts/src/lexigram/contracts/
+oridecon-contracts/src/oridecon/contracts/
 ├── exceptions/
-│   ├── base.py          # LexigramError (root)
+│   ├── base.py          # OrideconError (root)
 │   ├── domain.py        # DomainError, NotFoundError, ValidationError, etc.
 │   ├── infra.py         # InfrastructureError, DatabaseError, LockError, etc.
 │   ├── container.py     # ContainerError, CircularDependencyError, etc.
@@ -332,7 +332,7 @@ type depends on the semantic of the values:
 - **String enums** — use `class X(str, Enum):` or `class X(StrEnum):`.
   Members compare equal to their string value, serialize naturally to JSON,
   and work in `isinstance(x, str)` checks. `StrEnum` is the convention used
-  throughout `lexigram-contracts` (e.g. `Role`, `CircuitState`).
+  throughout `oridecon-contracts` (e.g. `Role`, `CircuitState`).
 - **Ordering / priority / status-code enums** — use `class X(int, Enum):`
   (or `IntEnum`). Required when members must support numeric comparison
   (`<`, `>`, `+`) or be passed directly to APIs that expect `int`.
@@ -388,21 +388,21 @@ class Status(Enum):
 
 | Enum | Location | Reason |
 |---|---|---|
-| `ChunkingStrategy` | `lexigram-ai-rag` | RAG chunking internals |
-| `CompressionStrategy` | `lexigram-ai-rag` | RAG compression internals |
-| `SynthesisStrategy` | `lexigram-ai-rag` | RAG synthesis internals |
-| `ReasoningStrategy` | `lexigram-ai-rag` | RAG reasoning internals |
-| `OptimizationStrategy` | `lexigram-ai-prompt` | Prompt optimization internals |
-| `RenderFormat` | `lexigram-ai-prompt` | Prompt rendering internals |
-| `FeedbackType` | `lexigram-ai-feedback` | Feedback collection internals |
-| `PlanStepStatus` | `lexigram-ai-agents` | Plan-and-execute internals |
+| `ChunkingStrategy` | `oridecon-ai-rag` | RAG chunking internals |
+| `CompressionStrategy` | `oridecon-ai-rag` | RAG compression internals |
+| `SynthesisStrategy` | `oridecon-ai-rag` | RAG synthesis internals |
+| `ReasoningStrategy` | `oridecon-ai-rag` | RAG reasoning internals |
+| `OptimizationStrategy` | `oridecon-ai-prompt` | Prompt optimization internals |
+| `RenderFormat` | `oridecon-ai-prompt` | Prompt rendering internals |
+| `FeedbackType` | `oridecon-ai-feedback` | Feedback collection internals |
+| `PlanStepStatus` | `oridecon-ai-agents` | Plan-and-execute internals |
 
 ### 2.6 No-Duplication Rule
 
 > **Every protocol, type, exception, and enum has exactly ONE definition
 > in the entire monorepo.**
 
-If a name exists in `lexigram-contracts`, no extension package may
+If a name exists in `oridecon-contracts`, no extension package may
 redefine it. Extension packages import from contracts.
 
 If a name exists in an extension package and a second package needs it,
@@ -419,9 +419,9 @@ This file contains **only base exception classes** — one per AI
 subdomain. Leaf exceptions live in their extension packages.
 
 ```python
-# lexigram-contracts/src/lexigram/contracts/ai/exceptions.py
+# oridecon-contracts/src/oridecon/contracts/ai/exceptions.py
 
-from lexigram.contracts.exceptions.domain import DomainError
+from oridecon.contracts.exceptions.domain import DomainError
 
 
 class AIError(DomainError):
@@ -432,19 +432,19 @@ class AIError(DomainError):
 
 
 class LLMError(AIError):
-    """Base for LLM client errors. Extended in lexigram-ai-llm."""
+    """Base for LLM client errors. Extended in oridecon-ai-llm."""
 
 
 class RAGError(AIError):
-    """Base for RAG pipeline errors. Extended in lexigram-ai-rag."""
+    """Base for RAG pipeline errors. Extended in oridecon-ai-rag."""
 
 
 class MemoryError(AIError):
-    """Base for memory system errors. Extended in lexigram-ai-memory."""
+    """Base for memory system errors. Extended in oridecon-ai-memory."""
 
 
 class SkillError(AIError):
-    """Base for skill execution errors. Extended in lexigram-ai-skills."""
+    """Base for skill execution errors. Extended in oridecon-ai-skills."""
 
 
 class GovernanceError(AIError):
@@ -460,7 +460,7 @@ class SessionError(AIError):
 
 
 class ExtractionError(AIError):
-    """Base for structured extraction errors. Extended in lexigram-ai-llm."""
+    """Base for structured extraction errors. Extended in oridecon-ai-llm."""
 ```
 
 No other exception classes in this file. No leaf exceptions. No flat
@@ -468,7 +468,7 @@ dumps of 30+ exceptions.
 
 ### 2.8 Contracts File Organization Checklist
 
-Before adding anything to `lexigram-contracts`, verify:
+Before adding anything to `oridecon-contracts`, verify:
 
 - [ ] Is it a protocol, shared type, base exception, or cross-package enum?
   If not, it doesn't belong in contracts.
@@ -503,20 +503,20 @@ These are non-negotiable. Violating any of these is a blocking issue.
 | **Exceptions** for unexpected infrastructure failures | Crash-level errors propagate; no silent swallowing |
 | **Registry-based dispatch** instead of `if/elif` chains | Extensible; declarative; key classes stay prominent |
 | **Absolute imports** everywhere | Unambiguous; refactor-safe |
-| **`lexigram.contracts.domain`** for domain models | Not Pydantic directly — use the framework's domain layer |
+| **`oridecon.contracts.domain`** for domain models | Not Pydantic directly — use the framework's domain layer |
 | **Google-style docstrings** with accurate, detailed first line | Consistency; generated documentation quality |
 | **`class X(str, Enum)`** for string enums; **`class X(int, Enum)`** for ordering/priority/status-code enums | Type safety; iteration; membership checking; correct numeric or string semantics |
 | **Typed constructor parameters** on all services | No `Any` on injected dependencies; use protocols |
 
 ### 4.2 Result Pattern Rules
 
-The `Result[T, E]` type from `lexigram.result` is
+The `Result[T, E]` type from `oridecon.result` is
 the **standard return type for domain operations that can fail in
 expected, recoverable ways**.
 
 ```python
-from lexigram.result import Result
-from lexigram.result import Ok, Err
+from oridecon.result import Result
+from oridecon.result import Ok, Err
 ```
 
 | Use `Result[T, E]` | Use Exceptions |
@@ -592,13 +592,13 @@ async def execute(self) -> Result[SkillResult, Any]:  # Defeats purpose
 | Anti-Pattern | Why |
 |--------------|-----|
 | **Service Locator** (passing the container into services) | Hides real dependencies; untestable |
-| **Direct cross-extension imports** (`lexigram-web` → `lexigram-sql`) | Violates dependency architecture; creates lateral coupling |
+| **Direct cross-extension imports** (`oridecon-web` → `oridecon-sql`) | Violates dependency architecture; creates lateral coupling |
 | **Shims, aliases, re-export wrappers** | Indirection without value; maintenance burden |
 | **Backward-compatibility layers or deprecation shims** | Clean breaks only; no dead code |
 | **Ad-hoc code to satisfy tests** | Tests validate the design — fix the design, not tests |
 | **Singletons (module-level or class-level)** | Use container-managed `singleton` registrations |
 | **Manual instantiation** of services | Always resolve through the container |
-| **`try/except` around framework imports** | `lexigram` and `lexigram-contracts` are always available |
+| **`try/except` around framework imports** | `oridecon` and `oridecon-contracts` are always available |
 | **Relative imports** | Use absolute imports exclusively |
 | **Duplicate or redundant code** | Extract, don't copy |
 | **Unused direct dependencies in package manifests** | Every `dependencies`/optional entry must be imported by that package's source (or be a hard runtime requirement of its integration); dead deps bloat installs and expand the supply-chain surface |
@@ -613,12 +613,12 @@ async def execute(self) -> Result[SkillResult, Any]:  # Defeats purpose
 | **`_assert_protocol()` scattered across modules** | Runtime checks belong at registration boundary only |
 | **Self-registering defaults in `__init__`** | Use `with_defaults()` classmethod or provider registration |
 | **Business logic on Provider classes** | Providers register and boot — domain logic goes on services |
-| **Mock/test classes in production `src/` trees** | Test doubles belong in `tests/` or `lexigram-testing` |
+| **Mock/test classes in production `src/` trees** | Test doubles belong in `tests/` or `oridecon-testing` |
 
 ### 4.4 Database Provider Rules
 
 All database access in extension packages must use
-`DatabaseProviderProtocol` from `lexigram-contracts`.
+`DatabaseProviderProtocol` from `oridecon-contracts`.
 
 | Rule | Implementation |
 |------|----------------|
@@ -626,10 +626,10 @@ All database access in extension packages must use
 | **Constructor injection** | Accept `provider: DatabaseProviderProtocol` |
 | **No direct pool creation** | Never call `asyncpg.create_pool()` directly |
 | **Use scoped context** | `async with provider.scoped_context():` |
-| **Cross-package is violation** | Never import from `lexigram.sql` |
+| **Cross-package is violation** | Never import from `oridecon.sql` |
 
 **Exceptions** — Direct database access acceptable for:
-- CLI administrative tools (`lexigram-admin/tools/*.py`)
+- CLI administrative tools (`oridecon-admin/tools/*.py`)
 - Monitoring/health check utilities
 
 ### 4.5 `__init__.py` Policy
@@ -728,7 +728,7 @@ except Exception:
 Use structlog via the framework's logging module. Never `print()`.
 
 ```python
-from lexigram.logging import get_logger
+from oridecon.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -740,8 +740,8 @@ logger.info("user_created", user_id=user.id, email=user.email)
 
 - **Absolute imports only** — no relative imports.
 - **No unused imports** (Ruff F401).
-- **Grouping order**: stdlib → third-party → `lexigram-contracts` →
-  `lexigram` → local.
+- **Grouping order**: stdlib → third-party → `oridecon-contracts` →
+  `oridecon` → local.
 - Ruff handles sort order — do not manually reorder.
 - Every file begins with `from __future__ import annotations`.
 - Use `if TYPE_CHECKING:` for imports needed only by type annotations.
@@ -751,8 +751,8 @@ logger.info("user_created", user_id=user.id, email=user.email)
 Services declare dependencies as typed constructor parameters:
 
 ```python
-from lexigram.contracts.cache import CacheBackendProtocol
-from lexigram.contracts.data.sql.database import DatabaseProviderProtocol
+from oridecon.contracts.cache import CacheBackendProtocol
+from oridecon.contracts.data.sql.database import DatabaseProviderProtocol
 
 
 class UserService:
@@ -774,25 +774,25 @@ A few capabilities are **ambient** by design — they are process-level, not per
 
 | Capability | Import Path | Usage |
 |------------|--------------|-------|
-| **Clock** | `from lexigram.primitives import clock` | `clock.now()`, `clock.monotonic()`, `clock.use(FixedClock())` |
-| **Identity** | `from lexigram.identity import ambient as identity` | `identity.new_uuid()`, `identity.generate_for("user")` |
-| **Hashing** | `from lexigram.security.hashing import ambient as hashing` | `hashing.hash_hex(data)`, `hashing.verify_hex(data, digest)` |
+| **Clock** | `from oridecon.primitives import clock` | `clock.now()`, `clock.monotonic()`, `clock.use(FixedClock())` |
+| **Identity** | `from oridecon.identity import ambient as identity` | `identity.new_uuid()`, `identity.generate_for("user")` |
+| **Hashing** | `from oridecon.security.hashing import ambient as hashing` | `hashing.hash_hex(data)`, `hashing.verify_hex(data, digest)` |
 
 **Design rationale:** These are truly ambient — every code path needs the same clock, the same identity generator, the same hasher. Forcing DI would add ~100+ constructor parameters and fixture changes across the codebase with no benefit.
 
 **Test override:** All ambient capabilities support `use()` context manager for test override:
 ```python
-from lexigram.testing.clock import FixedClock
-from lexigram.primitives import clock
+from oridecon.testing.clock import FixedClock
+from oridecon.primitives import clock
 
 with clock.use(FixedClock("2026-01-01")):
     assert clock.now().year == 2026
 ```
 
-For type-hinting test fakes, use the protocols from `lexigram-contracts`:
+For type-hinting test fakes, use the protocols from `oridecon-contracts`:
 ```python
-from lexigram.contracts.core.clock import ClockProtocol
-from lexigram.testing.clock import FixedClock  # implements ClockProtocol
+from oridecon.contracts.core.clock import ClockProtocol
+from oridecon.testing.clock import FixedClock  # implements ClockProtocol
 ```
 
 **All other services use constructor injection.**
@@ -978,7 +978,7 @@ class CacheProvider(Provider):
 class AgentsModule(Module):
     @classmethod
     def configure(cls, config: AgentConfig | None = None) -> DynamicModule:
-        from lexigram.ai.agents.di.provider import AgentsProvider
+        from oridecon.ai.agents.di.provider import AgentsProvider
 
         return DynamicModule(
             module=cls,
@@ -1017,7 +1017,7 @@ class AgentStrategyRegistry:
 **Rules:**
 - `__init__` creates an **empty** registry. No `_register_defaults()` — never
   self-register defaults in the constructor.
-- `with_defaults()` is inherited from `lexigram.primitives.registry.Registry`
+- `with_defaults()` is inherited from `oridecon.primitives.registry.Registry`
   (it is not re-implemented per class) and returns exactly the entries
   declared by the `_default_entries()` classmethod — the complete,
   in-package built-in set.  `StrategyRegistry` delegates that hook to
@@ -1097,14 +1097,14 @@ generators + Jinja templates and contributes them to the central CLI via
 entry points (same contribution model as web contributors).
 
 ```
-contracts    lexigram.contracts.cli.types.GeneratorDefinition / .make()
-core         lexigram.codegen.base.GeneratorBase   (jinja env, staging, collisions)
-             jinja2 ships behind the opt-in `lexigram[codegen]` extra — the
+contracts    oridecon.contracts.cli.types.GeneratorDefinition / .make()
+core         oridecon.codegen.base.GeneratorBase   (jinja env, staging, collisions)
+             jinja2 ships behind the opt-in `oridecon[codegen]` extra — the
              engine imports lazily and stays importable without it; packages
              authoring generators declare their own jinja2 dependency.
 packages     <pkg>/cli/generators/*.py  +  <pkg>/cli/templates/*.jinja2
              <pkg>/cli/contributor.py  →  get_generators() → [GeneratorDefinition]
-central CLI  entry-point group "lexigram.cli.contributors" → `lexigram gen …`
+central CLI  entry-point group "oridecon.cli.contributors" → `oridecon gen …`
 ```
 
 #### Adding a generator (checklist)
@@ -1119,7 +1119,7 @@ central CLI  entry-point group "lexigram.cli.contributors" → `lexigram gen …
    automatically (`auth_guard` → "Generate Auth Guard"); pass explicit
    `title=` only when derivation reads poorly.
 4. **Entry point** — already declared once per package
-   (`[project.entry-points."lexigram.cli.contributors"]`); nothing to add.
+   (`[project.entry-points."oridecon.cli.contributors"]`); nothing to add.
 5. **Tests** — cover `generate()` into `tmp_path` (file created, no-collision
    path, dry-run) via `patch.object(gen, "render_template", ...)` when content
    control is needed.
@@ -1163,12 +1163,12 @@ central CLI  entry-point group "lexigram.cli.contributors" → `lexigram gen …
 
 Before writing or modifying code, verify:
 
-- [ ] Does this import only from `lexigram` or `lexigram-contracts`
+- [ ] Does this import only from `oridecon` or `oridecon-contracts`
       (not cross-extension)?
 - [ ] Are all dependencies declared as **typed** constructor parameters
       (no `Any` on injected services)?
 - [ ] Is there a contract/protocol for every service boundary?
-- [ ] Does the protocol live in `lexigram-contracts` (not the extension)?
+- [ ] Does the protocol live in `oridecon-contracts` (not the extension)?
 - [ ] Is the registration happening in a provider?
 - [ ] Does the provider's `register()` take `ContainerRegistrarProtocol`
       and `boot()` take `ContainerResolverProtocol`?

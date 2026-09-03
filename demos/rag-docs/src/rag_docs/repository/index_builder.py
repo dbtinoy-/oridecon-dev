@@ -5,12 +5,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from lexigram.ai.rag.loaders.core import MarkdownLoader
-from lexigram.contracts.data.vector.types import CollectionConfig, VectorRecord
-from lexigram.vector.backends.memory import MemoryVectorCollection, MemoryVectorStore
+from oridecon.ai.rag.loaders.core import MarkdownLoader
+from oridecon.contracts.data.vector.types import CollectionConfig, VectorRecord
+from oridecon.vector.backends.memory import MemoryVectorCollection, MemoryVectorStore
 from rag_docs.repository.embedder import EMBEDDING_DIMENSION, HashingEmbedder
 
-CORPUS_COLLECTION_NAME = "lexigram_docs"
+CORPUS_COLLECTION_NAME = "oridecon_docs"
 
 
 @dataclass(frozen=True)

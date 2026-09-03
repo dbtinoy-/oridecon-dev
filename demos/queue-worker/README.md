@@ -1,8 +1,8 @@
 # Queue Worker Demo
 
-A focused, browser-first example of **Lexigram QueueModule** and
+A focused, browser-first example of **Oridecon QueueModule** and
 `MessageConsumer`. Publish a task to one configured topic and watch the
-consumer process it in the same standalone app. It uses Lexigram's in-memory
+consumer process it in the same standalone app. It uses Oridecon's in-memory
 backend, so no broker is required.
 
 ## What you'll learn

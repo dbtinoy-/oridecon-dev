@@ -1,6 +1,6 @@
 # 18 — Working Bulk Export from the List Toolbar (R22 / B28–B29) (Full Plan)
 
-**Date:** 2026-09-02 · **Status:** 🚧 In progress · **Branch:** `arena/01a05b98-lexigram`
+**Date:** 2026-09-02 · **Status:** 🚧 In progress · **Branch:** `arena/01a05b98-oridecon`
 
 ## 1. Findings
 
@@ -11,7 +11,7 @@ broken to different degrees in each:
 
 | # | Severity | Bug |
 |---|---|---|
-| **B28** | degraded/dead frontend | Export buttons render `onclick="return window.LexigramDownloadBulk(this);"`, but **no shipped static script defines it** — `admin.js` (the only script the AdminLayout stack loads) had nothing, so those pages threw `TypeError` and did nothing. Pages that render the lexigram-ui DataTable script get an inline *fallback* (`window.LexigramDownloadBulk \|\| function…`) — but it uses `alert()` instead of toasts, opens a `_blank` tab, and silently drops the CSRF token whenever the table zone lacks a `csrf_token` input (→ 403). |
+| **B28** | degraded/dead frontend | Export buttons render `onclick="return window.OrideconDownloadBulk(this);"`, but **no shipped static script defines it** — `admin.js` (the only script the AdminLayout stack loads) had nothing, so those pages threw `TypeError` and did nothing. Pages that render the oridecon-ui DataTable script get an inline *fallback* (`window.OrideconDownloadBulk \|\| function…`) — but it uses `alert()` instead of toasts, opens a `_blank` tab, and silently drops the CSRF token whenever the table zone lacks a `csrf_token` input (→ 403). |
 | **B29** | dead feature (controller stack) | The `ResourceController` bulk route had **no export branch at all**: `action=export` fell through to `"Unknown action: export"` — wrapped in a **success toast**. (`resources/handler.py` did have a CSV branch; live-verified against the playground.) |
 | B30 (deferred) | dead feature (jobs) | `ExportService` is never constructed or registered in DI outside tests, and its `_generate_download_url` points at `/admin/exports/download/{path}` — a route that does not exist. The job-based export path (`ExportAction`/`ExportBulkAction.execute`) therefore cannot resolve a service at runtime. Full fix needs blob-storage DI wiring — deferred; see §5. |
 
@@ -20,8 +20,8 @@ broken to different degrees in each:
 | File | Change |
 |---|---|
 | `controllers/resource/bulk.py` | B29: `bulk_action` gains an export branch — `export` / `export_csv` / `export_json` (capability-gated on `can_view`, honouring `meta.enable_export`) dispatch to a new `bulk_export(ids, file_format)` that fetches the selected rows (`QuerySpec.with_where_in`, duck-typed `find_one` fallback), normalizes dict/object rows, and returns a real `text/csv` or `application/json` attachment. CSV cells go through `sanitize_cell_value` (same formula-injection guard as the file backends); rows keep the selection order; response is `Cache-Control: no-store`. |
-| `static/js/admin.js` | B28: implements `window.LexigramDownloadBulk(btn)` — collects checked `input[name="ids"]` boxes, POSTs `action` + ids to `data-bulk-download-url` via `fetch` with the CSRF token (layout global → `input[name=csrf_token]` → `[data-csrf-token]` fallbacks), and triggers a same-tab blob download named from `Content-Disposition`; toasts on empty selection, failure, and success. The DataTable inline fallback's `\|\|` guard automatically defers to this implementation when both are present. |
-| `ui/layouts/admin_layout.py` | Exposes `window.__lexigramCsrfToken` in the same guarded inline script that already injects the htmx `X-CSRF-Token` header, so non-htmx fetches can authenticate with the global CSRF middleware. |
+| `static/js/admin.js` | B28: implements `window.OrideconDownloadBulk(btn)` — collects checked `input[name="ids"]` boxes, POSTs `action` + ids to `data-bulk-download-url` via `fetch` with the CSRF token (layout global → `input[name=csrf_token]` → `[data-csrf-token]` fallbacks), and triggers a same-tab blob download named from `Content-Disposition`; toasts on empty selection, failure, and success. The DataTable inline fallback's `\|\|` guard automatically defers to this implementation when both are present. |
+| `ui/layouts/admin_layout.py` | Exposes `window.__orideconCsrfToken` in the same guarded inline script that already injects the htmx `X-CSRF-Token` header, so non-htmx fetches can authenticate with the global CSRF middleware. |
 | `resources/handler.py` | Parity nit: the existing handler-stack CSV export now sends `Cache-Control: no-store` (exports may contain sensitive data). |
 | `tests/unit/controllers/test_resource_bulk_export.py` | New regression tests (fail on the old code): unknown-action fall-through no longer swallows export; CSV/JSON payloads, sanitization, ordering, capability gate, `enable_export` gate, `find_one` fallback. |
 
@@ -44,8 +44,8 @@ broken to different degrees in each:
 - The export capability gate reuses the existing map
   (`export*` → `can_view`); `meta.enable_export=False` → 403,
   unknown formats → 400.
-- The lexigram-ui DataTable inline fallback keeps working unchanged; its
-  `window.LexigramDownloadBulk || …` guard defers to the new `admin.js`
+- The oridecon-ui DataTable inline fallback keeps working unchanged; its
+  `window.OrideconDownloadBulk || …` guard defers to the new `admin.js`
   implementation whenever both load on a page.
 - **Verification:** 13 new tests (11 fail pre-fix; the 2 static-content
   guards pin B28 assets); admin unit **5416 passed / 8 skipped /
@@ -53,7 +53,7 @@ broken to different degrees in each:
 
 ## 5. Deferred follow-ups (B30 and friends)
 
-- Register `ExportService` (+ blob storage from `lexigram-storage`) in the
+- Register `ExportService` (+ blob storage from `oridecon-storage`) in the
   admin DI bundle and mount a download route keyed by **job id** (not raw
   file path — path-traversal surface) for the async job flow.
 - Export the *filtered* view (forward the list's current URL state), not

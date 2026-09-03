@@ -2,7 +2,7 @@
 
 The public surface is intentionally small: a standalone application factory,
 its typed demo config, and the lifecycle provider that initializes the
-Lexigram database repository.
+Oridecon database repository.
 """
 
 from __future__ import annotations

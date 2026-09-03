@@ -3,9 +3,9 @@ title: "Feature Flags"
 description: "Runtime flag evaluation with TTL caching, targeting context, and pluggable providers."
 ---
 
-`lexigram-features` provides protocol-backed feature flag evaluation. Application code depends on `FlagManagerProtocol`; the underlying store — in-memory, environment variables, a shared cache, or your own adapter — is chosen in configuration. Evaluations are cached in-process, targeting is driven by an explicit context object, and runtime overrides let operators force outcomes without redeploying.
+`oridecon-features` provides protocol-backed feature flag evaluation. Application code depends on `FlagManagerProtocol`; the underlying store — in-memory, environment variables, a shared cache, or your own adapter — is chosen in configuration. Evaluations are cached in-process, targeting is driven by an explicit context object, and runtime overrides let operators force outcomes without redeploying.
 
-For the full configuration reference, decorators, and audit log, see the [`lexigram-features` package docs](/packages/lexigram-features/).
+For the full configuration reference, decorators, and audit log, see the [`oridecon-features` package docs](/packages/oridecon-features/).
 
 ---
 
@@ -15,7 +15,7 @@ Services depend on `FlagManagerProtocol`. The manager wraps one or more provider
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.contracts.feature_flags.models import FlagEvaluation, FlagValue
+from oridecon.contracts.feature_flags.models import FlagEvaluation, FlagValue
 
 
 @runtime_checkable
@@ -35,8 +35,8 @@ Targeting data is carried in a `FlagContext` value object — user id, session i
 Register the module and configure the `features:` section. With no config block the subsystem boots with safe defaults (300-second cache, no seed flags, default-disabled fallback).
 
 ```python
-from lexigram import Application
-from lexigram.features import FeatureFlagsModule
+from oridecon import Application
+from oridecon.features import FeatureFlagsModule
 
 app = Application(name="my-app")
 app.add_module(FeatureFlagsModule.configure())
@@ -47,7 +47,7 @@ features:
   enabled: true
   cache_ttl: 300              # seconds; 0 disables the evaluation cache
   default_enabled: false      # fallback when a flag is not defined
-  flag_env_prefix: "LEX_FLAG_"
+  flag_env_prefix: "ORI_FLAG_"
   initial_flags:
     new_checkout: true
     legacy_search: false
@@ -56,7 +56,7 @@ features:
 Each entry in `initial_flags` becomes a boolean `Flag` seeded into the default `LocalProvider`. For rich flag types (percentage rollouts, user lists, variants) construct `Flag` objects in code:
 
 ```python
-from lexigram.features import Flag, FlagType, LocalProvider
+from oridecon.features import Flag, FlagType, LocalProvider
 
 provider = LocalProvider({
     "new_search": Flag(name="new_search", type=FlagType.PERCENTAGE, percentage=25),
@@ -76,8 +76,8 @@ provider = LocalProvider({
 Inject `FlagManagerProtocol` (or the concrete `FlagManager`) and call `is_enabled` at the decision point:
 
 ```python
-from lexigram.contracts.feature_flags import FlagManagerProtocol
-from lexigram.features import FlagContext
+from oridecon.contracts.feature_flags import FlagManagerProtocol
+from oridecon.features import FlagContext
 
 
 class CheckoutService:
@@ -102,7 +102,7 @@ A `Flag` carries its evaluation strategy. The shipped strategies are `BOOLEAN`, 
 For A/B tests, define a `VARIANT` flag with weights summing to 100 and call `get_variant`:
 
 ```python
-from lexigram.features import Flag, FlagType, FlagContext, FlagManager, LocalProvider
+from oridecon.features import Flag, FlagType, FlagContext, FlagManager, LocalProvider
 
 provider = LocalProvider({
     "homepage_layout": Flag(
@@ -138,12 +138,12 @@ Every override is recorded; inspect `manager.get_audit_log()` for the history.
 
 ## 6. External Providers
 
-`lexigram-features` ships these backends — all implement `AbstractFlagProvider` and plug into `FlagManager` interchangeably:
+`oridecon-features` ships these backends — all implement `AbstractFlagProvider` and plug into `FlagManager` interchangeably:
 
 | Backend                  | Purpose                                                                 |
 |--------------------------|-------------------------------------------------------------------------|
 | `LocalProvider`          | In-memory definitions, the default                                      |
-| `EnvProvider`            | Reads flags from environment variables (`LEX_FLAG_*` by default)        |
+| `EnvProvider`            | Reads flags from environment variables (`ORI_FLAG_*` by default)        |
 | `ChainedProvider`        | Queries several providers in order; first hit wins                      |
 | `CacheBackendFlagProvider` | Stores flag definitions in any `CacheBackendProtocol` (Redis, memory)  |
 | `MemoryProvider`         | Test double with explicit per-flag overrides                            |
@@ -151,12 +151,12 @@ Every override is recorded; inspect `manager.get_audit_log()` for the history.
 A common production layout chains env-vars over a shared cache over local defaults:
 
 ```python
-from lexigram.features import (
+from oridecon.features import (
     ChainedProvider, EnvProvider, LocalProvider, CacheBackendFlagProvider, FlagManager,
 )
 
 provider = ChainedProvider([
-    EnvProvider(prefix="LEX_FLAG_"),            # ops overrides
+    EnvProvider(prefix="ORI_FLAG_"),            # ops overrides
     CacheBackendFlagProvider(cache, ttl=3600),  # shared store across instances
     LocalProvider(seed_flags),                  # baked-in defaults
 ])
@@ -176,8 +176,8 @@ No SaaS adapters (LaunchDarkly, Unleash, Flagsmith) ship with the framework. To 
 `FeatureFlagsModule.stub()` boots the subsystem with an empty in-memory provider, suitable for unit and integration tests:
 
 ```python
-from lexigram import Application
-from lexigram.features import FeatureFlagsModule, FlagManager, MemoryProvider
+from oridecon import Application
+from oridecon.features import FeatureFlagsModule, FlagManager, MemoryProvider
 
 
 async def test_checkout_uses_new_flow() -> None:
@@ -201,4 +201,4 @@ manager = FlagManager(provider)
 
 - [Multi-tenancy](/guides/multi-tenancy/) — tenant-scoped flags via `FlagContext.user_attributes`
 - [Dependency Injection](/fundamentals/dependency-injection/) — resolving `FlagManagerProtocol` from the container
-- [`lexigram-features` package](/packages/lexigram-features/) — decorators, audit log, change events
+- [`oridecon-features` package](/packages/oridecon-features/) — decorators, audit log, change events

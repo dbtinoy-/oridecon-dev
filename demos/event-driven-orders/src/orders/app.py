@@ -1,14 +1,14 @@
 """Composition root for the event-driven orders demo — start reading here.
 
-Every Lexigram application has exactly one place that knows how the pieces
+Every Oridecon application has exactly one place that knows how the pieces
 fit together: the **composition root**.  Everything else (controllers,
 services, templates) is inert until *this file* wires it.
 
-The mental model has three layers.  Once these click, every Lexigram app
+The mental model has three layers.  Once these click, every Oridecon app
 reads the same way:
 
 1. CONFIGURATION — ``application.yaml`` holds your values.  The framework
-   loads it; ``LEX_*`` env vars win over yaml.
+   loads it; ``ORI_*`` env vars win over yaml.
 
 2. CAPABILITIES (declarative) — ``Module.configure(...)`` switches
    framework packages on.  Each reads its own yaml section automatically.
@@ -27,18 +27,18 @@ Run with::
     cd demos/event-driven-orders
     PYTHONPATH=src uv run python -m orders
 """
-# Lexigram composition root — the single file that wires
+# Oridecon composition root — the single file that wires
 # all modules and providers together. Your app will have exactly one
 # composition root. Framework modules (EventsModule, WebModule) are
 # declarative; your app-specific Provider is imperative.
 
 from __future__ import annotations
 
-from lexigram.app.base import Application
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider
-from lexigram.events.module import EventsModule
-from lexigram.web.module import WebModule
+from oridecon.app.base import Application
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider
+from oridecon.events.module import EventsModule
+from oridecon.web.module import WebModule
 from orders.controllers.api import OrdersApiController
 from orders.di.provider import OrdersProvider
 from orders.ui.pages import OrdersPageController
@@ -69,7 +69,7 @@ def build_providers() -> list[Provider]:
     return [OrdersProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create the application in ``CREATED`` state (not yet started).
 
     Use this in tests (boot it yourself) or hand to ``main.py`` which

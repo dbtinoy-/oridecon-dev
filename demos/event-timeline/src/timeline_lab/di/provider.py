@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from lexigram.contracts.core.di import (
+from oridecon.contracts.core.di import (
     ContainerRegistrarProtocol,
     ContainerResolverProtocol,
 )
-from lexigram.contracts.core.health import HealthCheckResult, HealthStatus
-from lexigram.contracts.events import EventBusProtocol, EventStoreProtocol
-from lexigram.di.provider import Provider
+from oridecon.contracts.core.health import HealthCheckResult, HealthStatus
+from oridecon.contracts.events import EventBusProtocol, EventStoreProtocol
+from oridecon.di.provider import Provider
 from timeline_lab.config import TimelineLabConfig
 from timeline_lab.controllers.api import TimelineApiController
 from timeline_lab.events import TimelineEvent
@@ -40,7 +40,7 @@ class TimelineLabProvider(Provider):
         self._service = TimelineService(event_bus, event_store, config)
 
         # These are application callbacks, but routing, retry, queueing, and
-        # dispatch lifecycle are all provided by lexigram-events.
+        # dispatch lifecycle are all provided by oridecon-events.
         event_bus.subscribe(TimelineEvent, self._service.record_delivery)
         event_bus.subscribe(TimelineEvent, self._service.failure_probe)
         container.bind(

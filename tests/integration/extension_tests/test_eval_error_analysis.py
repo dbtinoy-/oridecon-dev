@@ -10,9 +10,9 @@ from __future__ import annotations
 
 import pytest
 
-from lexigram.ai.evaluation import ErrorAnalysis
-from lexigram.ai.evaluation.exceptions import AnalysisError
-from lexigram.contracts.ai.experiment import (
+from oridecon.ai.evaluation import ErrorAnalysis
+from oridecon.ai.evaluation.exceptions import AnalysisError
+from oridecon.contracts.ai.experiment import (
     ErrorRecord,
     ExperimentRun,
     MetricRecord,

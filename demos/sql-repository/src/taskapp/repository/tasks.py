@@ -1,10 +1,10 @@
-"""SQLite-backed task repository using Lexigram's database protocol."""
+"""SQLite-backed task repository using Oridecon's database protocol."""
 
 from __future__ import annotations
 
 from typing import Any
 
-from lexigram.contracts.data.sql.database import DatabaseProviderProtocol
+from oridecon.contracts.data.sql.database import DatabaseProviderProtocol
 
 
 class TaskRepository:

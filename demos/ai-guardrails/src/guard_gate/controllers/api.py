@@ -3,7 +3,7 @@
 Handlers return ``Result`` values; the web pipeline renders ``Ok`` payloads
 and maps ``Err`` errors to ProblemDetail responses automatically.
 
-Controllers are the HTTP surface in Lexigram.  They:
+Controllers are the HTTP surface in Oridecon.  They:
 - Accept Request objects (Starlette)
 - Return Result[dict, DomainError] for automatic error mapping
 - Are registered in app.py via WebModule.configure(controllers=[...])
@@ -22,10 +22,10 @@ from starlette.requests import Request
 from guard_gate.domain.guarded_assistant import GuardedAssistant
 from guard_gate.domain.policy import PolicyToggle
 from guard_gate.repository.acts import ACTS
-from lexigram.contracts.exceptions import NotFoundError, ValidationError
-from lexigram.result import Err, Ok, Result
-from lexigram.serialization import loads as json_loads
-from lexigram.web import Controller, JSONResponse, get, post
+from oridecon.contracts.exceptions import NotFoundError, ValidationError
+from oridecon.result import Err, Ok, Result
+from oridecon.serialization import loads as json_loads
+from oridecon.web import Controller, JSONResponse, get, post
 
 
 async def _body(request: Request) -> dict[str, Any]:
@@ -53,7 +53,7 @@ def _serialize(outcome: Any) -> JSONResponse:
 class GuardApiController(Controller):
     """Endpoints consumed by ui/static/app.js.
 
-    The Controller base class from lexigram.web provides
+    The Controller base class from oridecon.web provides
     route decorators (@get, @post, etc.) and integrates with the
     DI container.  Dependencies (assistant, toggle) are injected —
     the controller never instantiates them directly.

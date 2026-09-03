@@ -1,9 +1,9 @@
 {
-  "name": "Lexigram workspace",
+  "name": "Oridecon workspace",
   "dockerComposeFile": ["../docker-compose.yml", "docker-compose.extend.yml"],
   "service": "dev",
   "runServices": ["postgres", "redis"],
-  "workspaceFolder": "/workspaces/lexigram-dev",
+  "workspaceFolder": "/workspaces/oridecon-dev",
   "features": {
     "ghcr.io/astral-sh/uv:0": {}
   },

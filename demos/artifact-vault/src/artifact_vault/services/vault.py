@@ -1,4 +1,4 @@
-"""Application adapter around Lexigram's BlobStoreProtocol."""
+"""Application adapter around Oridecon's BlobStoreProtocol."""
 
 from __future__ import annotations
 
@@ -6,9 +6,9 @@ from datetime import timedelta
 from typing import Any
 
 from artifact_vault.config import ArtifactVaultConfig
-from lexigram.contracts import BlobStoreProtocol
-from lexigram.contracts.infra.storage import FileInfo, UploadOptions
-from lexigram.storage.exceptions import StorageUnsupportedOperationError
+from oridecon.contracts import BlobStoreProtocol
+from oridecon.contracts.infra.storage import FileInfo, UploadOptions
+from oridecon.storage.exceptions import StorageUnsupportedOperationError
 
 
 class ArtifactVaultService:
@@ -28,7 +28,7 @@ class ArtifactVaultService:
                 "Welcome to Artifact Vault. Upload, inspect, preview, and delete an artifact.",
                 UploadOptions(
                     content_type="text/plain",
-                    metadata={"owner": "lexigram", "kind": "guide"},
+                    metadata={"owner": "oridecon", "kind": "guide"},
                 ),
             )
 

@@ -18,7 +18,7 @@ import asyncio
 import sys
 
 from guard_gate.app import create_app
-from lexigram.logging import get_logger
+from oridecon.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -31,7 +31,7 @@ async def serve() -> None:
     SIGINT.  In production, you'd add health checks and graceful
     drain here.
     """
-    from lexigram.web.server.runner import run_server
+    from oridecon.web.server.runner import run_server
 
     app = create_app()
     await app.start()

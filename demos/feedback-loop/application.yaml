@@ -21,20 +21,20 @@ description: User feedback capture, rating aggregation, and regression runs
 #   3. ai_evaluation: Evaluation harness and error analysis
 #
 # For full reference see:
-#   - Lexigram Web:         packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram AI Feedback: experimental/ai/lexigram-ai-feedback/
-#   - Lexigram AI Eval:     experimental/ai/lexigram-ai-evaluation/
+#   - Oridecon Web:         packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon AI Feedback: experimental/ai/oridecon-ai-feedback/
+#   - Oridecon AI Eval:     experimental/ai/oridecon-ai-evaluation/
 #
 # ENVIRONMENT VARIABLE OVERRIDE:
-#   Every key can be overridden via LEX_* env vars with __ as delimiter.
+#   Every key can be overridden via ORI_* env vars with __ as delimiter.
 #   Examples:
-#     LEX_WEB__SERVER__PORT=9000
-#     LEX_AI_FEEDBACK__ASYNC_PROCESSING=true
+#     ORI_WEB__SERVER__PORT=9000
+#     ORI_AI_FEEDBACK__ASYNC_PROCESSING=true
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 #
@@ -69,7 +69,7 @@ web:
       # excluded_paths: []              # paths exempt from CSRF validation
       # exclude_content_types: []       # Content-Types that bypass CSRF
       # exclude_auth_schemes: []        # Auth schemes that bypass CSRF
-      # secret_key: null                # HMAC key (LEX_WEB__SECURITY__CSRF__SECRET_KEY)
+      # secret_key: null                # HMAC key (ORI_WEB__SECURITY__CSRF__SECRET_KEY)
 
   # ── Rate Limiting ──────────────────────────────────────────────────────────
   # Prevents brute-force and DoS attacks.  Longest-prefix-match selects

@@ -17,9 +17,9 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from lexigram.contracts.domain import DomainEvent
-from lexigram.contracts.events import EventBusProtocol, EventMiddlewareProtocol
-from lexigram.testing.memory.event_bus import InMemoryEventBus
+from oridecon.contracts.domain import DomainEvent
+from oridecon.contracts.events import EventBusProtocol, EventMiddlewareProtocol
+from oridecon.testing.memory.event_bus import InMemoryEventBus
 
 # ---------------------------------------------------------------------------
 # Test events
@@ -305,7 +305,7 @@ class TestMemoryProvider:
 
     def test_provider_name(self) -> None:
         """MemoryProvider has name 'memory'."""
-        from lexigram.testing.memory.di.provider import MemoryProvider
+        from oridecon.testing.memory.di.provider import MemoryProvider
 
         provider = MemoryProvider()
         assert provider.name == "memory"
@@ -313,7 +313,7 @@ class TestMemoryProvider:
     @pytest.mark.asyncio
     async def test_register_binds_event_bus(self) -> None:
         """MemoryProvider registers EventBusProtocol singleton."""
-        from lexigram.testing.memory.di.provider import MemoryProvider
+        from oridecon.testing.memory.di.provider import MemoryProvider
 
         provider = MemoryProvider()
         container = MagicMock()
@@ -326,8 +326,8 @@ class TestMemoryProvider:
     @pytest.mark.asyncio
     async def test_register_binds_domain_event_publisher(self) -> None:
         """MemoryProvider registers DomainEventPublisherProtocol singleton."""
-        from lexigram.contracts.events import DomainEventPublisherProtocol
-        from lexigram.testing.memory.di.provider import MemoryProvider
+        from oridecon.contracts.events import DomainEventPublisherProtocol
+        from oridecon.testing.memory.di.provider import MemoryProvider
 
         provider = MemoryProvider()
         container = MagicMock()
@@ -340,8 +340,8 @@ class TestMemoryProvider:
     @pytest.mark.asyncio
     async def test_register_binds_command_bus(self) -> None:
         """MemoryProvider registers CommandBusProtocol singleton."""
-        from lexigram.contracts.events import CommandBusProtocol
-        from lexigram.testing.memory.di.provider import MemoryProvider
+        from oridecon.contracts.events import CommandBusProtocol
+        from oridecon.testing.memory.di.provider import MemoryProvider
 
         provider = MemoryProvider()
         container = MagicMock()
@@ -354,8 +354,8 @@ class TestMemoryProvider:
     @pytest.mark.asyncio
     async def test_register_binds_query_bus(self) -> None:
         """MemoryProvider registers QueryBusProtocol singleton."""
-        from lexigram.contracts.events import QueryBusProtocol
-        from lexigram.testing.memory.di.provider import MemoryProvider
+        from oridecon.contracts.events import QueryBusProtocol
+        from oridecon.testing.memory.di.provider import MemoryProvider
 
         provider = MemoryProvider()
         container = MagicMock()

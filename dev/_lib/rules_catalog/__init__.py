@@ -1,4 +1,4 @@
-"""Lexigram architectural rule catalog.
+"""Oridecon architectural rule catalog.
 
 Public API: :func:`build_rules_catalog` plus the finding/definition
 types consumed by the rule engine and audit generators. Detectors are

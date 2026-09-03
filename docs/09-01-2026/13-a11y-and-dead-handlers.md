@@ -1,6 +1,6 @@
 # 13 — Accessibility Pass + Dead Alpine Handler Class (R17 / B13) (Full Plan)
 
-**Date:** 2026-09-02 · **Status:** 🚧 In progress · **Branch:** `arena/01a05b98-lexigram`
+**Date:** 2026-09-02 · **Status:** 🚧 In progress · **Branch:** `arena/01a05b98-oridecon`
 
 ## 1. Audit findings (live HTML, playground)
 
@@ -26,7 +26,7 @@ Impact (everything below was *silently broken* for mouse and keyboard):
 | Component (file) | Dead behaviour |
 |---|---|
 | Command palette (admin `command_palette.py`) | ↑/↓/Enter navigation, option click, option hover-select — the palette could open but never execute anything |
-| SlideOver (`lexigram-ui slide_over.py` + auto-footer Cancel via `button.py`) | header ✕ Close and footer Cancel buttons (only ESC/backdrop worked) |
+| SlideOver (`oridecon-ui slide_over.py` + auto-footer Cancel via `button.py`) | header ✕ Close and footer Cancel buttons (only ESC/backdrop worked) |
 | Button loading state (`button.py`) | `loading` spinner never engages/clears |
 | Modal (`modal.py`) | trigger open + footer close |
 | Section (`section.py`) | collapse/expand |
@@ -60,16 +60,16 @@ tokens / schema fingerprint).
    so HTMX-driven filter/sort/page swaps announce nothing to screen
    readers.
 5. **Decorative icons**: 82 inline SVGs on the products list, only 9 with
-   `aria-hidden` — `get_icon()` (lexigram-ui) does not default to
+   `aria-hidden` — `get_icon()` (oridecon-ui) does not default to
    `aria-hidden="true" focusable="false"`.
 
 ## 2. Changes
 
 | File | Change |
 |---|---|
-| **lexigram-ui** `atoms/button.py`, `molecules/{builder,modal,section,tabs,toggle}.py`, `organisms/{query_builder,slide_over,task_progress}.py` | B13: all Alpine `x_on_*` → canonical `x-on:` dict keys |
-| **lexigram-ui** `atoms/icons.py` | `get_icon()` defaults `aria-hidden="true" focusable="false"` unless the caller passes an ARIA label/role |
-| **lexigram-ui** `tests/unit/test_no_dead_alpine_attrs.py` | New: source-scan guard + rendered-output checks |
+| **oridecon-ui** `atoms/button.py`, `molecules/{builder,modal,section,tabs,toggle}.py`, `organisms/{query_builder,slide_over,task_progress}.py` | B13: all Alpine `x_on_*` → canonical `x-on:` dict keys |
+| **oridecon-ui** `atoms/icons.py` | `get_icon()` defaults `aria-hidden="true" focusable="false"` unless the caller passes an ARIA label/role |
+| **oridecon-ui** `tests/unit/test_no_dead_alpine_attrs.py` | New: source-scan guard + rendered-output checks |
 | **admin** `ui/organisms/command_palette.py` | B13 fix + combobox pattern (`role="combobox"`, `aria-expanded`, `aria-controls`, `aria-activedescendant`), unique option ids, `:aria-selected`, `x-trap` on the dialog, `aria-label` on the input |
 | **admin** `ui/organisms/table/views/{tabular_rows,grid,stacked,calendar}.py` | unique per-row checkbox ids (`id="row-select-{rid}"` etc.) |
 | **admin** `ui/templates/shell_scripts.py` | `aria-label="Dismiss notification"` on the three flash close buttons |
@@ -79,7 +79,7 @@ tokens / schema fingerprint).
 ## 3. Verification
 
 - Unit: new guard/regression tests green in both packages; both full
-  suites green (admin 5357-baseline, lexigram-ui suite).
+  suites green (admin 5357-baseline, oridecon-ui suite).
 - Live: re-fetch dashboard/list/palette HTML — zero `x-on-*` dead
   attributes; palette input exposes combobox ARIA; checkbox ids unique;
   close buttons labeled; result count is a polite live region; SVG
@@ -90,7 +90,7 @@ tokens / schema fingerprint).
 
 **Status: ✅ Shipped.**
 
-* B13 fixed at all 18 Alpine call sites in lexigram-ui and 5 in the admin
+* B13 fixed at all 18 Alpine call sites in oridecon-ui and 5 in the admin
   command palette. `hx_on_*` left untouched (valid htmx `hx-on-` alias,
   verified against the vendored `htmx.min.js`).
 * The existing `Icon` atom's `aria_hidden=False` opt-out is preserved: it
@@ -105,7 +105,7 @@ tokens / schema fingerprint).
 
 **Verification (all green):**
 
-* lexigram-ui unit: **1275 passed** (was 1270; +5 new guards), cov 76.64%.
+* oridecon-ui unit: **1275 passed** (was 1270; +5 new guards), cov 76.64%.
 * admin unit: **5366 passed / 8 skipped** (+9 new guards), cov 76.04%.
 * admin e2e: **72 passed / 2 skipped**.
 * Live (playground, `/admin/` + `/admin/products` after restart):

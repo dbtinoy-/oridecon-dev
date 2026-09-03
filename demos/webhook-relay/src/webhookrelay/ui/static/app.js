@@ -1,4 +1,4 @@
-/* Browser controls for Lexigram WebhookModule's subscription and verification path. */
+/* Browser controls for Oridecon WebhookModule's subscription and verification path. */
 "use strict";
 
 const $ = (id) => document.getElementById(id);
@@ -39,9 +39,9 @@ async function refreshSubscriptions() {
     const data = await readResponse(await fetch("/api/webhook/subscriptions"));
     const subscriptions = data.subscriptions || [];
     $("subscription-list").textContent =
-      `${data.count} active subscription${data.count === 1 ? "" : "s"} managed by Lexigram`;
+      `${data.count} active subscription${data.count === 1 ? "" : "s"} managed by Oridecon`;
     if (!activeSubscription && subscriptions.length) {
-      log("Lexigram has an active subscription; create one here to use its secret", "log-hit");
+      log("Oridecon has an active subscription; create one here to use its secret", "log-hit");
     }
   } catch (e) {
     log(`subscription refresh failed: ${e.message}`, "log-error");
@@ -68,7 +68,7 @@ async function createSubscription(event) {
     $("subscription-output").innerHTML =
       `<strong>${escapeHtml(activeSubscription.subscription_id.slice(0, 8))}</strong>` +
       ` · secret generated · ${escapeHtml(activeSubscription.url)}`;
-    log("created a Lexigram subscription; signing is ready", "log-hit");
+    log("created a Oridecon subscription; signing is ready", "log-hit");
     await refreshSubscriptions();
   } catch (e) {
     showError(e.message);
@@ -112,7 +112,7 @@ async function send(event) {
     const body = { event_type: eventType, payload, source: "console" };
     if (signed) {
       if (!activeSubscription) {
-        throw new Error("Create a Lexigram subscription before signing an event");
+        throw new Error("Create a Oridecon subscription before signing an event");
       }
       body.subscription_id = activeSubscription.subscription_id;
       body.signature = await signPayload(payload, activeSubscription.secret);

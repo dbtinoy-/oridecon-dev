@@ -1,6 +1,6 @@
 # Event-Driven Orders Demo
 
-Demonstrates the **events (CQRS) subsystem** of Lexigram.
+Demonstrates the **events (CQRS) subsystem** of Oridecon.
 
 This demo is a small production-style order flow. The write side dispatches
 **commands** (`PlaceOrder`, `PayOrder`, `ShipOrder`) through the command bus;
@@ -23,7 +23,7 @@ framework's in-memory buses.
 
 ## Concepts
 
-| Piece | Where | Lexigram API used |
+| Piece | Where | Oridecon API used |
 |-------|-------|-------------------|
 | Write side: commands + handlers | `commands.py`, `handlers.py` | `Command`, `CommandBusImpl`, `command bus.register()` |
 | Domain events with aggregate context | `domain.py` | `DomainEvent` (contracts) |
@@ -65,7 +65,7 @@ success, and error feedback.
 ## Layout — read it in this order
 
 Start at the composition root and follow the wiring outward.
-Each file has teaching comments explaining the Lexigram convention it follows.
+Each file has teaching comments explaining the Oridecon convention it follows.
 
 | # | File | Lesson |
 |---|------|--------|

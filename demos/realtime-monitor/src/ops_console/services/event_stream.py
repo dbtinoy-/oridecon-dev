@@ -14,7 +14,7 @@ from collections import deque
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
 
-from lexigram.logging import get_logger
+from oridecon.logging import get_logger
 from ops_console.domain import SystemEvent
 
 logger = get_logger(__name__)

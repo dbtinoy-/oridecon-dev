@@ -1,1 +1,0 @@
-"""Tests for lexigram-auth admin widget handlers."""

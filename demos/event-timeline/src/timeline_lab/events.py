@@ -4,14 +4,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from lexigram.events.messages import Event
+from oridecon.events.messages import Event
 
 
 @dataclass(frozen=True)
 class TimelineEvent(Event):
     """A fact in the lab's single checkout stream.
 
-    This is deliberately a regular Lexigram ``Event`` subclass so the event
+    This is deliberately a regular Oridecon ``Event`` subclass so the event
     store can assign sequence metadata and the event bus can route it to
     subscribers by type.
     """

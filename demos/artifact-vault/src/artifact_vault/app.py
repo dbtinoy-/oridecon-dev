@@ -5,15 +5,15 @@ from __future__ import annotations
 from artifact_vault.controllers.api import ArtifactVaultApiController
 from artifact_vault.di.provider import ArtifactVaultProvider
 from artifact_vault.ui.pages import ArtifactVaultPageController
-from lexigram.app.base import Application
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider
-from lexigram.storage.module import StorageModule
-from lexigram.web.module import WebModule
+from oridecon.app.base import Application
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider
+from oridecon.storage.module import StorageModule
+from oridecon.web.module import WebModule
 
 
 def build_modules() -> list[object]:
-    """Build the Lexigram modules required by the artifact vault demo."""
+    """Build the Oridecon modules required by the artifact vault demo."""
     return [
         StorageModule.configure(),
         WebModule.configure(
@@ -27,7 +27,7 @@ def build_providers() -> list[Provider]:
     return [ArtifactVaultProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create and configure the artifact vault application."""
     app = Application(name="artifact-vault", config=config)
     app.add_modules(build_modules())

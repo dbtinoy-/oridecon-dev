@@ -12,8 +12,8 @@ from typing import AsyncIterator
 import httpx
 import pytest
 
-from lexigram.app import Application
-from lexigram.web.di.provider import WebProvider
+from oridecon.app import Application
+from oridecon.web.di.provider import WebProvider
 
 from orders.app import create_app
 
@@ -53,7 +53,7 @@ async def test_ship_unpaid_problem_type_names_the_domain_error(
     response = await client.post(f"/orders/{order_id}/ship")
 
     assert response.status_code == 409
-    assert response.json()["type"] == "urn:lexigram:order-not-paid"
+    assert response.json()["type"] == "urn:oridecon:order-not-paid"
 
 
 async def test_place_pay_ship_over_http(client: httpx.AsyncClient) -> None:

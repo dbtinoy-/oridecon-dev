@@ -13,15 +13,15 @@ import random
 
 import pytest
 
-from lexigram.ai.evaluation import (
+from oridecon.ai.evaluation import (
     EvaluationDataset,
     EvaluationSample,
     FileCheckpointStore,
     make_run_id,
 )
-from lexigram.ai.evaluation.harness.runner import EvaluationHarness
-from lexigram.contracts.ai.evaluation import EvaluationResult, EvaluationScoreType
-from lexigram.contracts.core.result import Ok, Result
+from oridecon.ai.evaluation.harness.runner import EvaluationHarness
+from oridecon.contracts.ai.evaluation import EvaluationResult, EvaluationScoreType
+from oridecon.contracts.core.result import Ok, Result
 
 _SEED = 20260821
 

@@ -4,17 +4,17 @@ from __future__ import annotations
 
 from typing import Any
 
-from lexigram.contracts.webhook.types import WebhookSubscription
-import lexigram.serialization as json
-from lexigram.web import Controller, get, post
-from lexigram.webhook.subscription.service import WebhookSubscriptionService
-from lexigram.webhook.verification.hmac import HMACSignatureVerifier
+from oridecon.contracts.webhook.types import WebhookSubscription
+import oridecon.serialization as json
+from oridecon.web import Controller, get, post
+from oridecon.webhook.subscription.service import WebhookSubscriptionService
+from oridecon.webhook.verification.hmac import HMACSignatureVerifier
 
 
 class WebhookApiController(Controller):
     """Keep inbound webhook handling narrow and browser-observable.
 
-    Lexigram manages subscriptions and cryptographic verification. The demo
+    Oridecon manages subscriptions and cryptographic verification. The demo
     adds only an in-memory event ledger so users can see accepted events
     without configuring a second server.
     """
@@ -37,7 +37,7 @@ class WebhookApiController(Controller):
 
     @post("/subscriptions")
     async def create_subscription(self, body: dict[str, Any]) -> dict[str, Any]:
-        """Create a Lexigram-managed subscription and return its secret once."""
+        """Create a Oridecon-managed subscription and return its secret once."""
         url = body.get("url", "")
         if not url:
             return {"error": "URL is required"}
@@ -127,7 +127,7 @@ class WebhookApiController(Controller):
 
     @get("/health")
     async def health(self) -> dict[str, Any]:
-        """Report that the relay and Lexigram subscription service are ready."""
+        """Report that the relay and Oridecon subscription service are ready."""
         return {"status": "ok", "service": "webhookrelay", "subscriptions": True}
 
     async def _verify_for_subscription(

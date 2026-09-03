@@ -5,8 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import ClassVar
 
-from lexigram.config.base import BaseConfig
-from lexigram.validation import ConfigDict, Field
+from oridecon.config.base import BaseConfig
+from oridecon.validation import ConfigDict, Field
 
 
 @dataclass(init=False)

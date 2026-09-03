@@ -2,7 +2,7 @@
 
 import pytest
 
-from lexigram.app.types import AppState
+from oridecon.app.types import AppState
 
 
 class TestAppState:

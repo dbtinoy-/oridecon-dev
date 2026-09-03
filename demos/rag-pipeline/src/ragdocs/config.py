@@ -6,8 +6,8 @@ Convention followed: **Config model** — ``RagDocsConfig`` extends
 validates the YAML section against this model at boot time.
 
 For full reference see:
-- ``lexigram.config.BaseConfig`` — base config class
-- ``lexigram.validation.Field`` — field descriptor with validation
+- ``oridecon.config.BaseConfig`` — base config class
+- ``oridecon.validation.Field`` — field descriptor with validation
 """
 
 from __future__ import annotations
@@ -15,9 +15,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import ClassVar
 
-from lexigram.config import BaseConfig
-from lexigram.contracts.core.config import Environment
-from lexigram.validation import ConfigDict, Field
+from oridecon.config import BaseConfig
+from oridecon.contracts.core.config import Environment
+from oridecon.validation import ConfigDict, Field
 
 
 @dataclass(init=False)
@@ -25,7 +25,7 @@ class RagDocsConfig(BaseConfig):
     """Root configuration for the rag-pipeline demo.
 
     Maps 1:1 to the ``ragdocs:`` section in ``application.yaml``.
-    The framework merges YAML values + ``LEX_RAGDOCS__*`` env overrides
+    The framework merges YAML values + ``ORI_RAGDOCS__*`` env overrides
     into this model at boot time.
     """
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Lexigram Framework is an **open-source** project maintained by Lexigram, licensed under the [MIT License](./LICENSE). This document describes the project structure, decision-making process, and roles.
+The Oridecon Framework is an **open-source** project maintained by Oridecon, licensed under the [MIT License](./LICENSE). This document describes the project structure, decision-making process, and roles.
 
 ## Project Leadership
 
@@ -80,10 +80,10 @@ The Lexigram Framework is an **open-source** project maintained by Lexigram, lic
 5. **IoC** — Inversion of Control via the container
 
 ### Package Boundaries
-- **lexigram-contracts**: Zero dependencies (pure interfaces)
-- **lexigram**: Core framework only
-- **lexigram-***: Extensions, independent of each other
-- **lexigram.ai**: Orchestrator for AI sub-packages
+- **oridecon-contracts**: Zero dependencies (pure interfaces)
+- **oridecon**: Core framework only
+- **oridecon-***: Extensions, independent of each other
+- **oridecon.ai**: Orchestrator for AI sub-packages
 
 See `.importlinter` for enforced contracts.
 

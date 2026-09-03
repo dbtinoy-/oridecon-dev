@@ -91,7 +91,7 @@ class BaseAuditGenerator(ABC):
         # Start from this script's location and navigate up
         current = Path(__file__).resolve()
         # Go up from scripts/audit/base.py to workspace root
-        # /path/to/lexigram/scripts/audit/base.py -> /path/to/lexigram/
+        # /path/to/oridecon/scripts/audit/base.py -> /path/to/oridecon/
         return current.parent.parent.parent
 
     def _read_template(self, template_name: str) -> str:
@@ -104,7 +104,7 @@ class BaseAuditGenerator(ABC):
             Formatted template string.
         """
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        return f"""# AUDIT_{template_name.upper()}.md — Lexigram Framework {self._get_title()}
+        return f"""# AUDIT_{template_name.upper()}.md — Oridecon Framework {self._get_title()}
 
 > **Generated**: {timestamp}
 > **Generator**: {self.name}.py
@@ -201,7 +201,7 @@ class TestableAuditGenerator(FileAuditGenerator):
         content += "## Test Summary\n\n"
         content += "| Package | Status |\n"
         content += "|--------|--------|\n"
-        content += f"| lexigram | {self._run_tests(workspace, 'lexigram')} |\n\n"
+        content += f"| oridecon | {self._run_tests(workspace, 'oridecon')} |\n\n"
 
         return content
 

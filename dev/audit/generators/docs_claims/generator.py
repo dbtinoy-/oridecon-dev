@@ -2,25 +2,25 @@
 
 Checks two claim classes that the import audit cannot see:
 
-1. **Environment variables** — every ``LEX_*`` env var mention in a package doc
+1. **Environment variables** — every ``ORI_*`` env var mention in a package doc
    must resolve against live configuration classes:
 
-   - ``LEX_<SECTION>__<KEY>`` — core ``LEX_`` prefix plus a ``*Config`` class
-     section and (nested) key path, e.g. ``LEX_LOGGING__JSON_FORMAT``.
-   - ``LEX_<PACKAGE>__<KEY>`` — extension packages register their own prefix
-     (e.g. ``LEX_SQL``) with keys straight from their config classes, e.g.
-     ``LEX_SQL__BACKEND__URL``.
+   - ``ORI_<SECTION>__<KEY>`` — core ``ORI_`` prefix plus a ``*Config`` class
+     section and (nested) key path, e.g. ``ORI_LOGGING__JSON_FORMAT``.
+   - ``ORI_<PACKAGE>__<KEY>`` — extension packages register their own prefix
+     (e.g. ``ORI_SQL``) with keys straight from their config classes, e.g.
+     ``ORI_SQL__BACKEND__URL``.
    - ``<env_prefix>`` — pydantic ``model_config["env_prefix"]`` families, e.g.
-     ``LEX_NOTIFICATION__INBOX__MARK_READ_ON_FETCH``.
+     ``ORI_NOTIFICATION__INBOX__MARK_READ_ON_FETCH``.
    - ``*`` keypath segments are wildcards for list/dict positions
-     (``LEX_CACHE__BACKENDS__0__NAME`` matches ``backends.*.name``).
-   - Variables read directly by framework code (``os.environ.get("LEX_QUIET")``)
+     (``ORI_CACHE__BACKENDS__0__NAME`` matches ``backends.*.name``).
+   - Variables read directly by framework code (``os.environ.get("ORI_QUIET")``)
      are whitelisted.
-   - ``LEX_ERR_*`` is the error-code namespace, not env vars — ignored.
+   - ``ORI_ERR_*`` is the error-code namespace, not env vars — ignored.
    - Trailing-``__`` tokens are env-source prefix claims.
 
 2. **Provider priorities** — every ``ProviderPriority.<MEMBER>`` claim must be a
-   real member of ``lexigram.contracts.core.provider.ProviderPriority``.
+   real member of ``oridecon.contracts.core.provider.ProviderPriority``.
 
 Implementation: :mod:`introspect` (config-class typing helpers),
 :mod:`registry` (discovery + env-validity maps), :mod:`claims` (claim
@@ -64,7 +64,7 @@ class DocsClaimsAuditGenerator(MarkdownAuditGenerator):
 
     name = "docs-claims"
     description = (
-        "Generate AUDIT_DOC_CLAIMS.md verifying that every `LEX_*` env var and "
+        "Generate AUDIT_DOC_CLAIMS.md verifying that every `ORI_*` env var and "
         "`ProviderPriority.*` claim in package docs resolves against the framework."
     )
     output_file = "AUDIT_DOC_CLAIMS.md"
@@ -140,17 +140,17 @@ class DocsClaimsAuditGenerator(MarkdownAuditGenerator):
                         ClaimIssue(
                             doc=rel,
                             claim=f"ProviderPriority.{member}",
-                            reason="no such member on lexigram.contracts.core.provider.ProviderPriority",
+                            reason="no such member on oridecon.contracts.core.provider.ProviderPriority",
                         )
                     )
 
         lines = [
-            "# AUDIT_DOC_CLAIMS.md — Lexigram Documentation Claims Audit",
+            "# AUDIT_DOC_CLAIMS.md — Oridecon Documentation Claims Audit",
             "",
-            "> **Source**: Every `LEX_*` env var and `ProviderPriority.*` mention in every",
+            "> **Source**: Every `ORI_*` env var and `ProviderPriority.*` mention in every",
             "> package `docs/*.md` file (prose + python blocks), resolved against the",
             "> installed framework. Env vars must map to a real `*Config` field",
-            "> (`LEX_<SECTION>__<KEY>` / `LEX_<PACKAGE>__<KEY>`) or be read directly by",
+            "> (`ORI_<SECTION>__<KEY>` / `ORI_<PACKAGE>__<KEY>`) or be read directly by",
             "> framework code.",
             "",
             "## Summary",

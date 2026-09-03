@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from lexigram.app.base import Application
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider
-from lexigram.events.module import EventsModule
-from lexigram.web.module import WebModule
+from oridecon.app.base import Application
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider
+from oridecon.events.module import EventsModule
+from oridecon.web.module import WebModule
 from timeline_lab.controllers.api import TimelineApiController
 from timeline_lab.di.provider import TimelineLabProvider
 from timeline_lab.ui.pages import TimelinePageController
@@ -27,7 +27,7 @@ def build_providers() -> list[Provider]:
     return [TimelineLabProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create an unstarted application for standalone use and tests."""
     application = Application(name="event-timeline", config=config)
     application.add_modules(build_modules())

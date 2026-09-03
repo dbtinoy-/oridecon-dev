@@ -2,7 +2,7 @@
 
 > Module name: `support_agent` — run with `PYTHONPATH=demos/support-agent/src uv run python -m support_agent`
 
-Demonstrates the **AI agents subsystem** from `lexigram-ai-agents` through a
+Demonstrates the **AI agents subsystem** from `oridecon-ai-agents` through a
 browser: pick a scripted scenario, watch the ReAct agent reason step-by-step,
 call tools (order lookup, refund calculation, KB search), and see the traced
 response with token counts and timing.
@@ -11,7 +11,7 @@ Fully offline against a scripted LLM — no API keys, no network. The agent
 runs for real (tools get called, the strategy parser drives the loop) while
 model output stays byte-stable across runs.
 
-## Lexigram concepts used
+## Oridecon concepts used
 
 | Concept | Where in this demo | Your app |
 |---------|-------------------|----------|
@@ -26,7 +26,7 @@ model output stays byte-stable across runs.
 
 ## What it shows
 
-| Piece | Where | Lexigram API used |
+| Piece | Where | Oridecon API used |
 |-------|-------|-------------------|
 | Agent assembly | `services/support_service.py` | `AgentBuilder`, `AgentProtocol`, `with_strategy("react")` |
 | Tool registration | `tools.py` | `@tool(description=...)`, `Registry[str, Any]` |
@@ -57,7 +57,7 @@ PYTHONPATH=src uv run python -m support_agent
 
 Open http://127.0.0.1:8082, pick a scenario, type a question, and watch
 the agent reason step-by-step. Override the port without touching yaml:
-`LEX_WEB__SERVER__PORT=9000`.
+`ORI_WEB__SERVER__PORT=9000`.
 
 ## API Endpoints
 
@@ -69,7 +69,7 @@ the agent reason step-by-step. Override the port without touching yaml:
 ## Layout — read it in this order
 
 Start at the composition root and follow the wiring outward.
-Each file has teaching comments explaining the Lexigram convention it follows.
+Each file has teaching comments explaining the Oridecon convention it follows.
 
 | # | File | Lesson |
 |---|------|--------|
@@ -101,7 +101,7 @@ demos/support-agent/
 │   │   └── fixtures.py        # Orders + KB data
 │   ├── tools.py               # @tool functions: lookup, refund, search
 │   └── ui/                    # pages controller + views/ + static/
-├── application.yaml           # web section (LEX_* overrides win)
+├── application.yaml           # web section (ORI_* overrides win)
 └── tests/                     # e2e + unit tests
 ```
 

@@ -7,7 +7,7 @@ chunked, embedded with a BLAKE2b hashing embedder, stored in an in-memory
 vector collection, retrieved through pluggable strategies, and synthesized
 into cited answers — no LLM, no network.
 
-## Lexigram concepts used
+## Oridecon concepts used
 
 | Concept | Where in this demo | Your app |
 |---------|-------------------|----------|
@@ -22,7 +22,7 @@ into cited answers — no LLM, no network.
 
 ## What it shows
 
-| Piece | Where | Lexigram API used |
+| Piece | Where | Oridecon API used |
 |-------|-------|-------------------|
 | Deterministic embeddings | `repository/embedder.py` | `EmbeddingClientProtocol` — BLAKE2b + IDF |
 | Corpus ingestion | `repository/index_builder.py` | `MarkdownLoader`, `MemoryVectorStore`, `VectorRecord` |
@@ -49,12 +49,12 @@ cd demos/rag-docs
 PYTHONPATH=src uv run python -m rag_docs              # start the web console
 ```
 
-Open http://127.0.0.1:7075. Type a question about Lexigram, pick a strategy,
+Open http://127.0.0.1:7075. Type a question about Oridecon, pick a strategy,
 and get cited answers from the framework's own docs. **Run Guided Demo**
 walks through three representative questions in the browser, with each
 request showing progress and any error in the console.
 
-Override the port without touching yaml: `LEX_WEB__SERVER__PORT=9000`.
+Override the port without touching yaml: `ORI_WEB__SERVER__PORT=9000`.
 
 ## API Endpoints
 
@@ -72,7 +72,7 @@ The split-screen console gives you:
 ## Layout — read it in this order
 
 Start at the composition root and follow the wiring outward.
-Each file has teaching comments explaining the Lexigram convention it follows.
+Each file has teaching comments explaining the Oridecon convention it follows.
 
 | # | File | Lesson |
 |---|------|--------|
@@ -110,7 +110,7 @@ demos/rag-docs/
 │       └── static/
 │           ├── app.js                  # vanilla JS client
 │           └── style.css               # dark-theme split layout
-├── application.yaml                    # web section (LEX_* overrides win)
+├── application.yaml                    # web section (ORI_* overrides win)
 └── tests/                              # 28 tests: API, pages, service, embedder, index
 ```
 

@@ -35,7 +35,7 @@ async def test_login_has_light_theme(client: httpx.AsyncClient) -> None:
 async def test_login_has_footer(client: httpx.AsyncClient) -> None:
     r = await client.get("/login", follow_redirects=False)
     assert "demo-footer" in r.text
-    assert "lexigram.dev" in r.text
+    assert "oridecon.dev" in r.text
 
 async def test_challenge_has_footer(client: httpx.AsyncClient) -> None:
     r = await client.get("/challenge", follow_redirects=False)

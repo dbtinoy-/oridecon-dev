@@ -19,7 +19,7 @@ class IntegrationsAuditGenerator(MarkdownAuditGenerator):
         package_rows = [_integration_row(path) for path in self.iter_package_roots(root=root)]
         package_rows = [row for row in package_rows if row["implementations"] or row["services"]]
 
-        markdown = """# AUDIT_INTEGRATIONS.md — Lexigram Framework Integrations
+        markdown = """# AUDIT_INTEGRATIONS.md — Oridecon Framework Integrations
 
 > **Source**: Backend-style directories and dependency hints from `pyproject.toml`.
 

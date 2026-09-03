@@ -1,7 +1,7 @@
 # RAG Pipeline Demo
 
-A focused, browser-first example of **Lexigram VectorModule** for document
-chunking and retrieval. Lexigram owns vector-store lifecycle, collection
+A focused, browser-first example of **Oridecon VectorModule** for document
+chunking and retrieval. Oridecon owns vector-store lifecycle, collection
 management, and similarity search. The demo supplies only chunking and a
 repeatable local embedder, so it runs without an external model or database.
 
@@ -10,7 +10,7 @@ repeatable local embedder, so it runs without an external model or database.
 1. `VectorModule.stub()` — real `VectorStoreProtocol` DI wiring
 2. Collection lifecycle — create a dimensioned cosine/flat collection at boot
 3. Document chunking — turn one document into indexable records
-4. Vector upsert and search — use Lexigram's collection protocol directly
+4. Vector upsert and search — use Oridecon's collection protocol directly
 5. Context synthesis — format ranked sources for an LLM prompt
 
 ## Read in order
@@ -39,7 +39,7 @@ VectorModule.stub() ──► VectorStoreProtocol ──► collection
 
 The deterministic embedder is intentionally the only local substitute. To
 move to a real vector backend, change the module configuration; the controller
-and retriever continue to depend on Lexigram contracts.
+and retriever continue to depend on Oridecon contracts.
 
 ## Quick start
 
@@ -55,7 +55,7 @@ Open the URL printed by the server, ingest a document, and search it.
 | Method | Path | Description |
 |--------|------|-------------|
 | `POST` | `/api/rag/ingest` | Chunk and upsert a document |
-| `POST` | `/api/rag/search` | Search the Lexigram collection |
+| `POST` | `/api/rag/search` | Search the Oridecon collection |
 | `POST` | `/api/rag/search/context` | Return ranked context and sources |
 | `GET` | `/api/rag/stats` | Show collection and retrieval stats |
 | `GET` | `/api/rag/health` | Show collection readiness |

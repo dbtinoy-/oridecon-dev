@@ -1,4 +1,4 @@
-# AUDIT_TESTS.md — Lexigram Framework Targeted Test Execution Audit
+# AUDIT_TESTS.md — Oridecon Framework Targeted Test Execution Audit
 
 > **Source**: Live pytest execution evidence for targeted scopes, with `tests/` directory scanning as supporting context.
 
@@ -29,70 +29,70 @@
 
 | Label | Code Coverage | Pass/Total | Failed | Skipped | Warnings | Exit Code | Duration |
 |-------|---------------|------------|---------|----------|------|-----------|----------|
-| Package tests: core/lexigram-contracts | 34.0% | 1814/1814 | 0 | 0 | 4 | 0 | 10308 ms |
-| Package tests: core/lexigram | 38.0% | 3089/3094 | 0 | 5 | 2 | 0 | 53088 ms |
-| Package tests: experimental/ai/lexigram-ai-agents | 85.0% | 402/402 | 0 | 0 | 4 | 0 | 5838 ms |
-| Package tests: experimental/ai/lexigram-ai-evaluation | 97.0% | 167/167 | 0 | 0 | 4 | 0 | 1851 ms |
-| Package tests: experimental/ai/lexigram-ai-feedback | 96.0% | 260/260 | 0 | 0 | 4 | 0 | 2110 ms |
-| Package tests: experimental/ai/lexigram-ai-governance | 88.0% | 544/544 | 0 | 0 | 47 | 0 | 4565 ms |
-| Package tests: experimental/ai/lexigram-ai-guard | 87.0% | 242/242 | 0 | 0 | 7 | 0 | 2123 ms |
-| Package tests: experimental/ai/lexigram-ai-llm | 71.0% | 953/974 | 0 | 21 | 4 | 0 | 31131 ms |
-| Package tests: experimental/ai/lexigram-ai-mcp | 54.0% | 400/400 | 0 | 0 | 4 | 0 | 3519 ms |
-| Package tests: experimental/ai/lexigram-ai-memory | 83.0% | 240/240 | 0 | 0 | 4 | 0 | 2358 ms |
-| Package tests: experimental/ai/lexigram-ai-observability | 87.0% | 260/260 | 0 | 0 | 4 | 0 | 2578 ms |
-| Package tests: experimental/ai/lexigram-ai-prompt | 87.0% | 307/307 | 0 | 0 | 4 | 0 | 2358 ms |
-| Package tests: experimental/ai/lexigram-ai-rag | 62.0% | 528/535 | 0 | 7 | 4 | 0 | 6838 ms |
-| Package tests: experimental/ai/lexigram-ai-relay-gateway | 94.0% | 581/581 | 0 | 0 | 4 | 0 | 4223 ms |
-| Package tests: experimental/ai/lexigram-ai-relay | 91.0% | 534/534 | 0 | 0 | 4 | 0 | 5630 ms |
-| Package tests: experimental/ai/lexigram-ai-session | 89.0% | 219/219 | 0 | 0 | 4 | 0 | 2404 ms |
-| Package tests: experimental/ai/lexigram-ai-skills | 80.0% | 286/286 | 0 | 0 | 6 | 0 | 5287 ms |
-| Package tests: experimental/ai/lexigram-ai-workers | 87.0% | 328/328 | 0 | 0 | 4 | 0 | 3784 ms |
-| Package tests: experimental/ai/lexigram-ai | 42.0% | 470/489 | 0 | 19 | 4 | 1 | 15075 ms |
-| Package tests: experimental/apps/lexigram-admin | 78.0% | 5277/5307 | 0 | 30 | 18 | 0 | 77006 ms |
-| Package tests: experimental/apps/lexigram-builder | 0.0% | 0/0 | 0 | 0 | 0 | 1 | 385 ms |
-| Package tests: experimental/apps/lexigram-cli | 81.0% | 902/903 | 0 | 1 | 6 | 0 | 14514 ms |
-| Package tests: experimental/apps/lexigram-ui | 77.0% | 1439/1517 | 0 | 78 | 4 | 0 | 7173 ms |
-| Package tests: experimental/multimedia/lexigram-multimedia-beat | 74.0% | 21/21 | 0 | 0 | 4 | 0 | 2660 ms |
-| Package tests: experimental/multimedia/lexigram-multimedia-image | 92.0% | 54/54 | 0 | 0 | 4 | 0 | 2079 ms |
-| Package tests: experimental/multimedia/lexigram-multimedia-interpolate | 88.0% | 23/23 | 0 | 0 | 4 | 0 | 1918 ms |
-| Package tests: experimental/multimedia/lexigram-multimedia-music | 87.0% | 47/47 | 0 | 0 | 4 | 0 | 1996 ms |
-| Package tests: experimental/multimedia/lexigram-multimedia-tts | 79.0% | 63/63 | 0 | 0 | 4 | 0 | 2236 ms |
-| Package tests: experimental/multimedia/lexigram-multimedia-upscale | 92.0% | 42/42 | 0 | 0 | 4 | 0 | 2092 ms |
-| Package tests: experimental/multimedia/lexigram-multimedia-video | 87.0% | 182/182 | 0 | 0 | 4 | 0 | 5553 ms |
-| Package tests: experimental/multimedia/lexigram-multimedia | 58.0% | 89/89 | 0 | 0 | 5 | 0 | 4647 ms |
-| Package tests: packages/lexigram-audit | 87.0% | 293/293 | 0 | 0 | 4 | 0 | 2371 ms |
-| Package tests: packages/lexigram-auth | 69.0% | 632/636 | 0 | 4 | 15 | 0 | 30015 ms |
-| Package tests: packages/lexigram-cache | 81.0% | 874/887 | 0 | 13 | 6 | 0 | 10653 ms |
-| Package tests: packages/lexigram-events | 64.0% | 1002/1017 | 0 | 15 | 4 | 0 | 11974 ms |
-| Package tests: packages/lexigram-features | 84.0% | 253/253 | 0 | 0 | 17 | 0 | 3493 ms |
-| Package tests: packages/lexigram-graph | 80.0% | 263/264 | 0 | 1 | 4 | 0 | 2281 ms |
-| Package tests: packages/lexigram-graphql | 76.0% | 520/522 | 0 | 2 | 23 | 0 | 5943 ms |
-| Package tests: packages/lexigram-http | 85.0% | 457/457 | 0 | 0 | 8 | 0 | 2829 ms |
-| Package tests: packages/lexigram-monitor | 78.0% | 317/338 | 0 | 21 | 4 | 1 | 8238 ms |
-| Package tests: packages/lexigram-nosql | 91.0% | 537/537 | 0 | 0 | 4 | 0 | 3432 ms |
-| Package tests: packages/lexigram-notification | 85.0% | 296/296 | 0 | 0 | 7 | 0 | 6728 ms |
-| Package tests: packages/lexigram-queue | 85.0% | 235/235 | 0 | 0 | 4 | 0 | 4333 ms |
-| Package tests: packages/lexigram-resilience | 75.0% | 311/311 | 0 | 0 | 4 | 0 | 20640 ms |
-| Package tests: packages/lexigram-search | 66.0% | 813/818 | 0 | 5 | 4 | 0 | 4118 ms |
-| Package tests: packages/lexigram-secrets | 59.0% | 134/134 | 0 | 0 | 4 | 0 | 1650 ms |
-| Package tests: packages/lexigram-sql | 61.0% | 1338/1429 | 0 | 91 | 10 | 0 | 11928 ms |
-| Package tests: packages/lexigram-storage | 64.0% | 463/466 | 0 | 3 | 4 | 0 | 6658 ms |
-| Package tests: packages/lexigram-tasks | 76.0% | 537/553 | 0 | 16 | 4 | 0 | 11211 ms |
-| Package tests: packages/lexigram-tenancy | 85.0% | 362/362 | 0 | 0 | 4 | 0 | 2991 ms |
-| Package tests: packages/lexigram-testing | 17.0% | 443/458 | 0 | 15 | 2 | 0 | 7845 ms |
-| Package tests: packages/lexigram-vector | 78.0% | 533/533 | 0 | 0 | 4 | 0 | 4155 ms |
-| Package tests: packages/lexigram-web | 81.0% | 1421/1428 | 0 | 7 | 6 | 0 | 14780 ms |
-| Package tests: packages/lexigram-webhook | 90.0% | 336/336 | 0 | 0 | 4 | 0 | 2752 ms |
-| Package tests: packages/lexigram-workflow | 73.0% | 559/559 | 0 | 0 | 4 | 0 | 13706 ms |
+| Package tests: core/oridecon-contracts | 34.0% | 1814/1814 | 0 | 0 | 4 | 0 | 10308 ms |
+| Package tests: core/oridecon | 38.0% | 3089/3094 | 0 | 5 | 2 | 0 | 53088 ms |
+| Package tests: experimental/ai/oridecon-ai-agents | 85.0% | 402/402 | 0 | 0 | 4 | 0 | 5838 ms |
+| Package tests: experimental/ai/oridecon-ai-evaluation | 97.0% | 167/167 | 0 | 0 | 4 | 0 | 1851 ms |
+| Package tests: experimental/ai/oridecon-ai-feedback | 96.0% | 260/260 | 0 | 0 | 4 | 0 | 2110 ms |
+| Package tests: experimental/ai/oridecon-ai-governance | 88.0% | 544/544 | 0 | 0 | 47 | 0 | 4565 ms |
+| Package tests: experimental/ai/oridecon-ai-guard | 87.0% | 242/242 | 0 | 0 | 7 | 0 | 2123 ms |
+| Package tests: experimental/ai/oridecon-ai-llm | 71.0% | 953/974 | 0 | 21 | 4 | 0 | 31131 ms |
+| Package tests: experimental/ai/oridecon-ai-mcp | 54.0% | 400/400 | 0 | 0 | 4 | 0 | 3519 ms |
+| Package tests: experimental/ai/oridecon-ai-memory | 83.0% | 240/240 | 0 | 0 | 4 | 0 | 2358 ms |
+| Package tests: experimental/ai/oridecon-ai-observability | 87.0% | 260/260 | 0 | 0 | 4 | 0 | 2578 ms |
+| Package tests: experimental/ai/oridecon-ai-prompt | 87.0% | 307/307 | 0 | 0 | 4 | 0 | 2358 ms |
+| Package tests: experimental/ai/oridecon-ai-rag | 62.0% | 528/535 | 0 | 7 | 4 | 0 | 6838 ms |
+| Package tests: experimental/ai/oridecon-ai-relay-gateway | 94.0% | 581/581 | 0 | 0 | 4 | 0 | 4223 ms |
+| Package tests: experimental/ai/oridecon-ai-relay | 91.0% | 534/534 | 0 | 0 | 4 | 0 | 5630 ms |
+| Package tests: experimental/ai/oridecon-ai-session | 89.0% | 219/219 | 0 | 0 | 4 | 0 | 2404 ms |
+| Package tests: experimental/ai/oridecon-ai-skills | 80.0% | 286/286 | 0 | 0 | 6 | 0 | 5287 ms |
+| Package tests: experimental/ai/oridecon-ai-workers | 87.0% | 328/328 | 0 | 0 | 4 | 0 | 3784 ms |
+| Package tests: experimental/ai/oridecon-ai | 42.0% | 470/489 | 0 | 19 | 4 | 1 | 15075 ms |
+| Package tests: experimental/apps/oridecon-admin | 78.0% | 5277/5307 | 0 | 30 | 18 | 0 | 77006 ms |
+| Package tests: experimental/apps/oridecon-builder | 0.0% | 0/0 | 0 | 0 | 0 | 1 | 385 ms |
+| Package tests: experimental/apps/oridecon-cli | 81.0% | 902/903 | 0 | 1 | 6 | 0 | 14514 ms |
+| Package tests: experimental/apps/oridecon-ui | 77.0% | 1439/1517 | 0 | 78 | 4 | 0 | 7173 ms |
+| Package tests: experimental/multimedia/oridecon-multimedia-beat | 74.0% | 21/21 | 0 | 0 | 4 | 0 | 2660 ms |
+| Package tests: experimental/multimedia/oridecon-multimedia-image | 92.0% | 54/54 | 0 | 0 | 4 | 0 | 2079 ms |
+| Package tests: experimental/multimedia/oridecon-multimedia-interpolate | 88.0% | 23/23 | 0 | 0 | 4 | 0 | 1918 ms |
+| Package tests: experimental/multimedia/oridecon-multimedia-music | 87.0% | 47/47 | 0 | 0 | 4 | 0 | 1996 ms |
+| Package tests: experimental/multimedia/oridecon-multimedia-tts | 79.0% | 63/63 | 0 | 0 | 4 | 0 | 2236 ms |
+| Package tests: experimental/multimedia/oridecon-multimedia-upscale | 92.0% | 42/42 | 0 | 0 | 4 | 0 | 2092 ms |
+| Package tests: experimental/multimedia/oridecon-multimedia-video | 87.0% | 182/182 | 0 | 0 | 4 | 0 | 5553 ms |
+| Package tests: experimental/multimedia/oridecon-multimedia | 58.0% | 89/89 | 0 | 0 | 5 | 0 | 4647 ms |
+| Package tests: packages/oridecon-audit | 87.0% | 293/293 | 0 | 0 | 4 | 0 | 2371 ms |
+| Package tests: packages/oridecon-auth | 69.0% | 632/636 | 0 | 4 | 15 | 0 | 30015 ms |
+| Package tests: packages/oridecon-cache | 81.0% | 874/887 | 0 | 13 | 6 | 0 | 10653 ms |
+| Package tests: packages/oridecon-events | 64.0% | 1002/1017 | 0 | 15 | 4 | 0 | 11974 ms |
+| Package tests: packages/oridecon-features | 84.0% | 253/253 | 0 | 0 | 17 | 0 | 3493 ms |
+| Package tests: packages/oridecon-graph | 80.0% | 263/264 | 0 | 1 | 4 | 0 | 2281 ms |
+| Package tests: packages/oridecon-graphql | 76.0% | 520/522 | 0 | 2 | 23 | 0 | 5943 ms |
+| Package tests: packages/oridecon-http | 85.0% | 457/457 | 0 | 0 | 8 | 0 | 2829 ms |
+| Package tests: packages/oridecon-monitor | 78.0% | 317/338 | 0 | 21 | 4 | 1 | 8238 ms |
+| Package tests: packages/oridecon-nosql | 91.0% | 537/537 | 0 | 0 | 4 | 0 | 3432 ms |
+| Package tests: packages/oridecon-notification | 85.0% | 296/296 | 0 | 0 | 7 | 0 | 6728 ms |
+| Package tests: packages/oridecon-queue | 85.0% | 235/235 | 0 | 0 | 4 | 0 | 4333 ms |
+| Package tests: packages/oridecon-resilience | 75.0% | 311/311 | 0 | 0 | 4 | 0 | 20640 ms |
+| Package tests: packages/oridecon-search | 66.0% | 813/818 | 0 | 5 | 4 | 0 | 4118 ms |
+| Package tests: packages/oridecon-secrets | 59.0% | 134/134 | 0 | 0 | 4 | 0 | 1650 ms |
+| Package tests: packages/oridecon-sql | 61.0% | 1338/1429 | 0 | 91 | 10 | 0 | 11928 ms |
+| Package tests: packages/oridecon-storage | 64.0% | 463/466 | 0 | 3 | 4 | 0 | 6658 ms |
+| Package tests: packages/oridecon-tasks | 76.0% | 537/553 | 0 | 16 | 4 | 0 | 11211 ms |
+| Package tests: packages/oridecon-tenancy | 85.0% | 362/362 | 0 | 0 | 4 | 0 | 2991 ms |
+| Package tests: packages/oridecon-testing | 17.0% | 443/458 | 0 | 15 | 2 | 0 | 7845 ms |
+| Package tests: packages/oridecon-vector | 78.0% | 533/533 | 0 | 0 | 4 | 0 | 4155 ms |
+| Package tests: packages/oridecon-web | 81.0% | 1421/1428 | 0 | 7 | 6 | 0 | 14780 ms |
+| Package tests: packages/oridecon-webhook | 90.0% | 336/336 | 0 | 0 | 4 | 0 | 2752 ms |
+| Package tests: packages/oridecon-workflow | 73.0% | 559/559 | 0 | 0 | 4 | 0 | 13706 ms |
 
 ### Execution Scope Notes
 
-- `framework-core`: real test execution for `lexigram/tests`.
-- `package`: real test execution for `<package>/tests` across every discovered Lexigram package with tests.
-### Package tests: core/lexigram-contracts
+- `framework-core`: real test execution for `oridecon/tests`.
+- `package`: real test execution for `<package>/tests` across every discovered Oridecon package with tests.
+### Package tests: core/oridecon-contracts
 
-- Scope: `core/lexigram-contracts/tests`
-- Command: `uv run pytest core/lexigram-contracts/tests -q -m not integration --cov=core/lexigram.contracts`
+- Scope: `core/oridecon-contracts/tests`
+- Command: `uv run pytest core/oridecon-contracts/tests -q -m not integration --cov=core/oridecon.contracts`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `10308 ms`
@@ -102,7 +102,7 @@
 - Output snippet:
 
 ```text
-2026-09-01 12:52:51 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:52:51 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [  3%]
 ........................................................................ [  7%]
 ........................................................................ [ 11%]
@@ -113,10 +113,10 @@
 ....................................................
 ```
 
-### Package tests: core/lexigram
+### Package tests: core/oridecon
 
-- Scope: `core/lexigram/tests`
-- Command: `uv run pytest core/lexigram/tests -q -m not integration --cov=core/lexigram`
+- Scope: `core/oridecon/tests`
+- Command: `uv run pytest core/oridecon/tests -q -m not integration --cov=core/oridecon`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `53088 ms`
@@ -126,17 +126,17 @@
 - Output snippet:
 
 ```text
-2026-09-01 12:53:02 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
-2026-09-01 12:53:02 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=1 imports=0 is_global=False module=CoreModule providers=1
-2026-09-01 12:53:02 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=1 imports=1 is_global=False module=CacheModule providers=1
-2026-09-01 12:53:02 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=1 imports=2 is_global=False module=WebModule providers=1
+2026-09-01 12:53:02 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:53:02 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=1 imports=0 is_global=False module=CoreModule providers=1
+2026-09-01 12:53:02 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=1 imports=1 is_global=False module=CacheModule providers=1
+2026-09-01 12:53:02 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=1 imports=2 is_global=False module=WebModule providers=1
 .........................................................
 ```
 
-### Package tests: experimental/ai/lexigram-ai-agents
+### Package tests: experimental/ai/oridecon-ai-agents
 
-- Scope: `experimental/ai/lexigram-ai-agents/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-agents/tests -q -m not integration --cov=experimental/ai/lexigram.ai.agents`
+- Scope: `experimental/ai/oridecon-ai-agents/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-agents/tests -q -m not integration --cov=experimental/ai/oridecon.ai.agents`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `5838 ms`
@@ -146,7 +146,7 @@
 - Output snippet:
 
 ```text
-2026-09-01 12:53:55 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:53:55 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 17%]
 ........................................................................ [ 35%]
 ........................................................................ [ 53%]
@@ -157,10 +157,10 @@
 .venv/lib/python3.13/site-packages/_pytest/config/_
 ```
 
-### Package tests: experimental/ai/lexigram-ai-evaluation
+### Package tests: experimental/ai/oridecon-ai-evaluation
 
-- Scope: `experimental/ai/lexigram-ai-evaluation/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-evaluation/tests -q -m not integration --cov=experimental/ai/lexigram.ai.evaluation`
+- Scope: `experimental/ai/oridecon-ai-evaluation/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-evaluation/tests -q -m not integration --cov=experimental/ai/oridecon.ai.evaluation`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `1851 ms`
@@ -170,19 +170,19 @@
 - Output snippet:
 
 ```text
-2026-09-01 12:54:01 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:54:01 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 43%]
 ........................................................................ [ 86%]
 .......................                                                  [100%]
 =============================== warnings summary ===============================
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
-  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; lexigram.testing.fix
+  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; oridecon.testing.fix
 ```
 
-### Package tests: experimental/ai/lexigram-ai-feedback
+### Package tests: experimental/ai/oridecon-ai-feedback
 
-- Scope: `experimental/ai/lexigram-ai-feedback/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-feedback/tests -q -m not integration --cov=experimental/ai/lexigram.ai.feedback`
+- Scope: `experimental/ai/oridecon-ai-feedback/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-feedback/tests -q -m not integration --cov=experimental/ai/oridecon.ai.feedback`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2110 ms`
@@ -192,7 +192,7 @@
 - Output snippet:
 
 ```text
-2026-09-01 12:54:02 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:54:02 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 27%]
 ........................................................................ [ 55%]
 ........................................................................ [ 83%]
@@ -202,10 +202,10 @@
   .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewr
 ```
 
-### Package tests: experimental/ai/lexigram-ai-governance
+### Package tests: experimental/ai/oridecon-ai-governance
 
-- Scope: `experimental/ai/lexigram-ai-governance/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-governance/tests -q -m not integration --cov=experimental/ai/lexigram.ai.governance`
+- Scope: `experimental/ai/oridecon-ai-governance/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-governance/tests -q -m not integration --cov=experimental/ai/oridecon.ai.governance`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `4565 ms`
@@ -215,7 +215,7 @@
 - Output snippet:
 
 ```text
-2026-09-01 12:54:05 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:54:05 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 13%]
 ........................................................................ [ 26%]
 ........................................................................ [ 39%]
@@ -226,10 +226,10 @@
 ........................................            
 ```
 
-### Package tests: experimental/ai/lexigram-ai-guard
+### Package tests: experimental/ai/oridecon-ai-guard
 
-- Scope: `experimental/ai/lexigram-ai-guard/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-guard/tests -q -m not integration --cov=experimental/ai/lexigram.ai.guard`
+- Scope: `experimental/ai/oridecon-ai-guard/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-guard/tests -q -m not integration --cov=experimental/ai/oridecon.ai.guard`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2123 ms`
@@ -239,7 +239,7 @@
 - Output snippet:
 
 ```text
-2026-09-01 12:54:09 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:54:09 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 29%]
 ........................................................................ [ 59%]
 ........................................................................ [ 89%]
@@ -249,10 +249,10 @@
   .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewr
 ```
 
-### Package tests: experimental/ai/lexigram-ai-llm
+### Package tests: experimental/ai/oridecon-ai-llm
 
-- Scope: `experimental/ai/lexigram-ai-llm/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-llm/tests -q -m not integration --cov=experimental/ai/lexigram.ai.llm`
+- Scope: `experimental/ai/oridecon-ai-llm/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-llm/tests -q -m not integration --cov=experimental/ai/oridecon.ai.llm`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `31131 ms`
@@ -262,7 +262,7 @@
 - Output snippet:
 
 ```text
-2026-09-01 12:54:11 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:54:11 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ssssssssssssssss........................................................ [  7%]
 ........................................................................ [ 14%]
 ........................................................................ [ 22%]
@@ -273,10 +273,10 @@ s....................................................................... [ 36%]
 ....................................................
 ```
 
-### Package tests: experimental/ai/lexigram-ai-mcp
+### Package tests: experimental/ai/oridecon-ai-mcp
 
-- Scope: `experimental/ai/lexigram-ai-mcp/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-mcp/tests -q -m not integration --cov=experimental/ai/lexigram.ai.mcp`
+- Scope: `experimental/ai/oridecon-ai-mcp/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-mcp/tests -q -m not integration --cov=experimental/ai/oridecon.ai.mcp`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `3519 ms`
@@ -286,7 +286,7 @@ s....................................................................... [ 36%]
 - Output snippet:
 
 ```text
-2026-09-01 12:54:42 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:54:42 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 18%]
 ........................................................................ [ 36%]
 ........................................................................ [ 54%]
@@ -297,10 +297,10 @@ s....................................................................... [ 36%]
 .venv/lib/python3.13/site-packages/_pytest/config/_
 ```
 
-### Package tests: experimental/ai/lexigram-ai-memory
+### Package tests: experimental/ai/oridecon-ai-memory
 
-- Scope: `experimental/ai/lexigram-ai-memory/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-memory/tests -q -m not integration --cov=experimental/ai/lexigram.ai.memory`
+- Scope: `experimental/ai/oridecon-ai-memory/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-memory/tests -q -m not integration --cov=experimental/ai/oridecon.ai.memory`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2358 ms`
@@ -310,7 +310,7 @@ s....................................................................... [ 36%]
 - Output snippet:
 
 ```text
-2026-09-01 12:54:46 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:54:46 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 30%]
 ........................................................................ [ 60%]
 ........................................................................ [ 90%]
@@ -320,10 +320,10 @@ s....................................................................... [ 36%]
   .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewr
 ```
 
-### Package tests: experimental/ai/lexigram-ai-observability
+### Package tests: experimental/ai/oridecon-ai-observability
 
-- Scope: `experimental/ai/lexigram-ai-observability/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-observability/tests -q -m not integration --cov=experimental/ai/lexigram.ai.observability`
+- Scope: `experimental/ai/oridecon-ai-observability/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-observability/tests -q -m not integration --cov=experimental/ai/oridecon.ai.observability`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2578 ms`
@@ -333,7 +333,7 @@ s....................................................................... [ 36%]
 - Output snippet:
 
 ```text
-2026-09-01 12:54:48 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:54:48 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 27%]
 ........................................................................ [ 55%]
 ........................................................................ [ 83%]
@@ -343,10 +343,10 @@ s....................................................................... [ 36%]
   .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewr
 ```
 
-### Package tests: experimental/ai/lexigram-ai-prompt
+### Package tests: experimental/ai/oridecon-ai-prompt
 
-- Scope: `experimental/ai/lexigram-ai-prompt/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-prompt/tests -q -m not integration --cov=experimental/ai/lexigram.ai.prompt`
+- Scope: `experimental/ai/oridecon-ai-prompt/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-prompt/tests -q -m not integration --cov=experimental/ai/oridecon.ai.prompt`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2358 ms`
@@ -356,7 +356,7 @@ s....................................................................... [ 36%]
 - Output snippet:
 
 ```text
-2026-09-01 12:54:51 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:54:51 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 23%]
 ........................................................................ [ 46%]
 ........................................................................ [ 70%]
@@ -367,10 +367,10 @@ s....................................................................... [ 36%]
   .ve
 ```
 
-### Package tests: experimental/ai/lexigram-ai-rag
+### Package tests: experimental/ai/oridecon-ai-rag
 
-- Scope: `experimental/ai/lexigram-ai-rag/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-rag/tests -q -m not integration --cov=experimental/ai/lexigram.ai.rag`
+- Scope: `experimental/ai/oridecon-ai-rag/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-rag/tests -q -m not integration --cov=experimental/ai/oridecon.ai.rag`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `6838 ms`
@@ -380,7 +380,7 @@ s....................................................................... [ 36%]
 - Output snippet:
 
 ```text
-2026-09-01 12:54:53 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:54:53 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ..........................................................s............. [ 13%]
 ...sss..........ss...................................................... [ 26%]
 .........................................................s.............. [ 40%]
@@ -391,10 +391,10 @@ s....................................................................... [ 36%]
 ...............................                     
 ```
 
-### Package tests: experimental/ai/lexigram-ai-relay-gateway
+### Package tests: experimental/ai/oridecon-ai-relay-gateway
 
-- Scope: `experimental/ai/lexigram-ai-relay-gateway/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-relay-gateway/tests -q -m not integration --cov=experimental/ai/lexigram.ai.relay.gateway`
+- Scope: `experimental/ai/oridecon-ai-relay-gateway/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-relay-gateway/tests -q -m not integration --cov=experimental/ai/oridecon.ai.relay.gateway`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `4223 ms`
@@ -404,8 +404,8 @@ s....................................................................... [ 36%]
 - Output snippet:
 
 ```text
-2026-09-01 12:55:00 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
-2026-09-01 12:55:00 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=RelayModule providers=0
+2026-09-01 12:55:00 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:55:00 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=RelayModule providers=0
 ........................................................................ [ 12%]
 ........................................................................ [ 24%]
 ........................................................................ [ 37%]
@@ -414,10 +414,10 @@ s....................................................................... [ 36%]
 ..........................
 ```
 
-### Package tests: experimental/ai/lexigram-ai-relay
+### Package tests: experimental/ai/oridecon-ai-relay
 
-- Scope: `experimental/ai/lexigram-ai-relay/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-relay/tests -q -m not integration --cov=experimental/ai/lexigram.ai.relay`
+- Scope: `experimental/ai/oridecon-ai-relay/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-relay/tests -q -m not integration --cov=experimental/ai/oridecon.ai.relay`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `5630 ms`
@@ -427,8 +427,8 @@ s....................................................................... [ 36%]
 - Output snippet:
 
 ```text
-2026-09-01 12:55:04 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
-2026-09-01 12:55:04 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=RelayModule providers=0
+2026-09-01 12:55:04 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:55:04 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=RelayModule providers=0
 ........................................................................ [ 13%]
 ........................................................................ [ 26%]
 ........................................................................ [ 40%]
@@ -437,10 +437,10 @@ s....................................................................... [ 36%]
 ..........................
 ```
 
-### Package tests: experimental/ai/lexigram-ai-session
+### Package tests: experimental/ai/oridecon-ai-session
 
-- Scope: `experimental/ai/lexigram-ai-session/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-session/tests -q -m not integration --cov=experimental/ai/lexigram.ai.session`
+- Scope: `experimental/ai/oridecon-ai-session/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-session/tests -q -m not integration --cov=experimental/ai/oridecon.ai.session`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2404 ms`
@@ -450,7 +450,7 @@ s....................................................................... [ 36%]
 - Output snippet:
 
 ```text
-2026-09-01 12:55:10 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:55:10 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 32%]
 ........................................................................ [ 65%]
 ........................................................................ [ 98%]
@@ -460,10 +460,10 @@ s....................................................................... [ 36%]
   .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewr
 ```
 
-### Package tests: experimental/ai/lexigram-ai-skills
+### Package tests: experimental/ai/oridecon-ai-skills
 
-- Scope: `experimental/ai/lexigram-ai-skills/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-skills/tests -q -m not integration --cov=experimental/ai/lexigram.ai.skills`
+- Scope: `experimental/ai/oridecon-ai-skills/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-skills/tests -q -m not integration --cov=experimental/ai/oridecon.ai.skills`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `5287 ms`
@@ -473,7 +473,7 @@ s....................................................................... [ 36%]
 - Output snippet:
 
 ```text
-2026-09-01 12:55:12 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:55:12 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 25%]
 ........................................................................ [ 50%]
 ........................................................................ [ 75%]
@@ -483,10 +483,10 @@ s....................................................................... [ 36%]
   .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewr
 ```
 
-### Package tests: experimental/ai/lexigram-ai-workers
+### Package tests: experimental/ai/oridecon-ai-workers
 
-- Scope: `experimental/ai/lexigram-ai-workers/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai-workers/tests -q -m not integration --cov=experimental/ai/lexigram.ai.workers`
+- Scope: `experimental/ai/oridecon-ai-workers/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai-workers/tests -q -m not integration --cov=experimental/ai/oridecon.ai.workers`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `3784 ms`
@@ -496,7 +496,7 @@ s....................................................................... [ 36%]
 - Output snippet:
 
 ```text
-2026-09-01 12:55:18 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:55:18 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 21%]
 ........................................................................ [ 43%]
 ........................................................................ [ 65%]
@@ -507,10 +507,10 @@ s....................................................................... [ 36%]
   .ve
 ```
 
-### Package tests: experimental/ai/lexigram-ai
+### Package tests: experimental/ai/oridecon-ai
 
-- Scope: `experimental/ai/lexigram-ai/tests`
-- Command: `uv run pytest experimental/ai/lexigram-ai/tests -q -m not integration --cov=experimental/ai/lexigram.ai`
+- Scope: `experimental/ai/oridecon-ai/tests`
+- Command: `uv run pytest experimental/ai/oridecon-ai/tests -q -m not integration --cov=experimental/ai/oridecon.ai`
 - Status: **FAIL**
 - Exit code: `1`
 - Duration: `15075 ms`
@@ -520,7 +520,7 @@ s....................................................................... [ 36%]
 - Output snippet:
 
 ```text
-2026-09-01 12:55:21 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:55:21 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 15%]
 ........................................................................ [ 30%]
 ..................................................................ss.... [ 45%]
@@ -532,10 +532,10 @@ ERROR: Coverage failure: total of 42 is less than fail-under=43
                         
 ```
 
-### Package tests: experimental/apps/lexigram-admin
+### Package tests: experimental/apps/oridecon-admin
 
-- Scope: `experimental/apps/lexigram-admin/tests`
-- Command: `uv run pytest experimental/apps/lexigram-admin/tests -q -m not integration --cov=experimental/apps/lexigram.admin`
+- Scope: `experimental/apps/oridecon-admin/tests`
+- Command: `uv run pytest experimental/apps/oridecon-admin/tests -q -m not integration --cov=experimental/apps/oridecon.admin`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `77006 ms`
@@ -545,7 +545,7 @@ ERROR: Coverage failure: total of 42 is less than fail-under=43
 - Output snippet:
 
 ```text
-2026-09-01 12:55:36 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:55:36 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 sssssssss....sssssssss.................................................. [  1%]
 ........................................................................ [  2%]
 ....................................................s..................s [  4%]
@@ -556,10 +556,10 @@ s....................................................................... [  5%]
 ....................................................
 ```
 
-### Package tests: experimental/apps/lexigram-builder
+### Package tests: experimental/apps/oridecon-builder
 
-- Scope: `experimental/apps/lexigram-builder/tests`
-- Command: `uv run pytest experimental/apps/lexigram-builder/tests -q -m not integration --cov=experimental/apps/lexigram.builder`
+- Scope: `experimental/apps/oridecon-builder/tests`
+- Command: `uv run pytest experimental/apps/oridecon-builder/tests -q -m not integration --cov=experimental/apps/oridecon.builder`
 - Status: **FAIL**
 - Exit code: `1`
 - Duration: `385 ms`
@@ -581,10 +581,10 @@ Traceback (most recent call last):
   File "/ho
 ```
 
-### Package tests: experimental/apps/lexigram-cli
+### Package tests: experimental/apps/oridecon-cli
 
-- Scope: `experimental/apps/lexigram-cli/tests`
-- Command: `uv run pytest experimental/apps/lexigram-cli/tests -q -m not integration --cov=experimental/apps/lexigram.cli`
+- Scope: `experimental/apps/oridecon-cli/tests`
+- Command: `uv run pytest experimental/apps/oridecon-cli/tests -q -m not integration --cov=experimental/apps/oridecon.cli`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `14514 ms`
@@ -594,7 +594,7 @@ Traceback (most recent call last):
 - Output snippet:
 
 ```text
-2026-09-01 12:56:54 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:56:54 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [  7%]
 ........................................................................ [ 15%]
 ........................................................................ [ 23%]
@@ -605,10 +605,10 @@ Traceback (most recent call last):
 ....................................................
 ```
 
-### Package tests: experimental/apps/lexigram-ui
+### Package tests: experimental/apps/oridecon-ui
 
-- Scope: `experimental/apps/lexigram-ui/tests`
-- Command: `uv run pytest experimental/apps/lexigram-ui/tests -q -m not integration --cov=experimental/apps/lexigram.ui`
+- Scope: `experimental/apps/oridecon-ui/tests`
+- Command: `uv run pytest experimental/apps/oridecon-ui/tests -q -m not integration --cov=experimental/apps/oridecon.ui`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `7173 ms`
@@ -618,7 +618,7 @@ Traceback (most recent call last):
 - Output snippet:
 
 ```text
-2026-09-01 12:57:08 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:57:08 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 ........................................................................ [  9%]
 ........................................................................ [ 14%]
@@ -629,10 +629,10 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 ....................................................
 ```
 
-### Package tests: experimental/multimedia/lexigram-multimedia-beat
+### Package tests: experimental/multimedia/oridecon-multimedia-beat
 
-- Scope: `experimental/multimedia/lexigram-multimedia-beat/tests`
-- Command: `uv run pytest experimental/multimedia/lexigram-multimedia-beat/tests -q -m not integration --cov=experimental/multimedia/lexigram.multimedia.beat`
+- Scope: `experimental/multimedia/oridecon-multimedia-beat/tests`
+- Command: `uv run pytest experimental/multimedia/oridecon-multimedia-beat/tests -q -m not integration --cov=experimental/multimedia/oridecon.multimedia.beat`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2660 ms`
@@ -642,21 +642,21 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:57:16 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:57:16 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 .....................                                                    [100%]
 =============================== warnings summary ===============================
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
-  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; lexigram.testing.fixtures.core
+  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; oridecon.testing.fixtures.core
     self.import_plugin(import_spec)
 
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
   /home/admin/Documents/AI/applications/lexigr
 ```
 
-### Package tests: experimental/multimedia/lexigram-multimedia-image
+### Package tests: experimental/multimedia/oridecon-multimedia-image
 
-- Scope: `experimental/multimedia/lexigram-multimedia-image/tests`
-- Command: `uv run pytest experimental/multimedia/lexigram-multimedia-image/tests -q -m not integration --cov=experimental/multimedia/lexigram.multimedia.image`
+- Scope: `experimental/multimedia/oridecon-multimedia-image/tests`
+- Command: `uv run pytest experimental/multimedia/oridecon-multimedia-image/tests -q -m not integration --cov=experimental/multimedia/oridecon.multimedia.image`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2079 ms`
@@ -666,21 +666,21 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:57:18 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:57:18 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ......................................................                   [100%]
 =============================== warnings summary ===============================
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
-  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; lexigram.testing.fixtures.core
+  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; oridecon.testing.fixtures.core
     self.import_plugin(import_spec)
 
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
   /home/admin/Documents/AI/applications/lexigr
 ```
 
-### Package tests: experimental/multimedia/lexigram-multimedia-interpolate
+### Package tests: experimental/multimedia/oridecon-multimedia-interpolate
 
-- Scope: `experimental/multimedia/lexigram-multimedia-interpolate/tests`
-- Command: `uv run pytest experimental/multimedia/lexigram-multimedia-interpolate/tests -q -m not integration --cov=experimental/multimedia/lexigram.multimedia.interpolate`
+- Scope: `experimental/multimedia/oridecon-multimedia-interpolate/tests`
+- Command: `uv run pytest experimental/multimedia/oridecon-multimedia-interpolate/tests -q -m not integration --cov=experimental/multimedia/oridecon.multimedia.interpolate`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `1918 ms`
@@ -690,21 +690,21 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:57:20 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:57:20 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 .......................                                                  [100%]
 =============================== warnings summary ===============================
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
-  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; lexigram.testing.fixtures.core
+  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; oridecon.testing.fixtures.core
     self.import_plugin(import_spec)
 
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
   /home/admin/Documents/AI/applications/lexigr
 ```
 
-### Package tests: experimental/multimedia/lexigram-multimedia-music
+### Package tests: experimental/multimedia/oridecon-multimedia-music
 
-- Scope: `experimental/multimedia/lexigram-multimedia-music/tests`
-- Command: `uv run pytest experimental/multimedia/lexigram-multimedia-music/tests -q -m not integration --cov=experimental/multimedia/lexigram.multimedia.music`
+- Scope: `experimental/multimedia/oridecon-multimedia-music/tests`
+- Command: `uv run pytest experimental/multimedia/oridecon-multimedia-music/tests -q -m not integration --cov=experimental/multimedia/oridecon.multimedia.music`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `1996 ms`
@@ -714,21 +714,21 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:57:22 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:57:22 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ...............................................                          [100%]
 =============================== warnings summary ===============================
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
-  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; lexigram.testing.fixtures.core
+  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; oridecon.testing.fixtures.core
     self.import_plugin(import_spec)
 
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
   /home/admin/Documents/AI/applications/lexigr
 ```
 
-### Package tests: experimental/multimedia/lexigram-multimedia-tts
+### Package tests: experimental/multimedia/oridecon-multimedia-tts
 
-- Scope: `experimental/multimedia/lexigram-multimedia-tts/tests`
-- Command: `uv run pytest experimental/multimedia/lexigram-multimedia-tts/tests -q -m not integration --cov=experimental/multimedia/lexigram.multimedia.tts`
+- Scope: `experimental/multimedia/oridecon-multimedia-tts/tests`
+- Command: `uv run pytest experimental/multimedia/oridecon-multimedia-tts/tests -q -m not integration --cov=experimental/multimedia/oridecon.multimedia.tts`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2236 ms`
@@ -738,21 +738,21 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:57:24 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:57:24 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ...............................................................          [100%]
 =============================== warnings summary ===============================
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
-  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; lexigram.testing.fixtures.core
+  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; oridecon.testing.fixtures.core
     self.import_plugin(import_spec)
 
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
   /home/admin/Documents/AI/applications/lexigr
 ```
 
-### Package tests: experimental/multimedia/lexigram-multimedia-upscale
+### Package tests: experimental/multimedia/oridecon-multimedia-upscale
 
-- Scope: `experimental/multimedia/lexigram-multimedia-upscale/tests`
-- Command: `uv run pytest experimental/multimedia/lexigram-multimedia-upscale/tests -q -m not integration --cov=experimental/multimedia/lexigram.multimedia.upscale`
+- Scope: `experimental/multimedia/oridecon-multimedia-upscale/tests`
+- Command: `uv run pytest experimental/multimedia/oridecon-multimedia-upscale/tests -q -m not integration --cov=experimental/multimedia/oridecon.multimedia.upscale`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2092 ms`
@@ -762,21 +762,21 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:57:26 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:57:26 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ..........................................                               [100%]
 =============================== warnings summary ===============================
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
-  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; lexigram.testing.fixtures.core
+  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; oridecon.testing.fixtures.core
     self.import_plugin(import_spec)
 
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
   /home/admin/Documents/AI/applications/lexigr
 ```
 
-### Package tests: experimental/multimedia/lexigram-multimedia-video
+### Package tests: experimental/multimedia/oridecon-multimedia-video
 
-- Scope: `experimental/multimedia/lexigram-multimedia-video/tests`
-- Command: `uv run pytest experimental/multimedia/lexigram-multimedia-video/tests -q -m not integration --cov=experimental/multimedia/lexigram.multimedia.video`
+- Scope: `experimental/multimedia/oridecon-multimedia-video/tests`
+- Command: `uv run pytest experimental/multimedia/oridecon-multimedia-video/tests -q -m not integration --cov=experimental/multimedia/oridecon.multimedia.video`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `5553 ms`
@@ -786,19 +786,19 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:57:29 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:57:29 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 39%]
 ........................................................................ [ 79%]
 ......................................                                   [100%]
 =============================== warnings summary ===============================
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
-  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; lexigram.testing.fix
+  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; oridecon.testing.fix
 ```
 
-### Package tests: experimental/multimedia/lexigram-multimedia
+### Package tests: experimental/multimedia/oridecon-multimedia
 
-- Scope: `experimental/multimedia/lexigram-multimedia/tests`
-- Command: `uv run pytest experimental/multimedia/lexigram-multimedia/tests -q -m not integration --cov=experimental/multimedia/lexigram.multimedia`
+- Scope: `experimental/multimedia/oridecon-multimedia/tests`
+- Command: `uv run pytest experimental/multimedia/oridecon-multimedia/tests -q -m not integration --cov=experimental/multimedia/oridecon.multimedia`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `4647 ms`
@@ -808,21 +808,21 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:57:34 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:57:34 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 80%]
 .................                                                        [100%]
 =============================== warnings summary ===============================
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
-  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; lexigram.testing.fixtures.core
+  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; oridecon.testing.fixtures.core
     self.import_plugin(import_spec)
 
 .venv/lib/python3.13/site-packag
 ```
 
-### Package tests: packages/lexigram-audit
+### Package tests: packages/oridecon-audit
 
-- Scope: `packages/lexigram-audit/tests`
-- Command: `uv run pytest packages/lexigram-audit/tests -q -m not integration --cov=packages/lexigram.audit`
+- Scope: `packages/oridecon-audit/tests`
+- Command: `uv run pytest packages/oridecon-audit/tests -q -m not integration --cov=packages/oridecon.audit`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2371 ms`
@@ -832,7 +832,7 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:57:39 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:57:39 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 24%]
 ........................................................................ [ 49%]
 ........................................................................ [ 73%]
@@ -843,10 +843,10 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
   .ve
 ```
 
-### Package tests: packages/lexigram-auth
+### Package tests: packages/oridecon-auth
 
-- Scope: `packages/lexigram-auth/tests`
-- Command: `uv run pytest packages/lexigram-auth/tests -q -m not integration --cov=packages/lexigram.auth`
+- Scope: `packages/oridecon-auth/tests`
+- Command: `uv run pytest packages/oridecon-auth/tests -q -m not integration --cov=packages/oridecon.auth`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `30015 ms`
@@ -856,7 +856,7 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:57:41 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:57:41 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 11%]
 ........................................................................ [ 22%]
 ........................................................................ [ 33%]
@@ -867,10 +867,10 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 ....................................................
 ```
 
-### Package tests: packages/lexigram-cache
+### Package tests: packages/oridecon-cache
 
-- Scope: `packages/lexigram-cache/tests`
-- Command: `uv run pytest packages/lexigram-cache/tests -q -m not integration --cov=packages/lexigram.cache`
+- Scope: `packages/oridecon-cache/tests`
+- Command: `uv run pytest packages/oridecon-cache/tests -q -m not integration --cov=packages/oridecon.cache`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `10653 ms`
@@ -880,7 +880,7 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:58:11 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:58:11 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [  8%]
 .................................................ss..................... [ 16%]
 ........................................................................ [ 24%]
@@ -891,10 +891,10 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 ....................................................
 ```
 
-### Package tests: packages/lexigram-events
+### Package tests: packages/oridecon-events
 
-- Scope: `packages/lexigram-events/tests`
-- Command: `uv run pytest packages/lexigram-events/tests -q -m not integration --cov=packages/lexigram.events`
+- Scope: `packages/oridecon-events/tests`
+- Command: `uv run pytest packages/oridecon-events/tests -q -m not integration --cov=packages/oridecon.events`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `11974 ms`
@@ -904,7 +904,7 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:58:22 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:58:22 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ...s.................................................................... [  7%]
 ........................................................................ [ 14%]
 ........................................................................ [ 21%]
@@ -915,10 +915,10 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 ....................................................
 ```
 
-### Package tests: packages/lexigram-features
+### Package tests: packages/oridecon-features
 
-- Scope: `packages/lexigram-features/tests`
-- Command: `uv run pytest packages/lexigram-features/tests -q -m not integration --cov=packages/lexigram.features`
+- Scope: `packages/oridecon-features/tests`
+- Command: `uv run pytest packages/oridecon-features/tests -q -m not integration --cov=packages/oridecon.features`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `3493 ms`
@@ -928,7 +928,7 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:58:34 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:58:34 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 28%]
 ........................................................................ [ 56%]
 ........................................................................ [ 85%]
@@ -938,10 +938,10 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
   .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewr
 ```
 
-### Package tests: packages/lexigram-graph
+### Package tests: packages/oridecon-graph
 
-- Scope: `packages/lexigram-graph/tests`
-- Command: `uv run pytest packages/lexigram-graph/tests -q -m not integration --cov=packages/lexigram.graph`
+- Scope: `packages/oridecon-graph/tests`
+- Command: `uv run pytest packages/oridecon-graph/tests -q -m not integration --cov=packages/oridecon.graph`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2281 ms`
@@ -951,7 +951,7 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:58:37 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:58:37 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 27%]
 ..................s..................................................... [ 54%]
 ........................................................................ [ 81%]
@@ -961,10 +961,10 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
   .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewr
 ```
 
-### Package tests: packages/lexigram-graphql
+### Package tests: packages/oridecon-graphql
 
-- Scope: `packages/lexigram-graphql/tests`
-- Command: `uv run pytest packages/lexigram-graphql/tests -q -m not integration --cov=packages/lexigram.graphql`
+- Scope: `packages/oridecon-graphql/tests`
+- Command: `uv run pytest packages/oridecon-graphql/tests -q -m not integration --cov=packages/oridecon.graphql`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `5943 ms`
@@ -974,7 +974,7 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [  4%]
 - Output snippet:
 
 ```text
-2026-09-01 12:58:40 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:58:40 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 s....................................................................... [ 13%]
 ........................................................................ [ 27%]
 .................s...................................................... [ 41%]
@@ -985,10 +985,10 @@ s....................................................................... [ 13%]
 ..................                                  
 ```
 
-### Package tests: packages/lexigram-http
+### Package tests: packages/oridecon-http
 
-- Scope: `packages/lexigram-http/tests`
-- Command: `uv run pytest packages/lexigram-http/tests -q -m not integration --cov=packages/lexigram.http`
+- Scope: `packages/oridecon-http/tests`
+- Command: `uv run pytest packages/oridecon-http/tests -q -m not integration --cov=packages/oridecon.http`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2829 ms`
@@ -998,7 +998,7 @@ s....................................................................... [ 13%]
 - Output snippet:
 
 ```text
-2026-09-01 12:58:46 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:58:46 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 15%]
 ........................................................................ [ 31%]
 ........................................................................ [ 47%]
@@ -1009,10 +1009,10 @@ s....................................................................... [ 13%]
 =============================== warnings summary ===
 ```
 
-### Package tests: packages/lexigram-monitor
+### Package tests: packages/oridecon-monitor
 
-- Scope: `packages/lexigram-monitor/tests`
-- Command: `uv run pytest packages/lexigram-monitor/tests -q -m not integration --cov=packages/lexigram.monitor`
+- Scope: `packages/oridecon-monitor/tests`
+- Command: `uv run pytest packages/oridecon-monitor/tests -q -m not integration --cov=packages/oridecon.monitor`
 - Status: **FAIL**
 - Exit code: `1`
 - Duration: `8238 ms`
@@ -1022,7 +1022,7 @@ s....................................................................... [ 13%]
 - Output snippet:
 
 ```text
-2026-09-01 12:58:48 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:58:48 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 .s..........................ssssss...................................... [ 21%]
 ...s................................................sss.s............... [ 43%]
 ........................................................................ [ 64%]
@@ -1034,10 +1034,10 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 .venv/lib/python3.13/
 ```
 
-### Package tests: packages/lexigram-nosql
+### Package tests: packages/oridecon-nosql
 
-- Scope: `packages/lexigram-nosql/tests`
-- Command: `uv run pytest packages/lexigram-nosql/tests -q -m not integration --cov=packages/lexigram.nosql`
+- Scope: `packages/oridecon-nosql/tests`
+- Command: `uv run pytest packages/oridecon-nosql/tests -q -m not integration --cov=packages/oridecon.nosql`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `3432 ms`
@@ -1047,7 +1047,7 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 - Output snippet:
 
 ```text
-2026-09-01 12:58:57 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:58:57 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 13%]
 ........................................................................ [ 26%]
 ........................................................................ [ 40%]
@@ -1058,10 +1058,10 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 .................................                   
 ```
 
-### Package tests: packages/lexigram-notification
+### Package tests: packages/oridecon-notification
 
-- Scope: `packages/lexigram-notification/tests`
-- Command: `uv run pytest packages/lexigram-notification/tests -q -m not integration --cov=packages/lexigram.notification`
+- Scope: `packages/oridecon-notification/tests`
+- Command: `uv run pytest packages/oridecon-notification/tests -q -m not integration --cov=packages/oridecon.notification`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `6728 ms`
@@ -1071,7 +1071,7 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 - Output snippet:
 
 ```text
-2026-09-01 12:59:00 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:59:00 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 24%]
 ........................................................................ [ 48%]
 ........................................................................ [ 72%]
@@ -1082,10 +1082,10 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
   .ve
 ```
 
-### Package tests: packages/lexigram-queue
+### Package tests: packages/oridecon-queue
 
-- Scope: `packages/lexigram-queue/tests`
-- Command: `uv run pytest packages/lexigram-queue/tests -q -m not integration --cov=packages/lexigram.queue`
+- Scope: `packages/oridecon-queue/tests`
+- Command: `uv run pytest packages/oridecon-queue/tests -q -m not integration --cov=packages/oridecon.queue`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `4333 ms`
@@ -1095,7 +1095,7 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 - Output snippet:
 
 ```text
-2026-09-01 12:59:07 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:59:07 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 30%]
 ........................................................................ [ 61%]
 ........................................................................ [ 91%]
@@ -1105,10 +1105,10 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
   .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewr
 ```
 
-### Package tests: packages/lexigram-resilience
+### Package tests: packages/oridecon-resilience
 
-- Scope: `packages/lexigram-resilience/tests`
-- Command: `uv run pytest packages/lexigram-resilience/tests -q -m not integration --cov=packages/lexigram.resilience`
+- Scope: `packages/oridecon-resilience/tests`
+- Command: `uv run pytest packages/oridecon-resilience/tests -q -m not integration --cov=packages/oridecon.resilience`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `20640 ms`
@@ -1118,7 +1118,7 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 - Output snippet:
 
 ```text
-2026-09-01 12:59:11 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:59:11 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 23%]
 ........................................................................ [ 46%]
 ........................................................................ [ 69%]
@@ -1129,10 +1129,10 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
   .ve
 ```
 
-### Package tests: packages/lexigram-search
+### Package tests: packages/oridecon-search
 
-- Scope: `packages/lexigram-search/tests`
-- Command: `uv run pytest packages/lexigram-search/tests -q -m not integration --cov=packages/lexigram.search`
+- Scope: `packages/oridecon-search/tests`
+- Command: `uv run pytest packages/oridecon-search/tests -q -m not integration --cov=packages/oridecon.search`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `4118 ms`
@@ -1142,7 +1142,7 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 - Output snippet:
 
 ```text
-2026-09-01 12:59:32 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:59:32 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [  8%]
 ........................................................................ [ 17%]
 ........................................................................ [ 26%]
@@ -1153,10 +1153,10 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 ....................................................
 ```
 
-### Package tests: packages/lexigram-secrets
+### Package tests: packages/oridecon-secrets
 
-- Scope: `packages/lexigram-secrets/tests`
-- Command: `uv run pytest packages/lexigram-secrets/tests -q -m not integration --cov=packages/lexigram.secrets`
+- Scope: `packages/oridecon-secrets/tests`
+- Command: `uv run pytest packages/oridecon-secrets/tests -q -m not integration --cov=packages/oridecon.secrets`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `1650 ms`
@@ -1166,21 +1166,21 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 - Output snippet:
 
 ```text
-2026-09-01 12:59:36 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:59:36 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 53%]
 ..............................................................           [100%]
 =============================== warnings summary ===============================
 .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885
-  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; lexigram.testing.fixtures.core
+  .venv/lib/python3.13/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; oridecon.testing.fixtures.core
     self.import_plugin(import_spec)
 
 .venv/lib/python3.13/site-packag
 ```
 
-### Package tests: packages/lexigram-sql
+### Package tests: packages/oridecon-sql
 
-- Scope: `packages/lexigram-sql/tests`
-- Command: `uv run pytest packages/lexigram-sql/tests -q -m not integration --cov=packages/lexigram.sql`
+- Scope: `packages/oridecon-sql/tests`
+- Command: `uv run pytest packages/oridecon-sql/tests -q -m not integration --cov=packages/oridecon.sql`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `11928 ms`
@@ -1190,7 +1190,7 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 - Output snippet:
 
 ```text
-2026-09-01 12:59:37 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:59:37 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................s............................... [  5%]
 ........................................................................ [ 10%]
 ........................................................................ [ 15%]
@@ -1201,10 +1201,10 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 ...........................................s........
 ```
 
-### Package tests: packages/lexigram-storage
+### Package tests: packages/oridecon-storage
 
-- Scope: `packages/lexigram-storage/tests`
-- Command: `uv run pytest packages/lexigram-storage/tests -q -m not integration --cov=packages/lexigram.storage`
+- Scope: `packages/oridecon-storage/tests`
+- Command: `uv run pytest packages/oridecon-storage/tests -q -m not integration --cov=packages/oridecon.storage`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `6658 ms`
@@ -1214,7 +1214,7 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 - Output snippet:
 
 ```text
-2026-09-01 12:59:49 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:59:49 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 15%]
 ........................................................................ [ 30%]
 ............................................s........................... [ 46%]
@@ -1225,10 +1225,10 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 =============================== warnings summary ===
 ```
 
-### Package tests: packages/lexigram-tasks
+### Package tests: packages/oridecon-tasks
 
-- Scope: `packages/lexigram-tasks/tests`
-- Command: `uv run pytest packages/lexigram-tasks/tests -q -m not integration --cov=packages/lexigram.tasks`
+- Scope: `packages/oridecon-tasks/tests`
+- Command: `uv run pytest packages/oridecon-tasks/tests -q -m not integration --cov=packages/oridecon.tasks`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `11211 ms`
@@ -1238,7 +1238,7 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 - Output snippet:
 
 ```text
-2026-09-01 12:59:56 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 12:59:56 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 13%]
 ........................................................................ [ 26%]
 ........................................................................ [ 39%]
@@ -1249,10 +1249,10 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 .................................................   
 ```
 
-### Package tests: packages/lexigram-tenancy
+### Package tests: packages/oridecon-tenancy
 
-- Scope: `packages/lexigram-tenancy/tests`
-- Command: `uv run pytest packages/lexigram-tenancy/tests -q -m not integration --cov=packages/lexigram.tenancy`
+- Scope: `packages/oridecon-tenancy/tests`
+- Command: `uv run pytest packages/oridecon-tenancy/tests -q -m not integration --cov=packages/oridecon.tenancy`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2991 ms`
@@ -1262,7 +1262,7 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 - Output snippet:
 
 ```text
-2026-09-01 13:00:07 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 13:00:07 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 19%]
 ........................................................................ [ 39%]
 ........................................................................ [ 59%]
@@ -1273,10 +1273,10 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 .venv/lib/python3.13/site-packages/_pytest/config/_
 ```
 
-### Package tests: packages/lexigram-testing
+### Package tests: packages/oridecon-testing
 
-- Scope: `packages/lexigram-testing/tests`
-- Command: `uv run pytest packages/lexigram-testing/tests -q -m not integration --cov=packages/lexigram.testing`
+- Scope: `packages/oridecon-testing/tests`
+- Command: `uv run pytest packages/oridecon-testing/tests -q -m not integration --cov=packages/oridecon.testing`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `7845 ms`
@@ -1286,7 +1286,7 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 - Output snippet:
 
 ```text
-2026-09-01 13:00:10 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 13:00:10 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 .................s...................................................... [ 15%]
 ........................................................................ [ 31%]
 ........................................................................ [ 47%]
@@ -1297,10 +1297,10 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 =============================== warnings summary ===
 ```
 
-### Package tests: packages/lexigram-vector
+### Package tests: packages/oridecon-vector
 
-- Scope: `packages/lexigram-vector/tests`
-- Command: `uv run pytest packages/lexigram-vector/tests -q -m not integration --cov=packages/lexigram.vector`
+- Scope: `packages/oridecon-vector/tests`
+- Command: `uv run pytest packages/oridecon-vector/tests -q -m not integration --cov=packages/oridecon.vector`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `4155 ms`
@@ -1310,7 +1310,7 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 - Output snippet:
 
 ```text
-2026-09-01 13:00:18 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 13:00:18 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 13%]
 ........................................................................ [ 27%]
 ........................................................................ [ 40%]
@@ -1321,10 +1321,10 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 .............................                       
 ```
 
-### Package tests: packages/lexigram-web
+### Package tests: packages/oridecon-web
 
-- Scope: `packages/lexigram-web/tests`
-- Command: `uv run pytest packages/lexigram-web/tests -q -m not integration --cov=packages/lexigram.web`
+- Scope: `packages/oridecon-web/tests`
+- Command: `uv run pytest packages/oridecon-web/tests -q -m not integration --cov=packages/oridecon.web`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `14780 ms`
@@ -1334,7 +1334,7 @@ ERROR: Coverage failure: total of 78 is less than fail-under=80
 - Output snippet:
 
 ```text
-2026-09-01 13:00:22 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 13:00:22 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 sss..................................................................... [  5%]
 ........................................................................ [ 10%]
 ........................................................................ [ 15%]
@@ -1345,10 +1345,10 @@ sss..................................................................... [  5%]
 ....................................................
 ```
 
-### Package tests: packages/lexigram-webhook
+### Package tests: packages/oridecon-webhook
 
-- Scope: `packages/lexigram-webhook/tests`
-- Command: `uv run pytest packages/lexigram-webhook/tests -q -m not integration --cov=packages/lexigram.webhook`
+- Scope: `packages/oridecon-webhook/tests`
+- Command: `uv run pytest packages/oridecon-webhook/tests -q -m not integration --cov=packages/oridecon.webhook`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `2752 ms`
@@ -1358,7 +1358,7 @@ sss..................................................................... [  5%]
 - Output snippet:
 
 ```text
-2026-09-01 13:00:37 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 13:00:37 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 21%]
 ........................................................................ [ 42%]
 ........................................................................ [ 64%]
@@ -1369,10 +1369,10 @@ sss..................................................................... [  5%]
   .ve
 ```
 
-### Package tests: packages/lexigram-workflow
+### Package tests: packages/oridecon-workflow
 
-- Scope: `packages/lexigram-workflow/tests`
-- Command: `uv run pytest packages/lexigram-workflow/tests -q -m not integration --cov=packages/lexigram.workflow`
+- Scope: `packages/oridecon-workflow/tests`
+- Command: `uv run pytest packages/oridecon-workflow/tests -q -m not integration --cov=packages/oridecon.workflow`
 - Status: **PASS**
 - Exit code: `0`
 - Duration: `13706 ms`
@@ -1382,7 +1382,7 @@ sss..................................................................... [  5%]
 - Output snippet:
 
 ```text
-2026-09-01 13:00:40 [debug    ] module_decorated               _logger_name=lexigram.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
+2026-09-01 13:00:40 [debug    ] module_decorated               _logger_name=oridecon.di.module.decorator controllers=0 exports=0 imports=0 is_global=False module=TestingModule providers=0
 ........................................................................ [ 12%]
 ........................................................................ [ 25%]
 ........................................................................ [ 38%]

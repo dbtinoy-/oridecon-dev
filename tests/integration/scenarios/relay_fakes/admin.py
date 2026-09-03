@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 
-from lexigram.contracts.ai.governance import (
+from oridecon.contracts.ai.governance import (
     AIAuditEvent,
     AIAuditStoreProtocol,
     RelayBillingError,
@@ -17,16 +17,16 @@ from lexigram.contracts.ai.governance import (
     RelayUsageScope,
     RelayUsageStoreProtocol,
 )
-from lexigram.contracts.ai.relay import (
+from oridecon.contracts.ai.relay import (
     RelayConvertResult,
     RelayRequestPayload,
     RelayUsage,
 )
-from lexigram.contracts.auth.guard import AuthorizerProtocol
-from lexigram.contracts.core.result import Err, Ok, Result
-from lexigram.contracts.events.protocols import EventBusProtocol
-from lexigram.contracts.web import HTTPClientProtocol, HttpResponse
-from lexigram.serialization import dumps
+from oridecon.contracts.auth.guard import AuthorizerProtocol
+from oridecon.contracts.core.result import Err, Ok, Result
+from oridecon.contracts.events.protocols import EventBusProtocol
+from oridecon.contracts.web import HTTPClientProtocol, HttpResponse
+from oridecon.serialization import dumps
 
 
 @dataclass

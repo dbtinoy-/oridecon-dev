@@ -36,7 +36,7 @@ class QualityAuditGenerator(MarkdownAuditGenerator):
         package_errors = mypy_result.get("package_errors", {})
         error_categories = mypy_result.get("error_categories", {})
         
-        markdown = """# AUDIT_QUALITY.md — Lexigram Framework Quality Snapshot
+        markdown = """# AUDIT_QUALITY.md — Oridecon Framework Quality Snapshot
 
 > **Source**: Live command evidence from repository quality tools, with package counts as supporting context.
 

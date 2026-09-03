@@ -6,7 +6,7 @@ import pathlib
 
 import pytest
 
-from lexigram.web.config import WebConfig
+from oridecon.web.config import WebConfig
 
 from ops_console.config import RealtimeConfig
 
@@ -19,8 +19,8 @@ def test_demo_section_self_binds_with_defaults() -> None:
 
 
 def test_env_overrides_win(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("LEX_WEB__SERVER__PORT", "7099")
-    monkeypatch.setenv("LEX_DEMO__HEARTBEAT_INTERVAL_SECONDS", "1.5")
+    monkeypatch.setenv("ORI_WEB__SERVER__PORT", "7099")
+    monkeypatch.setenv("ORI_DEMO__HEARTBEAT_INTERVAL_SECONDS", "1.5")
 
     web = WebConfig.from_yaml()
     demo = RealtimeConfig.from_yaml()

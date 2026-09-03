@@ -2,8 +2,8 @@
 # Ratchet: new violations fail CI; entries whose files drop under the
 # limit become stale and must be removed in the same change.
 # Regenerate after review: uv run python dev/checks/loc_limit.py --root . --write-baseline
-core/lexigram-contracts/src/lexigram/contracts/__init__.py
-core/lexigram/src/lexigram/primitives/registry/core.py
-experimental/ai/lexigram-ai-mcp/src/lexigram/ai/mcp/cli/commands.py
-experimental/apps/lexigram-cli/src/lexigram/cli/scaffold.py
+core/oridecon-contracts/src/oridecon/contracts/__init__.py
+core/oridecon/src/oridecon/primitives/registry/core.py
+experimental/ai/oridecon-ai-mcp/src/oridecon/ai/mcp/cli/commands.py
+experimental/apps/oridecon-cli/src/oridecon/cli/scaffold.py
 tests/integration/scenarios/scenario_apps.py

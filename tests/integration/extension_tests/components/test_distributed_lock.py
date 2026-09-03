@@ -1,11 +1,11 @@
-# packages/lexigram/tests/unit/components/test_distributed_lock.py
+# packages/oridecon/tests/unit/components/test_distributed_lock.py
 
 import asyncio
 from unittest.mock import AsyncMock
 
 import pytest
 
-from lexigram.cache.locks import DistributedLockProtocol
+from oridecon.cache.locks import DistributedLockProtocol
 
 
 @pytest.fixture

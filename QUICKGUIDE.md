@@ -1,21 +1,21 @@
-# Lexigram Framework
+# Oridecon Framework
 
-A comprehensive, structured guide to the Lexigram framework — a **contract-based, async-first, full-stack Python application platform** built on Dependency Injection, Inversion of Control, and the Provider pattern.
+A comprehensive, structured guide to the Oridecon framework — a **contract-based, async-first, full-stack Python application platform** built on Dependency Injection, Inversion of Control, and the Provider pattern.
 
 ---
 
 ## 1. Install in 60 Seconds
 
 ```bash
-pip install lexigram lexigram-web
+pip install oridecon oridecon-web
 ```
 
 ### Hello World — Web API
 
 ```python
 import asyncio
-from lexigram.app import Application
-from lexigram.web import Controller, get, WebModule
+from oridecon.app import Application
+from oridecon.web import Controller, get, WebModule
 
 
 class HelloController(Controller):
@@ -23,7 +23,7 @@ class HelloController(Controller):
 
     @get("/hello")
     async def hello(self) -> dict:
-        return {"message": "Hello from Lexigram"}
+        return {"message": "Hello from Oridecon"}
 
 
 async def main() -> None:
@@ -40,10 +40,10 @@ asyncio.run(main())
 
 ```python
 import asyncio
-from lexigram.app import Application
-from lexigram.app.invoker import Invoker
-from lexigram.di.module import Module, module
-from lexigram.logging import get_logger
+from oridecon.app import Application
+from oridecon.app.invoker import Invoker
+from oridecon.di.module import Module, module
+from oridecon.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -74,7 +74,7 @@ asyncio.run(main())
 
 ## 2. The Five Pillars — Architecture at a Glance
 
-Everything in Lexigram revolves around five interlocking concepts:
+Everything in Oridecon revolves around five interlocking concepts:
 
 ```
 Contract    →  "I need something that can cache"              (the interface)
@@ -97,11 +97,11 @@ graph LR
 ## 3. Package Hierarchy — The Inviolable Rule
 
 ```
-lexigram-contracts    Zero dependencies. Protocols, types, exceptions only.
+oridecon-contracts    Zero dependencies. Protocols, types, exceptions only.
     ↑   ↑
-    ↑ lexigram           Depends ONLY on lexigram-contracts. Core framework.
+    ↑ oridecon           Depends ONLY on oridecon-contracts. Core framework.
     ↑   ↑
-    lexigram-*         Extension packages. Depend on lexigram + lexigram-contracts.
+    oridecon-*         Extension packages. Depend on oridecon + oridecon-contracts.
 ```
 
 > [!CAUTION]
@@ -111,24 +111,24 @@ lexigram-contracts    Zero dependencies. Protocols, types, exceptions only.
 
 | Layer | Representative Packages | Purpose |
 |---|---|---|
-| **Contracts** | `lexigram-contracts` | Protocols, types, exceptions, domain primitives |
-| **Core** | `lexigram` | Container, DI, Result, config, logging, registry |
-| **Infrastructure** | `lexigram-sql`, `lexigram-cache`, `lexigram-vector`, `lexigram-nosql`, `lexigram-graph`, `lexigram-storage` | Data and persistence backends |
-| **Web** | `lexigram-web`, `lexigram-graphql`, `lexigram-http` | ASGI web, GraphQL, HTTP client |
-| **Security** | `lexigram-auth`, `lexigram-security` | JWT/OAuth2, RBAC, encryption |
-| **Events & Workflows** | `lexigram-events`, `lexigram-queue`, `lexigram-tasks`, `lexigram-workflow` | CQRS, messaging, workers, orchestration |
-| **AI** | `lexigram-ai`, `lexigram-ai-llm`, `lexigram-ai-rag`, `lexigram-ai-agents`, `lexigram-ai-memory`, `lexigram-ai-mcp`, `lexigram-ai-safety`, `lexigram-ai-observability`, `lexigram-ai-platform` | AI/LLM integration, orchestration, and tooling |
-| **Operations** | `lexigram-resilience`, `lexigram-monitor` | Circuit breakers, health checks, metrics, monitoring |
-| **Productivity** | `lexigram-admin`, `lexigram-cli`, `lexigram-features`, `lexigram-notification`, `lexigram-search`, `lexigram-ui` | Admin UI, CLI, feature flags, notifications, search, UI |
-| **Testing** | `lexigram-testing` | Test environments, fakes, clients, harnesses |
+| **Contracts** | `oridecon-contracts` | Protocols, types, exceptions, domain primitives |
+| **Core** | `oridecon` | Container, DI, Result, config, logging, registry |
+| **Infrastructure** | `oridecon-sql`, `oridecon-cache`, `oridecon-vector`, `oridecon-nosql`, `oridecon-graph`, `oridecon-storage` | Data and persistence backends |
+| **Web** | `oridecon-web`, `oridecon-graphql`, `oridecon-http` | ASGI web, GraphQL, HTTP client |
+| **Security** | `oridecon-auth`, `oridecon-security` | JWT/OAuth2, RBAC, encryption |
+| **Events & Workflows** | `oridecon-events`, `oridecon-queue`, `oridecon-tasks`, `oridecon-workflow` | CQRS, messaging, workers, orchestration |
+| **AI** | `oridecon-ai`, `oridecon-ai-llm`, `oridecon-ai-rag`, `oridecon-ai-agents`, `oridecon-ai-memory`, `oridecon-ai-mcp`, `oridecon-ai-safety`, `oridecon-ai-observability`, `oridecon-ai-platform` | AI/LLM integration, orchestration, and tooling |
+| **Operations** | `oridecon-resilience`, `oridecon-monitor` | Circuit breakers, health checks, metrics, monitoring |
+| **Productivity** | `oridecon-admin`, `oridecon-cli`, `oridecon-features`, `oridecon-notification`, `oridecon-search`, `oridecon-ui` | Admin UI, CLI, feature flags, notifications, search, UI |
+| **Testing** | `oridecon-testing` | Test environments, fakes, clients, harnesses |
 
 ### Typical Source Layout
 
 Most packages follow a layout like this, with sub-domains added where needed:
 
 ```text
-lexigram-<name>/
-├── src/lexigram/<name>/
+oridecon-<name>/
+├── src/oridecon/<name>/
 │   ├── __init__.py
 │   ├── config.py           ← Package configuration (when the package has runtime config)
 │   ├── module.py           ← Module entrypoint for DI composition
@@ -146,10 +146,10 @@ lexigram-<name>/
 
 ### 4.1 Contracts (The Interface Boundary)
 
-Contracts are Python `Protocol` classes that define **what** a service does — never **how**. They live exclusively in `lexigram-contracts`.
+Contracts are Python `Protocol` classes that define **what** a service does — never **how**. They live exclusively in `oridecon-contracts`.
 
 ```python
-# core/lexigram-contracts/src/lexigram/contracts/infra/cache/protocols.py
+# core/oridecon-contracts/src/oridecon/contracts/infra/cache/protocols.py
 
 from typing import Protocol
 
@@ -165,7 +165,7 @@ class CacheBackendProtocol(Protocol):
 **Where things live in contracts** — organized by domain:
 
 ```
-core/lexigram-contracts/src/lexigram/contracts/
+core/oridecon-contracts/src/oridecon/contracts/
 ├── core/           ← DI, config, health, lifecycle, logging, modules, registry
 ├── ai/             ← LLM, RAG, memory, agents, routing, governance, guards
 ├── auth/           ← identities, tokens, policies, auth contracts
@@ -183,13 +183,13 @@ core/lexigram-contracts/src/lexigram/contracts/
 ```
 
 > [!IMPORTANT]
-> **The Golden Rule:** If two or more packages need to reference the same type, protocol, or exception, it lives in `lexigram-contracts`. No exceptions.
+> **The Golden Rule:** If two or more packages need to reference the same type, protocol, or exception, it lives in `oridecon-contracts`. No exceptions.
 
 ### 4.2 Container (The Resolution Engine)
 
 The `Container` manages the full dependency graph:
 
-**Source:** `core/lexigram/src/lexigram/di/container/container.py`
+**Source:** `core/oridecon/src/oridecon/di/container/container.py`
 
 #### Three-Phase Lifecycle
 
@@ -247,11 +247,11 @@ container.dump_dependency_graph()  # Adjacency map: service → dependencies
 
 ### 4.3 Provider (The Registration + Lifecycle Unit)
 
-**Source:** `core/lexigram/src/lexigram/di/provider.py`
+**Source:** `core/oridecon/src/oridecon/di/provider.py`
 
 ```python
-from lexigram.di.provider import Provider
-from lexigram.contracts.core import ProviderPriority
+from oridecon.di.provider import Provider
+from oridecon.contracts.core import ProviderPriority
 
 
 class CacheProvider(Provider):
@@ -299,7 +299,7 @@ class CacheProvider(Provider):
 
 #### Real Extension Example: LLM Provider
 
-**Source:** `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/di/provider.py`
+**Source:** `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/di/provider.py`
 
 ```python
 @inject
@@ -381,15 +381,15 @@ class UserService:
 
 ## 5. The Application — Composition Root
 
-**Source:** `core/lexigram/src/lexigram/app/base.py`
+**Source:** `core/oridecon/src/oridecon/app/base.py`
 
 ### Quick Start (Module-Based)
 
 ```python
 import asyncio
-from lexigram.app import Application
-from lexigram.di.module import Module, module
-from lexigram.web import WebModule
+from oridecon.app import Application
+from oridecon.di.module import Module, module
+from oridecon.web import WebModule
 
 
 @module(
@@ -452,14 +452,14 @@ Each transition is irreversible. Providers/modules can only be added in `CREATED
 
 ## 6. The Module System — Encapsulation Boundaries
 
-**Source:** `core/lexigram/src/lexigram/di/module/base.py`
+**Source:** `core/oridecon/src/oridecon/di/module/base.py`
 
-Modules are the **organizational unit** of a Lexigram application. They group providers and define visibility boundaries.
+Modules are the **organizational unit** of a Oridecon application. They group providers and define visibility boundaries.
 
 ### Basic Module
 
 ```python
-from lexigram.di.module import Module, module
+from oridecon.di.module import Module, module
 
 
 @module()
@@ -486,7 +486,7 @@ Many integration modules expose a small factory surface for root composition and
 #### `configure()` — Production Configuration
 
 ```python
-# experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/module.py
+# experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/module.py
 
 
 @module()
@@ -551,14 +551,14 @@ DynamicModule(
 
 ## 7. The Registry Pattern — Extensible Dispatch
 
-**Source:** `core/lexigram/src/lexigram/primitives/registry/core.py`
+**Source:** `core/oridecon/src/oridecon/primitives/registry/core.py`
 
 The `Registry` replaces `if/elif` chains with a data-driven, extensible collection:
 
 ### Base Registry
 
 ```python
-from lexigram.primitives.registry import Registry
+from oridecon.primitives.registry import Registry
 
 # Type-safe key→value collection
 handler_registry = Registry[str, type]("handlers")
@@ -624,7 +624,7 @@ chunker = registry.instantiate("fixed", chunk_size=512)
 
 ## 8. The Result Pattern — Explicit Error Handling
 
-**Source:** `core/lexigram/src/lexigram/result/types.py`
+**Source:** `core/oridecon/src/oridecon/result/types.py`
 
 ### When to Use What
 
@@ -642,7 +642,7 @@ chunker = registry.instantiate("fixed", chunk_size=512)
 ### Basic Usage
 
 ```python
-from lexigram.result import Result, Ok, Err
+from oridecon.result import Result, Ok, Err
 
 
 async def find_user(self, user_id: str) -> Result[User, DomainError]:
@@ -662,7 +662,7 @@ else:
 
 ### Rich Monadic API
 
-Lexigram's `Result` is **async-first**: the plain method names (`map`, `and_then`, `or_else`) are async and accept awaitables. Methods that take sync callables carry the `_sync` suffix.
+Oridecon's `Result` is **async-first**: the plain method names (`map`, `and_then`, `or_else`) are async and accept awaitables. Methods that take sync callables carry the `_sync` suffix.
 
 ```python
 # Async transform — awaitable callable
@@ -706,15 +706,15 @@ except ValueError as e:
 
 ## 9. The Web Layer
 
-The `lexigram-web` package provides a full ASGI web framework with controllers, decorators, and automatic DI.
+The `oridecon-web` package provides a full ASGI web framework with controllers, decorators, and automatic DI.
 
 ### Controllers
 
-**Sources:** `packages/lexigram-web/src/lexigram/web/routing/controllers.py` and `packages/lexigram-web/src/lexigram/web/routing/controller.py`
+**Sources:** `packages/oridecon-web/src/oridecon/web/routing/controllers.py` and `packages/oridecon-web/src/oridecon/web/routing/controller.py`
 
 ```python
-from lexigram.web import Controller, get, post, put, delete, json_response
-from lexigram.result import Result, Ok
+from oridecon.web import Controller, get, post, put, delete, json_response
+from oridecon.result import Result, Ok
 
 
 class UserController(Controller):
@@ -749,7 +749,7 @@ class UserController(Controller):
 
 ### Route Decorators
 
-**Source:** `packages/lexigram-web/src/lexigram/web/routing/decorators.py`
+**Source:** `packages/oridecon-web/src/oridecon/web/routing/decorators.py`
 
 ```python
 @get("/path")         # GET request
@@ -771,8 +771,8 @@ Controllers can return `Result[T, E]` directly. The framework's `ResultResponseM
 - `Err(DomainError)` → **400** by default
 
 ```python
-from lexigram.contracts.exceptions.domain import DomainError
-from lexigram.web import Controller, error_status
+from oridecon.contracts.exceptions.domain import DomainError
+from oridecon.web import Controller, error_status
 
 
 class ItemNotFound(DomainError): ...
@@ -799,7 +799,7 @@ class ProductController(GenericController[Product]):
 
 ### WebModule Registration
 
-**Source:** `packages/lexigram-web/src/lexigram/web/module.py`
+**Source:** `packages/oridecon-web/src/oridecon/web/module.py`
 
 ```python
 # Explicit controller registration
@@ -820,17 +820,17 @@ WebModule.stub()
 
 ## 10. Configuration System
 
-**Source:** `core/lexigram/src/lexigram/config/__init__.py`
+**Source:** `core/oridecon/src/oridecon/config/__init__.py`
 
 Configuration is a **service**, not a global constant. It flows through the container like any other dependency.
 
 ### Multi-Source Loading
 
 ```python
-from lexigram.config import LexigramConfig
+from oridecon.config import OrideconConfig
 
 # Reads from: YAML files → .env files → environment variables → CLI args
-config = LexigramConfig.from_env_profile()
+config = OrideconConfig.from_env_profile()
 ```
 
 Sources (in priority order, highest wins):
@@ -844,7 +844,7 @@ Sources (in priority order, highest wins):
 Every extension package defines its own config class:
 
 ```python
-# experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/config.py
+# experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/config.py
 @dataclass
 class ClientConfig:
     provider: str = "openai"
@@ -869,7 +869,7 @@ class MyService:
 
 | Component | Purpose |
 |---|---|
-| `LexigramConfig` | Root config — merges all sources |
+| `OrideconConfig` | Root config — merges all sources |
 | `BaseConfig` | Base class for typed config sections |
 | `ConfigLoader` | Loads and merges from multiple sources |
 | `ConfigRegistry` | Registry of all config sections |
@@ -879,27 +879,27 @@ class MyService:
 
 ## 11. The AI Subsystem
 
-Lexigram includes a full **AI/LLM platform**:
+Oridecon includes a full **AI/LLM platform**:
 
 | Package | What it provides |
 |---------|-----------------|
-| `lexigram-ai` | AI orchestration layer — discovers and wires AI sub-packages via `AIModule` and entry-point discovery |
-| `lexigram-ai-llm` | Multi-provider LLM client (OpenAI, Anthropic, Google, Ollama, etc.) |
-| `lexigram-ai-rag` | RAG pipelines (document loading, chunking, retrieval, synthesis) |
-| `lexigram-ai-agents` | Agent execution (ReAct, plan-and-execute, tool use) |
-| `lexigram-ai-memory` | Memory systems (working, episodic, semantic, consolidation) |
-| `lexigram-ai-mcp` | Model Context Protocol integration |
-| `lexigram-ai-safety` | Guard pipelines, governance controls, and feedback workflows |
-| `lexigram-ai-observability` | AI-specific tracing, token metrics, and latency instrumentation |
-| `lexigram-ai-platform` | Prompt, session, skills, and worker-oriented platform services |
+| `oridecon-ai` | AI orchestration layer — discovers and wires AI sub-packages via `AIModule` and entry-point discovery |
+| `oridecon-ai-llm` | Multi-provider LLM client (OpenAI, Anthropic, Google, Ollama, etc.) |
+| `oridecon-ai-rag` | RAG pipelines (document loading, chunking, retrieval, synthesis) |
+| `oridecon-ai-agents` | Agent execution (ReAct, plan-and-execute, tool use) |
+| `oridecon-ai-memory` | Memory systems (working, episodic, semantic, consolidation) |
+| `oridecon-ai-mcp` | Model Context Protocol integration |
+| `oridecon-ai-safety` | Guard pipelines, governance controls, and feedback workflows |
+| `oridecon-ai-observability` | AI-specific tracing, token metrics, and latency instrumentation |
+| `oridecon-ai-platform` | Prompt, session, skills, and worker-oriented platform services |
 
 ### Architecture Rules
 
-- All AI packages depend **only** on `lexigram` + `lexigram-contracts`
+- All AI packages depend **only** on `oridecon` + `oridecon-contracts`
 - AI packages do **NOT** import from each other
 - Shared types (`ChatMessage`, `Role`, `Document`, `SearchResult`) live in contracts
 - Cross-AI communication goes through protocols resolved via the container
-- `lexigram-ai` discovers sub-packages via `lexigram.ai.subsystems` entry points
+- `oridecon-ai` discovers sub-packages via `oridecon.ai.subsystems` entry points
 
 ### LLM Usage Pattern
 
@@ -980,7 +980,7 @@ class Order(AggregateRoot):
 ### Exception Hierarchy
 
 ```
-LexigramError (contracts)
+OrideconError (contracts)
 ├── DomainError
 │   ├── NotFoundError, ValidationError, ConflictError
 ├── InfrastructureError
@@ -991,15 +991,15 @@ LexigramError (contracts)
 │
 ├── ai/errors.py:
 │   ├── AIError (base only)
-│   ├── LLMError (base) ← leaf exceptions in lexigram-ai-llm
-│   ├── RAGError (base) ← leaf exceptions in lexigram-ai-rag
-│   └── MemoryError (base) ← leaf exceptions in lexigram-ai-memory
+│   ├── LLMError (base) ← leaf exceptions in oridecon-ai-llm
+│   ├── RAGError (base) ← leaf exceptions in oridecon-ai-rag
+│   └── MemoryError (base) ← leaf exceptions in oridecon-ai-memory
 │
 ├── agents/errors.py:
 │   ├── AgentError, ToolError, StrategyError
 ```
 
-**Rule:** Base exceptions in `lexigram-contracts`, leaf exceptions in extension packages.
+**Rule:** Base exceptions in `oridecon-contracts`, leaf exceptions in extension packages.
 
 ---
 
@@ -1008,8 +1008,8 @@ LexigramError (contracts)
 ### TestEnvironment
 
 ```python
-from lexigram.contracts.infra.cache import CacheBackendProtocol
-from lexigram.testing import FakeCache, TestEnvironment
+from oridecon.contracts.infra.cache import CacheBackendProtocol
+from oridecon.testing import FakeCache, TestEnvironment
 
 
 async def test_user_service():
@@ -1057,8 +1057,8 @@ Putting it all together — a realistic application composition:
 
 ```python
 import asyncio
-from lexigram.app import Application
-from lexigram.di.module import Module, module
+from oridecon.app import Application
+from oridecon.di.module import Module, module
 
 
 @module(
@@ -1102,7 +1102,7 @@ if __name__ == "__main__":
 
 | ❌ Don't | ✅ Do Instead |
 |---|---|
-| Import concrete classes in application code | Import contracts from `lexigram-contracts` |
+| Import concrete classes in application code | Import contracts from `oridecon-contracts` |
 | Call `container.resolve()` inside `register()` | Use `boot()` for anything requiring resolution |
 | Pass the container into a service | Declare typed `__init__` parameters |
 | Use module-level singletons | Register in a provider |
@@ -1110,11 +1110,11 @@ if __name__ == "__main__":
 | Wrap infrastructure exceptions in `Result` | Let `DatabaseError` propagate as an exception |
 | Use `if/elif` for type dispatch | Use a `Registry` |
 | Import between extension packages | Use contracts + container |
-| Define shared types in extension packages | Move to `lexigram-contracts` |
+| Define shared types in extension packages | Move to `oridecon-contracts` |
 | Use bare classes for enums | Use `class X(str, Enum)` |
-| `import logging` / `logging.getLogger(...)` | `from lexigram.logging import get_logger` then `get_logger(__name__)` |
+| `import logging` / `logging.getLogger(...)` | `from oridecon.logging import get_logger` then `get_logger(__name__)` |
 | `await app.serve()` — no such method | Keep the loop alive with `await asyncio.Event().wait()` |
-| Relative imports (`from .utils import ...`) | Absolute imports only (`from lexigram.web.utils import ...`) |
+| Relative imports (`from .utils import ...`) | Absolute imports only (`from oridecon.web.utils import ...`) |
 
 ---
 
@@ -1128,16 +1128,16 @@ uv sync
 uv run ruff check . --fix && uv run ruff format .
 
 # Type Check
-uv run mypy core/lexigram/src/
+uv run mypy core/oridecon/src/
 
 # Test
 uv run pytest --tb=short
-uv run pytest packages/lexigram-web/tests/ -v             # One package
+uv run pytest packages/oridecon-web/tests/ -v             # One package
 uv run pytest -k "test_user" -v                  # Pattern match
 uv run pytest -m "not integration"               # Skip integration
 
 # Full CI
-uv run ruff check . && uv run ruff format --check . && uv run mypy core/lexigram/src/ && uv run pytest --tb=short --cov-fail-under=80
+uv run ruff check . && uv run ruff format --check . && uv run mypy core/oridecon/src/ && uv run pytest --tb=short --cov-fail-under=80
 ```
 
 ---
@@ -1146,18 +1146,18 @@ uv run ruff check . && uv run ruff format --check . && uv run mypy core/lexigram
 
 | # | File | What You'll Learn |
 |---|---|---|
-| 1 | `core/lexigram-contracts/src/lexigram/contracts/core/di.py` | Container protocols — the DI contract |
-| 2 | `core/lexigram/src/lexigram/di/provider.py` | Provider base class — lifecycle hooks, priority |
-| 3 | `core/lexigram/src/lexigram/di/container/container.py` | Container — registration, resolution, scoping, validation |
-| 4 | `core/lexigram/src/lexigram/result/types.py` | `Ok`, `Err` — full monadic API |
-| 5 | `core/lexigram/src/lexigram/app/base.py` | Application — composition root, boot sequence |
-| 6 | `core/lexigram/src/lexigram/di/module/base.py` | Module base class and default factory helpers |
-| 7 | `core/lexigram/src/lexigram/primitives/registry/core.py` | Registry — extensible dispatch, backend/strategy variants |
-| 8 | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/module.py` | Real extension module — configure/stub pattern |
-| 9 | `experimental/ai/lexigram-ai-llm/src/lexigram/ai/llm/di/provider.py` | Real extension provider — register/boot/shutdown/health |
-| 10 | `packages/lexigram-web/src/lexigram/web/routing/controllers.py` | Controller base class and web routing conventions |
-| 11 | `packages/lexigram-events/src/lexigram/events/module.py` | Events module — CQRS buses, scope pattern |
-| 12 | `core/lexigram/src/lexigram/__init__.py` | Root exports — lazy-loaded public API |
+| 1 | `core/oridecon-contracts/src/oridecon/contracts/core/di.py` | Container protocols — the DI contract |
+| 2 | `core/oridecon/src/oridecon/di/provider.py` | Provider base class — lifecycle hooks, priority |
+| 3 | `core/oridecon/src/oridecon/di/container/container.py` | Container — registration, resolution, scoping, validation |
+| 4 | `core/oridecon/src/oridecon/result/types.py` | `Ok`, `Err` — full monadic API |
+| 5 | `core/oridecon/src/oridecon/app/base.py` | Application — composition root, boot sequence |
+| 6 | `core/oridecon/src/oridecon/di/module/base.py` | Module base class and default factory helpers |
+| 7 | `core/oridecon/src/oridecon/primitives/registry/core.py` | Registry — extensible dispatch, backend/strategy variants |
+| 8 | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/module.py` | Real extension module — configure/stub pattern |
+| 9 | `experimental/ai/oridecon-ai-llm/src/oridecon/ai/llm/di/provider.py` | Real extension provider — register/boot/shutdown/health |
+| 10 | `packages/oridecon-web/src/oridecon/web/routing/controllers.py` | Controller base class and web routing conventions |
+| 11 | `packages/oridecon-events/src/oridecon/events/module.py` | Events module — CQRS buses, scope pattern |
+| 12 | `core/oridecon/src/oridecon/__init__.py` | Root exports — lazy-loaded public API |
 
 ---
 

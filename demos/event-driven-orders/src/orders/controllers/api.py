@@ -31,11 +31,11 @@ from decimal import Decimal, InvalidOperation
 
 from starlette.requests import Request
 
-from lexigram.contracts.exceptions.domain import ValidationError
-from lexigram.result import Err, Ok, Result
-from lexigram.serialization import loads as json_loads
-from lexigram.web import Controller, get, post
-from lexigram.web.routing.result_bridge import error_status
+from oridecon.contracts.exceptions.domain import ValidationError
+from oridecon.result import Err, Ok, Result
+from oridecon.serialization import loads as json_loads
+from oridecon.web import Controller, get, post
+from oridecon.web.routing.result_bridge import error_status
 from orders.domain import (
     OrderAlreadyPaidError,
     OrderAlreadyShippedError,
@@ -58,12 +58,12 @@ from orders.services.orders_api import OrdersApi
 class OrdersApiController(Controller):
     """Expose the order write/read sides over HTTP.
 
-    Lexigram pattern: controllers are stateless handlers that receive
+    Oridecon pattern: controllers are stateless handlers that receive
     collaborators via constructor injection.  The framework resolves the
     controller when a request matches its routes — you never instantiate
     it manually.
 
-    Route decorators (@get, @post) come from lexigram.web, not Starlette
+    Route decorators (@get, @post) come from oridecon.web, not Starlette
     directly — they integrate with the framework's middleware stack.
     """
 

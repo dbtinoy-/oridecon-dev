@@ -1,6 +1,6 @@
-# AUDIT_DOC_IMPORTS.md — Lexigram Documentation Import Audit
+# AUDIT_DOC_IMPORTS.md — Oridecon Documentation Import Audit
 
-> **Source**: Every `lexigram.*` `from`/`import` statement in the python
+> **Source**: Every `oridecon.*` `from`/`import` statement in the python
 > blocks of every package `docs/*.md` file, resolved against the installed
 > framework with `importlib`. An import fails when its module cannot be
 > imported or when an imported name is missing from that module.
@@ -10,4 +10,4 @@
 - Imports verified: 1529
 - Unresolved imports: 0
 
-No unresolved `lexigram.*` imports detected.
+No unresolved `oridecon.*` imports detected.

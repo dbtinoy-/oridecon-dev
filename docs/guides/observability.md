@@ -1,17 +1,17 @@
 ---
 title: "Observability"
-description: "Structured logging, metrics, distributed tracing, and health checks with lexigram-monitor."
+description: "Structured logging, metrics, distributed tracing, and health checks with oridecon-monitor."
 ---
 
-Lexigram treats observability as a first-class concern. Core ships structured logging out of the box, and `lexigram-monitor` adds metrics, distributed tracing, and health checks behind protocol interfaces so your code stays backend-agnostic. Swap Prometheus for OpenTelemetry — or a no-op stub in tests — without touching application code.
+Oridecon treats observability as a first-class concern. Core ships structured logging out of the box, and `oridecon-monitor` adds metrics, distributed tracing, and health checks behind protocol interfaces so your code stays backend-agnostic. Swap Prometheus for OpenTelemetry — or a no-op stub in tests — without touching application code.
 
-For the full API, see the [`lexigram-monitor` package docs](/packages/lexigram-monitor/).
+For the full API, see the [`oridecon-monitor` package docs](/packages/oridecon-monitor/).
 
 ---
 
 ## 1. The Four Pillars
 
-Observability in Lexigram is organised around four concerns: **logs**, **metrics**, **traces**, and **health**. A single `MonitorModule` wires them into the DI container, and exporters fan out to whichever backend you scrape or ship to.
+Observability in Oridecon is organised around four concerns: **logs**, **metrics**, **traces**, and **health**. A single `MonitorModule` wires them into the DI container, and exporters fan out to whichever backend you scrape or ship to.
 
 ```mermaid
 flowchart LR
@@ -33,10 +33,10 @@ Logging is always-on in core; the other three pillars activate when `MonitorModu
 
 ## 2. Structured Logging
 
-`lexigram.logging` is `structlog`-based — never use `print()`. Get a logger named after your module and pass context as keyword arguments:
+`oridecon.logging` is `structlog`-based — never use `print()`. Get a logger named after your module and pass context as keyword arguments:
 
 ```python
-from lexigram.logging import get_logger
+from oridecon.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -51,21 +51,21 @@ class OrderService:
             raise
 ```
 
-Keyword arguments become first-class fields in the JSON output. `logger.bind(...)` returns a new logger with permanent context — useful for request-scoped fields like `request_id` or `tenant_id`. Format, level, redaction, and sampling are governed by the core logging config — `LEX_LEXIGRAM__LOGGING__*` or the `logging:` section at the core app level — not by `MonitorConfig` (see [YAML Configuration](/fundamentals/yaml-configuration/)).
+Keyword arguments become first-class fields in the JSON output. `logger.bind(...)` returns a new logger with permanent context — useful for request-scoped fields like `request_id` or `tenant_id`. Format, level, redaction, and sampling are governed by the core logging config — `ORI_ORIDECON__LOGGING__*` or the `logging:` section at the core app level — not by `MonitorConfig` (see [YAML Configuration](/fundamentals/yaml-configuration/)).
 
 ### Sentry Error Tracking
 
-`lexigram-monitor` bridges structured logs and an external error tracker (Sentry) so every crash is both logged with a correlation id and reported to Sentry with the same id. Enable it by setting a DSN — either the dedicated config var or the conventional `SENTRY_DSN` fallback:
+`oridecon-monitor` bridges structured logs and an external error tracker (Sentry) so every crash is both logged with a correlation id and reported to Sentry with the same id. Enable it by setting a DSN — either the dedicated config var or the conventional `SENTRY_DSN` fallback:
 
 ```bash
-LEX_MONITOR__ERROR_TRACKING__DSN=https://public@sentry.io/1   # or
+ORI_MONITOR__ERROR_TRACKING__DSN=https://public@sentry.io/1   # or
 SENTRY_DSN=https://public@sentry.io/1
 ```
 
 Install the unhandled-exception hook to capture crashes that escape every handler — it forwards them to the tracker and logs an `unhandled_exception` event carrying the active `trace_id`/`request_id` from `structlog.contextvars`:
 
 ```python
-from lexigram.monitor.error_tracking import (
+from oridecon.monitor.error_tracking import (
     install_unhandled_exception_hook,
     setup_error_tracking,
 )
@@ -85,7 +85,7 @@ When booting through the framework, `MonitorProvider` installs this hook automat
 Inject `MetricsCollectorProtocol` for the full counter / gauge / histogram API, or the narrower `MetricsRecorderProtocol` if your code only records.
 
 ```python
-from lexigram.contracts.observability.metrics import MetricsCollectorProtocol
+from oridecon.contracts.observability.metrics import MetricsCollectorProtocol
 
 
 class CheckoutService:
@@ -105,7 +105,7 @@ class CheckoutService:
 For ergonomic instrumentation, the package ships decorators that time and trace a function in one line:
 
 ```python
-from lexigram.monitor import metered, traced
+from oridecon.monitor import metered, traced
 
 @traced("checkout.process")
 @metered("checkout.process.duration")
@@ -124,7 +124,7 @@ Label cardinality is the most common cause of Prometheus memory blow-ups. Never 
 Inject `TracerProtocol` and wrap units of work in a span. Spans are context managers and automatically close on exit, capturing exceptions if any are raised.
 
 ```python
-from lexigram.contracts.observability.tracing import TracerProtocol
+from oridecon.contracts.observability.tracing import TracerProtocol
 
 
 class FulfilmentService:
@@ -151,8 +151,8 @@ For propagation across services or messaging boundaries, use `tracer.inject_cont
 Health checks register against `HealthCheckRegistryProtocol`, tagged with a `HealthCheckCategory` that maps directly to Kubernetes probe types:
 
 ```python
-from lexigram.contracts.core.health import HealthCheckCategory, HealthStatus, HealthCheckResult
-from lexigram.contracts.observability.metrics import HealthCheckRegistryProtocol
+from oridecon.contracts.core.health import HealthCheckCategory, HealthStatus, HealthCheckResult
+from oridecon.contracts.observability.metrics import HealthCheckRegistryProtocol
 
 
 async def check_payment_gateway() -> HealthCheckResult:
@@ -174,7 +174,7 @@ class CheckoutModule:
         )
 ```
 
-When `lexigram-monitor` is paired with `lexigram-web`, the module registers HTTP endpoints under the configured base path (defaults to `/health`). The `Application` itself also exposes `liveness()`, `readiness()`, `startup_check()`, and `health_check()` coroutines for non-HTTP probes (see [Deployment](/guides/deployment/)).
+When `oridecon-monitor` is paired with `oridecon-web`, the module registers HTTP endpoints under the configured base path (defaults to `/health`). The `Application` itself also exposes `liveness()`, `readiness()`, `startup_check()`, and `health_check()` coroutines for non-HTTP probes (see [Deployment](/guides/deployment/)).
 
 ---
 
@@ -183,9 +183,9 @@ When `lexigram-monitor` is paired with `lexigram-web`, the module registers HTTP
 Wire `MonitorModule` into your application and configure the `monitor:` section. Defaults are zero-config — every pillar can be toggled independently.
 
 ```python
-from lexigram import Application
-from lexigram.di.module import Module, module
-from lexigram.monitor import MonitorModule
+from oridecon import Application
+from oridecon.di.module import Module, module
+from oridecon.monitor import MonitorModule
 
 
 @module(imports=[MonitorModule.configure()])
@@ -228,7 +228,7 @@ monitor:
     timeout: 5
 ```
 
-Every key shown above has a `LEX_MONITOR__*` environment-variable equivalent (e.g. `LEX_MONITOR__TRACING__SAMPLE_RATE=0.05`). Structured logging is configured separately via the core `LEX_LEXIGRAM__LOGGING__*` namespace. See [YAML Configuration](/fundamentals/yaml-configuration/) for override semantics.
+Every key shown above has a `ORI_MONITOR__*` environment-variable equivalent (e.g. `ORI_MONITOR__TRACING__SAMPLE_RATE=0.05`). Structured logging is configured separately via the core `ORI_ORIDECON__LOGGING__*` namespace. See [YAML Configuration](/fundamentals/yaml-configuration/) for override semantics.
 
 For tests, swap the module for a no-op stub that discards everything:
 
@@ -257,4 +257,4 @@ Shipping OTLP to a sidecar/agent collector lets it handle routing, retries, and 
 - [Dependency Injection](/fundamentals/dependency-injection/) — injecting metrics, tracer, and health registry protocols
 - [Providers](/fundamentals/providers/) — how `MonitorProvider` registers the four pillars
 - [Deployment](/guides/deployment/) — wiring `/health` to Kubernetes probes
-- [`lexigram-monitor` package reference](/packages/lexigram-monitor/) — full API surface
+- [`oridecon-monitor` package reference](/packages/oridecon-monitor/) — full API surface

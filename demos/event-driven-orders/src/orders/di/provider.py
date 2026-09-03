@@ -20,16 +20,16 @@ Convention: one Provider per bounded context; ``register()`` does binding
 
 from __future__ import annotations
 
-from lexigram.contracts.core.di import (
+from oridecon.contracts.core.di import (
     ContainerRegistrarProtocol,
     ContainerResolverProtocol,
 )
-from lexigram.contracts.core.health import (
+from oridecon.contracts.core.health import (
     HealthCheckResult,
 )
-from lexigram.contracts.core.provider import ProviderPriority
-from lexigram.contracts.events import CommandBusProtocol, EventBusProtocol
-from lexigram.di.provider import Provider
+from oridecon.contracts.core.provider import ProviderPriority
+from oridecon.contracts.events import CommandBusProtocol, EventBusProtocol
+from oridecon.di.provider import Provider
 from orders.commands import PayOrder, PlaceOrder, ShipOrder
 from orders.domain import OrderPaid, OrderPlaced, OrderShipped
 from orders.events import NotificationHandler, OrdersView

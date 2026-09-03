@@ -2,18 +2,18 @@
 
 from __future__ import annotations
 
-from lexigram.auth.exceptions import (
+from oridecon.auth.exceptions import (
     InvalidCredentialsError,
     PasswordPolicyError,
 )
-from lexigram.auth.models import UserCredentials
-from lexigram.auth.storage import UserStoreProtocol
-from lexigram.contracts.auth import (
+from oridecon.auth.models import UserCredentials
+from oridecon.auth.storage import UserStoreProtocol
+from oridecon.contracts.auth import (
     PasswordHasherProtocol,
     PasswordPolicyProtocol,
 )
-from lexigram.logging import get_logger
-from lexigram.result import Err, Ok, Result
+from oridecon.logging import get_logger
+from oridecon.result import Err, Ok, Result
 
 logger = get_logger(__name__)
 

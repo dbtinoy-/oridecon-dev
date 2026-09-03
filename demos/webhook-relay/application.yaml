@@ -12,23 +12,23 @@ description: Webhook receiving, HMAC signature verification, and event relay
 # defaults.  Each section maps 1:1 to a typed config model — the
 # framework validates your yaml against it at boot time.
 #
-# DEMO FOCUS: Lexigram WebhookModule subscriptions and HMAC verification.
+# DEMO FOCUS: Oridecon WebhookModule subscriptions and HMAC verification.
 # The browser creates a subscription, signs an inbound event, and inspects
 # the local accepted-event ledger.
 #
 # LEARNING PATH:
-#   1. webhook:    Lexigram subscription store and delivery lifecycle
+#   1. webhook:    Oridecon subscription store and delivery lifecycle
 #   2. webhookrelay: demo-only secret validation and ledger settings
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram Webhook:   packages/lexigram-webhook/
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon Webhook:   packages/oridecon-webhook/
 #   - Demo config:        demos/webhook-relay/src/webhookrelay/config.py
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -89,7 +89,7 @@ web:
 #   2. Event routing — route events to registered handlers
 #   3. Event logging — log all processed events
 # ─────────────────────────────────────────────────────────────────────────────
-# ── Lexigram Webhook capability ──────────────────────────────────────────────
+# ── Oridecon Webhook capability ──────────────────────────────────────────────
 # WebhookModule owns subscriptions, generated secrets, HMAC verification,
 # delivery stores, and lifecycle wiring. Private URLs are enabled only because
 # this standalone demo may point at a local/test receiver.

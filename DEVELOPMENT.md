@@ -1,4 +1,4 @@
-# Lexigram — Repository Engineering Guidelines
+# Oridecon — Repository Engineering Guidelines
 
 > **Scope**: Repository-wide engineering workflow. Framework implementation standards (contracts, DI, code style, providers, modules, testing) live in [AGENTS.md](./AGENTS.md).
 
@@ -33,10 +33,10 @@ uv run ruff format --check .     # Format check (CI mode, no writes)
 make type
 
 # Type-check a single package with its own pyproject config.
-make type-pkg PKG=lexigram-web
+make type-pkg PKG=oridecon-web
 
 # Core-only quick check (the historical minimal gate).
-uv run mypy core/lexigram/src/
+uv run mypy core/oridecon/src/
 ```
 
 > Reminder: prevent common mypy failures by always declaring return types, typing function arguments and attributes, avoiding `Any` return values, keeping overrides type-compatible, fixing missing imports, and keeping methods reachable and correctly named. This helps avoid `attr-defined`, `no-untyped-def`, `no-any-return`, `arg-type`, `override`, `unreachable`, `name-defined`, `assignment`, `return-value`, `call-arg`, `type-arg`, `union-attr`, `str`, and `import-not-found` errors.
@@ -49,9 +49,9 @@ uv run mypy core/lexigram/src/
 uv run pytest
 
 # Scoped runs
-uv run pytest packages/lexigram-web/tests/                                        # One package
-uv run pytest packages/lexigram-web/tests/unit/test_controller.py -v              # One file
-uv run pytest packages/lexigram-web/tests/unit/test_controller.py::test_create -v # One test
+uv run pytest packages/oridecon-web/tests/                                        # One package
+uv run pytest packages/oridecon-web/tests/unit/test_controller.py -v              # One file
+uv run pytest packages/oridecon-web/tests/unit/test_controller.py::test_create -v # One test
 uv run pytest -k "test_user"                                                     # Pattern match
 
 # Integration opt-in / explicit exclusion
@@ -74,8 +74,8 @@ uv run pytest --cov-fail-under=80
 > suite run from the repo root (`make test` / `make ci`). Individual
 > packages set their own, often lower, floor in their own
 > `pyproject.toml` `addopts` for scoped/local runs (e.g.
-> `lexigram-ai-mcp` at 35%, most `lexigram-ai-*` packages at 60%,
-> `lexigram-ai-agents` at 80%). A package below 80% locally is not a
+> `oridecon-ai-mcp` at 35%, most `oridecon-ai-*` packages at 60%,
+> `oridecon-ai-agents` at 80%). A package below 80% locally is not a
 > violation as long as the root aggregate run stays ≥80%.
 
 ### 3.5 Full CI Pipeline (Run Before Every PR)
@@ -109,11 +109,11 @@ uv run ruff check . \
 # only when that package changes.
 
 # Set version (pyproject.toml only — __init__.py reads it from metadata)
-uvx yj set version "0.1.3001" < core/lexigram/pyproject.toml
+uvx yj set version "0.1.3001" < core/oridecon/pyproject.toml
 
 # Build & publish (from the package being released)
-cd core/lexigram && uv build
-uv publish dist/lexigram-*.whl dist/lexigram-*.tar.gz --token pypi-xxxx
+cd core/oridecon && uv build
+uv publish dist/oridecon-*.whl dist/oridecon-*.tar.gz --token pypi-xxxx
 ```
 
 ---
@@ -145,7 +145,7 @@ the conventional-commit prefix: `git commit -m "<emoji> <type>(<scope>): <summar
 | `style`    | 🎨    | Format/whitespace, no logic change | `🎨 style(web): normalize quotes`              |
 | `chore`    | 🔧    | Maintenance/tooling              | `🔧 chore(git): allowlist tiered paths`          |
 | `ci`       | 👷    | CI workflows and config          | `👷 ci: derive members from shared inventory`    |
-| `build`    | 📦    | Build system / packaging         | `📦 build: publish lexigram 0.1.3008`            |
+| `build`    | 📦    | Build system / packaging         | `📦 build: publish oridecon 0.1.3008`            |
 | `deps`     | ⬆️    | Dependency upgrade               | `⬆️ deps: uv sync to 0.8.14`                     |
 | `security` | 🔒    | Security hardening fix           | `🔒 security(auth): pin JWT algorithm`           |
 | `revert`   | ⏪    | Reverts a previous commit        | `⏪ revert: undo glob members experiment`        |
@@ -167,15 +167,15 @@ Build a **longer, verifiable commit history** with tests alongside features.
 
 1. **Ship features together with their tests, in small focused commits.** Each
    new feature or bugfix commit includes its test file in the same change —
-   e.g. `lexigram-features/src` plus `lexigram-features/tests/unit/test_*.py`
+   e.g. `oridecon-features/src` plus `oridecon-features/tests/unit/test_*.py`
    together — so every commit is independently verifiable.
 2. **Push commits over multiple days/sessions** instead of one continuous
    window, keeping the conventional commit prefixes.
 3. **Tag intermediate releases** (`v0.1.4`, `v0.1.5`), to show cadence over time.
 4. **Version every package incrementally and independently.** Each
-   `lexigram-*` package carries its own version (`0.<minor>.<patch><build>`
+   `oridecon-*` package carries its own version (`0.<minor>.<patch><build>`
    per §3.6) and bumps only when *that* package changes — a fix in
-   `lexigram-cache` never moves `lexigram-web` or `lexigram`. After a
+   `oridecon-cache` never moves `oridecon-web` or `oridecon`. After a
    package's feature/fix lands (with its tests, rule 1), bump it in the same
    or immediately-following commit with `make version-bump PKG=<pkg>`
    (`APPLY=--apply` to write; `make version-check` to see which packages

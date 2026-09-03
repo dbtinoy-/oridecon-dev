@@ -22,13 +22,13 @@ description: Deterministic purchase approval state machine with saga orchestrati
 #   3. approval_flow: Demo-specific seed data and labels
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram Workflow:  packages/lexigram-workflow/src/lexigram/workflow/config.py
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon Workflow:  packages/oridecon-workflow/src/oridecon/workflow/config.py
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 #
@@ -100,7 +100,7 @@ web:
 
 
 # ── Workflow ─────────────────────────────────────────────────────────────────
-# Lexigram Workflow provides pipeline orchestration, graph execution,
+# Oridecon Workflow provides pipeline orchestration, graph execution,
 # state machines, and retry/timeout infrastructure.  The WorkflowModule
 # reads this section automatically via config_key="workflow" /
 # config_model=WorkflowConfig.

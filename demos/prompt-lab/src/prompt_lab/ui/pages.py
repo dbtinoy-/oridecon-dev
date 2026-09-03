@@ -1,6 +1,6 @@
 """Server-rendered page + static assets for the prompt lab.
 
-Demonstrates the *page controller* half of a Lexigram web app: HTML lives
+Demonstrates the *page controller* half of a Oridecon web app: HTML lives
 in ``ui/views/``, assets in ``ui/static/``, and this controller serves
 them with zero business logic — every dynamic interaction goes through
 the JSON API in ``controllers/api.py`` instead.  The vanilla-JS client in
@@ -13,7 +13,7 @@ from pathlib import Path
 
 from starlette.requests import Request
 
-from lexigram.web import Controller, FileResponse, get
+from oridecon.web import Controller, FileResponse, get
 
 UI_ROOT = Path(__file__).resolve().parent
 VIEWS_ROOT = UI_ROOT / "views"

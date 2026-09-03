@@ -1,10 +1,10 @@
-"""Tests for lexigram.primitives — TransformPipe transformation chain."""
+"""Tests for oridecon.primitives — TransformPipe transformation chain."""
 
 from __future__ import annotations
 
 import pytest
 
-from lexigram.workflow.core.pipe import TransformPipe
+from oridecon.workflow.core.pipe import TransformPipe
 
 
 class TestTransformPipe:

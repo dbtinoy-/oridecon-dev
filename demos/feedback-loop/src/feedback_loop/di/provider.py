@@ -20,11 +20,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from feedback_loop.services import LoopService
-from lexigram.contracts.core.health import HealthCheckResult
-from lexigram.di.provider import Provider
+from oridecon.contracts.core.health import HealthCheckResult
+from oridecon.di.provider import Provider
 
 if TYPE_CHECKING:
-    from lexigram.contracts.core.di import (
+    from oridecon.contracts.core.di import (
         ContainerRegistrarProtocol,
         ContainerResolverProtocol,
     )
@@ -60,8 +60,8 @@ class LoopProvider(Provider):
 
     async def boot(self, container: ContainerResolverProtocol) -> None:
         """Resolve collector + tracker; harness/evaluator built locally."""
-        from lexigram.ai.feedback.services.collector import FeedbackCollector
-        from lexigram.contracts.ai.experiment import ExperimentTrackerProtocol
+        from oridecon.ai.feedback.services.collector import FeedbackCollector
+        from oridecon.contracts.ai.experiment import ExperimentTrackerProtocol
 
         collector = await container.resolve(FeedbackCollector)
         try:

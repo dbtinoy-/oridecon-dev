@@ -26,7 +26,7 @@ async def test_page_has_footer(client: httpx.AsyncClient) -> None:
 
     assert response.status_code == 200
     assert "demo-footer" in response.text
-    assert "lexigram.dev" in response.text
+    assert "oridecon.dev" in response.text
 
 async def test_page_has_strategy_select(client: httpx.AsyncClient) -> None:
     response = await client.get("/")

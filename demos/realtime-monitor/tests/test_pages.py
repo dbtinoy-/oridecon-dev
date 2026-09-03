@@ -17,7 +17,7 @@ async def test_index_has_light_theme(client: httpx.AsyncClient) -> None:
 async def test_index_has_footer(client: httpx.AsyncClient) -> None:
     r = await client.get("/")
     assert "demo-footer" in r.text
-    assert "lexigram.dev" in r.text
+    assert "oridecon.dev" in r.text
 
 async def test_css_returns(client: httpx.AsyncClient) -> None:
     r = await client.get("/static/style.css")

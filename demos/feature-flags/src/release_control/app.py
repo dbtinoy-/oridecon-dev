@@ -8,18 +8,18 @@ a visual release-operations console.
 
 from __future__ import annotations
 
-from lexigram.app.base import Application
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider
-from lexigram.features.module import FeatureFlagsModule
-from lexigram.web.module import WebModule
+from oridecon.app.base import Application
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider
+from oridecon.features.module import FeatureFlagsModule
+from oridecon.web.module import WebModule
 from release_control.controllers.api import ReleaseControlApiController
 from release_control.di.provider import ReleaseControlProvider
 from release_control.ui.pages import ReleaseControlPageController
 
 
 def build_modules() -> list[object]:
-    """Build the Lexigram modules required by the release control demo."""
+    """Build the Oridecon modules required by the release control demo."""
     return [
         FeatureFlagsModule.configure(),
         WebModule.configure(
@@ -33,7 +33,7 @@ def build_providers() -> list[Provider]:
     return [ReleaseControlProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create and configure the release control application."""
     app = Application(name="feature-flags", config=config)
     app.add_modules(build_modules())

@@ -1,6 +1,6 @@
 """Dict-backed session storage for the API-keys console demo."""
 # Session repository — another protocol implementation.
-# Uses clock.now() from lexigram.primitives (ambient capability) instead
+# Uses clock.now() from oridecon.primitives (ambient capability) instead
 # of datetime.now() for testability.
 
 from __future__ import annotations
@@ -8,8 +8,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from lexigram.contracts.auth import SessionRepositoryProtocol
-from lexigram.primitives import clock
+from oridecon.contracts.auth import SessionRepositoryProtocol
+from oridecon.primitives import clock
 
 
 @dataclass

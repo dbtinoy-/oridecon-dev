@@ -18,13 +18,13 @@ def _package_names(entries: list[str]) -> set[str]:
     """Package names in a path list, at whatever depth they appear.
 
     Layout-agnostic on purpose: this must keep working as entries go from
-    ``lexigram-sql/src`` to ``packages/lexigram-sql/src`` during Phase 3.
+    ``oridecon-sql/src`` to ``packages/oridecon-sql/src`` during Phase 3.
     """
 
     names = set()
     for entry in entries:
         for segment in Path(entry).parts:
-            if segment.startswith("lexigram"):
+            if segment.startswith("oridecon"):
                 names.add(segment)
                 break
     return names

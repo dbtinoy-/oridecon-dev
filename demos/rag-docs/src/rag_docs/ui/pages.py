@@ -1,6 +1,6 @@
 """Console page — static serving only (logic lives in the API controller).
 
-Lexigram pattern: page controllers serve HTML and static assets only.
+Oridecon pattern: page controllers serve HTML and static assets only.
 All dynamic logic lives in API controllers — this file has zero
 business logic, just file-serving routes.
 
@@ -14,7 +14,7 @@ from pathlib import Path
 
 from starlette.requests import Request
 
-from lexigram.web import Controller, FileResponse, get
+from oridecon.web import Controller, FileResponse, get
 
 UI_ROOT = Path(__file__).resolve().parent
 VIEWS_ROOT = UI_ROOT / "views"

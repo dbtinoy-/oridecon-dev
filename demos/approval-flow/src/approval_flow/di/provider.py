@@ -7,24 +7,24 @@ from typing import TYPE_CHECKING
 from approval_flow.config import ApprovalFlowConfig
 from approval_flow.controllers.api import ApprovalFlowApiController
 from approval_flow.services.flow import ApprovalFlowService
-from lexigram.contracts.core.health import (
+from oridecon.contracts.core.health import (
     HealthCheckCategory,
     HealthCheckResult,
     HealthStatus,
 )
-from lexigram.contracts.workflow import StateMachineProtocol
-from lexigram.di.provider import Provider
-from lexigram.workflow.di.provider import WorkflowProvider
+from oridecon.contracts.workflow import StateMachineProtocol
+from oridecon.di.provider import Provider
+from oridecon.workflow.di.provider import WorkflowProvider
 
 if TYPE_CHECKING:
-    from lexigram.contracts.core.di import (
+    from oridecon.contracts.core.di import (
         ContainerRegistrarProtocol,
         ContainerResolverProtocol,
     )
 
 
 class ApprovalFlowProvider(Provider):
-    """Bind the demo service after Lexigram WorkflowModule is registered."""
+    """Bind the demo service after Oridecon WorkflowModule is registered."""
 
     name = "approval_flow"
     config_key: str | None = "approval_flow"

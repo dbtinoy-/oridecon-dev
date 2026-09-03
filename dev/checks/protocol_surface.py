@@ -1,6 +1,6 @@
 """Snapshot-check the method surface of every runtime_checkable Protocol.
 
-When a Protocol in lexigram-contracts gains or loses a member, every stub and
+When a Protocol in oridecon-contracts gains or loses a member, every stub and
 fake implementing it goes stale silently (isinstance flips at runtime — see
 TaskProviderProtocol/build_idempotency_manager). This tool makes protocol
 drift a deliberate, reviewed diff:
@@ -22,10 +22,10 @@ import logging
 from pathlib import Path
 import sys
 
-from lexigram.serialization import dumps, loads
+from oridecon.serialization import dumps, loads
 
 MANIFEST = Path(__file__).parent / "_data" / "protocol_surface.json"
-CONTRACTS_PKG = "lexigram.contracts"
+CONTRACTS_PKG = "oridecon.contracts"
 
 
 def _runtime_protocols() -> dict[str, list[str]]:
@@ -49,7 +49,7 @@ def _runtime_protocols() -> dict[str, list[str]]:
         if not name.startswith(CONTRACTS_PKG):
             continue
         module_file = getattr(module, "__file__", None) or ""
-        if "lexigram-contracts" not in module_file:
+        if "oridecon-contracts" not in module_file:
             continue  # imported-in protocols belong to their home package
         for value in vars(module).values():
             if (

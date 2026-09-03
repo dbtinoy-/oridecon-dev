@@ -1,9 +1,9 @@
 ---
 title: "Multi-Tenancy"
-description: "Tenant resolution, isolation, and enforcement with lexigram-tenancy."
+description: "Tenant resolution, isolation, and enforcement with oridecon-tenancy."
 ---
 
-`lexigram-tenancy` adds first-class multi-tenancy — identifying the current tenant, isolating its data, and propagating its context safely across async calls.
+`oridecon-tenancy` adds first-class multi-tenancy — identifying the current tenant, isolating its data, and propagating its context safely across async calls.
 
 ---
 
@@ -27,8 +27,8 @@ Resolution runs at the edge of the request pipeline. Resolvers are tried in orde
 | `path` | `/api/v1/{tenant}/...` | multi-org public portals |
 
 ```python
-from lexigram import Application
-from lexigram.tenancy import TenancyModule, TenancyConfig, ResolutionConfig
+from oridecon import Application
+from oridecon.tenancy import TenancyModule, TenancyConfig, ResolutionConfig
 
 app = Application(name="my-saas")
 app.add_module(
@@ -46,7 +46,7 @@ For tests, `TenancyModule.stub()` provides an in-memory, header-only setup with 
 
 Once resolved, a `TenantContextMiddleware` stores the tenant id in a `ContextVar`, so it follows your code across `await` boundaries without being threaded through every function signature. Tenant-aware services and repositories read the current tenant from that context automatically.
 
-See the [`lexigram-tenancy` package docs](/packages/lexigram-tenancy/) for the exact context-accessor and tenant-scoping decorator APIs.
+See the [`oridecon-tenancy` package docs](/packages/oridecon-tenancy/) for the exact context-accessor and tenant-scoping decorator APIs.
 
 ---
 
@@ -76,4 +76,4 @@ Mark routes as tenant-scoped so a request without a resolved, authorized tenant 
 
 - [Authentication](/guides/authentication/) — pairing tenants with JWT claims
 - [Database & Persistence](/guides/database/) — tenant-aware repositories
-- [`lexigram-tenancy` package](/packages/lexigram-tenancy/) — resolvers, isolation, and lifecycle
+- [`oridecon-tenancy` package](/packages/oridecon-tenancy/) — resolvers, isolation, and lifecycle

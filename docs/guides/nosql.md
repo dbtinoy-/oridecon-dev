@@ -3,9 +3,9 @@ title: "NoSQL Document Stores"
 description: "Async document database access with MongoDB, DynamoDB, and Firestore behind a single protocol."
 ---
 
-`lexigram-nosql` provides async document-database access behind a single protocol. Application code depends on `DocumentStoreProtocol`; the backend (MongoDB, DynamoDB in-memory simulator, or Firestore emulator) is chosen in configuration. You can swap backends, run several side-by-side, and substitute an in-memory stub in tests without touching the services that use them.
+`oridecon-nosql` provides async document-database access behind a single protocol. Application code depends on `DocumentStoreProtocol`; the backend (MongoDB, DynamoDB in-memory simulator, or Firestore emulator) is chosen in configuration. You can swap backends, run several side-by-side, and substitute an in-memory stub in tests without touching the services that use them.
 
-For the full configuration reference and advanced features (aggregation pipelines, document migrations, bulk writes), see the [`lexigram-nosql` package docs](/packages/lexigram-nosql/).
+For the full configuration reference and advanced features (aggregation pipelines, document migrations, bulk writes), see the [`oridecon-nosql` package docs](/packages/oridecon-nosql/).
 
 ---
 
@@ -15,13 +15,13 @@ All backends implement `DocumentStoreProtocol`, which exposes collection access 
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.contracts.data.nosql.nosql import (
+from oridecon.contracts.data.nosql.nosql import (
     BulkWriteResult,
     CollectionProtocol,
     DocumentResult,
     DocumentStoreProtocol,
 )
-from lexigram.result import Result
+from oridecon.result import Result
 
 
 @runtime_checkable
@@ -48,8 +48,8 @@ graph LR
 `NoSQLConfig` lives under the `nosql:` key in `application.yaml`. The driver selects the backend:
 
 ```python
-from lexigram import Application
-from lexigram.nosql import NoSQLModule
+from oridecon import Application
+from oridecon.nosql import NoSQLModule
 
 app = Application(name="my-app")
 ```
@@ -76,7 +76,7 @@ DynamoDB and Firestore each have their own config section:
 nosql:
   driver: dynamodb
   dynamodb:
-    table_name: "lexigram"
+    table_name: "oridecon"
     region: "${AWS_REGION:us-east-1}"
     pk_field: "_id"
     endpoint_url: "${DYNAMODB_ENDPOINT}"  # localhost:8000 for DynamoDB Local
@@ -98,8 +98,8 @@ nosql:
 Inject `DocumentStoreProtocol` into any service. Call `collection()` to get a handle, then use the collection API:
 
 ```python
-from lexigram.contracts.data.nosql.nosql import DocumentStoreProtocol
-from lexigram.result import Result, Ok, Err
+from oridecon.contracts.data.nosql.nosql import DocumentStoreProtocol
+from oridecon.result import Result, Ok, Err
 from my_app.domain.models import Product
 
 
@@ -125,9 +125,9 @@ class ProductCatalog:
 Resolving the store outside a service (scripts, tests):
 
 ```python
-from lexigram import Application
-from lexigram.nosql import NoSQLModule
-from lexigram.contracts.data.nosql.nosql import DocumentStoreProtocol
+from oridecon import Application
+from oridecon.nosql import NoSQLModule
+from oridecon.contracts.data.nosql.nosql import DocumentStoreProtocol
 
 async with Application.boot(modules=[NoSQLModule.stub()]) as app:
     store = await app.container.resolve(DocumentStoreProtocol)
@@ -141,8 +141,8 @@ async with Application.boot(modules=[NoSQLModule.stub()]) as app:
 For domain-driven projects, `DocumentRepositoryProtocol` provides a generic CRUD interface. `NoSQLModule.scope()` registers your repository classes:
 
 ```python
-from lexigram.contracts.data.nosql.nosql_repository import DocumentRepositoryProtocol
-from lexigram.nosql import NoSQLModule, NoSQLConfig
+from oridecon.contracts.data.nosql.nosql_repository import DocumentRepositoryProtocol
+from oridecon.nosql import NoSQLModule, NoSQLConfig
 
 
 class ProductRepository:
@@ -172,7 +172,7 @@ class CatalogModule:
 The fluent query builder constructs typed filter dictionaries without raw dicts:
 
 ```python
-from lexigram.nosql import DocumentQueryBuilder
+from oridecon.nosql import DocumentQueryBuilder
 
 query = (
     DocumentQueryBuilder()
@@ -188,7 +188,7 @@ query = (
 The builder offers `where`, `and_where`, `or_where`, `where_in`, `where_ne`, `where_between`, `where_regex`, and more. Aggregation pipelines chain stages fluently:
 
 ```python
-from lexigram.nosql import AggregationPipeline, AggregationOp
+from oridecon.nosql import AggregationPipeline, AggregationOp
 
 pipeline = (
     AggregationPipeline()
@@ -207,7 +207,7 @@ pipeline = (
 The `MigrationManager` applies ordered schema changes. Operations are declarative:
 
 ```python
-from lexigram.nosql import MigrationManager, CreateIndex, DropIndex, RenameField, AddField, DropCollection
+from oridecon.nosql import MigrationManager, CreateIndex, DropIndex, RenameField, AddField, DropCollection
 
 manager = MigrationManager(store)
 manager.add("2", "Add unique email index", CreateIndex("users", [("email", 1)], unique=True))
@@ -248,8 +248,8 @@ nosql:
 
 ```python
 from typing import Annotated
-from lexigram.contracts.data.nosql.nosql import DocumentStoreProtocol
-from lexigram.di.markers import Named
+from oridecon.contracts.data.nosql.nosql import DocumentStoreProtocol
+from oridecon.di.markers import Named
 
 
 class DashboardService:
@@ -269,9 +269,9 @@ class DashboardService:
 `NoSQLModule.stub()` returns an in-memory document store with no external service:
 
 ```python
-from lexigram import Application
-from lexigram.nosql import NoSQLModule
-from lexigram.contracts.data.nosql.nosql import DocumentStoreProtocol
+from oridecon import Application
+from oridecon.nosql import NoSQLModule
+from oridecon.contracts.data.nosql.nosql import DocumentStoreProtocol
 
 
 async def test_inserts_product() -> None:
@@ -288,4 +288,4 @@ async def test_inserts_product() -> None:
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding protocols to implementations
 - [Providers](/fundamentals/providers/) — how `NoSQLProvider` hooks into application boot
 - [Testing](/guides/testing/) — substituting stubs for infrastructure
-- [`lexigram-nosql` package](/packages/lexigram-nosql/) — full config reference, `DocumentRepositoryProtocol`, bulk operations
+- [`oridecon-nosql` package](/packages/oridecon-nosql/) — full config reference, `DocumentRepositoryProtocol`, bulk operations

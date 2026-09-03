@@ -25,70 +25,70 @@ OUT = ROOT / "application.full.example.yaml"
 PKG_HEADER = re.compile(r"^### `([^`]+)` \((\d+) vars\)$")
 
 # Packages where env_prefix does NOT match the first env segment.
-# Key = first lowercase segment after stripping LEX_, Value = YAML section key.
+# Key = first lowercase segment after stripping ORI_, Value = YAML section key.
 _PACKAGE_TO_YAML_SECTION: dict[str, str] = {
     "sql": "db",
 }
 
-# Package metadata: keyed by catalog pkg_name (e.g. "lexigram-sql").
+# Package metadata: keyed by catalog pkg_name (e.g. "oridecon-sql").
 # Value = (display_name, env_prefix_override_or_None)
 _SECTION_META: dict[str, tuple[str, str | None]] = {
-    "lexigram": ("Core Framework", None),
-    "lexigram-sql": ("SQL Database", "LEX_SQL__"),
-    "lexigram-cache": ("Cache", "LEX_CACHE__"),
-    "lexigram-web": ("Web", "LEX_WEB__"),
-    "lexigram-auth": ("Auth", "LEX_AUTH__"),
-    "lexigram-events": ("Events", "LEX_EVENTS__"),
-    "lexigram-graphql": ("GraphQL", "LEX_GRAPHQL__"),
-    "lexigram-monitor": ("Monitor", "LEX_MONITOR__"),
-    "lexigram-search": ("Search", "LEX_SEARCH__"),
-    "lexigram-storage": ("Storage", "LEX_STORAGE__"),
-    "lexigram-vector": ("Vector", "LEX_VECTOR__"),
-    "lexigram-nosql": ("NoSQL", "LEX_NOSQL__"),
-    "lexigram-graph": ("Graph", "LEX_GRAPH__"),
-    "lexigram-tasks": ("Tasks", "LEX_TASKS__"),
-    "lexigram-features": ("Features", "LEX_FEATURES__"),
-    "lexigram-resilience": ("Resilience", "LEX_RESILIENCE__"),
-    "lexigram-admin": ("Admin", "LEX_ADMIN__"),
-    "lexigram-ai": ("AI", "LEX_AI__"),
-    "lexigram-ai-rag": ("AI RAG", "LEX_AI_RAG__"),
-    "lexigram-ai-memory": ("AI Memory", "LEX_AI_MEMORY__"),
-    "lexigram-ai-session": ("AI Session", "LEX_AI_SESSION__"),
-    "lexigram-ai-agents": ("AI Agents", "LEX_AI_AGENTS__"),
-    "lexigram-ai-governance": ("AI Governance", "LEX_AI_GOVERNANCE__"),
-    "lexigram-ai-guard": ("AI Guard", "LEX_AI_GUARD__"),
-    "lexigram-ai-feedback": ("AI Feedback", "LEX_AI_FEEDBACK__"),
-    "lexigram-ai-prompt": ("AI Prompt", "LEX_AI_PROMPT__"),
-    "lexigram-ai-skills": ("AI Skills", "LEX_AI_SKILLS__"),
-    "lexigram-ai-workers": ("AI Workers", "LEX_AI_WORKERS__"),
-    "lexigram-ai-mcp": ("AI MCP", "LEX_AI_MCP__"),
-    "lexigram-ai-observability": ("AI Observability", "LEX_AI_OBSERVABILITY__"),
-    "lexigram-ai-evaluation": ("AI Evaluation", "LEX_AI_EVALUATION__"),
-    "lexigram-ai-llm": ("AI LLM", "LEX_AI_LLM__"),
-    "lexigram-audit": ("Audit", "LEX_AUDIT__"),
-    "lexigram-http": ("HTTP Client", "LEX_HTTP__"),
-    "lexigram-secrets": ("Secrets", "LEX_SECRETS_"),
-    "lexigram-tenancy": ("Tenancy", "LEX_TENANCY__"),
-    "lexigram-webhook": ("Webhook", "LEX_WEBHOOK__"),
-    "lexigram-multimedia": ("Multimedia", None),
-    "lexigram-ui": ("UI", "LEX_UI__"),
-    "lexigram-cli": ("CLI", None),
-    "lexigram-notification": ("Notification", "LEX_NOTIFICATION__"),
-    "lexigram-testing": ("Testing", "LEX_TESTING__"),
-    "lexigram-middleware": ("Middleware", "LEX_MIDDLEWARE__"),
-    "lexigram-security": ("Security", "LEX_SECURITY__"),
-    "lexigram-idempotency": ("Idempotency", "LEX_IDEMPOTENCY__"),
-    "lexigram-mapping": ("Mapping", "LEX_MAPPING__"),
-    "lexigram-workflow": ("Workflow", "LEX_WORKFLOW__"),
+    "oridecon": ("Core Framework", None),
+    "oridecon-sql": ("SQL Database", "ORI_SQL__"),
+    "oridecon-cache": ("Cache", "ORI_CACHE__"),
+    "oridecon-web": ("Web", "ORI_WEB__"),
+    "oridecon-auth": ("Auth", "ORI_AUTH__"),
+    "oridecon-events": ("Events", "ORI_EVENTS__"),
+    "oridecon-graphql": ("GraphQL", "ORI_GRAPHQL__"),
+    "oridecon-monitor": ("Monitor", "ORI_MONITOR__"),
+    "oridecon-search": ("Search", "ORI_SEARCH__"),
+    "oridecon-storage": ("Storage", "ORI_STORAGE__"),
+    "oridecon-vector": ("Vector", "ORI_VECTOR__"),
+    "oridecon-nosql": ("NoSQL", "ORI_NOSQL__"),
+    "oridecon-graph": ("Graph", "ORI_GRAPH__"),
+    "oridecon-tasks": ("Tasks", "ORI_TASKS__"),
+    "oridecon-features": ("Features", "ORI_FEATURES__"),
+    "oridecon-resilience": ("Resilience", "ORI_RESILIENCE__"),
+    "oridecon-admin": ("Admin", "ORI_ADMIN__"),
+    "oridecon-ai": ("AI", "ORI_AI__"),
+    "oridecon-ai-rag": ("AI RAG", "ORI_AI_RAG__"),
+    "oridecon-ai-memory": ("AI Memory", "ORI_AI_MEMORY__"),
+    "oridecon-ai-session": ("AI Session", "ORI_AI_SESSION__"),
+    "oridecon-ai-agents": ("AI Agents", "ORI_AI_AGENTS__"),
+    "oridecon-ai-governance": ("AI Governance", "ORI_AI_GOVERNANCE__"),
+    "oridecon-ai-guard": ("AI Guard", "ORI_AI_GUARD__"),
+    "oridecon-ai-feedback": ("AI Feedback", "ORI_AI_FEEDBACK__"),
+    "oridecon-ai-prompt": ("AI Prompt", "ORI_AI_PROMPT__"),
+    "oridecon-ai-skills": ("AI Skills", "ORI_AI_SKILLS__"),
+    "oridecon-ai-workers": ("AI Workers", "ORI_AI_WORKERS__"),
+    "oridecon-ai-mcp": ("AI MCP", "ORI_AI_MCP__"),
+    "oridecon-ai-observability": ("AI Observability", "ORI_AI_OBSERVABILITY__"),
+    "oridecon-ai-evaluation": ("AI Evaluation", "ORI_AI_EVALUATION__"),
+    "oridecon-ai-llm": ("AI LLM", "ORI_AI_LLM__"),
+    "oridecon-audit": ("Audit", "ORI_AUDIT__"),
+    "oridecon-http": ("HTTP Client", "ORI_HTTP__"),
+    "oridecon-secrets": ("Secrets", "ORI_SECRETS_"),
+    "oridecon-tenancy": ("Tenancy", "ORI_TENANCY__"),
+    "oridecon-webhook": ("Webhook", "ORI_WEBHOOK__"),
+    "oridecon-multimedia": ("Multimedia", None),
+    "oridecon-ui": ("UI", "ORI_UI__"),
+    "oridecon-cli": ("CLI", None),
+    "oridecon-notification": ("Notification", "ORI_NOTIFICATION__"),
+    "oridecon-testing": ("Testing", "ORI_TESTING__"),
+    "oridecon-middleware": ("Middleware", "ORI_MIDDLEWARE__"),
+    "oridecon-security": ("Security", "ORI_SECURITY__"),
+    "oridecon-idempotency": ("Idempotency", "ORI_IDEMPOTENCY__"),
+    "oridecon-mapping": ("Mapping", "ORI_MAPPING__"),
+    "oridecon-workflow": ("Workflow", "ORI_WORKFLOW__"),
 }
 
 # Manual sections for vars not in the catalog (core config, etc.)
 _MANUAL_SECTIONS: dict[str, str] = {
-    "lexigram": """\
-# ── Core Framework (lexigram) ──────────────────────────────────────────────────
-# config_section: root (folded by LexigramConfig._fold_lexigram_env_section)
+    "oridecon": """\
+# ── Core Framework (oridecon) ──────────────────────────────────────────────────
+# config_section: root (folded by OrideconConfig._fold_oridecon_env_section)
 # Core config fields live at the root level of the YAML.
-app_name: "lexigram-app"
+app_name: "oridecon-app"
 debug: false
 env: development
 logging:
@@ -98,7 +98,7 @@ modules: []
 discovery:
   auto_discover: true
   package_patterns:
-    - "lexigram_*"
+    - "oridecon_*"
 health:
   enabled: true
   path: /health
@@ -106,7 +106,7 @@ health:
 }
 
 # Packages where vars are direct env access (not config-derived) — emit as comments only.
-_COMMENT_ONLY_SECTIONS = {"lexigram-testing"}
+_COMMENT_ONLY_SECTIONS = {"oridecon-testing"}
 
 _SECRET_SUFFIXES = (
     "SECRET",
@@ -144,22 +144,22 @@ def _coerce_yaml_value(raw: str, _typ: str) -> str | int | float | bool | None:
 
 def _derive_env_prefix(env_var: str) -> str:
     """Derive the env_prefix from the first env var of a section."""
-    if not env_var.startswith("LEX_"):
-        return "LEX_"
+    if not env_var.startswith("ORI_"):
+        return "ORI_"
     parts = env_var[4:].split("__")
-    return "LEX_" + parts[0] + "__"
+    return "ORI_" + parts[0] + "__"
 
 
 def env_var_to_yaml_path(env_var: str) -> list[str] | None:
     """Convert an env var name to a YAML key path.
 
     Args:
-        env_var: Full env var name, e.g. ``LEX_AUTH__TOKEN__ALGORITHM``.
+        env_var: Full env var name, e.g. ``ORI_AUTH__TOKEN__ALGORITHM``.
 
     Returns:
         List of YAML key segments, or None if the var should be skipped.
     """
-    if not env_var.startswith("LEX_"):
+    if not env_var.startswith("ORI_"):
         return None
     rest = env_var[4:]  # AUTH__TOKEN__ALGORITHM
     segments = rest.lower().split("__")
@@ -230,13 +230,13 @@ def _emit_header() -> list[str]:
     return [
         "# ==============================================================================",
         "# application.example.yaml",
-        "# Lexigram Framework — complete configuration reference.",
+        "# Oridecon Framework — complete configuration reference.",
         "#",
         "# All values shown are exact defaults taken from each package's config class.",
         "# Secrets:  prefer environment variables or a vault over plaintext.",
         '#           Syntax: "${ENV_VAR_NAME}" lets the loader substitute at runtime.',
         "# Env-var overrides use double-underscore nesting, e.g.:",
-        "#   LEX_WEB__SERVER__PORT=9000  →  web.server.port = 9000",
+        "#   ORI_WEB__SERVER__PORT=9000  →  web.server.port = 9000",
         "# ==============================================================================",
     ]
 
@@ -268,7 +268,7 @@ def generate() -> None:
             continue
         yaml_section = path[0]
         display_name, prefix_override = _SECTION_META.get(
-            pkg_name, (pkg_name.replace("lexigram-", "").replace("-", " ").title(), None)
+            pkg_name, (pkg_name.replace("oridecon-", "").replace("-", " ").title(), None)
         )
         env_prefix = prefix_override or _derive_env_prefix(first_var)
 

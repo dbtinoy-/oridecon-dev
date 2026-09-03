@@ -6,7 +6,7 @@ import hashlib
 import math
 import re
 
-from lexigram.contracts.ai.llm import EmbeddingClientProtocol
+from oridecon.contracts.ai.llm import EmbeddingClientProtocol
 
 _TOKEN_RE = re.compile(r"[a-z0-9]+")
 _EMBEDDING_DIMENSION = 1024
@@ -27,7 +27,7 @@ def _tokenize(text: str) -> set[str]:
     return {_stem(token) for token in _TOKEN_RE.findall(text.lower())}
 
 
-from lexigram.contracts.core.health import HealthCheckResult
+from oridecon.contracts.core.health import HealthCheckResult
 
 
 class HashingEmbedder(EmbeddingClientProtocol):

@@ -2,14 +2,14 @@
 
 > Module name: `demo_hub` — run with `PYTHONPATH=src uv run python -m demo_hub`
 
-One port for the whole fleet. The hub boots every web demo's real Lexigram
+One port for the whole fleet. The hub boots every web demo's real Oridecon
 `Application` **in-process** and mounts it under `/demos/<slug>/`, then serves
 a status console that links to all of them.
 
 No other ports are needed in embedded mode — and every demo still runs
 standalone on its documented port (nothing about the demos was changed).
 
-## Lexigram concepts used
+## Oridecon concepts used
 
 | Concept | Where in this demo | Your app |
 |---------|-------------------|----------|
@@ -22,7 +22,7 @@ standalone on its documented port (nothing about the demos was changed).
 
 ## What it shows
 
-| Piece | Where | Lexigram API used |
+| Piece | Where | Oridecon API used |
 |-------|-------|-------------------|
 | Hub composition | `app.py` | `build_modules()`, `build_providers()`, `create_app()` |
 | Child mounting | `fleet.py` | `Fleet.mount_all()` → `SubsiteMiddleware` |
@@ -80,7 +80,7 @@ demos/demo-hub/
 │   │   └── registry.py        # Service registry + demo metadata
 │   └── ui/
 │       └── pages.py           # Hub console HTML page
-├── application.yaml           # web section (LEX_* overrides win)
+├── application.yaml           # web section (ORI_* overrides win)
 └── tests/                     # registry + subsite rewrite tests
 ```
 

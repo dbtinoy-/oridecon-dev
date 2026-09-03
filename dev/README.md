@@ -43,9 +43,9 @@ and reuse `_resolve_default()` from `env_example.py` for consistent default hand
 | `checks/tier_boundary.py` | Fails when a stable-tier package depends on an `experimental/` one |
 | `checks/dep_pins.py` | Dependency pin policy; baseline: `_data/dep_pins_baseline.json` |
 | `checks/stub_shadows.py` | Fails when a class attribute resolves to a `NotImplementedError` stub shadowing a real implementation later in its MRO. Run after any mixin/base refactor |
-| `checks/protocol_surface.py` | Fails when a `lexigram.contracts` runtime_checkable Protocol gains/loses public members. After an intentional protocol change run with `--update`, review `checks/_data/protocol_surface.json`, commit both together |
+| `checks/protocol_surface.py` | Fails when a `oridecon.contracts` runtime_checkable Protocol gains/loses public members. After an intentional protocol change run with `--update`, review `checks/_data/protocol_surface.json`, commit both together |
 | `checks/env_example.py` | env.example coverage vs referenced variables (completeness target: `.env.full.example`) |
-| `checks/env_binding.py` | Empirically verifies every documented `LEX_*` variable binds through its config family's real `from_yaml()` |
+| `checks/env_binding.py` | Empirically verifies every documented `ORI_*` variable binds through its config family's real `from_yaml()` |
 | `checks/loc_limit.py` | 500-LOC ratchet; baseline: `_data/loc_limit_baseline.txt` |
 | `checks/version.py` | Per-package version scheme (§3.6): within an active series only the build segment moves (`0.1.5001 → 0.1.5002`) |
 | `checks/config_fields.py` | Config field catalog consistency |

@@ -20,10 +20,10 @@ def find_env_prefixes() -> dict[str, str]:
     """Derive each package's true env prefix from its root config classes.
 
     Runtime truth: an env var binds iff it matches
-    ``LEX_<config_section>__<field_path>`` where ``config_section`` is the
+    ``ORI_<config_section>__<field_path>`` where ``config_section`` is the
     ClassVar on the consuming root config class.  This scans declared
     ``config_section`` values statically and maps them to the canonical
-    ``LEX_<SECTION>__`` prefix per package.
+    ``ORI_<SECTION>__`` prefix per package.
 
     Packages whose roots declare no section fall back to the historical
     name-derived prefix.
@@ -35,10 +35,10 @@ def find_env_prefixes() -> dict[str, str]:
             # umbrella plus its subsections); document the shortest — the
             # most root-level — one as the package prefix.
             primary = min(sections, key=len)
-            prefixes[pkg_name] = f"LEX_{primary.upper()}__"
+            prefixes[pkg_name] = f"ORI_{primary.upper()}__"
         else:
             prefixes[pkg_name] = (
-                f"LEX_{pkg_name.replace('lexigram-', '').upper().replace('-', '_')}__"
+                f"ORI_{pkg_name.replace('oridecon-', '').upper().replace('-', '_')}__"
             )
     return prefixes
 
@@ -101,7 +101,7 @@ def build_field_paths(
 
 
 def scan_direct_env_vars() -> list[dict]:
-    """Scan for direct os.environ.get('LEX_*') calls."""
+    """Scan for direct os.environ.get('ORI_*') calls."""
     entries: list[dict] = []
     seen: set[str] = set()
 
@@ -115,7 +115,7 @@ def scan_direct_env_vars() -> list[dict]:
                 rel = pyfile.relative_to(REPO_ROOT)
                 for m in DIRECT_ENV_RE.finditer(text):
                     var = m.group(1)
-                    if var.startswith("LEX_ERR_"):
+                    if var.startswith("ORI_ERR_"):
                         continue
                     if var not in seen:
                         seen.add(var)
@@ -135,8 +135,8 @@ def scan_direct_env_vars() -> list[dict]:
 
 
 def package_sort_key(pkg: str) -> tuple:
-    if pkg == "lexigram-contracts":
+    if pkg == "oridecon-contracts":
         return (0, "")
-    if pkg == "lexigram":
+    if pkg == "oridecon":
         return (1, "")
     return (2, pkg)

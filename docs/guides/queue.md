@@ -12,9 +12,9 @@ uv run python -m orders demo
 :::
 
 
-`lexigram-queue` provides async publish/subscribe messaging behind a single protocol. Application code depends on `QueueProtocol`; the backend (in-memory, Redis, RabbitMQ, Kafka, SQS, Azure Service Bus, or GCP Pub/Sub) is chosen in configuration. You can swap backends, run several side-by-side, and substitute an in-memory stub in tests without touching the services that use them.
+`oridecon-queue` provides async publish/subscribe messaging behind a single protocol. Application code depends on `QueueProtocol`; the backend (in-memory, Redis, RabbitMQ, Kafka, SQS, Azure Service Bus, or GCP Pub/Sub) is chosen in configuration. You can swap backends, run several side-by-side, and substitute an in-memory stub in tests without touching the services that use them.
 
-For the full configuration reference and advanced features (transactional outbox, middleware pipelines, dead-letter queues), see the [`lexigram-queue` package docs](/packages/lexigram-queue/).
+For the full configuration reference and advanced features (transactional outbox, middleware pipelines, dead-letter queues), see the [`oridecon-queue` package docs](/packages/oridecon-queue/).
 
 ---
 
@@ -24,8 +24,8 @@ All backends implement `QueueProtocol`. Messages are modeled as `BusMessage` —
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.contracts.queue.protocols import QueueProtocol
-from lexigram.contracts.queue.types import BusMessage, DeliveryGuarantee
+from oridecon.contracts.queue.protocols import QueueProtocol
+from oridecon.contracts.queue.types import BusMessage, DeliveryGuarantee
 
 
 @runtime_checkable
@@ -55,8 +55,8 @@ graph LR
 Queue backends are declared through `NamedQueueConfig`. Exactly one should be marked `primary: true`:
 
 ```python
-from lexigram import Application
-from lexigram.queue import QueueModule
+from oridecon import Application
+from oridecon.queue import QueueModule
 
 app = Application(name="my-app")
 ```
@@ -108,8 +108,8 @@ queue:
 Inject `QueueProtocol` and call `publish()` with a `BusMessage`:
 
 ```python
-from lexigram.contracts.queue.protocols import QueueProtocol
-from lexigram.contracts.queue.types import BusMessage, DeliveryGuarantee
+from oridecon.contracts.queue.protocols import QueueProtocol
+from oridecon.contracts.queue.types import BusMessage, DeliveryGuarantee
 
 
 class OrderService:
@@ -146,8 +146,8 @@ Use `BusMessage.delivery_guarantee` to tune safety. `AT_LEAST_ONCE` is the best 
 For structured consumers, extend `MessageConsumer` and declare the topic:
 
 ```python
-from lexigram.contracts.queue.types import BusMessage
-from lexigram.queue import MessageConsumer
+from oridecon.contracts.queue.types import BusMessage
+from oridecon.queue import MessageConsumer
 
 
 class OrderConsumer(MessageConsumer):
@@ -160,8 +160,8 @@ class OrderConsumer(MessageConsumer):
 Scope consumers into your feature module:
 
 ```python
-from lexigram.di.module import module
-from lexigram.queue import QueueModule
+from oridecon.di.module import module
+from oridecon.queue import QueueModule
 
 @module(imports=[
     QueueModule.configure(),
@@ -178,7 +178,7 @@ class OrdersFeatureModule:
 Messages that exhaust their retries are routed to the `DeadLetterQueue`:
 
 ```python
-from lexigram.queue import DeadLetterQueue
+from oridecon.queue import DeadLetterQueue
 
 dlq = DeadLetterQueue(max_size=1000)
 dlq.push(message)
@@ -189,20 +189,20 @@ failed = dlq.drain()   # returns the drained messages
 `DeadLetterQueue` is in-memory by default. In production, pair it with an `AuditStoreProtocol` or a persistent backend so dead-lettered messages survive a process restart.
 :::
 
-For crash-safe staging of messages in the *same database transaction* as your business data, use the durable SQL outbox — `OutboxStoreProtocol` (from `lexigram.contracts.data.outbox`), implemented by `SQLOutboxStore`, with the background `OutboxPublisher` relaying pending rows to the bus after commit:
+For crash-safe staging of messages in the *same database transaction* as your business data, use the durable SQL outbox — `OutboxStoreProtocol` (from `oridecon.contracts.data.outbox`), implemented by `SQLOutboxStore`, with the background `OutboxPublisher` relaying pending rows to the bus after commit:
 
 ```python
-from lexigram.sql.outbox import OutboxPublisher, SQLOutboxStore
+from oridecon.sql.outbox import OutboxPublisher, SQLOutboxStore
 
 store = SQLOutboxStore(db=db_provider)     # writes inside the caller's transaction
 publisher = OutboxPublisher(store=store, event_bus=event_bus)
 await publisher.start()                    # poller relays pending rows every poll_interval
 ```
 
-For same-request fan-out *without* durability requirements, `BatchedPublisher` (from `lexigram.queue`) batches `QueueProtocol.publish` calls in memory within one process:
+For same-request fan-out *without* durability requirements, `BatchedPublisher` (from `oridecon.queue`) batches `QueueProtocol.publish` calls in memory within one process:
 
 ```python
-from lexigram.queue import BatchedPublisher
+from oridecon.queue import BatchedPublisher
 
 publisher = BatchedPublisher(queue)
 publisher.stage("order.created", BusMessage(topic="order.created", payload=data))
@@ -220,7 +220,7 @@ await publisher.flush()
 Chain middleware around message handlers with `MessagePipeline`:
 
 ```python
-from lexigram.queue import MessagePipeline, MiddlewareBase
+from oridecon.queue import MessagePipeline, MiddlewareBase
 
 
 class LoggingMiddleware(MiddlewareBase):
@@ -257,8 +257,8 @@ queue:
 
 ```python
 from typing import Annotated
-from lexigram.contracts.queue.protocols import QueueProtocol
-from lexigram.di.markers import Named
+from oridecon.contracts.queue.protocols import QueueProtocol
+from oridecon.di.markers import Named
 
 
 class NotificationService:
@@ -278,10 +278,10 @@ class NotificationService:
 `QueueModule.stub()` returns an in-memory backend with no external broker:
 
 ```python
-from lexigram import Application
-from lexigram.queue import QueueModule
-from lexigram.contracts.queue.protocols import QueueProtocol
-from lexigram.contracts.queue.types import BusMessage
+from oridecon import Application
+from oridecon.queue import QueueModule
+from oridecon.contracts.queue.protocols import QueueProtocol
+from oridecon.contracts.queue.types import BusMessage
 
 
 async def test_publishes_and_consumes() -> None:
@@ -305,4 +305,4 @@ async def test_publishes_and_consumes() -> None:
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding protocols to implementations
 - [Providers](/fundamentals/providers/) — how `QueueProvider` hooks into application boot
 - [Testing](/guides/testing/) — substituting stubs for infrastructure
-- [`lexigram-queue` package](/packages/lexigram-queue/) — full config reference, driver options, CLI tools
+- [`oridecon-queue` package](/packages/oridecon-queue/) — full config reference, driver options, CLI tools

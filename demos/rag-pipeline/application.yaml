@@ -12,22 +12,22 @@ description: Document ingestion and semantic search with vector store
 # defaults.  Each section maps 1:1 to a typed config model — the
 # framework validates your yaml against it at boot time.
 #
-# DEMO FOCUS: Lexigram VectorModule + one document retrieval collection.
+# DEMO FOCUS: Oridecon VectorModule + one document retrieval collection.
 # The local embedder keeps the experience standalone; storage and similarity
-# search are provided by Lexigram's VectorStoreProtocol.
+# search are provided by Oridecon's VectorStoreProtocol.
 #
 # LEARNING PATH:
 #   1. web:        HTTP server, security, CSRF
 #   2. ragdocs:    Vector store dimension, chunk size, top-k retrieval
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
 #   - Demo config:        demos/rag-pipeline/src/ragdocs/config.py
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -79,7 +79,7 @@ web:
 # RagDocsProvider reads this section automatically via
 # config_key="ragdocs" / config_model=RagDocsConfig.
 #
-# VectorModule.stub() selects Lexigram's in-memory backend. Replace the
+# VectorModule.stub() selects Oridecon's in-memory backend. Replace the
 # module configuration, not the controller, when moving to Qdrant or another
 # VectorStoreProtocol implementation.
 #

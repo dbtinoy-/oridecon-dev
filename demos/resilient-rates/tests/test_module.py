@@ -6,7 +6,7 @@ from typing import AsyncIterator
 
 import pytest
 
-from lexigram.app import Application
+from oridecon.app import Application
 
 from rates.app import create_app
 from rates.repository import FaultController, Scenario

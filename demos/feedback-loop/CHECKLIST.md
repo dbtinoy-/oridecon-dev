@@ -21,7 +21,7 @@ Demo: `feedback-loop` · Port: `8086` · Reviewed: `2026-08-25` (Wave 0 rollout)
 
 - [x] `grep -rn "print(" src/` → zero hits
 - [x] Walkthrough narration uses `get_logger` structured events
-- [x] Wall-clock via `lexigram.primitives.clock`; ids via identity ambient;
+- [x] Wall-clock via `oridecon.primitives.clock`; ids via identity ambient;
       digests via hashing ambient
 - [x] Deterministic scripted randomness annotated `# deterministic-by-design`
 - [x] All non-2xx API paths return RFC-9457 ProblemDetail
@@ -50,5 +50,5 @@ Demo: `feedback-loop` · Port: `8086` · Reviewed: `2026-08-25` (Wave 0 rollout)
 - [x] Registered in hub `registry.py` (correct slug/port/module triple)
 - [x] Makefile `DEMO_TEST_DIRS`, `DEMO_COMPILE_DIRS`, `smoke-demos` updated
 - [x] `demos/README.md`: at-a-glance section + running command row
-- [x] docs.lexigram.dev/demos table row added
+- [x] docs.oridecon.dev/demos table row added
 - [x] README follows Blueprint skeleton (run / API / tour / standalone note)

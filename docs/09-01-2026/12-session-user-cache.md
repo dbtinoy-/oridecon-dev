@@ -1,6 +1,6 @@
 # 12 — Request-Scoped Session→User Cache (R16) (Full Plan)
 
-**Date:** 2026-09-02 · **Status:** ✅ Done · **Branch:** `arena/01a05b98-lexigram`
+**Date:** 2026-09-02 · **Status:** ✅ Done · **Branch:** `arena/01a05b98-oridecon`
 
 ## 1. Problem (measured)
 
@@ -23,7 +23,7 @@ removed for boot DDL).
 ### 2.1 The cache
 
 New `SessionUserCache`
-(`src/lexigram/admin/auth/services/session_user_cache.py`):
+(`src/oridecon/admin/auth/services/session_user_cache.py`):
 
 - Maps `session_id → (user, user_id, expires_at_monotonic)`.
 - **Short TTL, default 5 s**, configurable via

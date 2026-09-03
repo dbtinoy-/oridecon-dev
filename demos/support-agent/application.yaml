@@ -20,13 +20,13 @@ description: Agent with tool orchestration and step-by-step trace
 #   2. ai_agents:  Agent execution, strategy, iteration limits
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram Agents:    experimental/ai/lexigram-ai-agents/src/lexigram/ai/agents/config.py
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon Agents:    experimental/ai/oridecon-ai-agents/src/oridecon/ai/agents/config.py
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -94,7 +94,7 @@ web:
 
 
 # ── AI Agents ───────────────────────────────────────────────────────────────
-# Lexigram AI Agents provides agent execution, tool registry, and
+# Oridecon AI Agents provides agent execution, tool registry, and
 # strategy support.  The AgentsModule reads this section automatically
 # via config_key="ai_agents" / config_model=AgentConfig.
 #

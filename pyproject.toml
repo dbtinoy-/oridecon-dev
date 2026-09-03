@@ -1,13 +1,13 @@
 # Virtual workspace root - no [project] table.
-# The root is not a distribution (lexigram-workspace is unpublished); all 54
+# The root is not a distribution (oridecon-workspace is unpublished); all 54
 # packages are workspace members discovered via the globs below. Project
 # metadata that lived here (see git history for the project.urls table) is kept as a
 # comment to avoid forcing a dependency on the root project.
-#   Homepage:       https://lexigram.dev
-#   Repository:     https://github.com/dbtinoy-/lexigram
-#   Documentation:  https://docs.lexigram.dev
-#   Issues:         https://github.com/dbtinoy-/lexigram/issues
-#   Changelog:      https://github.com/dbtinoy-/lexigram/blob/main/CHANGELOG.md
+#   Homepage:       https://oridecon.dev
+#   Repository:     https://github.com/dbtinoy-/oridecon
+#   Documentation:  https://docs.oridecon.dev
+#   Issues:         https://github.com/dbtinoy-/oridecon/issues
+#   Changelog:      https://github.com/dbtinoy-/oridecon/blob/main/CHANGELOG.md
 
 
 
@@ -21,64 +21,64 @@ members = ["core/*", "packages/*", "experimental/*/*"]
 override-dependencies = ["gradio>=6.15.1", "diffusers==0.32.2", "transformers==4.50.0", "pytorch-lightning>=2.5.1", "torchaudio==2.9.0", "torch==2.9.0", "stable-audio-tools==0.0.20"]
 
 [tool.uv.sources]
-lexigram = { workspace = true }
-lexigram-admin = { workspace = true }
-lexigram-builder = { workspace = true }
-lexigram-ai-agents = { workspace = true }
-lexigram-ai-mcp = { workspace = true }
-lexigram-ai-feedback = { workspace = true }
-lexigram-ai-governance = { workspace = true }
-lexigram-ai-guard = { workspace = true }
-lexigram-ai-prompt = { workspace = true }
-lexigram-ai-session = { workspace = true }
-lexigram-ai-skills = { workspace = true }
-lexigram-ai-workers = { workspace = true }
-lexigram-ai = { workspace = true }
-lexigram-ai-llm = { workspace = true }
-lexigram-ai-memory = { workspace = true }
-lexigram-ai-observability = { workspace = true }
-lexigram-ai-rag = { workspace = true }
-lexigram-ai-relay = { workspace = true }
-lexigram-ai-relay-gateway = { workspace = true }
-lexigram-auth = { workspace = true }
-lexigram-cli = { workspace = true }
-lexigram-sql = { workspace = true }
-lexigram-events = { workspace = true }
-lexigram-graphql = { workspace = true }
-lexigram-notification = { workspace = true }
-lexigram-queue = { workspace = true }
-lexigram-monitor = { workspace = true }
-lexigram-http = { workspace = true }
-lexigram-features = { workspace = true }
-lexigram-resilience = { workspace = true }
-lexigram-search = { workspace = true }
-lexigram-storage = { workspace = true }
-lexigram-tasks = { workspace = true }
-lexigram-secrets = { workspace = true }
-lexigram-testing = { workspace = true }
-lexigram-contracts = { workspace = true }
-lexigram-ui = { workspace = true }
-lexigram-web = { workspace = true }
-lexigram-cache = { workspace = true }
-lexigram-workflow = { workspace = true }
-lexigram-nosql = { workspace = true }
-lexigram-vector = { workspace = true }
-lexigram-graph = { workspace = true }
-lexigram-tenancy = { workspace = true }
-lexigram-audit = { workspace = true }
-lexigram-webhook = { workspace = true }
-lexigram-ai-evaluation = { workspace = true }
-lexigram-multimedia = { workspace = true }
-lexigram-multimedia-tts = { workspace = true }
-lexigram-multimedia-music = { workspace = true }
-lexigram-multimedia-video = { workspace = true }
-lexigram-multimedia-image = { workspace = true }
-lexigram-multimedia-upscale = { workspace = true }
-lexigram-multimedia-interpolate = { workspace = true }
-lexigram-multimedia-beat = { workspace = true }
+oridecon = { workspace = true }
+oridecon-admin = { workspace = true }
+oridecon-builder = { workspace = true }
+oridecon-ai-agents = { workspace = true }
+oridecon-ai-mcp = { workspace = true }
+oridecon-ai-feedback = { workspace = true }
+oridecon-ai-governance = { workspace = true }
+oridecon-ai-guard = { workspace = true }
+oridecon-ai-prompt = { workspace = true }
+oridecon-ai-session = { workspace = true }
+oridecon-ai-skills = { workspace = true }
+oridecon-ai-workers = { workspace = true }
+oridecon-ai = { workspace = true }
+oridecon-ai-llm = { workspace = true }
+oridecon-ai-memory = { workspace = true }
+oridecon-ai-observability = { workspace = true }
+oridecon-ai-rag = { workspace = true }
+oridecon-ai-relay = { workspace = true }
+oridecon-ai-relay-gateway = { workspace = true }
+oridecon-auth = { workspace = true }
+oridecon-cli = { workspace = true }
+oridecon-sql = { workspace = true }
+oridecon-events = { workspace = true }
+oridecon-graphql = { workspace = true }
+oridecon-notification = { workspace = true }
+oridecon-queue = { workspace = true }
+oridecon-monitor = { workspace = true }
+oridecon-http = { workspace = true }
+oridecon-features = { workspace = true }
+oridecon-resilience = { workspace = true }
+oridecon-search = { workspace = true }
+oridecon-storage = { workspace = true }
+oridecon-tasks = { workspace = true }
+oridecon-secrets = { workspace = true }
+oridecon-testing = { workspace = true }
+oridecon-contracts = { workspace = true }
+oridecon-ui = { workspace = true }
+oridecon-web = { workspace = true }
+oridecon-cache = { workspace = true }
+oridecon-workflow = { workspace = true }
+oridecon-nosql = { workspace = true }
+oridecon-vector = { workspace = true }
+oridecon-graph = { workspace = true }
+oridecon-tenancy = { workspace = true }
+oridecon-audit = { workspace = true }
+oridecon-webhook = { workspace = true }
+oridecon-ai-evaluation = { workspace = true }
+oridecon-multimedia = { workspace = true }
+oridecon-multimedia-tts = { workspace = true }
+oridecon-multimedia-music = { workspace = true }
+oridecon-multimedia-video = { workspace = true }
+oridecon-multimedia-image = { workspace = true }
+oridecon-multimedia-upscale = { workspace = true }
+oridecon-multimedia-interpolate = { workspace = true }
+oridecon-multimedia-beat = { workspace = true }
 
 [tool.uv.extra-build-dependencies]
-# madmom@0.16.1 (lexigram-multimedia-beat optional extra) does not declare
+# madmom@0.16.1 (oridecon-multimedia-beat optional extra) does not declare
 # its build dependencies; make them available in the isolated build env.
 madmom = ["Cython", "numpy"]
 
@@ -104,7 +104,7 @@ tooling = [
     "granian>=2.8.2",
     "xgboost>=3.2.0",
     "uvicorn>=0.41.0",
-    "lexigram-nosql",
+    "oridecon-nosql",
     "pytest-timeout>=2.4.0",
     "pip-audit>=2.10.1",
     "prometheus-client>=0.19.0",
@@ -156,112 +156,112 @@ filterwarnings = [
     "ignore::pytest.PytestAssertRewriteWarning",
     "ignore::pytest.PytestCollectionWarning",
 ]
-addopts = ["--strict-markers", "--strict-config", "--tb=short", "--import-mode=importlib", "-p", "no:cacheprovider", "--ignore=lexigram-testing/src"]
+addopts = ["--strict-markers", "--strict-config", "--tb=short", "--import-mode=importlib", "-p", "no:cacheprovider", "--ignore=oridecon-testing/src"]
 consider_namespace_packages = true
-norecursedirs = [".worktrees", ".venv", "build", "dist", "demos", "experimental/apps/lexigram-cli/src/lexigram/cli/templates", "packages/lexigram-testing"]
+norecursedirs = [".worktrees", ".venv", "build", "dist", "demos", "experimental/apps/oridecon-cli/src/oridecon/cli/templates", "packages/oridecon-testing"]
 testpaths = [
-    "core/lexigram/tests",
-    "experimental/apps/lexigram-admin/tests",
-    "experimental/apps/lexigram-builder/tests",
-    "experimental/ai/lexigram-ai/tests",
-    "experimental/ai/lexigram-ai-agents/tests",
-    "experimental/ai/lexigram-ai-feedback/tests",
-    "experimental/ai/lexigram-ai-governance/tests",
-    "experimental/ai/lexigram-ai-guard/tests",
-    "experimental/ai/lexigram-ai-prompt/tests",
-    "experimental/ai/lexigram-ai-session/tests",
-    "experimental/ai/lexigram-ai-skills/tests",
-    "experimental/ai/lexigram-ai-workers/tests",
-    "experimental/ai/lexigram-ai-llm/tests",
-    "experimental/ai/lexigram-ai-mcp/tests",
-    "experimental/ai/lexigram-ai-memory/tests",
-    "experimental/ai/lexigram-ai-observability/tests",
-    "experimental/ai/lexigram-ai-rag/tests",
-    "experimental/ai/lexigram-ai-relay/tests",
-    "experimental/ai/lexigram-ai-relay-gateway/tests",
-    "packages/lexigram-auth/tests",
-    "packages/lexigram-cache/tests",
-    "experimental/apps/lexigram-cli/tests",
-    "core/lexigram-contracts/tests",
-    "packages/lexigram-events/tests",
-    "packages/lexigram-features/tests",
-    "packages/lexigram-graphql/tests",
-    "packages/lexigram-http/tests",
-    "packages/lexigram-monitor/tests",
-    "packages/lexigram-notification/tests",
-    "packages/lexigram-queue/tests",
-    "packages/lexigram-nosql/tests",
-    "packages/lexigram-resilience/tests",
-    "packages/lexigram-graph/tests",
-    "packages/lexigram-search/tests",
-    "packages/lexigram-sql/tests",
-    "packages/lexigram-storage/tests",
-    "packages/lexigram-tasks/tests",
-    "packages/lexigram-secrets/tests",
-    "packages/lexigram-testing/tests",
-    "experimental/ai/lexigram-ai-evaluation/tests",
-    "packages/lexigram-tenancy/tests",
-    "experimental/multimedia/lexigram-multimedia/tests",
-    "experimental/multimedia/lexigram-multimedia-tts/tests",
-    "experimental/multimedia/lexigram-multimedia-music/tests",
-    "experimental/multimedia/lexigram-multimedia-video/tests",
-    "experimental/multimedia/lexigram-multimedia-image/tests",
-    "experimental/multimedia/lexigram-multimedia-upscale/tests",
-    "experimental/multimedia/lexigram-multimedia-interpolate/tests",
-    "experimental/multimedia/lexigram-multimedia-beat/tests",
-    "experimental/apps/lexigram-ui/tests",
-    "packages/lexigram-vector/tests",
-    "packages/lexigram-web/tests",
-    "packages/lexigram-workflow/tests",
-    "packages/lexigram-audit/tests",
-    "packages/lexigram-webhook/tests",
+    "core/oridecon/tests",
+    "experimental/apps/oridecon-admin/tests",
+    "experimental/apps/oridecon-builder/tests",
+    "experimental/ai/oridecon-ai/tests",
+    "experimental/ai/oridecon-ai-agents/tests",
+    "experimental/ai/oridecon-ai-feedback/tests",
+    "experimental/ai/oridecon-ai-governance/tests",
+    "experimental/ai/oridecon-ai-guard/tests",
+    "experimental/ai/oridecon-ai-prompt/tests",
+    "experimental/ai/oridecon-ai-session/tests",
+    "experimental/ai/oridecon-ai-skills/tests",
+    "experimental/ai/oridecon-ai-workers/tests",
+    "experimental/ai/oridecon-ai-llm/tests",
+    "experimental/ai/oridecon-ai-mcp/tests",
+    "experimental/ai/oridecon-ai-memory/tests",
+    "experimental/ai/oridecon-ai-observability/tests",
+    "experimental/ai/oridecon-ai-rag/tests",
+    "experimental/ai/oridecon-ai-relay/tests",
+    "experimental/ai/oridecon-ai-relay-gateway/tests",
+    "packages/oridecon-auth/tests",
+    "packages/oridecon-cache/tests",
+    "experimental/apps/oridecon-cli/tests",
+    "core/oridecon-contracts/tests",
+    "packages/oridecon-events/tests",
+    "packages/oridecon-features/tests",
+    "packages/oridecon-graphql/tests",
+    "packages/oridecon-http/tests",
+    "packages/oridecon-monitor/tests",
+    "packages/oridecon-notification/tests",
+    "packages/oridecon-queue/tests",
+    "packages/oridecon-nosql/tests",
+    "packages/oridecon-resilience/tests",
+    "packages/oridecon-graph/tests",
+    "packages/oridecon-search/tests",
+    "packages/oridecon-sql/tests",
+    "packages/oridecon-storage/tests",
+    "packages/oridecon-tasks/tests",
+    "packages/oridecon-secrets/tests",
+    "packages/oridecon-testing/tests",
+    "experimental/ai/oridecon-ai-evaluation/tests",
+    "packages/oridecon-tenancy/tests",
+    "experimental/multimedia/oridecon-multimedia/tests",
+    "experimental/multimedia/oridecon-multimedia-tts/tests",
+    "experimental/multimedia/oridecon-multimedia-music/tests",
+    "experimental/multimedia/oridecon-multimedia-video/tests",
+    "experimental/multimedia/oridecon-multimedia-image/tests",
+    "experimental/multimedia/oridecon-multimedia-upscale/tests",
+    "experimental/multimedia/oridecon-multimedia-interpolate/tests",
+    "experimental/multimedia/oridecon-multimedia-beat/tests",
+    "experimental/apps/oridecon-ui/tests",
+    "packages/oridecon-vector/tests",
+    "packages/oridecon-web/tests",
+    "packages/oridecon-workflow/tests",
+    "packages/oridecon-audit/tests",
+    "packages/oridecon-webhook/tests",
     "tests",
 ]
 
 pythonpath = [
     ".",
-    "core/lexigram/src",
-    "experimental/apps/lexigram-admin/src",
-    "experimental/apps/lexigram-builder/src",
-    "experimental/ai/lexigram-ai/src",
-    "experimental/ai/lexigram-ai-agents/src",
-    "experimental/ai/lexigram-ai-feedback/src",
-    "experimental/ai/lexigram-ai-governance/src",
-    "experimental/ai/lexigram-ai-guard/src",
-    "experimental/ai/lexigram-ai-prompt/src",
-    "experimental/ai/lexigram-ai-session/src",
-    "experimental/ai/lexigram-ai-skills/src",
-    "experimental/ai/lexigram-ai-workers/src",
-    "experimental/ai/lexigram-ai-rag/src",
-    "experimental/ai/lexigram-ai-relay/src",
-    "experimental/ai/lexigram-ai-relay-gateway/src",
-    "packages/lexigram-auth/src",
-    "packages/lexigram-cache/src",
-    "experimental/apps/lexigram-cli/src",
-    "packages/lexigram-sql/src",
-    "packages/lexigram-events/src",
-    "packages/lexigram-graphql/src",
-    "packages/lexigram-monitor/src",
-    "packages/lexigram-http/src",
-    "packages/lexigram-workflow/src",
-    "packages/lexigram-features/src",
-    "packages/lexigram-resilience/src",
-    "packages/lexigram-search/src",
-    "packages/lexigram-storage/src",
-    "packages/lexigram-tasks/src",
-    "packages/lexigram-secrets/src",
-    "packages/lexigram-secrets/tests",
-    "packages/lexigram-testing/src",
-    "core/lexigram-contracts/src",
-    "experimental/apps/lexigram-ui/src",
-    "packages/lexigram-web/src",
-    "experimental/ai/lexigram-ai-governance/src",
-    "experimental/ai/lexigram-ai-observability/src",
-    "packages/lexigram-vector/src",
-    "packages/lexigram-nosql/src",
-    "packages/lexigram-graph/src",
-    "packages/lexigram-audit/src",
-    "packages/lexigram-webhook/src",
+    "core/oridecon/src",
+    "experimental/apps/oridecon-admin/src",
+    "experimental/apps/oridecon-builder/src",
+    "experimental/ai/oridecon-ai/src",
+    "experimental/ai/oridecon-ai-agents/src",
+    "experimental/ai/oridecon-ai-feedback/src",
+    "experimental/ai/oridecon-ai-governance/src",
+    "experimental/ai/oridecon-ai-guard/src",
+    "experimental/ai/oridecon-ai-prompt/src",
+    "experimental/ai/oridecon-ai-session/src",
+    "experimental/ai/oridecon-ai-skills/src",
+    "experimental/ai/oridecon-ai-workers/src",
+    "experimental/ai/oridecon-ai-rag/src",
+    "experimental/ai/oridecon-ai-relay/src",
+    "experimental/ai/oridecon-ai-relay-gateway/src",
+    "packages/oridecon-auth/src",
+    "packages/oridecon-cache/src",
+    "experimental/apps/oridecon-cli/src",
+    "packages/oridecon-sql/src",
+    "packages/oridecon-events/src",
+    "packages/oridecon-graphql/src",
+    "packages/oridecon-monitor/src",
+    "packages/oridecon-http/src",
+    "packages/oridecon-workflow/src",
+    "packages/oridecon-features/src",
+    "packages/oridecon-resilience/src",
+    "packages/oridecon-search/src",
+    "packages/oridecon-storage/src",
+    "packages/oridecon-tasks/src",
+    "packages/oridecon-secrets/src",
+    "packages/oridecon-secrets/tests",
+    "packages/oridecon-testing/src",
+    "core/oridecon-contracts/src",
+    "experimental/apps/oridecon-ui/src",
+    "packages/oridecon-web/src",
+    "experimental/ai/oridecon-ai-governance/src",
+    "experimental/ai/oridecon-ai-observability/src",
+    "packages/oridecon-vector/src",
+    "packages/oridecon-nosql/src",
+    "packages/oridecon-graph/src",
+    "packages/oridecon-audit/src",
+    "packages/oridecon-webhook/src",
 ]
 markers = [
     "integration: marks tests as integration tests (excluded by default; opt in with '-m integration' or an integration path)",
@@ -292,7 +292,7 @@ omit = [
     "*/conftest.py",
     "*/migrations/*",
     "*/__pycache__/*",
-    "lexigram-cli/src/lexigram/cli/templates/*",
+    "oridecon-cli/src/oridecon/cli/templates/*",
 ]
 
 [tool.coverage.report]
@@ -314,7 +314,7 @@ directory = "htmlcov"
 output = "coverage.xml"
 
 [tool.ruff]
-# Lexigram Framework workspace-level ruff configuration.
+# Oridecon Framework workspace-level ruff configuration.
 # Sub-packages extend this config via `extend = "../pyproject.toml"`.
 line-length = 88
 target-version = "py311"
@@ -546,31 +546,31 @@ ignore = [
 ]
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
-# Disallow direct imports of json/orjson — use lexigram.serialization
-"json" = { msg = "Use lexigram.serialization instead of standard library json for performance and consistency." }
-"orjson" = { msg = "Use lexigram.serialization instead of direct orjson to allow graceful fallback." }
+# Disallow direct imports of json/orjson — use oridecon.serialization
+"json" = { msg = "Use oridecon.serialization instead of standard library json for performance and consistency." }
+"orjson" = { msg = "Use oridecon.serialization instead of direct orjson to allow graceful fallback." }
 
 [tool.ruff.lint.per-file-ignores]
 "**/__init__.py" = ["F401", "TID252"]  # relative imports allowed in __init__.py re-exports
 # Demo scripts and notebooks are user-facing examples, not production source
 "demos/**" = ["T201", "INP001", "ANN"]
 "*.ipynb" = ["T201", "ANN", "INP001", "E402", "F401", "S101", "BLE001"]
-# lexigram-contracts has zero external deps — cannot use lexigram.serialization
-"core/lexigram-contracts/**" = ["TID251"]
+# oridecon-contracts has zero external deps — cannot use oridecon.serialization
+"core/oridecon-contracts/**" = ["TID251"]
 # Serialization implementation must use stdlib json directly (it IS the json layer)
-"core/lexigram/src/lexigram/serialization/**" = ["TID251"]
-"packages/lexigram-events/src/lexigram/events/webhooks/dispatcher.py" = ["TID251"]
-"packages/lexigram-queue/src/lexigram/queue/backends/**" = ["TID251"]
-"packages/lexigram-queue/tests/unit/test_tracing_queue_backends.py" = ["TID251"]
-"packages/lexigram-resilience/src/lexigram/resilience/circuit/backend.py" = ["TID251"]
-"packages/lexigram-tasks/src/lexigram/tasks/dlq/backend.py" = ["TID251"]
-"packages/lexigram-tasks/src/lexigram/tasks/results/cache_backend.py" = ["TID251"]
-"packages/lexigram-testing/src/lexigram/testing/snapshots.py" = ["TID251"]
-"experimental/ai/lexigram-ai-governance/src/lexigram/ai/governance/audit.py" = ["TID251"]
-"packages/lexigram-audit/src/lexigram/audit/verification/checksum.py" = ["TID251"]
-"experimental/apps/lexigram-cli/src/lexigram/cli/commands/mcp.py" = ["TID251"]
-"packages/lexigram-tasks/src/lexigram/tasks/scheduling/persistence.py" = ["TID251"]
-"packages/lexigram-tasks/src/lexigram/tasks/workflows/state.py" = ["TID251"]
+"core/oridecon/src/oridecon/serialization/**" = ["TID251"]
+"packages/oridecon-events/src/oridecon/events/webhooks/dispatcher.py" = ["TID251"]
+"packages/oridecon-queue/src/oridecon/queue/backends/**" = ["TID251"]
+"packages/oridecon-queue/tests/unit/test_tracing_queue_backends.py" = ["TID251"]
+"packages/oridecon-resilience/src/oridecon/resilience/circuit/backend.py" = ["TID251"]
+"packages/oridecon-tasks/src/oridecon/tasks/dlq/backend.py" = ["TID251"]
+"packages/oridecon-tasks/src/oridecon/tasks/results/cache_backend.py" = ["TID251"]
+"packages/oridecon-testing/src/oridecon/testing/snapshots.py" = ["TID251"]
+"experimental/ai/oridecon-ai-governance/src/oridecon/ai/governance/audit.py" = ["TID251"]
+"packages/oridecon-audit/src/oridecon/audit/verification/checksum.py" = ["TID251"]
+"experimental/apps/oridecon-cli/src/oridecon/cli/commands/mcp.py" = ["TID251"]
+"packages/oridecon-tasks/src/oridecon/tasks/scheduling/persistence.py" = ["TID251"]
+"packages/oridecon-tasks/src/oridecon/tasks/workflows/state.py" = ["TID251"]
 # Utility scripts under dev/ — broader exception patterns are expected
 "tools/**" = ["T201", "S", "ERA001", "ANN", "INP001"]
 "dev/**" = ["T201", "S", "ERA001", "INP001", "ANN"]
@@ -587,7 +587,7 @@ ignore = [
 "generate_*.py" = ["ERA001", "T201", "S", "INP001", "ANN"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["lexigram"]
+known-first-party = ["oridecon"]
 force-sort-within-sections = true
 
 [tool.ruff.lint.mccabe]
@@ -605,7 +605,7 @@ max-complexity = 15
 #   uv run python dev/checks/lint_imports.py
 #
 # Do NOT use `uv run lint-imports` directly — it will fail to discover
-# extension packages (lexigram.contracts, lexigram.cache, etc.).
+# extension packages (oridecon.contracts, oridecon.cache, etc.).
 # ---------------------------------------------------------------------------
 
 [tool.mypy]
@@ -613,68 +613,68 @@ python_version = "3.11"
 namespace_packages = true
 explicit_package_bases = true
 mypy_path = [
-    "core/lexigram/src",
-    "core/lexigram-contracts/src",
-    "experimental/apps/lexigram-admin/src",
-    "experimental/apps/lexigram-builder/src",
-    "experimental/ai/lexigram-ai/src",
-    "experimental/ai/lexigram-ai-agents/src",
-    "experimental/ai/lexigram-ai-evaluation/src",
-    "experimental/ai/lexigram-ai-feedback/src",
-    "experimental/ai/lexigram-ai-governance/src",
-    "experimental/ai/lexigram-ai-guard/src",
-    "experimental/ai/lexigram-ai-llm/src",
-    "experimental/ai/lexigram-ai-memory/src",
-    "experimental/ai/lexigram-ai-observability/src",
-    "experimental/ai/lexigram-ai-prompt/src",
-    "experimental/ai/lexigram-ai-rag/src",
-    "experimental/ai/lexigram-ai-relay/src",
-    "experimental/ai/lexigram-ai-relay-gateway/src",
-    "experimental/ai/lexigram-ai-session/src",
-    "experimental/ai/lexigram-ai-skills/src",
-    "experimental/ai/lexigram-ai-workers/src",
-    "experimental/ai/lexigram-ai-mcp/src",
-    "packages/lexigram-auth/src",
-    "packages/lexigram-cache/src",
-    "experimental/apps/lexigram-cli/src",
-    "packages/lexigram-events/src",
-    "packages/lexigram-features/src",
-    "packages/lexigram-graphql/src",
-    "packages/lexigram-http/src",
-    "packages/lexigram-monitor/src",
-    "packages/lexigram-nosql/src",
-    "packages/lexigram-notification/src",
-    "packages/lexigram-queue/src",
-    "packages/lexigram-resilience/src",
-    "packages/lexigram-search/src",
-    "packages/lexigram-storage/src",
-    "packages/lexigram-tasks/src",
-    "packages/lexigram-secrets/src",
-    "packages/lexigram-sql/src",
-    "packages/lexigram-tenancy/src",
-    "packages/lexigram-testing/src",
-    "experimental/apps/lexigram-ui/src",
-    "packages/lexigram-vector/src",
-    "packages/lexigram-web/src",
-    "packages/lexigram-workflow/src",
-    "packages/lexigram-audit/src",
-    "packages/lexigram-webhook/src",
-    "packages/lexigram-graph/src",
-    "experimental/multimedia/lexigram-multimedia/src",
-    "experimental/multimedia/lexigram-multimedia-beat/src",
-    "experimental/multimedia/lexigram-multimedia-image/src",
-    "experimental/multimedia/lexigram-multimedia-interpolate/src",
-    "experimental/multimedia/lexigram-multimedia-music/src",
-    "experimental/multimedia/lexigram-multimedia-tts/src",
-    "experimental/multimedia/lexigram-multimedia-upscale/src",
-    "experimental/multimedia/lexigram-multimedia-video/src",
+    "core/oridecon/src",
+    "core/oridecon-contracts/src",
+    "experimental/apps/oridecon-admin/src",
+    "experimental/apps/oridecon-builder/src",
+    "experimental/ai/oridecon-ai/src",
+    "experimental/ai/oridecon-ai-agents/src",
+    "experimental/ai/oridecon-ai-evaluation/src",
+    "experimental/ai/oridecon-ai-feedback/src",
+    "experimental/ai/oridecon-ai-governance/src",
+    "experimental/ai/oridecon-ai-guard/src",
+    "experimental/ai/oridecon-ai-llm/src",
+    "experimental/ai/oridecon-ai-memory/src",
+    "experimental/ai/oridecon-ai-observability/src",
+    "experimental/ai/oridecon-ai-prompt/src",
+    "experimental/ai/oridecon-ai-rag/src",
+    "experimental/ai/oridecon-ai-relay/src",
+    "experimental/ai/oridecon-ai-relay-gateway/src",
+    "experimental/ai/oridecon-ai-session/src",
+    "experimental/ai/oridecon-ai-skills/src",
+    "experimental/ai/oridecon-ai-workers/src",
+    "experimental/ai/oridecon-ai-mcp/src",
+    "packages/oridecon-auth/src",
+    "packages/oridecon-cache/src",
+    "experimental/apps/oridecon-cli/src",
+    "packages/oridecon-events/src",
+    "packages/oridecon-features/src",
+    "packages/oridecon-graphql/src",
+    "packages/oridecon-http/src",
+    "packages/oridecon-monitor/src",
+    "packages/oridecon-nosql/src",
+    "packages/oridecon-notification/src",
+    "packages/oridecon-queue/src",
+    "packages/oridecon-resilience/src",
+    "packages/oridecon-search/src",
+    "packages/oridecon-storage/src",
+    "packages/oridecon-tasks/src",
+    "packages/oridecon-secrets/src",
+    "packages/oridecon-sql/src",
+    "packages/oridecon-tenancy/src",
+    "packages/oridecon-testing/src",
+    "experimental/apps/oridecon-ui/src",
+    "packages/oridecon-vector/src",
+    "packages/oridecon-web/src",
+    "packages/oridecon-workflow/src",
+    "packages/oridecon-audit/src",
+    "packages/oridecon-webhook/src",
+    "packages/oridecon-graph/src",
+    "experimental/multimedia/oridecon-multimedia/src",
+    "experimental/multimedia/oridecon-multimedia-beat/src",
+    "experimental/multimedia/oridecon-multimedia-image/src",
+    "experimental/multimedia/oridecon-multimedia-interpolate/src",
+    "experimental/multimedia/oridecon-multimedia-music/src",
+    "experimental/multimedia/oridecon-multimedia-tts/src",
+    "experimental/multimedia/oridecon-multimedia-upscale/src",
+    "experimental/multimedia/oridecon-multimedia-video/src",
 ]
 warn_unused_ignores = true
 exclude = [
-    "experimental/apps/lexigram-cli/src/lexigram/cli/templates/.*",
-    "core/lexigram-contracts/src/lexigram/__init__.py",
-    "experimental/ai/lexigram-ai/src/lexigram/__init__.py",
-    "experimental/apps/lexigram-admin/src/lexigram/__init__.py",
+    "experimental/apps/oridecon-cli/src/oridecon/cli/templates/.*",
+    "core/oridecon-contracts/src/oridecon/__init__.py",
+    "experimental/ai/oridecon-ai/src/oridecon/__init__.py",
+    "experimental/apps/oridecon-admin/src/oridecon/__init__.py",
     "^tests/",
     "^docs/",
     "alembic/.*",
@@ -770,20 +770,20 @@ ignore_missing_imports = true
 
 # [[tool.mypy.overrides]]
 # module = [
-#     "lexigram.logging.redaction",
-#     "lexigram.validation.rules",
-#     "lexigram.di.function_provider",
-#     "lexigram.di.decorators",
-#     "lexigram.di.module.decorator",
-#     "lexigram.di.module.compiler",
-#     "lexigram.di.module.base",
-#     "lexigram.di.container",
-#     "lexigram.di.orchestrator",
-#     "lexigram.di.integration.provider",
-#     "lexigram.domain.models.base",
-#     "lexigram.config.main",
-#     "lexigram.core",
-#     "lexigram.app.module",
-#     "lexigram.app.base",
+#     "oridecon.logging.redaction",
+#     "oridecon.validation.rules",
+#     "oridecon.di.function_provider",
+#     "oridecon.di.decorators",
+#     "oridecon.di.module.decorator",
+#     "oridecon.di.module.compiler",
+#     "oridecon.di.module.base",
+#     "oridecon.di.container",
+#     "oridecon.di.orchestrator",
+#     "oridecon.di.integration.provider",
+#     "oridecon.domain.models.base",
+#     "oridecon.config.main",
+#     "oridecon.core",
+#     "oridecon.app.module",
+#     "oridecon.app.base",
 # ]
 # ignore_errors = true

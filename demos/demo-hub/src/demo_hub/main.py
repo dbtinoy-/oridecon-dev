@@ -16,7 +16,7 @@ import asyncio
 import sys
 
 from demo_hub.app import create_app
-from lexigram.logging import get_logger
+from oridecon.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -29,8 +29,8 @@ async def serve() -> None:
     The ``finally`` block ensures ``stop()`` runs even on errors.
     """
     from demo_hub.fleet import Fleet
-    from lexigram.web.di.provider import WebProvider
-    from lexigram.web.server.runner import run_server
+    from oridecon.web.di.provider import WebProvider
+    from oridecon.web.server.runner import run_server
 
     app = create_app()
     await app.start()

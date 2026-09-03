@@ -22,13 +22,13 @@ description: Order lifecycle with domain events, outbox pattern, and CQRS
 #   2. events:     Command bus, event bus, domain events, outbox pattern
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram Events:    packages/lexigram-events/src/lexigram/events/config.py
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon Events:    packages/oridecon-events/src/oridecon/events/config.py
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -96,7 +96,7 @@ web:
 
 
 # ── Events (CQRS) ───────────────────────────────────────────────────────────
-# Lexigram Events provides command bus, event bus, and domain event
+# Oridecon Events provides command bus, event bus, and domain event
 # infrastructure.  The EventsModule reads this section automatically
 # via config_key="events" / config_model=EventsConfig.
 #

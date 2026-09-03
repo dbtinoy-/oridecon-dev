@@ -11,8 +11,8 @@ Regenerate the baseline deliberately after review:
     uv run python scripts/check_dep_pins.py --write-baseline
 
 Note:
-    Third-party is defined as any distribution outside the ``lexigram`` /
-    ``lexigram-*`` workspace members.
+    Third-party is defined as any distribution outside the ``oridecon`` /
+    ``oridecon-*`` workspace members.
 """
 
 from __future__ import annotations
@@ -58,9 +58,9 @@ def iter_member_pyprojects(
 
 
 def _is_third_party(name: str) -> bool:
-    """Return True for distributions outside the lexigram workspace."""
+    """Return True for distributions outside the oridecon workspace."""
 
-    return name != "lexigram" and not name.startswith("lexigram-")
+    return name != "oridecon" and not name.startswith("oridecon-")
 
 
 def _unbounded_specs(specs: list[str]) -> list[tuple[str, str]]:
@@ -150,7 +150,7 @@ def main(argv: list[str] | None = None) -> int:
         "--root",
         type=Path,
         default=Path.cwd(),
-        help="Workspace root containing lexigram-* member directories",
+        help="Workspace root containing oridecon-* member directories",
     )
     baseline_default = Path(__file__).resolve().parent / "_data" / "dep_pins_baseline.json"
     parser.add_argument(

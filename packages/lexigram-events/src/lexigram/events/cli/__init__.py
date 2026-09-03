@@ -1,1 +1,0 @@
-"""Events CLI package."""

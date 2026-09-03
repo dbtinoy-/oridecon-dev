@@ -1,7 +1,7 @@
 import pytest
 
-from lexigram.contracts.domain import DomainEvent
-from lexigram.testing.memory.event_bus import InMemoryEventBus
+from oridecon.contracts.domain import DomainEvent
+from oridecon.testing.memory.event_bus import InMemoryEventBus
 
 
 class MyEvent(DomainEvent):

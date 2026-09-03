@@ -19,7 +19,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from lexigram.result import Ok, Result
+from oridecon.result import Ok, Result
 
 
 @dataclass(frozen=True)

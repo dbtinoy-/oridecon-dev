@@ -6,8 +6,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from lexigram.app.base import Application
-from lexigram.di.module import Module, module
+from oridecon.app.base import Application
+from oridecon.di.module import Module, module
 
 
 class TestApplicationDiscoverModules:
@@ -94,11 +94,11 @@ class TestApplicationDiscoverModules:
         class AutoModule(Module):
             pass
 
-        from lexigram.app.config.discovery import ModuleDiscoveryConfig
-        from lexigram.config.main import LexigramConfig
+        from oridecon.app.config.discovery import ModuleDiscoveryConfig
+        from oridecon.config.main import OrideconConfig
 
         disc_cfg = ModuleDiscoveryConfig(auto_discover=True)
-        config = LexigramConfig()
+        config = OrideconConfig()
         config.discovery = disc_cfg
 
         app = Application(config=config)

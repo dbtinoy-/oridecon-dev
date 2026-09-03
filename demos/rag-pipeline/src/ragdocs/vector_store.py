@@ -1,7 +1,7 @@
 """Deterministic local embeddings for the RAG demo.
 
 Storage is deliberately not implemented here.  The application composes
-Lexigram's ``VectorModule`` and ``VectorStoreProtocol``; this tiny embedder
+Oridecon's ``VectorModule`` and ``VectorStoreProtocol``; this tiny embedder
 only makes the demo runnable without an external embedding API.
 """
 
@@ -16,7 +16,7 @@ class DeterministicEmbedder:
 
     The interface mirrors the small part of an embedding client used by the
     retriever.  Swap this class for a hosted embedding client in a real app;
-    the Lexigram vector collection does not change.
+    the Oridecon vector collection does not change.
     """
 
     def __init__(self, dimension: int = 128) -> None:

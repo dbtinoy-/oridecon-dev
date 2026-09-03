@@ -3,20 +3,20 @@ title: "GraphQL APIs"
 description: "Schema-first GraphQL with Strawberry, subscriptions, and depth/complexity guards."
 ---
 
-`lexigram-graphql` is a Strawberry-based GraphQL layer that plugs into `lexigram-web`. Resolvers receive their dependencies from the container, the schema is built and validated at boot, and depth, complexity, and alias guards are enabled by default. WebSocket subscriptions, automatic persisted queries, and a per-request DataLoader cache are all on by default and tuned via configuration.
+`oridecon-graphql` is a Strawberry-based GraphQL layer that plugs into `oridecon-web`. Resolvers receive their dependencies from the container, the schema is built and validated at boot, and depth, complexity, and alias guards are enabled by default. WebSocket subscriptions, automatic persisted queries, and a per-request DataLoader cache are all on by default and tuned via configuration.
 
-For the complete API and tuning reference, see the [`lexigram-graphql` package docs](/packages/lexigram-graphql/).
+For the complete API and tuning reference, see the [`oridecon-graphql` package docs](/packages/oridecon-graphql/).
 
 ---
 
 ## 1. Defining Root Types
 
-Schemas are declared with Strawberry — `lexigram-graphql` adds DI, monitoring, and security around Strawberry's type system. Define your `Query` root with `@strawberry.type` and decorate fields with `lexigram.graphql.query`:
+Schemas are declared with Strawberry — `oridecon-graphql` adds DI, monitoring, and security around Strawberry's type system. Define your `Query` root with `@strawberry.type` and decorate fields with `oridecon.graphql.query`:
 
 ```python
 import strawberry
 from strawberry import Info
-from lexigram.graphql import query
+from oridecon.graphql import query
 
 
 @strawberry.type
@@ -42,7 +42,7 @@ The `query`, `mutation`, and `subscription` decorators are thin wrappers around 
 Resolvers reach into the container through the GraphQL **context**. `get_context(info)` returns a `GraphQLContext` carrying the request, the authenticated principal, and a per-request DI scope (`ctx.scope`, a `Scope` that supports `resolve`):
 
 ```python
-from lexigram.graphql import query, get_context
+from oridecon.graphql import query, get_context
 from my_app.users.repository import UserRepository
 
 
@@ -56,7 +56,7 @@ class Query:
         return User(**result.value.__dict__) if result.is_ok() else None
 ```
 
-`ctx.principal` is a `GraphQLPrincipal` (from `lexigram.contracts.graphql`) populated by the auth layer. For long-lived services, register a custom `ContextFactory` via `GraphQLModule.configure(context_factory_class=...)` and attach them once at context creation.
+`ctx.principal` is a `GraphQLPrincipal` (from `oridecon.contracts.graphql`) populated by the auth layer. For long-lived services, register a custom `ContextFactory` via `GraphQLModule.configure(context_factory_class=...)` and attach them once at context creation.
 
 :::note
 The container scope on `GraphQLContext` is per-request — services resolved here participate in request-scoped lifetimes and DataLoader caching automatically.
@@ -71,7 +71,7 @@ Mutations follow the same pattern, with `@strawberry.input` for argument shaping
 ```python
 import strawberry
 from strawberry import Info
-from lexigram.graphql import mutation, get_context
+from oridecon.graphql import mutation, get_context
 from my_app.users.service import UserService, CreateUserError
 
 
@@ -109,12 +109,12 @@ class Mutation:
 
 ## 4. Subscriptions
 
-Subscriptions stream values to clients over a WebSocket. `lexigram-graphql` ships the `graphql-transport-ws` protocol enabled by default and mounted at `/graphql/ws`. Yield from an async generator to push updates:
+Subscriptions stream values to clients over a WebSocket. `oridecon-graphql` ships the `graphql-transport-ws` protocol enabled by default and mounted at `/graphql/ws`. Yield from an async generator to push updates:
 
 ```python
 from collections.abc import AsyncGenerator
-from lexigram.graphql import subscription, get_context
-from lexigram.contracts.events import EventBusProtocol
+from oridecon.graphql import subscription, get_context
+from oridecon.contracts.events import EventBusProtocol
 from my_app.orders.events import OrderStatusChanged
 
 
@@ -136,7 +136,7 @@ class Subscription:
                 yield OrderStatus(order_id=order_id, status=event.status)
 ```
 
-The `subscriptions[websockets]` extra is required: `uv add "lexigram-graphql[subscriptions]"`.
+The `subscriptions[websockets]` extra is required: `uv add "oridecon-graphql[subscriptions]"`.
 
 ---
 
@@ -166,10 +166,10 @@ Queries that exceed the budget are rejected with `QueryTooDeepError` or `QueryTo
 Add the module and (optionally) your root types. `WebModule` must be imported alongside it — the HTTP endpoint is mounted as a contributor to the web app at `/graphql`, with the playground at `/graphql/playground`:
 
 ```python
-from lexigram import Application
-from lexigram.di.module import Module, module
-from lexigram.graphql import GraphQLModule
-from lexigram.web import WebModule
+from oridecon import Application
+from oridecon.di.module import Module, module
+from oridecon.graphql import GraphQLModule
+from oridecon.web import WebModule
 
 
 @module(
@@ -202,7 +202,7 @@ graphql:
 ```
 
 :::note
-`introspection.enabled` and `playground.enabled` are auto-disabled when `LEX_ENV=production`, regardless of the YAML value. This is enforced inside `GraphQLConfig` validators, not something the deployer has to remember.
+`introspection.enabled` and `playground.enabled` are auto-disabled when `ORI_ENV=production`, regardless of the YAML value. This is enforced inside `GraphQLConfig` validators, not something the deployer has to remember.
 :::
 
 ---
@@ -212,7 +212,7 @@ graphql:
 Subclass `AbstractPermission` and pass instances via `permission_classes=[...]` on any decorator. Helpers like `IsAuthenticated`, `IsAdmin`, and `IsOwner` ship out of the box:
 
 ```python
-from lexigram.graphql import query, IsAuthenticated
+from oridecon.graphql import query, IsAuthenticated
 
 
 @strawberry.type
@@ -242,9 +242,9 @@ graphql:
 Use `GraphQLModule.stub()` for unit tests, or boot the full module and resolve the executor to drive real queries:
 
 ```python
-from lexigram import Application
-from lexigram.graphql import GraphQLModule
-from lexigram.contracts.graphql import GraphQLExecutorProtocol
+from oridecon import Application
+from oridecon.graphql import GraphQLModule
+from oridecon.contracts.graphql import GraphQLExecutorProtocol
 
 
 async def test_user_query() -> None:
@@ -265,4 +265,4 @@ See [Testing](/guides/testing/) for fixture patterns and stub modules.
 
 - [Event-Driven Architecture](/guides/event-driven/) — feed subscriptions from your domain event bus
 - [Authentication & Authorization](/guides/authentication/) — populate `GraphQLPrincipal` and reuse policies in `AbstractPermission`
-- [`lexigram-graphql` package](/packages/lexigram-graphql/) — DataLoader, federation, schema baselines, and metrics
+- [`oridecon-graphql` package](/packages/oridecon-graphql/) — DataLoader, federation, schema baselines, and metrics

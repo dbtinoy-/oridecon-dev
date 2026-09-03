@@ -20,13 +20,13 @@ description: TOTP-based multi-factor authentication enrollment and verification
 #   2. auth:       Users, roles, JWT, password rules
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram Auth:      packages/lexigram-auth/src/lexigram/auth/config.py
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon Auth:      packages/oridecon-auth/src/oridecon/auth/config.py
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -94,7 +94,7 @@ web:
 
 
 # ── Auth ─────────────────────────────────────────────────────────────────────
-# Lexigram Auth handles users, roles, RBAC, JWT tokens, and password
+# Oridecon Auth handles users, roles, RBAC, JWT tokens, and password
 # hashing.  The AuthModule reads this section automatically via
 # config_key="auth" / config_model=AuthConfig.
 #

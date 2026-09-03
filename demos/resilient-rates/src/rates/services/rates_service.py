@@ -1,7 +1,7 @@
 """Cache-aside rates service with resilience and single-flight reads.
 
 Convention followed: **Service pattern** — this module owns the core
-business logic for the rate desk.  It composes three Lexigram
+business logic for the rate desk.  It composes three Oridecon
 subsystems:
 
 1. **Cache-aside** — ``StampedeProtectedCache`` wraps the framework's
@@ -25,18 +25,18 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
-from lexigram.cache.service.stampede import StampedeProtectedCache
-from lexigram.contracts.infra.cache import CacheBackendProtocol
-from lexigram.contracts.infra.resilience import ResiliencePipelineFactoryProtocol
-from lexigram.logging import get_logger
-from lexigram.resilience import (
+from oridecon.cache.service.stampede import StampedeProtectedCache
+from oridecon.contracts.infra.cache import CacheBackendProtocol
+from oridecon.contracts.infra.resilience import ResiliencePipelineFactoryProtocol
+from oridecon.logging import get_logger
+from oridecon.resilience import (
     CircuitBreakerConfig,
     CircuitOpenError,
     RetryConfig,
     RetryExhaustedError,
     TimeoutConfig,
 )
-from lexigram.result import Err, Ok, Result
+from oridecon.result import Err, Ok, Result
 from rates.domain import RateQuote
 from rates.exceptions import (
     RateUnavailableError,

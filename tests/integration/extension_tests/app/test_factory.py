@@ -2,8 +2,8 @@
 
 import pytest
 
-from lexigram.app.factory import create_app
-from lexigram.app.base import Application
+from oridecon.app.factory import create_app
+from oridecon.app.base import Application
 
 
 class TestCreateApp:
@@ -13,7 +13,7 @@ class TestCreateApp:
         """Test create_app with default name."""
         app = create_app()
         assert isinstance(app, Application)
-        assert app.name == "lexigram-app"
+        assert app.name == "oridecon-app"
 
     def test_create_app_custom_name(self) -> None:
         """Test create_app with custom name."""

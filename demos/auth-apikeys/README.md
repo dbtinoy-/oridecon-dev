@@ -1,11 +1,11 @@
 # API Keys Console Demo
 
-Demonstrates **machine authentication** from lexigram-auth: manage API keys
+Demonstrates **machine authentication** from oridecon-auth: manage API keys
 in a browser (issue with scopes, list, revoke), then call a protected JSON
 endpoint with the `X-API-Key` header. Raw keys are shown exactly once; only
 hashes persist. Fully offline.
 
-## Lexigram concepts used
+## Oridecon concepts used
 
 | Concept | File | Your app |
 |---------|------|----------|
@@ -21,7 +21,7 @@ hashes persist. Fully offline.
 ## Layout — read it in this order
 
 Start at the composition root and follow the wiring outward.
-Each file has teaching comments explaining the Lexigram convention it follows.
+Each file has teaching comments explaining the Oridecon convention it follows.
 
 | # | File | Lesson |
 |---|------|--------|

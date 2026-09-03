@@ -1,6 +1,6 @@
 # 14 — CSP Correctness & Hardening (R18 / B14) (Full Plan)
 
-**Date:** 2026-09-02 · **Status:** 🚧 In progress · **Branch:** `arena/01a05b98-lexigram`
+**Date:** 2026-09-02 · **Status:** 🚧 In progress · **Branch:** `arena/01a05b98-oridecon`
 
 ## 1. Findings
 

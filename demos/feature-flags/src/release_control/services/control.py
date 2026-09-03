@@ -1,4 +1,4 @@
-"""Application service that presents Lexigram's flag manager as a release desk."""
+"""Application service that presents Oridecon's flag manager as a release desk."""
 
 from __future__ import annotations
 
@@ -6,18 +6,18 @@ from dataclasses import asdict
 from datetime import UTC, datetime
 from typing import Any
 
-from lexigram.features.config import FeatureFlagsConfig
-from lexigram.features.manager import FlagManager
-from lexigram.features.types import FlagContext
+from oridecon.features.config import FeatureFlagsConfig
+from oridecon.features.manager import FlagManager
+from oridecon.features.types import FlagContext
 from release_control.config import ReleaseControlConfig
 
 
 class ReleaseControlService:
-    """Own the demo scenario while delegating flag behavior to Lexigram.
+    """Own the demo scenario while delegating flag behavior to Oridecon.
 
     The lab intentionally keeps the application state in the package-owned
     ``FlagManager``: overrides, evaluation caching, variants, and the audit
-    trail are all real Lexigram behavior rather than look-alike demo classes.
+    trail are all real Oridecon behavior rather than look-alike demo classes.
     """
 
     _FLAG_NAMES = ("new_checkout", "search_experiment", "ai_assistant")

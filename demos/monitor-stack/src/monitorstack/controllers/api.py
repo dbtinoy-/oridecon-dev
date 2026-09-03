@@ -1,14 +1,14 @@
-"""HTTP surface for Lexigram metrics, health checks, and traces."""
+"""HTTP surface for Oridecon metrics, health checks, and traces."""
 
 from __future__ import annotations
 
 import asyncio
 from typing import Any
 
-from lexigram.contracts.observability.metrics import MetricsCollectorProtocol
-from lexigram.contracts.observability.tracing import TracerProtocol
-from lexigram.monitor.health import HealthCheckRegistry
-from lexigram.web import Controller, get, post
+from oridecon.contracts.observability.metrics import MetricsCollectorProtocol
+from oridecon.contracts.observability.tracing import TracerProtocol
+from oridecon.monitor.health import HealthCheckRegistry
+from oridecon.web import Controller, get, post
 
 
 class MonitorApiController(Controller):
@@ -30,7 +30,7 @@ class MonitorApiController(Controller):
 
     @get("/health")
     async def health(self) -> dict[str, Any]:
-        """Run Lexigram's categorised health registry."""
+        """Run Oridecon's categorised health registry."""
         status, details = await self._health_registry.run_all()
         readiness = details.get("readiness", {})
         return {
@@ -43,7 +43,7 @@ class MonitorApiController(Controller):
 
     @get("/metrics")
     async def metrics(self) -> dict[str, Any]:
-        """Serialize Lexigram metric instruments for the browser."""
+        """Serialize Oridecon metric instruments for the browser."""
         counters: dict[str, Any] = {}
         gauges: dict[str, Any] = {}
         histograms: dict[str, Any] = {}
@@ -68,13 +68,13 @@ class MonitorApiController(Controller):
 
     @get("/traces")
     async def traces(self) -> dict[str, Any]:
-        """Return the bounded in-memory spans kept by Lexigram Monitor."""
+        """Return the bounded in-memory spans kept by Oridecon Monitor."""
         spans = [self._span_payload(span) for span in self._tracer.get_all_spans()]
         return {"count": len(spans), "spans": spans}
 
     @post("/trace")
     async def create_trace(self, body: dict[str, Any]) -> dict[str, Any]:
-        """Create and finish a real Lexigram span, recording its duration."""
+        """Create and finish a real Oridecon span, recording its duration."""
         name = body.get("name", "unnamed")
         attributes = body.get("attributes", {})
         span = self._tracer.start_span(name, attributes)
@@ -97,7 +97,7 @@ class MonitorApiController(Controller):
 
     @post("/metrics/increment")
     async def increment_metric(self, body: dict[str, Any]) -> dict[str, Any]:
-        """Increment a Lexigram counter instrument."""
+        """Increment a Oridecon counter instrument."""
         name = body.get("name", "")
         if not name:
             return {"error": "Metric name is required"}
@@ -106,7 +106,7 @@ class MonitorApiController(Controller):
 
     @post("/metrics/gauge")
     async def set_gauge(self, body: dict[str, Any]) -> dict[str, Any]:
-        """Set a Lexigram gauge instrument."""
+        """Set a Oridecon gauge instrument."""
         name = body.get("name", "")
         if not name:
             return {"error": "Metric name is required"}
@@ -115,7 +115,7 @@ class MonitorApiController(Controller):
 
     @staticmethod
     def _span_payload(span: Any) -> dict[str, Any]:
-        """Convert a Lexigram span into JSON-safe fields."""
+        """Convert a Oridecon span into JSON-safe fields."""
         return {
             "name": span.name,
             "duration_ms": (span.get_duration() or 0) * 1000,

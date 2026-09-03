@@ -5,7 +5,7 @@
 3. Boot the real composition root via fixtures.
 
 This conftest boots the FULL application stack — no mocks.
-This is the Lexigram integration testing pattern: use the real DI
+This is the Oridecon integration testing pattern: use the real DI
 container, real providers, real services.  Tests validate the entire
 wiring, not just individual units.  For unit tests, mock at the
 protocol boundary (e.g. mock GuardPipelineProtocol).
@@ -27,7 +27,7 @@ os.chdir(_DEMO_ROOT)
 sys.path.insert(0, str(_DEMO_ROOT / "src"))
 
 from guard_gate.app import create_app  # noqa: E402
-from lexigram.web import WebProvider  # noqa: E402
+from oridecon.web import WebProvider  # noqa: E402
 
 
 @pytest.fixture

@@ -13,7 +13,7 @@ class ScriptContext:
 
 
 def resolve_workspace_root(start: Path | str) -> Path:
-    """Resolve the Lexigram workspace root from a starting path."""
+    """Resolve the Oridecon workspace root from a starting path."""
 
     current = Path(start).resolve()
     if current.is_file():

@@ -62,7 +62,7 @@ async def test_get_facts_snapshot_shape(app) -> None:
 
 
 async def test_blank_message_is_err(app) -> None:
-    from lexigram.result import Err
+    from oridecon.result import Err
 
     service = await app.container.resolve(ConciergeService)
     result = await service.send("alice", "   ")

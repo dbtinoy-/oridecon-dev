@@ -1,1 +1,1 @@
-"""No custom monitoring services: Lexigram Monitor owns the stack."""
+"""No custom monitoring services: Oridecon Monitor owns the stack."""

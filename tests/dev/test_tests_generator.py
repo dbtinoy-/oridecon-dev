@@ -7,24 +7,24 @@ from dev.audit.generators.tests import TestsAuditGenerator
 from dev._lib.evidence import CommandEvidence
 
 SCRIPTS_COMMAND = ("uv", "run", "pytest", "tests/scripts", "-q", "-m", "not integration", "--cov=scripts")
-FRAMEWORK_COMMAND = ("uv", "run", "pytest", "lexigram/tests", "-q", "-m", "not integration", "--cov=lexigram")
-CONTRACTS_PACKAGE_COMMAND = ("uv", "run", "pytest", "lexigram-contracts/tests", "-q", "-m", "not integration", "--cov=lexigram.contracts")
-AUTH_PACKAGE_COMMAND = ("uv", "run", "pytest", "lexigram-auth/tests", "-q", "-m", "not integration", "--cov=lexigram.auth")
+FRAMEWORK_COMMAND = ("uv", "run", "pytest", "oridecon/tests", "-q", "-m", "not integration", "--cov=oridecon")
+CONTRACTS_PACKAGE_COMMAND = ("uv", "run", "pytest", "oridecon-contracts/tests", "-q", "-m", "not integration", "--cov=oridecon.contracts")
+AUTH_PACKAGE_COMMAND = ("uv", "run", "pytest", "oridecon-auth/tests", "-q", "-m", "not integration", "--cov=oridecon.auth")
 
 
 def _write_sample_workspace(root: Path) -> None:
     (root / "pyproject.toml").write_text(
         '[project]\nname = "workspace"\n\n[tool.uv.workspace]\n'
-        'members = ["lexigram", "lexigram-auth", "lexigram-contracts"]\n',
+        'members = ["oridecon", "oridecon-auth", "oridecon-contracts"]\n',
         encoding="utf-8",
     )
-    package_root = root / "lexigram"
+    package_root = root / "oridecon"
     package_root.mkdir()
     (package_root / "pyproject.toml").write_text(
-        '[project]\nname = "lexigram"\n',
+        '[project]\nname = "oridecon"\n',
         encoding="utf-8",
     )
-    source_dir = package_root / "src" / "lexigram"
+    source_dir = package_root / "src" / "oridecon"
     source_dir.mkdir(parents=True)
     (source_dir / "__init__.py").write_text("", encoding="utf-8")
     tests_dir = package_root / "tests"
@@ -33,13 +33,13 @@ def _write_sample_workspace(root: Path) -> None:
         "from __future__ import annotations\n\n\ndef test_sample() -> None:\n    assert True\n",
         encoding="utf-8",
     )
-    contracts_package_root = root / "lexigram-contracts"
+    contracts_package_root = root / "oridecon-contracts"
     contracts_package_root.mkdir()
     (contracts_package_root / "pyproject.toml").write_text(
-        '[project]\nname = "lexigram-contracts"\n',
+        '[project]\nname = "oridecon-contracts"\n',
         encoding="utf-8",
     )
-    contracts_source_dir = contracts_package_root / "src" / "lexigram" / "contracts"
+    contracts_source_dir = contracts_package_root / "src" / "oridecon" / "contracts"
     contracts_source_dir.mkdir(parents=True)
     (contracts_source_dir / "__init__.py").write_text("", encoding="utf-8")
     contracts_tests_dir = contracts_package_root / "tests"
@@ -48,13 +48,13 @@ def _write_sample_workspace(root: Path) -> None:
         "from __future__ import annotations\n\n\ndef test_contracts() -> None:\n    assert True\n",
         encoding="utf-8",
     )
-    auth_package_root = root / "lexigram-auth"
+    auth_package_root = root / "oridecon-auth"
     auth_package_root.mkdir()
     (auth_package_root / "pyproject.toml").write_text(
-        '[project]\nname = "lexigram-auth"\n',
+        '[project]\nname = "oridecon-auth"\n',
         encoding="utf-8",
     )
-    auth_source_dir = auth_package_root / "src" / "lexigram" / "auth"
+    auth_source_dir = auth_package_root / "src" / "oridecon" / "auth"
     auth_source_dir.mkdir(parents=True)
     (auth_source_dir / "__init__.py").write_text("", encoding="utf-8")
     auth_tests_dir = auth_package_root / "tests"
@@ -124,7 +124,7 @@ def test_tests_generator_includes_labeled_execution_evidence(
     markdown = (tmp_path / "AUDIT_TESTS.md").read_text(encoding="utf-8")
 
     assert result.success is True
-    assert "# AUDIT_TESTS.md — Lexigram Framework Targeted Test Execution Audit" in markdown
+    assert "# AUDIT_TESTS.md — Oridecon Framework Targeted Test Execution Audit" in markdown
     assert "## Summary" in markdown
     assert "- Total passed tests: 9" in markdown
     assert "- Total failed tests: 0" in markdown
@@ -134,12 +134,12 @@ def test_tests_generator_includes_labeled_execution_evidence(
     assert "## Execution Evidence" in markdown
     assert "| Label | Code Coverage | Pass/Total | Failed | Skipped | Warnings | Exit Code | Duration |" in markdown
     assert "Scripts audit smoke" in markdown
-    assert "Lexigram framework core tests" in markdown
-    assert "Package tests: lexigram-contracts" in markdown
+    assert "Oridecon framework core tests" in markdown
+    assert "Package tests: oridecon-contracts" in markdown
     assert "`tests/scripts`" in markdown
-    assert "`lexigram/tests`" in markdown
-    assert "`lexigram-contracts/tests`" in markdown
-    assert "`lexigram-auth/tests`" in markdown
+    assert "`oridecon/tests`" in markdown
+    assert "`oridecon-contracts/tests`" in markdown
+    assert "`oridecon-auth/tests`" in markdown
     assert "- Parsed summary: `2 passed in 0.12s`" in markdown
     assert "- Parsed summary: `4 passed, 1 skipped, 1 warning in 0.08s`" in markdown
     assert "passed=4, total=5, failed=0, skipped=1, warnings=1, coverage=0.0%" in markdown
@@ -178,7 +178,7 @@ def test_tests_generator_renders_failed_command_evidence(
                 exit_code=1,
                 stdout=(
                     ".F\n"
-                    "FAILED lexigram/tests/test_sample.py::test_sample - AssertionError: boom\n"
+                    "FAILED oridecon/tests/test_sample.py::test_sample - AssertionError: boom\n"
                     "1 failed, 1 passed in 0.34s\n"
                 ),
                 stderr="",
@@ -217,7 +217,7 @@ def test_tests_generator_renders_failed_command_evidence(
     assert "- Exit code: `1`" in markdown
     assert "- Duration: `456 ms`" in markdown
     assert "- Parsed summary: `1 failed, 1 passed in 0.34s`" in markdown
-    assert "lexigram/tests/test_sample.py::test_sample" in markdown
+    assert "oridecon/tests/test_sample.py::test_sample" in markdown
 
 
 

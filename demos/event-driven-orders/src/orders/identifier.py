@@ -9,7 +9,7 @@ own module so the rest of the codebase imports from a single source.
 
 from __future__ import annotations
 
-from lexigram.identity import ambient as identity
+from oridecon.identity import ambient as identity
 
 
 def new_order_id() -> str:

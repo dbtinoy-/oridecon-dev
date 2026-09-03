@@ -48,7 +48,7 @@ def build_app() -> Starlette:
         return await pages.stylesheet(request)
 
     async def ws_endpoint(starlette_ws) -> None:
-        from lexigram.web import WebSocket
+        from oridecon.web import WebSocket
 
         from ops_console.controllers.operator import OperatorHandler
 

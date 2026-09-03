@@ -1,9 +1,9 @@
 ---
 title: "Dependency Injection"
-description: "Mastering Inversion of Control (IoC) and dependency management in Lexigram."
+description: "Mastering Inversion of Control (IoC) and dependency management in Oridecon."
 ---
 
-Lexigram is built on a powerful, lightweight **Dependency Injection (DI)** container. Instead of your components creating their own dependencies, they are "injected" at runtime, leading to cleaner code, easier testing, and true modularity.
+Oridecon is built on a powerful, lightweight **Dependency Injection (DI)** container. Instead of your components creating their own dependencies, they are "injected" at runtime, leading to cleaner code, easier testing, and true modularity.
 
 ## 1. The IoC Container
 
@@ -11,7 +11,7 @@ The DI container (Inversion of Control) is the central registry where all applic
 
 ### Registration Scopes
 
-Lexigram supports three primary registration lifetimes:
+Oridecon supports three primary registration lifetimes:
 
 | Scope | Method | Description |
 |-------|--------|-------------|
@@ -22,7 +22,7 @@ Lexigram supports three primary registration lifetimes:
 ### Container API
 
 ```python
-from lexigram import Container
+from oridecon import Container
 
 container = Container()
 
@@ -46,10 +46,10 @@ async with container.scope() as scoped:
 
 ## 2. Constructor Injection
 
-This is the **preferred** way to handle dependencies. By simply type-hinting your constructor parameters with a Protocol or Class, Lexigram will automatically resolve and inject the correct instance.
+This is the **preferred** way to handle dependencies. By simply type-hinting your constructor parameters with a Protocol or Class, Oridecon will automatically resolve and inject the correct instance.
 
 ```python
-from lexigram.contracts.data.sql.database import DatabaseProviderProtocol
+from oridecon.contracts.data.sql.database import DatabaseProviderProtocol
 
 class ProductService:
     def __init__(self, db: DatabaseProviderProtocol):
@@ -64,17 +64,17 @@ class ProductService:
 
 ## 3. DI Decorators
 
-Lexigram provides decorators to mark classes for automatic discovery and registration:
+Oridecon provides decorators to mark classes for automatic discovery and registration:
 
 | Decorator | Scope | Import From |
 |-----------|-------|-------------|
-| `@singleton` | One instance for the app | `lexigram` or `lexigram.di` |
-| `@injectable` | Transient by default | `lexigram` or `lexigram.di` |
-| `@scoped` | One instance per request/scope | `lexigram` or `lexigram.di` |
-| `@transient` | New instance each time | `lexigram` or `lexigram.di` |
+| `@singleton` | One instance for the app | `oridecon` or `oridecon.di` |
+| `@injectable` | Transient by default | `oridecon` or `oridecon.di` |
+| `@scoped` | One instance per request/scope | `oridecon` or `oridecon.di` |
+| `@transient` | New instance each time | `oridecon` or `oridecon.di` |
 
 ```python
-from lexigram import singleton, injectable, scoped
+from oridecon import singleton, injectable, scoped
 
 @singleton
 class ConfigService:
@@ -94,7 +94,7 @@ class RequestContext:
 
 ### How Auto-Registration Works
 
-1. `@singleton` marks `GreetingService` with `__lexigram_injectable__` metadata
+1. `@singleton` marks `GreetingService` with `__oridecon_injectable__` metadata
 2. `Application.discover_providers()` scans the package and finds the marked class
 3. At boot, the container registers `GreetingService` as a singleton
 4. When `HelloController` is instantiated, the container resolves `GreetingService` from the constructor type hints
@@ -106,7 +106,7 @@ class RequestContext:
 While constructor injection is preferred, you can also resolve dependencies manually from the container when necessary.
 
 ```python
-from lexigram.contracts.core.di import ContainerResolverProtocol
+from oridecon.contracts.core.di import ContainerResolverProtocol
 
 # Within a provider boot() method
 async def boot(self, container: ContainerResolverProtocol):
@@ -131,7 +131,7 @@ container.singleton(
 
 # Resolve by name using Annotated
 from typing import Annotated
-from lexigram.di.markers import Named
+from oridecon.di.markers import Named
 
 cache = await container.resolve(Annotated[CacheBackend, Named("redis")])
 ```

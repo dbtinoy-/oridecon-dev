@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from lexigram.ai.prompt.exceptions import PromptValidationError
+from oridecon.ai.prompt.exceptions import PromptValidationError
 
 from prompt_lab.repository.templates import TEMPLATES
 
@@ -24,7 +24,7 @@ class TestTemplates:
         assert "happy to help" in text.lower()
 
     def test_undeclared_variable_fails_validation(self) -> None:
-        from lexigram.ai.prompt.template.chat import ChatPromptTemplate
+        from oridecon.ai.prompt.template.chat import ChatPromptTemplate
 
         bad = ChatPromptTemplate(
             "bad", user="Hello {undeclared}", variables=[],

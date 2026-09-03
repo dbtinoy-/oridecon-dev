@@ -25,8 +25,8 @@ from feedback_loop.errors import (
 )
 from feedback_loop.schemas import AskRequest, RateRequest, RegressRequest
 from feedback_loop.services import LoopService
-from lexigram.result import Err, Ok, Result
-from lexigram.web import Controller, get, post
+from oridecon.result import Err, Ok, Result
+from oridecon.web import Controller, get, post
 
 
 class LoopApiController(Controller):

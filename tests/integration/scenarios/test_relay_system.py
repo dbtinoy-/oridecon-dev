@@ -12,8 +12,8 @@ import sys
 
 import pytest
 
-from lexigram.serialization import dumps_str
-from lexigram.serialization import loads as json_loads
+from oridecon.serialization import dumps_str
+from oridecon.serialization import loads as json_loads
 from tests.integration.scenarios.relay_fakes import FakeHTTPClient, RelayAppHarness
 
 pytestmark = [pytest.mark.integration, pytest.mark.scenario]
@@ -41,12 +41,12 @@ class TestRelayEntryPoints:
         self, relay_entry_points: dict[str, dict[str, object]]
     ) -> None:
         """Assert every relay entry-point group exposes its contributions."""
-        assert "relay-gateway" in relay_entry_points["lexigram.providers"]
-        assert "relay" in relay_entry_points["lexigram.providers"]
-        assert "relay-gateway" in relay_entry_points["lexigram.ai.modules"]
-        assert "relay-gateway" in relay_entry_points["lexigram.web.contributors"]
-        assert "relay-gateway" in relay_entry_points["lexigram.admin.contributors"]
-        assert "ai-governance" in relay_entry_points["lexigram.admin.contributors"]
+        assert "relay-gateway" in relay_entry_points["oridecon.providers"]
+        assert "relay" in relay_entry_points["oridecon.providers"]
+        assert "relay-gateway" in relay_entry_points["oridecon.ai.modules"]
+        assert "relay-gateway" in relay_entry_points["oridecon.web.contributors"]
+        assert "relay-gateway" in relay_entry_points["oridecon.admin.contributors"]
+        assert "ai-governance" in relay_entry_points["oridecon.admin.contributors"]
 
 
 class TestRelayBoot:
@@ -56,22 +56,22 @@ class TestRelayBoot:
         self, relay_app: RelayAppHarness
     ) -> None:
         """Assert every relay contract resolves exactly once after boot."""
-        from lexigram.contracts.admin.protocols import AdminContributorRegistryProtocol
-        from lexigram.contracts.ai.governance import (
+        from oridecon.contracts.admin.protocols import AdminContributorRegistryProtocol
+        from oridecon.contracts.ai.governance import (
             RelayBillingProtocol,
             RelayUsageStoreProtocol,
         )
-        from lexigram.contracts.ai.relay import (
+        from oridecon.contracts.ai.relay import (
             RelayConverterProtocol,
             RelayGatewayProtocol,
         )
-        from lexigram.contracts.ai.relay.operations import (
+        from oridecon.contracts.ai.relay.operations import (
             RelayOperationsControlProtocol,
             RelayOperationsProtocol,
         )
-        from lexigram.contracts.events.protocols import EventBusProtocol
-        from lexigram.contracts.web import HTTPClientProtocol
-        from lexigram.web.contributors import WebContributorRegistry
+        from oridecon.contracts.events.protocols import EventBusProtocol
+        from oridecon.contracts.web import HTTPClientProtocol
+        from oridecon.web.contributors import WebContributorRegistry
 
         harness = relay_app
         container = harness.container
@@ -118,7 +118,7 @@ class TestRelayBufferedRoute:
         self, relay_app: RelayAppHarness
     ) -> None:
         """POST /v1/chat/completions reaches Claude and echoes the result."""
-        from lexigram.contracts.ai.relay import RelayFormat
+        from oridecon.contracts.ai.relay import RelayFormat
 
         scenario = load_relay_fixture("openai_chat_to_claude.json")
         request_body = scenario["inbound"]
@@ -128,7 +128,7 @@ class TestRelayBufferedRoute:
         relay_app.fakes.http_client.responses = FakeHTTPClient.with_json(
             200, upstream
         ).responses
-        from lexigram.testing.clients.web import WebTestClient
+        from oridecon.testing.clients.web import WebTestClient
 
         harness = relay_app
         fakes = harness.fakes
@@ -223,7 +223,7 @@ class TestRelayStreamingRoute:
         self, relay_app: RelayAppHarness
     ) -> None:
         """POST /v1/chat/completions with stream flows SSE frames and settles."""
-        from lexigram.contracts.web import HttpResponse
+        from oridecon.contracts.web import HttpResponse
 
         scenario = load_relay_fixture("claude_stream_to_openai.json")
         events = scenario["upstream_events"]
@@ -241,7 +241,7 @@ class TestRelayStreamingRoute:
         ]
         fakes.converter.session = _ScenarioStreamSession()
 
-        from lexigram.testing.clients.web import WebTestClient
+        from oridecon.testing.clients.web import WebTestClient
 
         client = WebTestClient(harness.app)
         response = client.post(
@@ -292,7 +292,7 @@ class TestRelayAdminContributor:
         self, relay_app: RelayAppHarness
     ) -> None:
         """Every declared artifact on both AI contributors is registered."""
-        from lexigram.contracts.admin.protocols import AdminContributorRegistryProtocol
+        from oridecon.contracts.admin.protocols import AdminContributorRegistryProtocol
 
         expectations = load_relay_fixture("admin_expectations.json")
         expected = expectations["contributors"]
@@ -329,8 +329,8 @@ class TestRelayAdminContributor:
         self, relay_app: RelayAppHarness
     ) -> None:
         """The channel health widget renders a health-snapshot report."""
-        from lexigram.contracts.admin.protocols import AdminContributorRegistryProtocol
-        from lexigram.contracts.admin.types import WidgetParams
+        from oridecon.contracts.admin.protocols import AdminContributorRegistryProtocol
+        from oridecon.contracts.admin.types import WidgetParams
 
         container = relay_app.container
         registry = await container.resolve(AdminContributorRegistryProtocol)
@@ -355,7 +355,7 @@ class TestRelayAdminContributor:
         actor_id = control["operator_actor_id"]
         assert isinstance(actor_id, str)
 
-        from lexigram.contracts.admin.protocols import AdminContributorRegistryProtocol
+        from oridecon.contracts.admin.protocols import AdminContributorRegistryProtocol
 
         container = relay_app.container
         registry = await container.resolve(AdminContributorRegistryProtocol)
@@ -368,7 +368,7 @@ class TestRelayAdminContributor:
         )
         assert result.get("ok") is True, result
 
-        from lexigram.contracts.ai.relay.operations import RelayPolicyStoreProtocol
+        from oridecon.contracts.ai.relay.operations import RelayPolicyStoreProtocol
 
         policy_store = await container.resolve(RelayPolicyStoreProtocol)
         snapshot = await policy_store.load()
@@ -393,13 +393,13 @@ class TestRelayAdminContributor:
         denied_actor = control["denied_actor_id"]
         assert isinstance(denied_actor, str)
 
-        from lexigram.contracts.admin.protocols import AdminContributorRegistryProtocol
+        from oridecon.contracts.admin.protocols import AdminContributorRegistryProtocol
 
         container = relay_app.container
         registry = await container.resolve(AdminContributorRegistryProtocol)
         contributor = registry.get("relay-gateway")
 
-        from lexigram.contracts.ai.relay.operations import RelayPolicyStoreProtocol
+        from oridecon.contracts.ai.relay.operations import RelayPolicyStoreProtocol
 
         policy_store = await container.resolve(RelayPolicyStoreProtocol)
         before = await policy_store.load()

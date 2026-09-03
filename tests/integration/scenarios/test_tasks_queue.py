@@ -1,6 +1,6 @@
 """Tasks in-memory background job processing scenario.
 
-Packages under test: lexigram-tasks
+Packages under test: oridecon-tasks
 Infrastructure: in-memory task queue (no Redis required)
 
 Scenario:

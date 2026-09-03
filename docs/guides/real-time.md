@@ -12,9 +12,9 @@ uv run python -m ops_console
 :::
 
 
-`lexigram-web` provides WebSocket wrappers, SSE (Server-Sent Events) handlers, and streaming responses. The SSE layer includes backpressure, retry tracking, and a shared heartbeat scheduler that keeps asyncio tasks proportional to heartbeat intervals — not connection count.
+`oridecon-web` provides WebSocket wrappers, SSE (Server-Sent Events) handlers, and streaming responses. The SSE layer includes backpressure, retry tracking, and a shared heartbeat scheduler that keeps asyncio tasks proportional to heartbeat intervals — not connection count.
 
-For the full configuration reference and advanced features (connection lifecycle events, guard pipelines), see the [`lexigram-web` package docs](/packages/lexigram-web/).
+For the full configuration reference and advanced features (connection lifecycle events, guard pipelines), see the [`oridecon-web` package docs](/packages/oridecon-web/).
 
 ---
 
@@ -25,7 +25,7 @@ For the full configuration reference and advanced features (connection lifecycle
 The `WebSocket` class wraps Starlette's WebSocket with an ergonomic API:
 
 ```python
-from lexigram.web.transport import WebSocket
+from oridecon.web.transport import WebSocket
 
 
 async def chat_handler(ws: WebSocket) -> None:
@@ -56,8 +56,8 @@ state = ws.state                        # middleware state access
 Use `GuardedWebSocket` to enforce guards during the handshake phase. Guards run before `accept()` and reject with code `4003` on failure:
 
 ```python
-from lexigram.web.transport import GuardedWebSocket, execute_websocket_guards
-from lexigram.web.security import GuardProtocol
+from oridecon.web.transport import GuardedWebSocket, execute_websocket_guards
+from oridecon.web.security import GuardProtocol
 
 
 class AuthGuard(GuardProtocol):
@@ -91,8 +91,8 @@ The low-level `EventSourceResponse` streams events from an async generator:
 
 ```python
 from typing import AsyncGenerator
-from lexigram.web.transport import ServerSentEvent, EventSourceResponse
-from lexigram.web import Request
+from oridecon.web.transport import ServerSentEvent, EventSourceResponse
+from oridecon.web import Request
 
 
 async def stream_events(request: Request) -> EventSourceResponse:
@@ -123,8 +123,8 @@ Use the `sse_response()` convenience function for the same result.
 Subclass `AbstractSSEHandler` and decorate with `@sse_endpoint` for automatic connection tracking, heartbeat, and lifecycle hooks:
 
 ```python
-from lexigram.web.sse import AbstractSSEHandler, sse_endpoint
-from lexigram.web import Request
+from oridecon.web.sse import AbstractSSEHandler, sse_endpoint
+from oridecon.web import Request
 from collections.abc import AsyncGenerator
 from typing import Any
 
@@ -178,7 +178,7 @@ response = await handler.handle(request)
 Buffers events up to `max_buffer_size`. Returns `False` from `send()` when the buffer is full, signalling the producer to slow down:
 
 ```python
-from lexigram.web.sse import SSEBackpressureHandler
+from oridecon.web.sse import SSEBackpressureHandler
 
 
 handler = SSEBackpressureHandler(max_buffer_size=100)
@@ -199,7 +199,7 @@ async for event in handler.events():
 Tracks `Last-Event-ID` for client-side reconnect resume:
 
 ```python
-from lexigram.web.sse import SSERetryTracker
+from oridecon.web.sse import SSERetryTracker
 
 
 tracker = SSERetryTracker()
@@ -213,7 +213,7 @@ events = tracker.get_events_after("42")         # replay on reconnect
 Enhanced SSE with backpressure, retry tracking, and shared heartbeat:
 
 ```python
-from lexigram.web.sse import SSEResponse
+from oridecon.web.sse import SSEResponse
 
 
 response = SSEResponse(
@@ -233,7 +233,7 @@ return response.to_response()
 Instead of one asyncio task per connection, a single `SSEHeartbeatScheduler` fires heartbeats to all registered handlers at the configured interval:
 
 ```python
-from lexigram.web.sse import SSEHeartbeatScheduler, get_heartbeat_scheduler
+from oridecon.web.sse import SSEHeartbeatScheduler, get_heartbeat_scheduler
 
 
 # Get (or create) the shared scheduler for a 30s interval:
@@ -257,7 +257,7 @@ count = scheduler.active_connections
 Unit test SSE handlers by calling `stream()` directly with a request stub:
 
 ```python
-from lexigram.web.sse import AbstractSSEHandler
+from oridecon.web.sse import AbstractSSEHandler
 
 
 class TestHandler(AbstractSSEHandler):
@@ -282,4 +282,4 @@ For WebSocket tests, mock or stub the `WebSocket` class at the protocol boundary
 - [Security & Guards](/guides/authentication/) — `GuardProtocol` for WebSocket auth
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding protocols to implementations
 - [MCP Guide](/guides/ai-mcp/) — SSE transport for the Model Context Protocol
-- [`lexigram-web` package](/packages/lexigram-web/) — full config reference, decorators, middleware
+- [`oridecon-web` package](/packages/oridecon-web/) — full config reference, decorators, middleware

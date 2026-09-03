@@ -23,7 +23,7 @@ async def app() -> AsyncIterator[Starlette]:
     application = create_app()
     await application.start()
     try:
-        from lexigram.web.di.provider import WebProvider
+        from oridecon.web.di.provider import WebProvider
 
         web = await application.container.resolve(WebProvider)
         yield web.starlette

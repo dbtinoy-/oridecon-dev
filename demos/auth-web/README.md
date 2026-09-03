@@ -1,6 +1,6 @@
 # Auth Web Demo
 
-Demonstrates the **authentication subsystem** of Lexigram through a real
+Demonstrates the **authentication subsystem** of Oridecon through a real
 browser flow: register → login → cookie session → protected profile with JWT
 claims and session management → change password → logout.
 
@@ -9,7 +9,7 @@ build step. Everything runs offline against in-memory stores.
 
 ## What it shows
 
-| Piece | Where | Lexigram API used |
+| Piece | Where | Oridecon API used |
 |-------|-------|-------------------|
 | Registration (policy-checked) | `src/auth_web/controllers/api.py` | `AuthenticationService.register_user(RegisterRequest)` |
 | Login with lockout | `controllers/api.py` | `authenticate_user(email, password)` — constant-time verify, `AccountLockedError` after 5 failures |
@@ -53,7 +53,7 @@ change your password and re-login.
 | POST | `/api/verify-email` | Verify the session user's email with a verification token |
 | POST | `/api/send-verification` | Send a verification email for the session user |
 
-## Lexigram Concepts
+## Oridecon Concepts
 
 | Concept | Where in this demo | Your app |
 |---------|-------------------|----------|
@@ -72,12 +72,12 @@ change your password and re-login.
   process.
 - The demo seeds users from `application.yaml` at boot; registration adds more.
 - Host/port come from `application.yaml` (`web.server`); override via
-  `LEX_WEB__SERVER__PORT` without editing the file.
+  `ORI_WEB__SERVER__PORT` without editing the file.
 
 ## Layout — read it in this order
 
 Start at the composition root and follow the wiring outward.
-Each file has teaching comments explaining the Lexigram convention it follows.
+Each file has teaching comments explaining the Oridecon convention it follows.
 
 | # | File | Lesson |
 |---|------|--------|

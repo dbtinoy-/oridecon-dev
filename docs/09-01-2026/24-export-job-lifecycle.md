@@ -27,7 +27,7 @@ implementations.
 
 1. **Local fallbacks** (`services/export/fallbacks.py`, new):
    - `LocalExportBlobStore` — filesystem `BlobStoreProtocol` implementation
-     rooted at `{tempdir}/lexigram-admin-exports` (configurable). All paths
+     rooted at `{tempdir}/oridecon-admin-exports` (configurable). All paths
      resolve *under* the root with a traversal guard; implements the surface
      the export stack uses: `upload`, `download`, `stream`, `exists`,
      `delete`, `info`, `list`. `upload` returns a proper `FileInfo`.

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 """Scenario-specific app factories for cross-package integration tests.
 
-Each factory creates a minimal Lexigram application configured for
+Each factory creates a minimal Oridecon application configured for
 a specific package composition scenario. Real infrastructure credentials
 come from IntegrationTestConfig (environment variables / Docker Compose defaults).
 The relay factories compose the real provider/module graph from installed
@@ -29,8 +29,8 @@ def _postgres_dsn() -> str:
         A SQLAlchemy-compatible asyncpg DSN string.
     """
     return os.environ.get(
-        "LEX_TEST_POSTGRES_DSN",
-        "postgresql+asyncpg://lexigram:lexigram@localhost:15432/lexigram_test",
+        "ORI_TEST_POSTGRES_DSN",
+        "postgresql+asyncpg://oridecon:oridecon@localhost:15432/oridecon_test",
     )
 
 
@@ -41,7 +41,7 @@ def _redis_url() -> str:
         A Redis URL string targeting database 15 to avoid collisions.
     """
     return os.environ.get(
-        "LEX_TEST_REDIS_URL",
+        "ORI_TEST_REDIS_URL",
         "redis://localhost:16379/15",
     )
 
@@ -63,11 +63,11 @@ def _redis_url() -> str:
 # ---------------------------------------------------------------------------
 
 RELAY_ENTRY_POINT_GROUPS = (
-    "lexigram.providers",
-    "lexigram.ai.modules",
-    "lexigram.ai.subsystems",
-    "lexigram.web.contributors",
-    "lexigram.admin.contributors",
+    "oridecon.providers",
+    "oridecon.ai.modules",
+    "oridecon.ai.subsystems",
+    "oridecon.web.contributors",
+    "oridecon.admin.contributors",
 )
 """Entry-point groups the relay system registers against."""
 
@@ -124,39 +124,39 @@ async def relay_app_factory(relay_fakes):
 
         modules_before_boot = frozenset(_sys.modules)
 
-        from lexigram.admin import AdminModule
-        from lexigram.admin.config import AdminConfig
-        from lexigram.ai.governance import GovernanceModule
-        from lexigram.ai.governance.config import GovernanceConfig
-        from lexigram.ai.relay import RelayModule
-        from lexigram.ai.relay.gateway import RelayGatewayModule
-        from lexigram.ai.relay.gateway.config import RelayGatewayConfig
-        from lexigram.ai.relay.gateway.di.provider import RelayGatewayProvider
-        from lexigram.app.base import Application
-        from lexigram.contracts.ai.governance import (
+        from oridecon.admin import AdminModule
+        from oridecon.admin.config import AdminConfig
+        from oridecon.ai.governance import GovernanceModule
+        from oridecon.ai.governance.config import GovernanceConfig
+        from oridecon.ai.relay import RelayModule
+        from oridecon.ai.relay.gateway import RelayGatewayModule
+        from oridecon.ai.relay.gateway.config import RelayGatewayConfig
+        from oridecon.ai.relay.gateway.di.provider import RelayGatewayProvider
+        from oridecon.app.base import Application
+        from oridecon.contracts.ai.governance import (
             AIAuditStoreProtocol,
             RelayBillingProtocol,
             RelayUsageStoreProtocol,
         )
-        from lexigram.contracts.ai.relay import (
+        from oridecon.contracts.ai.relay import (
             RelayConverterProtocol,
             RelayFormat,
             RelayGatewayProtocol,
         )
-        from lexigram.contracts.ai.relay.gateway import RelayChannel
-        from lexigram.contracts.ai.relay.operations import (
+        from oridecon.contracts.ai.relay.gateway import RelayChannel
+        from oridecon.contracts.ai.relay.operations import (
             RelayOperationsControlProtocol,
             RelayOperationsProtocol,
         )
-        from lexigram.contracts.data import DatabaseProviderProtocol
-        from lexigram.contracts.events.protocols import EventBusProtocol
-        from lexigram.contracts.feature_flags.protocols import FlagManagerProtocol
-        from lexigram.contracts.web import HTTPClientProtocol
-        from lexigram.di.module import DynamicModule
-        from lexigram.http import HTTPModule
-        from lexigram.web import WebModule
-        from lexigram.web.config import ServerConfig, WebConfig
-        from lexigram.web.security.config import SecurityConfig
+        from oridecon.contracts.data import DatabaseProviderProtocol
+        from oridecon.contracts.events.protocols import EventBusProtocol
+        from oridecon.contracts.feature_flags.protocols import FlagManagerProtocol
+        from oridecon.contracts.web import HTTPClientProtocol
+        from oridecon.di.module import DynamicModule
+        from oridecon.http import HTTPModule
+        from oridecon.web import WebModule
+        from oridecon.web.config import ServerConfig, WebConfig
+        from oridecon.web.security.config import SecurityConfig
         from tests.integration.scenarios.relay_fakes import (
             RelayAppHarness,
             StubDatabaseProvider,
@@ -236,7 +236,7 @@ async def relay_app_factory(relay_fakes):
         # Relay routes derive the tenant from the authenticated user state.
         # No auth provider is composed in this scenario, so a minimal
         # Starlette middleware fabricates the normalized user dict.
-        from lexigram.contracts.web import WebProviderProtocol
+        from oridecon.contracts.web import WebProviderProtocol
 
         web_provider = await container.resolve(WebProviderProtocol)
         starlette_app: Any = web_provider.starlette

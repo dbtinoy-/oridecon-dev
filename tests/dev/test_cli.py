@@ -36,13 +36,13 @@ def _write_sample_workspace(root: Path) -> None:
     (root / "pyproject.toml").write_text(
         '[project]\nname = "workspace"\n', encoding="utf-8"
     )
-    package_root = root / "lexigram"
+    package_root = root / "oridecon"
     package_root.mkdir()
     (package_root / "pyproject.toml").write_text(
-        '[project]\nname = "lexigram"\n',
+        '[project]\nname = "oridecon"\n',
         encoding="utf-8",
     )
-    config_dir = package_root / "src" / "lexigram"
+    config_dir = package_root / "src" / "oridecon"
     config_dir.mkdir(parents=True)
     (config_dir / "config.py").write_text(
         """
@@ -59,7 +59,7 @@ class NestedConfig:
 
 class AppConfig:
     model_config: ClassVar[ConfigDict] = ConfigDict(
-        env_prefix="LEX_APP__",
+        env_prefix="ORI_APP__",
         env_nested_delimiter="__",
     )
     debug: bool = Field(default=False, description="Enable debug mode.")
@@ -221,7 +221,7 @@ def test_cli_validate_fails_when_required_reports_or_evidence_are_missing(
 
 ### Missing Packages
 
-- `lexigram-vector`
+- `oridecon-vector`
 """.strip()
         + "\n",
         encoding="utf-8",
@@ -261,7 +261,7 @@ def test_cli_validate_passes_with_required_reports_and_evidence(
 | Tool | Status | Exit Code | Duration | Command |
 |------|--------|-----------|----------|---------|
 | `Ruff` | **PASS** | 0 | 10 ms | `uv run ruff check .` |
-| `Mypy` | **PASS** | 0 | 20 ms | `uv run mypy lexigram/src/` |
+| `Mypy` | **PASS** | 0 | 20 ms | `uv run mypy oridecon/src/` |
 """.strip()
         + "\n",
         encoding="utf-8",

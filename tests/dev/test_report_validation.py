@@ -13,12 +13,12 @@ from dev._lib.validation import (
 
 def test_validate_package_coverage_fails_when_any_package_missing() -> None:
     validation = validate_package_coverage(
-        discovered={"lexigram", "lexigram-admin"},
-        covered={"lexigram"},
+        discovered={"oridecon", "oridecon-admin"},
+        covered={"oridecon"},
     )
 
     assert validation.success is False
-    assert validation.missing_packages == {"lexigram-admin"}
+    assert validation.missing_packages == {"oridecon-admin"}
 
 
 def test_validate_reference_marks_missing_reference_as_suspect() -> None:

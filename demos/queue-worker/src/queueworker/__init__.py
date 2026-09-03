@@ -1,4 +1,4 @@
-"""Queue worker demo — one Lexigram topic with an automatic consumer.
+"""Queue worker demo — one Oridecon topic with an automatic consumer.
 
 The public surface is intentionally small: a standalone application factory,
 its typed config, and the lifecycle provider that starts the consumer.

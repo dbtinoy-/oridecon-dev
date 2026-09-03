@@ -25,7 +25,7 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Any
 
-from lexigram.logging import get_logger
+from oridecon.logging import get_logger
 from orders.domain import OrderPaid, OrderPlaced, OrderShipped, OrderStatus
 
 logger = get_logger(__name__)

@@ -5,9 +5,9 @@ description: "Inter-package dependency rules, version notes, and known constrain
 
 ## The Golden Rule
 
-Every extension package depends only on `lexigram` and `lexigram-contracts`. No extension ever depends on another extension.
+Every extension package depends only on `oridecon` and `oridecon-contracts`. No extension ever depends on another extension.
 
-This rule keeps the dependency graph acyclic and ensures packages can be adopted independently. The core (`lexigram`) provides the DI container, Application abstraction, configuration, and logging. `lexigram-contracts` defines interface protocols that extensions implement.
+This rule keeps the dependency graph acyclic and ensures packages can be adopted independently. The core (`oridecon`) provides the DI container, Application abstraction, configuration, and logging. `oridecon-contracts` defines interface protocols that extensions implement.
 
 ## Documented Exceptions
 
@@ -15,17 +15,17 @@ A small number of cross-extension dependencies exist where the functionality is 
 
 | Extension | Depends On | Reason |
 |-----------|------------|--------|
-| `lexigram-web` | `lexigram-ui` | Shared UI primitives for web responses |
-| `lexigram-admin` | `lexigram-ui`, `lexigram-auth`, `lexigram-cache`, `lexigram-features`, `lexigram-resilience` | Admin dashboard functionality |
-| `lexigram-events` | `lexigram-resilience` | Event buses use retry and circuit breaker |
-| `lexigram-tasks` | `lexigram-resilience` | Background jobs need retry and timeout policies |
-| `lexigram-ai` | `lexigram-ai-llm`, `lexigram-ai-rag`, `lexigram-ai-feedback`, `lexigram-ai-observability`, `lexigram-vector` | The orchestrator discovers and wires AI sub-packages via entry points |
-| `lexigram-testing` | any extension (optional) | Cross-package test utilities |
+| `oridecon-web` | `oridecon-ui` | Shared UI primitives for web responses |
+| `oridecon-admin` | `oridecon-ui`, `oridecon-auth`, `oridecon-cache`, `oridecon-features`, `oridecon-resilience` | Admin dashboard functionality |
+| `oridecon-events` | `oridecon-resilience` | Event buses use retry and circuit breaker |
+| `oridecon-tasks` | `oridecon-resilience` | Background jobs need retry and timeout policies |
+| `oridecon-ai` | `oridecon-ai-llm`, `oridecon-ai-rag`, `oridecon-ai-feedback`, `oridecon-ai-observability`, `oridecon-vector` | The orchestrator discovers and wires AI sub-packages via entry points |
+| `oridecon-testing` | any extension (optional) | Cross-package test utilities |
 
 :::note
 These exceptions are explicitly managed and documented. Adding a new cross-extension dependency requires a design review to ensure it doesn't create circular or tangled imports.
 
-**AI sub-packages** (`lexigram-ai-llm`, `lexigram-ai-rag`, `lexigram-ai-agents`, …) each depend **only** on `lexigram` and `lexigram-contracts` — they never import each other. Cross-AI-package communication goes through protocols resolved via the container.
+**AI sub-packages** (`oridecon-ai-llm`, `oridecon-ai-rag`, `oridecon-ai-agents`, …) each depend **only** on `oridecon` and `oridecon-contracts` — they never import each other. Cross-AI-package communication goes through protocols resolved via the container.
 :::
 
 ## Python & Runtime
@@ -36,7 +36,7 @@ These exceptions are explicitly managed and documented. Adding a new cross-exten
 
 ## Known Constraints
 
-### Lexigram SQL
+### Oridecon SQL
 
 Requires an async database driver. Connection strings must use the async variant:
 
@@ -46,7 +46,7 @@ Requires an async database driver. Connection strings must use the async variant
 | MySQL | `aiomysql` | `mysql+aiomysql://user:pass@host/db` |
 | SQLite | `aiosqlite` | `sqlite+aiosqlite:///path/to/db` |
 
-### Lexigram NoSQL — Wire Status
+### Oridecon NoSQL — Wire Status
 
 | Backend | Status |
 |---------|--------|
@@ -54,14 +54,14 @@ Requires an async database driver. Connection strings must use the async variant
 | DynamoDB | Code exists but **not wired** — provider class written, not registered |
 | Firestore | Code exists but **not wired** — provider class written, not registered |
 
-### Lexigram Queue — Wire Status
+### Oridecon Queue — Wire Status
 
 | Backend | Status |
 |---------|--------|
 | Memory / Redis / RabbitMQ / Kafka / SQS | **Wired** — fully configurable |
 | Azure Service Bus / GCP Pub/Sub | Code exists but **not wired** — provider classes written, not registered |
 
-### Lexigram Graph
+### Oridecon Graph
 
 | Backend | Status |
 |---------|--------|
@@ -74,13 +74,13 @@ Install backend-specific dependencies via extras:
 
 | Package | Extras |
 |---------|--------|
-| `lexigram-sql` | `[postgres]`, `[mysql]`, `[sqlite]` |
-| `lexigram-cache` | `[redis]`, `[memcached]`, `[semantic]` |
-| `lexigram-queue` | `[redis]`, `[rabbitmq]`, `[kafka]`, `[sqs]`, `[azure]`, `[gcp]` |
-| `lexigram-search` | `[elasticsearch]`, `[meilisearch]`, `[algolia]` |
-| `lexigram-storage` | `[aws]`, `[gcp]`, `[azure]` |
-| `lexigram-vector` | `[pgvector]`, `[qdrant]`, `[pinecone]`, `[chroma]`, `[weaviate]` |
-| `lexigram-ai-llm` | `[openai]`, `[anthropic]`, `[ollama]`, `[groq]`, `[mistral]`, `[cohere]`, `[huggingface]` |
+| `oridecon-sql` | `[postgres]`, `[mysql]`, `[sqlite]` |
+| `oridecon-cache` | `[redis]`, `[memcached]`, `[semantic]` |
+| `oridecon-queue` | `[redis]`, `[rabbitmq]`, `[kafka]`, `[sqs]`, `[azure]`, `[gcp]` |
+| `oridecon-search` | `[elasticsearch]`, `[meilisearch]`, `[algolia]` |
+| `oridecon-storage` | `[aws]`, `[gcp]`, `[azure]` |
+| `oridecon-vector` | `[pgvector]`, `[qdrant]`, `[pinecone]`, `[chroma]`, `[weaviate]` |
+| `oridecon-ai-llm` | `[openai]`, `[anthropic]`, `[ollama]`, `[groq]`, `[mistral]`, `[cohere]`, `[huggingface]` |
 
 ## Maturity
 
@@ -88,4 +88,4 @@ All packages are **alpha** (0.1.x). Breaking changes may occur before the 1.0 re
 
 ---
 
-See [Adoption Paths](/ecosystem/adoption-paths/) for a staged guide to integrating Lexigram packages.
+See [Adoption Paths](/ecosystem/adoption-paths/) for a staged guide to integrating Oridecon packages.

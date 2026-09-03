@@ -23,7 +23,7 @@ _DEMO_ROOT = Path(__file__).resolve().parent
 os.chdir(_DEMO_ROOT)
 sys.path.insert(0, str(_DEMO_ROOT / "src"))
 
-from lexigram.web.di.provider import WebProvider  # noqa: E402
+from oridecon.web.di.provider import WebProvider  # noqa: E402
 
 
 @pytest.fixture(autouse=True)

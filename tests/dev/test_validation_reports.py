@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dev._lib.validation import parse_rules_report_summary
 
-_RULES_REPORT = """# AUDIT_RULES.md — Lexigram Framework Rules Audit
+_RULES_REPORT = """# AUDIT_RULES.md — Oridecon Framework Rules Audit
 
 ## Severity Summary
 
@@ -31,8 +31,8 @@ _RULES_REPORT = """# AUDIT_RULES.md — Lexigram Framework Rules Audit
 
 ### Covered Packages
 
-- `lexigram-demo-a`
-- `lexigram-demo-b`
+- `oridecon-demo-a`
+- `oridecon-demo-b`
 
 ### Missing Packages
 
@@ -40,7 +40,7 @@ _RULES_REPORT = """# AUDIT_RULES.md — Lexigram Framework Rules Audit
 
 ## Resolution Guide
 
-- `no-cross-extension-import`: Move shared contracts to `lexigram-contracts`.
+- `no-cross-extension-import`: Move shared contracts to `oridecon-contracts`.
 - `init-no-logic`: Keep `__init__.py` export-only.
 """
 
@@ -66,7 +66,7 @@ def test_parse_rules_report_summary_does_not_mix_resolution_guide_into_missing_p
 
 
 def test_parse_rules_report_summary_keeps_real_missing_packages() -> None:
-    report = _RULES_REPORT.replace("- `(none)`", "- `lexigram-nope`")
+    report = _RULES_REPORT.replace("- `(none)`", "- `oridecon-nope`")
     summary = parse_rules_report_summary(report)
 
-    assert summary.missing_packages == ("lexigram-nope",)
+    assert summary.missing_packages == ("oridecon-nope",)

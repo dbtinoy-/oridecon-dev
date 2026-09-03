@@ -3,9 +3,9 @@ title: "Caching"
 description: "Multi-backend caching with a single protocol — swap in-memory, Redis, or Memcached via config."
 ---
 
-`lexigram-cache` provides async caching behind a single protocol. Application code depends on `CacheBackendProtocol`; the backend (in-memory, Redis, or Memcached) is chosen in configuration. You can swap backends, run several side-by-side, and substitute an in-memory stub in tests without touching the services that use them.
+`oridecon-cache` provides async caching behind a single protocol. Application code depends on `CacheBackendProtocol`; the backend (in-memory, Redis, or Memcached) is chosen in configuration. You can swap backends, run several side-by-side, and substitute an in-memory stub in tests without touching the services that use them.
 
-For the full configuration reference and advanced features (stampede protection, semantic cache, decorators), see the [`lexigram-cache` package docs](/packages/lexigram-cache/).
+For the full configuration reference and advanced features (stampede protection, semantic cache, decorators), see the [`oridecon-cache` package docs](/packages/oridecon-cache/).
 
 ---
 
@@ -15,8 +15,8 @@ All backends implement `CacheBackendProtocol`. Every operation returns a `Result
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.result import Result
-from lexigram.contracts.infra.cache import CacheError
+from oridecon.result import Result
+from oridecon.contracts.infra.cache import CacheError
 
 
 @runtime_checkable
@@ -47,8 +47,8 @@ graph LR
 Add the provider and configure the `cache` section. Declare one or more `backends`; exactly one must be marked `default: true`.
 
 ```python
-from lexigram import Application
-from lexigram.cache import CacheProvider
+from oridecon import Application
+from oridecon.cache import CacheProvider
 
 app = Application(name="my-app")
 app.add_provider(CacheProvider())
@@ -91,8 +91,8 @@ Inject `CacheBackendProtocol` into any service. The protocol returns `Result`, s
 
 ```python
 from typing import cast
-from lexigram.contracts.infra.cache import CacheBackendProtocol
-from lexigram.result import Result, Ok, Err
+from oridecon.contracts.infra.cache import CacheBackendProtocol
+from oridecon.result import Result, Ok, Err
 from my_app.domain.models import Product
 
 
@@ -143,8 +143,8 @@ cache:
 
 ```python
 from typing import Annotated
-from lexigram.contracts.infra.cache import CacheBackendProtocol
-from lexigram.di.markers import Named
+from oridecon.contracts.infra.cache import CacheBackendProtocol
+from oridecon.di.markers import Named
 
 
 class CheckoutService:
@@ -185,9 +185,9 @@ async def update_product(self, product: Product) -> None:
 For unit tests, the framework ships an in-memory `CacheModule.stub()` that satisfies `CacheBackendProtocol` with no external service:
 
 ```python
-from lexigram import Application
-from lexigram.cache import CacheModule
-from lexigram.contracts.infra.cache import CacheBackendProtocol
+from oridecon import Application
+from oridecon.cache import CacheModule
+from oridecon.contracts.infra.cache import CacheBackendProtocol
 
 
 async def test_caches_product_lookup() -> None:
@@ -206,4 +206,4 @@ You can also bind a hand-rolled fake to the protocol in any test container — t
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding protocols to implementations
 - [Providers](/fundamentals/providers/) — how `CacheProvider` hooks into application boot
 - [Testing](/guides/testing/) — substituting stubs for infrastructure
-- [`lexigram-cache` package](/packages/lexigram-cache/) — stampede protection, `@cacheable` decorator, semantic cache
+- [`oridecon-cache` package](/packages/oridecon-cache/) — stampede protection, `@cacheable` decorator, semantic cache

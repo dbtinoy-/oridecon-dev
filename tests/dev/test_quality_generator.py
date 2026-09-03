@@ -10,16 +10,16 @@ from dev._lib.evidence import CommandEvidence
 def _write_sample_workspace(root: Path) -> None:
     (root / "pyproject.toml").write_text(
         '[project]\nname = "workspace"\n\n[tool.uv.workspace]\n'
-        'members = ["lexigram", "lexigram-ai-demo"]\n',
+        'members = ["oridecon", "oridecon-ai-demo"]\n',
         encoding="utf-8",
     )
-    package_root = root / "lexigram"
+    package_root = root / "oridecon"
     package_root.mkdir()
     (package_root / "pyproject.toml").write_text(
-        '[project]\nname = "lexigram"\n',
+        '[project]\nname = "oridecon"\n',
         encoding="utf-8",
     )
-    source_dir = package_root / "src" / "lexigram"
+    source_dir = package_root / "src" / "oridecon"
     source_dir.mkdir(parents=True)
     (source_dir / "__init__.py").write_text("", encoding="utf-8")
     tests_dir = package_root / "tests"
@@ -28,13 +28,13 @@ def _write_sample_workspace(root: Path) -> None:
         "from __future__ import annotations\n\n\ndef test_sample() -> None:\n    assert True\n",
         encoding="utf-8",
     )
-    extension_root = root / "lexigram-ai-demo"
+    extension_root = root / "oridecon-ai-demo"
     extension_root.mkdir()
     (extension_root / "pyproject.toml").write_text(
-        '[project]\nname = "lexigram-ai-demo"\n',
+        '[project]\nname = "oridecon-ai-demo"\n',
         encoding="utf-8",
     )
-    extension_source_dir = extension_root / "src" / "lexigram_ai_demo"
+    extension_source_dir = extension_root / "src" / "oridecon_ai_demo"
     extension_source_dir.mkdir(parents=True)
     (extension_source_dir / "__init__.py").write_text("", encoding="utf-8")
 
@@ -58,17 +58,17 @@ def test_quality_generator_includes_ruff_and_mypy_tool_evidence(
                 stderr="",
                 duration_ms=145,
             )
-        if command == ("uv", "run", "mypy", "src") and cwd is not None and cwd.name == "lexigram":
+        if command == ("uv", "run", "mypy", "src") and cwd is not None and cwd.name == "oridecon":
             return CommandEvidence(
                 command=command,
                 cwd=cwd,
                 timeout_seconds=timeout,
                 exit_code=1,
                 stdout="",
-                stderr="src/lexigram/demo.py:10: error: Example failure [attr-defined]\n",
+                stderr="src/oridecon/demo.py:10: error: Example failure [attr-defined]\n",
                 duration_ms=200,
             )
-        if command == ("uv", "run", "mypy", "src") and cwd is not None and cwd.name == "lexigram-ai-demo":
+        if command == ("uv", "run", "mypy", "src") and cwd is not None and cwd.name == "oridecon-ai-demo":
             return CommandEvidence(
                 command=command,
                 cwd=cwd,
@@ -110,13 +110,13 @@ def test_quality_generator_includes_ruff_and_mypy_tool_evidence(
     assert "- Status: **FAIL**" in markdown
     assert "- Exit code: `1`" in markdown
     assert "- Duration: `322 ms`" in markdown
-    assert "[lexigram] 1 errors" in markdown
+    assert "[oridecon] 1 errors" in markdown
     assert observed_commands == [
         (("uv", "run", "ruff", "check", "."), tmp_path, 120.0),
-        (("uv", "run", "mypy", "src"), tmp_path / "lexigram", 60.0),
+        (("uv", "run", "mypy", "src"), tmp_path / "oridecon", 60.0),
         (
             ("uv", "run", "mypy", "src"),
-            tmp_path / "lexigram-ai-demo",
+            tmp_path / "oridecon-ai-demo",
             60.0,
         ),
     ]

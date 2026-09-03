@@ -1,4 +1,4 @@
-# REF_CLI_COMMANDS.md — Lexigram CLI Command Registry
+# REF_CLI_COMMANDS.md — Oridecon CLI Command Registry
 
 **Date:** 2026-08-29
 **Total entries:** 79
@@ -9,17 +9,17 @@
 ## Command Tree
 
 ```
-lexigram
+oridecon
 ├── version          Show framework and package versions.
 ├── completion       Generate shell completion script.
 ├── list             List all available commands.
 ├── test             Run project tests.
 ├── lint             Run project linting.
-├── init             Initialize Lexigram in existing project
-├── new              Create a new Lexigram project
-│   └── project        Create a new Lexigram project, fully aligned with the framework.
+├── init             Initialize Oridecon in existing project
+├── new              Create a new Oridecon project
+│   └── project        Create a new Oridecon project, fully aligned with the framework.
 │   └── module         Create a bounded context inside a modular project.
-│   └── package        Scaffold a new lexigram-* extension package.
+│   └── package        Scaffold a new oridecon-* extension package.
 │
 ├── add              Add a provider to the project
 ├── dev              Development server and tools
@@ -96,7 +96,7 @@ lexigram
 │
 ├── config           Configuration management
 │   └── show           Show current configuration.
-│   └── init           Initialize a new Lexigram configuration file with default settings.
+│   └── init           Initialize a new Oridecon configuration file with default settings.
 │   └── validate       Validate configuration file.
 │   └── schema         Export configuration JSON schema.
 │   └── doctor         Diagnose configuration issues.
@@ -113,7 +113,7 @@ lexigram
 │   └── tasks          List registered task handlers.
 │   └── dependencies   Show provider dependency graph.
 │   └── config         Alias for config show.
-│   └── modules        List all registered Lexigram modules in the application.
+│   └── modules        List all registered Oridecon modules in the application.
 │   └── health         Show provider health status from the running application.
 │   └── main           Inspect runtime state (alias for subcommands).
 │
@@ -134,9 +134,9 @@ lexigram
 │   └── deps           Show and audit project dependencies.
 │
 ├── system           System information and management
-│   └── info           Display information about the Lexigram environment.
-│   └── health         Check the health of the current Lexigram project.
-│   └── shell          Open an interactive Lexigram shell.
+│   └── info           Display information about the Oridecon environment.
+│   └── health         Check the health of the current Oridecon project.
+│   └── shell          Open an interactive Oridecon shell.
 │   └── providers      List all registered providers in the current project.
 │   └── doctor         Diagnose system environment and configuration issues.
 │
@@ -167,92 +167,92 @@ lexigram
 
 | Generator | Description |
 |-----------|-------------|
-| `lexigram gen notification_template` | Generate a notification template |
-| `lexigram gen tenant_resolver` | Generate a custom tenant resolver strategy |
-| `lexigram gen auth_guard` | Generate an authentication/authorization guard |
-| `lexigram gen auth_policy` | Generate an authorization policy |
-| `lexigram gen guard` | Generate an authorization guard |
-| `lexigram gen feature_flag` | Generate a feature flag definition |
-| `lexigram gen mcp-controller` | Generate an MCPController class with tool, resource, and prompt examples |
-| `lexigram gen mcp-server` | Generate a standalone MCP server script with module-level decorators |
-| `lexigram gen audited` | Generate an audited async handler |
-| `lexigram gen task` | Generate a background task with queue registration |
-| `lexigram gen vector_collection` | Generate a vector collection definition with backend registration |
-| `lexigram gen event_handler` | Generate an event handler with bus registration |
-| `lexigram gen saga` | Generate a saga orchestrator with compensating actions |
-| `lexigram gen event` | Generate a domain event class |
-| `lexigram gen command` | Generate a CQRS command handler |
-| `lexigram gen query` | Generate a CQRS query handler |
-| `lexigram gen projection` | Generate an event projection for read models |
-| `lexigram gen admin_action` | Generate a custom admin action |
-| `lexigram gen admin_resource` | Generate an admin resource for the admin panel |
-| `lexigram gen workflow_def` | Generate a workflow definition with steps and transitions |
-| `lexigram gen pipeline` | Generate a pipeline with sequential processing stages |
-| `lexigram gen saga_step` | Generate a saga step with compensating transaction |
-| `lexigram gen repository` | Generate a database repository with query methods |
-| `lexigram gen filter` | Generate a query filter for database models |
-| `lexigram gen seeder` | Generate a database seeder for test/dev data |
-| `lexigram gen health` | Generate a database health check |
-| `lexigram gen model` | Generate a Pydantic entity model with Create/Update DTOs |
-| `lexigram gen migration` | Generate a chained alembic migration for an entity |
-| `lexigram gen service` | Generate a service with unit of work |
-| `lexigram gen dataloader` | Generate a GraphQL DataLoaderProtocol to solve N+1 problems |
-| `lexigram gen document_repo` | Generate a NoSQL document repository |
-| `lexigram gen cache_repo` | Generate a cache-backed repository with TTL support |
-| `lexigram gen api_client` | Generate an external API client |
-| `lexigram gen metric` | Generate a custom metric definition with backend registration |
-| `lexigram gen message_consumer` | Generate a message consumer with queue routing |
-| `lexigram gen provider` | Generate provider |
-| `lexigram gen test` | Generate test |
-| `lexigram gen search_index` | Generate a search index with backend registration |
-| `lexigram gen controller` | Generate a web controller with route handlers |
-| `lexigram gen resource` | Generate a resource controller slice |
-| `lexigram gen middleware` | Generate a web middleware component |
-| `lexigram gen graphql` | Generate a GraphQL schema and resolvers |
-| `lexigram gen webhook` | Generate a webhook handler |
-| `lexigram gen websocket` | Generate a WebSocket handler |
-| `lexigram gen exception_filter` | Generate a web exception filter |
-| `lexigram gen interceptor` | Generate a web request/response interceptor |
-| `lexigram gen error` | Generate a custom HTTP error |
-| `lexigram gen storage_driver` | Generate a file storage backend driver |
+| `oridecon gen notification_template` | Generate a notification template |
+| `oridecon gen tenant_resolver` | Generate a custom tenant resolver strategy |
+| `oridecon gen auth_guard` | Generate an authentication/authorization guard |
+| `oridecon gen auth_policy` | Generate an authorization policy |
+| `oridecon gen guard` | Generate an authorization guard |
+| `oridecon gen feature_flag` | Generate a feature flag definition |
+| `oridecon gen mcp-controller` | Generate an MCPController class with tool, resource, and prompt examples |
+| `oridecon gen mcp-server` | Generate a standalone MCP server script with module-level decorators |
+| `oridecon gen audited` | Generate an audited async handler |
+| `oridecon gen task` | Generate a background task with queue registration |
+| `oridecon gen vector_collection` | Generate a vector collection definition with backend registration |
+| `oridecon gen event_handler` | Generate an event handler with bus registration |
+| `oridecon gen saga` | Generate a saga orchestrator with compensating actions |
+| `oridecon gen event` | Generate a domain event class |
+| `oridecon gen command` | Generate a CQRS command handler |
+| `oridecon gen query` | Generate a CQRS query handler |
+| `oridecon gen projection` | Generate an event projection for read models |
+| `oridecon gen admin_action` | Generate a custom admin action |
+| `oridecon gen admin_resource` | Generate an admin resource for the admin panel |
+| `oridecon gen workflow_def` | Generate a workflow definition with steps and transitions |
+| `oridecon gen pipeline` | Generate a pipeline with sequential processing stages |
+| `oridecon gen saga_step` | Generate a saga step with compensating transaction |
+| `oridecon gen repository` | Generate a database repository with query methods |
+| `oridecon gen filter` | Generate a query filter for database models |
+| `oridecon gen seeder` | Generate a database seeder for test/dev data |
+| `oridecon gen health` | Generate a database health check |
+| `oridecon gen model` | Generate a Pydantic entity model with Create/Update DTOs |
+| `oridecon gen migration` | Generate a chained alembic migration for an entity |
+| `oridecon gen service` | Generate a service with unit of work |
+| `oridecon gen dataloader` | Generate a GraphQL DataLoaderProtocol to solve N+1 problems |
+| `oridecon gen document_repo` | Generate a NoSQL document repository |
+| `oridecon gen cache_repo` | Generate a cache-backed repository with TTL support |
+| `oridecon gen api_client` | Generate an external API client |
+| `oridecon gen metric` | Generate a custom metric definition with backend registration |
+| `oridecon gen message_consumer` | Generate a message consumer with queue routing |
+| `oridecon gen provider` | Generate provider |
+| `oridecon gen test` | Generate test |
+| `oridecon gen search_index` | Generate a search index with backend registration |
+| `oridecon gen controller` | Generate a web controller with route handlers |
+| `oridecon gen resource` | Generate a resource controller slice |
+| `oridecon gen middleware` | Generate a web middleware component |
+| `oridecon gen graphql` | Generate a GraphQL schema and resolvers |
+| `oridecon gen webhook` | Generate a webhook handler |
+| `oridecon gen websocket` | Generate a WebSocket handler |
+| `oridecon gen exception_filter` | Generate a web exception filter |
+| `oridecon gen interceptor` | Generate a web request/response interceptor |
+| `oridecon gen error` | Generate a custom HTTP error |
+| `oridecon gen storage_driver` | Generate a file storage backend driver |
 
 ---
 
 ## Contributed Command Groups
 
-These command groups are registered via the `lexigram.cli.contributors`
+These command groups are registered via the `oridecon.cli.contributors`
 entry-point and loaded at runtime by the CLI's contributor discovery system.
 
 **26 groups across 26 packages**
 
 | Group | Package | Target |
 |-------|---------|--------|
-| `lexigram admin` | lexigram-admin | `lexigram.admin.cli.contributor:AdminCliContributor` |
-| `lexigram ai` | lexigram-ai | `lexigram.ai.cli.contributor:AICliContributor` |
-| `lexigram audit` | lexigram-audit | `lexigram.audit.cli.contributor:AuditCliContributor` |
-| `lexigram auth` | lexigram-auth | `lexigram.auth.cli.contributor:AuthCliContributor` |
-| `lexigram cache` | lexigram-cache | `lexigram.cache.cli.contributor:CacheCliContributor` |
-| `lexigram core` | lexigram-cli | `lexigram.cli.contributors.core:CoreCliContributor` |
-| `lexigram events` | lexigram-events | `lexigram.events.cli.contributor:EventsCliContributor` |
-| `lexigram features` | lexigram-features | `lexigram.features.cli.contributor:FeaturesCliContributor` |
-| `lexigram graphql` | lexigram-graphql | `lexigram.graphql.cli.contributor:GraphQLCliContributor` |
-| `lexigram http` | lexigram-http | `lexigram.http.cli.contributor:HttpCliContributor` |
-| `lexigram mcp` | lexigram-ai-mcp | `lexigram.ai.mcp.cli.contributor:McpCliContributor` |
-| `lexigram monitor` | lexigram-monitor | `lexigram.monitor.cli.contributor:MonitorCliContributor` |
-| `lexigram nosql` | lexigram-nosql | `lexigram.nosql.cli.contributor:NoSqlCliContributor` |
-| `lexigram notification` | lexigram-notification | `lexigram.notification.cli.contributor:NotificationCliContributor` |
-| `lexigram queue` | lexigram-queue | `lexigram.queue.cli.contributor:QueueCliContributor` |
-| `lexigram resilience` | lexigram-resilience | `lexigram.resilience.cli.contributor:ResilienceCliContributor` |
-| `lexigram search` | lexigram-search | `lexigram.search.cli.contributor:SearchCliContributor` |
-| `lexigram session` | lexigram-ai-session | `lexigram.ai.session.cli.contributor:AiSessionCliContributor` |
-| `lexigram sql` | lexigram-sql | `lexigram.sql.cli.contributor:SqlCliContributor` |
-| `lexigram storage` | lexigram-storage | `lexigram.storage.cli.contributor:StorageCliContributor` |
-| `lexigram tasks` | lexigram-tasks | `lexigram.tasks.cli.contributor:TasksCliContributor` |
-| `lexigram tenancy` | lexigram-tenancy | `lexigram.tenancy.cli.contributor:TenancyCliContributor` |
-| `lexigram vector` | lexigram-vector | `lexigram.vector.cli.contributor:VectorCliContributor` |
-| `lexigram web` | lexigram-web | `lexigram.web.cli.contributor:WebCliContributor` |
-| `lexigram webhook` | lexigram-webhook | `lexigram.webhook.cli.contributor:WebhookCliContributor` |
-| `lexigram workflow` | lexigram-workflow | `lexigram.workflow.cli.contributor:WorkflowCliContributor` |
+| `oridecon admin` | oridecon-admin | `oridecon.admin.cli.contributor:AdminCliContributor` |
+| `oridecon ai` | oridecon-ai | `oridecon.ai.cli.contributor:AICliContributor` |
+| `oridecon audit` | oridecon-audit | `oridecon.audit.cli.contributor:AuditCliContributor` |
+| `oridecon auth` | oridecon-auth | `oridecon.auth.cli.contributor:AuthCliContributor` |
+| `oridecon cache` | oridecon-cache | `oridecon.cache.cli.contributor:CacheCliContributor` |
+| `oridecon core` | oridecon-cli | `oridecon.cli.contributors.core:CoreCliContributor` |
+| `oridecon events` | oridecon-events | `oridecon.events.cli.contributor:EventsCliContributor` |
+| `oridecon features` | oridecon-features | `oridecon.features.cli.contributor:FeaturesCliContributor` |
+| `oridecon graphql` | oridecon-graphql | `oridecon.graphql.cli.contributor:GraphQLCliContributor` |
+| `oridecon http` | oridecon-http | `oridecon.http.cli.contributor:HttpCliContributor` |
+| `oridecon mcp` | oridecon-ai-mcp | `oridecon.ai.mcp.cli.contributor:McpCliContributor` |
+| `oridecon monitor` | oridecon-monitor | `oridecon.monitor.cli.contributor:MonitorCliContributor` |
+| `oridecon nosql` | oridecon-nosql | `oridecon.nosql.cli.contributor:NoSqlCliContributor` |
+| `oridecon notification` | oridecon-notification | `oridecon.notification.cli.contributor:NotificationCliContributor` |
+| `oridecon queue` | oridecon-queue | `oridecon.queue.cli.contributor:QueueCliContributor` |
+| `oridecon resilience` | oridecon-resilience | `oridecon.resilience.cli.contributor:ResilienceCliContributor` |
+| `oridecon search` | oridecon-search | `oridecon.search.cli.contributor:SearchCliContributor` |
+| `oridecon session` | oridecon-ai-session | `oridecon.ai.session.cli.contributor:AiSessionCliContributor` |
+| `oridecon sql` | oridecon-sql | `oridecon.sql.cli.contributor:SqlCliContributor` |
+| `oridecon storage` | oridecon-storage | `oridecon.storage.cli.contributor:StorageCliContributor` |
+| `oridecon tasks` | oridecon-tasks | `oridecon.tasks.cli.contributor:TasksCliContributor` |
+| `oridecon tenancy` | oridecon-tenancy | `oridecon.tenancy.cli.contributor:TenancyCliContributor` |
+| `oridecon vector` | oridecon-vector | `oridecon.vector.cli.contributor:VectorCliContributor` |
+| `oridecon web` | oridecon-web | `oridecon.web.cli.contributor:WebCliContributor` |
+| `oridecon webhook` | oridecon-webhook | `oridecon.webhook.cli.contributor:WebhookCliContributor` |
+| `oridecon workflow` | oridecon-workflow | `oridecon.workflow.cli.contributor:WorkflowCliContributor` |
 
 ---
 

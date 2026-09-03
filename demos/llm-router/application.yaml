@@ -20,14 +20,14 @@ description: Multi-provider LLM routing with style-based content generation
 #   2. content_gen: Content generation settings, writing style, retries
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram AI LLM:    experimental/ai/lexigram-ai-llm/
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon AI LLM:    experimental/ai/oridecon-ai-llm/
 #   - Demo config:        demos/llm-router/src/content_gen/config.py
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 # ─────────────────────────────────────────────────────────────────────────────

@@ -1,10 +1,10 @@
 # 10 — Security Headers: Wire the Orphaned Middleware (Full Plan)
 
-**Date:** 2026-09-02 · **Status:** ✅ Done · **Branch:** `arena/01a05b98-lexigram`
+**Date:** 2026-09-02 · **Status:** ✅ Done · **Branch:** `arena/01a05b98-oridecon`
 
 ## 1. Problem
 
-`src/lexigram/admin/middleware/security_headers.py` contains a complete,
+`src/oridecon/admin/middleware/security_headers.py` contains a complete,
 tested implementation of OWASP-recommended HTTP security headers:
 
 - `AdminSecurityHeaders` — a `SecurityHeadersProtocol` service that merges

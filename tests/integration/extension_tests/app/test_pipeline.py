@@ -2,7 +2,7 @@
 
 import pytest
 
-from lexigram.app.pipeline import MiddlewarePipeline
+from oridecon.app.pipeline import MiddlewarePipeline
 
 
 class TestMiddlewarePipelineInit:

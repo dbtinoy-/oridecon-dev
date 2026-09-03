@@ -1,8 +1,8 @@
 import pytest
 
-from lexigram.testing.fixtures.bed import TestEnvironment
-from lexigram.testing.fixtures.containers import apply_overrides
-from lexigram.testing.mocks import MockProvider
+from oridecon.testing.fixtures.bed import TestEnvironment
+from oridecon.testing.fixtures.containers import apply_overrides
+from oridecon.testing.mocks import MockProvider
 
 
 class DummyContainer:

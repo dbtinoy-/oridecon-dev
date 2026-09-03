@@ -1,6 +1,6 @@
 ---
 title: Project Structure
-description: Recommended directory layouts for Lexigram projects
+description: Recommended directory layouts for Oridecon projects
 sidebar:
   order: 3
 ---
@@ -9,8 +9,8 @@ sidebar:
 - The recommended layout for **Pattern 2** (Structured App) projects
 - The recommended layout for **Pattern 3** (Modular App) projects
 
-Both are the same scaffolded tree at different stages: `lexigram new
-project` lays down the app package, and `lexigram new module <name>` grows
+Both are the same scaffolded tree at different stages: `oridecon new
+project` lays down the app package, and `oridecon new module <name>` grows
 a bounded context inside it. See
 [Your First App](/getting-started/first-app/) for the starting point.
 - What each directory and key file does
@@ -45,8 +45,8 @@ my-app/
 
 | File | Purpose |
 |------|---------|
-| `app.py` | The **composition root** — `create_app()` factory that wires providers. Auto-detected by `lexigram run` |
-| `application.yaml` | Configuration — loaded by `LexigramConfig.from_yaml()` |
+| `app.py` | The **composition root** — `create_app()` factory that wires providers. Auto-detected by `oridecon run` |
+| `application.yaml` | Configuration — loaded by `OrideconConfig.from_yaml()` |
 | `providers/` | `Provider` subclasses that bind services in the DI container via `register()` |
 | `domain/` | Business logic — framework-agnostic models and services |
 | `api/controllers/` | `Controller` subclasses auto-discovered by `WebProvider.auto_discover()` |
@@ -54,13 +54,13 @@ my-app/
 ### Example `app.py`
 
 ```python title="src/my_app/app.py"
-from lexigram import Application, LexigramConfig
-from lexigram.web import WebProvider
+from oridecon import Application, OrideconConfig
+from oridecon.web import WebProvider
 from my_app.providers.app_provider import AppProvider
 
 
 def create_app() -> Application:
-    config = LexigramConfig.from_yaml()
+    config = OrideconConfig.from_yaml()
     app = Application(name="my-app", config=config)
 
     app.add_provider(AppProvider())
@@ -72,9 +72,9 @@ def create_app() -> Application:
 ### Example Provider
 
 ```python title="src/my_app/providers/app_provider.py"
-from lexigram.di.provider import Provider
-from lexigram.contracts.core import ProviderPriority
-from lexigram.contracts.core.di import ContainerRegistrarProtocol
+from oridecon.di.provider import Provider
+from oridecon.contracts.core import ProviderPriority
+from oridecon.contracts.core.di import ContainerRegistrarProtocol
 
 
 class AppProvider(Provider):
@@ -88,14 +88,14 @@ class AppProvider(Provider):
 ```
 
 :::tip[Why lazy imports in `register()`?]
-Importing inside `register()` avoids circular imports and ensures modules load only when the container is being assembled. This is the recommended Lexigram convention.
+Importing inside `register()` avoids circular imports and ensures modules load only when the container is being assembled. This is the recommended Oridecon convention.
 :::
 
 ### Example Controller
 
 ```python title="src/my_app/api/controllers/user_controller.py"
-from lexigram.web import Controller, get, post
-from lexigram.result import Result
+from oridecon.web import Controller, get, post
+from oridecon.result import Result
 from my_app.domain.services import UserService
 from my_app.domain.models import User
 
@@ -165,7 +165,7 @@ my-platform/
 ### Example Module
 
 ```python title="src/my_platform/modules/auth/__init__.py"
-from lexigram.di.module import module
+from oridecon.di.module import module
 
 from my_platform.modules.auth.provider import AuthProvider
 from my_platform.modules.auth.protocols import AuthServiceProtocol
@@ -182,8 +182,8 @@ class AuthModule:
 ### Example App With Modules
 
 ```python title="src/my_platform/app.py"
-from lexigram import Application, LexigramConfig, CoreModule
-from lexigram.web import WebModule
+from oridecon import Application, OrideconConfig, CoreModule
+from oridecon.web import WebModule
 
 from my_platform.infrastructure import InfraModule
 from my_platform.modules.auth import AuthModule
@@ -191,7 +191,7 @@ from my_platform.modules.billing import BillingModule
 
 
 def create_app(profile: str | None = None) -> Application:
-    config = LexigramConfig.from_env_profile(profile)
+    config = OrideconConfig.from_env_profile(profile)
     app = Application(name="my-platform", config=config)
 
     app.add_module(CoreModule)

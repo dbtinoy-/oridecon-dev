@@ -1,11 +1,11 @@
 ---
 title: "Webhooks"
-description: "Outbound webhook subscriptions, HMAC-signed delivery, retries, and dead-letter handling with lexigram-webhook."
+description: "Outbound webhook subscriptions, HMAC-signed delivery, retries, and dead-letter handling with oridecon-webhook."
 ---
 
-`lexigram-webhook` is an **outbound** webhook subsystem: your application registers subscriber URLs, dispatches events to them with HMAC-signed payloads, retries failures with exponential backoff, and parks unrecoverable deliveries in a dead-letter queue. It also ships a small helper for **inbound** verification — useful when your code is the receiver of someone else's signed webhook.
+`oridecon-webhook` is an **outbound** webhook subsystem: your application registers subscriber URLs, dispatches events to them with HMAC-signed payloads, retries failures with exponential backoff, and parks unrecoverable deliveries in a dead-letter queue. It also ships a small helper for **inbound** verification — useful when your code is the receiver of someone else's signed webhook.
 
-For the full configuration reference and admin panel integration, see the [`lexigram-webhook` package docs](/packages/lexigram-webhook/).
+For the full configuration reference and admin panel integration, see the [`oridecon-webhook` package docs](/packages/oridecon-webhook/).
 
 ---
 
@@ -34,9 +34,9 @@ graph LR
 Register `WebhookModule.configure()` and add a `webhook:` block. Defaults are production-sane; override only what you need.
 
 ```python
-from lexigram import Application
-from lexigram.di.module import Module, module
-from lexigram.webhook import WebhookModule
+from oridecon import Application
+from oridecon.di.module import Module, module
+from oridecon.webhook import WebhookModule
 
 
 @module(imports=[WebhookModule.configure()])
@@ -74,7 +74,7 @@ Secrets are generated per-subscription by the service; there is no global signin
 Inject `WebhookSubscriptionService` to register, list, rotate, and deactivate subscribers. A partner subscribing to `order.shipped` looks like this:
 
 ```python
-from lexigram.webhook.subscription.service import WebhookSubscriptionService
+from oridecon.webhook.subscription.service import WebhookSubscriptionService
 
 
 class PartnerOnboarding:
@@ -103,7 +103,7 @@ Dispatch through `WebhookDeliveryServiceProtocol`. The service lists all active 
 
 ```python
 import uuid
-from lexigram.contracts.webhook import WebhookEvent, WebhookDeliveryServiceProtocol
+from oridecon.contracts.webhook import WebhookEvent, WebhookDeliveryServiceProtocol
 
 
 class ShippingService:
@@ -144,7 +144,7 @@ def verify(payload: bytes, signature_header: str, secret: str) -> bool:
 If you receive inbound webhooks elsewhere in your own app, reuse the package helper instead of reimplementing it:
 
 ```python
-from lexigram.webhook.verification.helpers import verify_webhook_payload
+from oridecon.webhook.verification.helpers import verify_webhook_payload
 
 ok = await verify_webhook_payload(raw_body, request.headers["X-Webhook-Signature"], secret)
 ```
@@ -173,8 +173,8 @@ Query attempts directly through `WebhookDeliveryStoreProtocol` (e.g. for an admi
 Dead-lettered attempts stay in the same store; `DeadLetterManager` is a thin convenience layer for listing and counting them. To replay one, call `redeliver()` on the delivery service:
 
 ```python
-from lexigram.contracts.webhook import WebhookDeliveryServiceProtocol
-from lexigram.webhook.delivery.dead_letter import DeadLetterManager
+from oridecon.contracts.webhook import WebhookDeliveryServiceProtocol
+from oridecon.webhook.delivery.dead_letter import DeadLetterManager
 
 
 class WebhookOps:
@@ -191,7 +191,7 @@ class WebhookOps:
             await self._deliveries.redeliver(attempt.attempt_id)
 ```
 
-When `enable_admin: true`, the same view is available in the Lexigram admin panel — subscriptions, recent deliveries, and the DLQ.
+When `enable_admin: true`, the same view is available in the Oridecon admin panel — subscriptions, recent deliveries, and the DLQ.
 
 ---
 
@@ -200,9 +200,9 @@ When `enable_admin: true`, the same view is available in the Lexigram admin pane
 `WebhookModule.configure()` defaults to the in-memory store, so an integration test can boot the full pipeline without external services:
 
 ```python
-from lexigram import Application
-from lexigram.webhook import WebhookModule
-from lexigram.webhook.subscription.service import WebhookSubscriptionService
+from oridecon import Application
+from oridecon.webhook import WebhookModule
+from oridecon.webhook.subscription.service import WebhookSubscriptionService
 
 
 async def test_subscription_round_trip() -> None:
@@ -221,4 +221,4 @@ For unit tests of services that *dispatch* webhooks, bind a fake `WebhookDeliver
 - [Event-Driven Architecture](/guides/event-driven/) — bridging domain events to outbound webhooks
 - [Resilience](/guides/resilience/) — circuit breakers and timeouts for outbound HTTP
 - [Background Jobs](/guides/background-jobs/) — offloading dispatch from request handlers
-- [`lexigram-webhook` package](/packages/lexigram-webhook/) — admin panel, SQL store, full config reference
+- [`oridecon-webhook` package](/packages/oridecon-webhook/) — admin panel, SQL store, full config reference

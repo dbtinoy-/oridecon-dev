@@ -26,7 +26,7 @@ RELAY_BODY: dict[str, object] = {
 
 def _client(harness: RelayAppHarness) -> object:
     """Return a WebTestClient bound to the harness application."""
-    from lexigram.testing.clients.web import WebTestClient
+    from oridecon.testing.clients.web import WebTestClient
 
     return WebTestClient(harness.app)
 
@@ -96,7 +96,7 @@ class TestRelayFailureMatrix:
 
     async def test_non_json_upstream_is_502(self, relay_app: RelayAppHarness) -> None:
         """A 2xx upstream body that is not JSON must map to a 502 error."""
-        from lexigram.contracts.web import HttpResponse
+        from oridecon.contracts.web import HttpResponse
 
         relay_app.fakes.http_client.responses = [
             HttpResponse(status=200, body=b"<html>proxy error</html>")

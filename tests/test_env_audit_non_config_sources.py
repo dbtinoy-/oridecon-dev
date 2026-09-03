@@ -8,14 +8,14 @@ def test_env_audit_includes_non_config_sources_appendix() -> None:
     generate_markdown = env_vars_audit.generate_markdown
 
     sample_packages = {
-        "lexigram-web": [
+        "oridecon-web": [
             env_var_def(
-                package="lexigram-web",
-                env_var="LEX_WEB__HOST",
+                package="oridecon-web",
+                env_var="ORI_WEB__HOST",
                 type_annotation="str",
                 default_value='"127.0.0.1"',
                 description="Host binding for web server",
-                source_file="lexigram-web/src/lexigram/web/config.py",
+                source_file="oridecon-web/src/oridecon/web/config.py",
                 source_class="WebConfig",
                 source_field_path="host",
             )
@@ -25,5 +25,5 @@ def test_env_audit_includes_non_config_sources_appendix() -> None:
     markdown = generate_markdown(sample_packages)
 
     assert "## Non-Config ENV Sources" in markdown
-    assert "`LEX_DEBUG`" in markdown
-    assert "lexigram/src/lexigram/logging/debug.py" in markdown
+    assert "`ORI_DEBUG`" in markdown
+    assert "oridecon/src/oridecon/logging/debug.py" in markdown

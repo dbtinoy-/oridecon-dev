@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Sequence
 
-from lexigram.contracts.ai.relay.operations import (
+from oridecon.contracts.ai.relay.operations import (
     RelayActiveStream,
     RelayChannelHealth,
     RelayOperationsControlProtocol,

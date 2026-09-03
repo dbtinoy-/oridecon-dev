@@ -36,7 +36,7 @@ async function generate(event) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        topic: "Lexigram framework",
+        topic: "Oridecon framework",
         style: $("style-select").value,
       }),
     });

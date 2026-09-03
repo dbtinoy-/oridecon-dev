@@ -68,7 +68,7 @@ class DependenciesAuditGenerator(MarkdownAuditGenerator):
         unbounded_total = sum(len(pairs) for pairs in pins.values())
         member_rows = list(iter_member_pyprojects(root))
 
-        markdown = """# AUDIT_DEPENDENCIES.md — Lexigram Framework Dependency Freshness Snapshot
+        markdown = """# AUDIT_DEPENDENCIES.md — Oridecon Framework Dependency Freshness Snapshot
 
 > **Source**: Live command evidence from `uv pip list --outdated` and workspace
 > manifest scans against `dev/checks/dep_pins.py`.

@@ -11,7 +11,7 @@ Run::
 
 The server exposes:
 
-- ``POST /api/webhook/subscriptions`` — create a Lexigram subscription
+- ``POST /api/webhook/subscriptions`` — create a Oridecon subscription
 - ``GET /api/webhook/subscriptions``  — list active subscriptions
 - ``POST /api/webhook/receive``       — receive and optionally verify an event
 - ``POST /api/webhook/validate``      — validate a raw payload signature
@@ -25,7 +25,7 @@ from __future__ import annotations
 import asyncio
 import sys
 
-from lexigram.logging import get_logger
+from oridecon.logging import get_logger
 from webhookrelay.app import create_app
 
 logger = get_logger(__name__)
@@ -38,7 +38,7 @@ async def serve() -> None:
     register → freeze → boot (seeding happens here) → server start.
     The ``finally`` block ensures ``stop()`` runs even on errors.
     """
-    from lexigram.web.server.runner import run_server
+    from oridecon.web.server.runner import run_server
 
     app = create_app()
     await app.start()

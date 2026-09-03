@@ -2,7 +2,7 @@
 
 import pytest
 
-from lexigram.app.events import (
+from oridecon.app.events import (
     ApplicationStarted,
     ApplicationStarting,
     ApplicationStopped,
@@ -112,7 +112,7 @@ class TestEventsExported:
 
     def test_all_exported(self) -> None:
         """Test that all events are in __all__."""
-        from lexigram.app.events import __all__ as events_all
+        from oridecon.app.events import __all__ as events_all
 
         assert "ApplicationStarted" in events_all
         assert "ApplicationStarting" in events_all

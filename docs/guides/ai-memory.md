@@ -3,9 +3,9 @@ title: "AI Memory"
 description: "Episodic, semantic, and working memory for intelligent agents."
 ---
 
-`lexigram-ai-memory` provides a three-tier memory system for AI agents: **working memory** (the current context window), **episodic memory** (timestamped conversation history), and **semantic memory** (extracted facts and entities). A consolidation pipeline periodically promotes episodic entries into semantic knowledge.
+`oridecon-ai-memory` provides a three-tier memory system for AI agents: **working memory** (the current context window), **episodic memory** (timestamped conversation history), and **semantic memory** (extracted facts and entities). A consolidation pipeline periodically promotes episodic entries into semantic knowledge.
 
-For full configuration details, see the [`lexigram-ai-memory` package docs](/packages/lexigram-ai-memory/).
+For full configuration details, see the [`oridecon-ai-memory` package docs](/packages/oridecon-ai-memory/).
 
 ---
 
@@ -15,10 +15,10 @@ Each memory tier has its own protocol. All memory operations return `Result` for
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.contracts.ai.memory import (
+from oridecon.contracts.ai.memory import (
     MemoryEntry, MemoryQuery, MemorySearchResult, ConsolidationResult,
 )
-from lexigram.contracts.core import HealthCheckResult
+from oridecon.contracts.core import HealthCheckResult
 
 
 class MemoryStoreProtocol(Protocol):
@@ -83,8 +83,8 @@ class MemoryEntry:
 Add `MemoryModule` with the three-tier configuration:
 
 ```python
-from lexigram import Application
-from lexigram.ai.memory import MemoryModule, MemoryConfig
+from oridecon import Application
+from oridecon.ai.memory import MemoryModule, MemoryConfig
 
 app = Application(name="my-app")
 app.add_module(MemoryModule.configure(
@@ -132,7 +132,7 @@ Set `enable_consolidation=False` in `MemoryModule.configure()` to disable backgr
 Working memory assembles the context window for each LLM call, fitting entries from episodic and semantic memory within a token budget:
 
 ```python
-from lexigram.contracts.ai.memory import (
+from oridecon.contracts.ai.memory import (
     WorkingMemoryProtocol,
     MemoryEntry,
 )
@@ -171,7 +171,7 @@ The `TokenBudgetAllocator` divides the budget across recent turns, episodic reca
 Episodic memory stores timestamped conversation turns and retrieves them by recency and relevance:
 
 ```python
-from lexigram.contracts.ai.memory import EpisodicMemoryProtocol, MemoryQuery
+from oridecon.contracts.ai.memory import EpisodicMemoryProtocol, MemoryQuery
 
 
 async def recall_recent(episodic: EpisodicMemoryProtocol, query: str) -> None:
@@ -198,7 +198,7 @@ Episodic entries have a configurable TTL. Expired entries are pruned during cons
 Semantic memory stores extracted facts as subject-predicate-object triples:
 
 ```python
-from lexigram.contracts.ai.memory import SemanticMemoryProtocol
+from oridecon.contracts.ai.memory import SemanticMemoryProtocol
 
 
 async def store_and_query(semantic: SemanticMemoryProtocol) -> None:
@@ -227,7 +227,7 @@ async def store_and_query(semantic: SemanticMemoryProtocol) -> None:
 The consolidation pipeline moves episodic into semantic storage:
 
 ```python
-from lexigram.contracts.ai.memory import MemoryConsolidatorProtocol
+from oridecon.contracts.ai.memory import MemoryConsolidatorProtocol
 
 
 async def run_consolidation(consolidator: MemoryConsolidatorProtocol, entries: list) -> None:
@@ -241,9 +241,9 @@ async def run_consolidation(consolidator: MemoryConsolidatorProtocol, entries: l
 Use `MemoryModule.stub()` for isolated tests:
 
 ```python
-from lexigram import Application
-from lexigram.ai.memory import MemoryModule
-from lexigram.contracts.ai.memory import (
+from oridecon import Application
+from oridecon.ai.memory import MemoryModule
+from oridecon.contracts.ai.memory import (
     MemoryStoreProtocol,
     EpisodicMemoryProtocol,
     SemanticMemoryProtocol,

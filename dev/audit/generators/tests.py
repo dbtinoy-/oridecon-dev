@@ -54,7 +54,7 @@ class TestsAuditGenerator(MarkdownAuditGenerator):
             else 0
         )
 
-        markdown = """# AUDIT_TESTS.md — Lexigram Framework Targeted Test Execution Audit
+        markdown = """# AUDIT_TESTS.md — Oridecon Framework Targeted Test Execution Audit
 
 > **Source**: Live pytest execution evidence for targeted scopes, with `tests/` directory scanning as supporting context.
 
@@ -94,8 +94,8 @@ class TestsAuditGenerator(MarkdownAuditGenerator):
             )
         markdown += "\n"
         markdown += "### Execution Scope Notes\n\n"
-        markdown += "- `framework-core`: real test execution for `lexigram/tests`.\n"
-        markdown += "- `package`: real test execution for `<package>/tests` across every discovered Lexigram package with tests.\n"
+        markdown += "- `framework-core`: real test execution for `oridecon/tests`.\n"
+        markdown += "- `package`: real test execution for `<package>/tests` across every discovered Oridecon package with tests.\n"
         if all_mode:
             markdown += (
                 "- `scripts-audit`: real test execution for `tests/scripts`.\n\n"
@@ -147,47 +147,47 @@ def _build_test_command_specs(
 
     specs: list[TestCommandSpec] = []
 
-    # Extract the core lexigram package if present and build its scope separately
+    # Extract the core oridecon package if present and build its scope separately
     core_package = next(
-        (row for row in package_rows if str(row["name"]) == "lexigram"), None
+        (row for row in package_rows if str(row["name"]) == "oridecon"), None
     )
     if core_package:
         specs.append(
             TestCommandSpec(
-                label="Lexigram framework core tests",
-                scope="lexigram/tests",
+                label="Oridecon framework core tests",
+                scope="oridecon/tests",
                 kind="framework-core",
                 command=(
                     "uv",
                     "run",
                     "pytest",
-                    "lexigram/tests",
+                    "oridecon/tests",
                     "-q",
                     "-m",
                     "not integration",
-                    "--cov=lexigram",
+                    "--cov=oridecon",
                 ),
             )
         )
 
     contracts_package = next(
-        (row for row in package_rows if str(row["name"]) == "lexigram-contracts"), None
+        (row for row in package_rows if str(row["name"]) == "oridecon-contracts"), None
     )
     if contracts_package:
         specs.append(
             TestCommandSpec(
-                label="Package tests: lexigram-contracts",
-                scope="lexigram-contracts/tests",
+                label="Package tests: oridecon-contracts",
+                scope="oridecon-contracts/tests",
                 kind="package",
                 command=(
                     "uv",
                     "run",
                     "pytest",
-                    "lexigram-contracts/tests",
+                    "oridecon-contracts/tests",
                     "-q",
                     "-m",
                     "not integration",
-                    "--cov=lexigram.contracts",
+                    "--cov=oridecon.contracts",
                 ),
             )
         )
@@ -198,14 +198,14 @@ def _build_test_command_specs(
             str(row["name"]),
         )
         for row in package_rows
-        if str(row["name"]) not in {"lexigram", "lexigram-contracts"}
+        if str(row["name"]) not in {"oridecon", "oridecon-contracts"}
     )
     for scope, package_name in package_scopes:
         kind = "package"
         label = f"Package tests: {package_name}"
 
         cov_module = package_name.replace("-", ".")
-        if package_name == "lexigram-sql":
+        if package_name == "oridecon-sql":
             label = f"Package tests: {package_name} (unit only, no external DB)"
             command = (
                 "uv",

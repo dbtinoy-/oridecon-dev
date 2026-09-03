@@ -1,6 +1,6 @@
 """Recording fake implementations for the relay system scenario tests.
 
-Each fake implements exactly one contract from ``lexigram-contracts`` (or
+Each fake implements exactly one contract from ``oridecon-contracts`` (or
 the gateway's internal route-event protocol) and records every call so
 tests can assert call ordering, wire payloads, and settlement semantics
 without touching real infrastructure.

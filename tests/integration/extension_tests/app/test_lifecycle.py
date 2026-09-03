@@ -4,10 +4,10 @@ from unittest.mock import AsyncMock, MagicMock, Mock, PropertyMock, patch
 
 import pytest
 
-from lexigram.app import run_application, start_application, stop_application
-from lexigram.app.base import Application
-from lexigram.di.container import Container
-from lexigram.di.types import ProviderPriority
+from oridecon.app import run_application, start_application, stop_application
+from oridecon.app.base import Application
+from oridecon.di.container import Container
+from oridecon.di.types import ProviderPriority
 
 
 async def _await_tasks(*tasks, **kwargs):
@@ -23,7 +23,7 @@ async def _await_tasks(*tasks, **kwargs):
     return results
 
 
-from lexigram.testing.mocks import MockProvider as BaseMockProvider
+from oridecon.testing.mocks import MockProvider as BaseMockProvider
 
 
 class MockProvider(BaseMockProvider):
@@ -156,7 +156,7 @@ class TestStartApplication:
 
         with pytest.raises(
             Exception,
-        ):  # The wrapper catches Exception and raises LexigramError
+        ):  # The wrapper catches Exception and raises OrideconError
             await start_application(mock_app)
 
 
@@ -189,10 +189,10 @@ class TestRunApplication:
         # inside run_application is intercepted correctly.
         with (
             patch(
-                "lexigram.app.runner.start_application", new_callable=AsyncMock,
+                "oridecon.app.runner.start_application", new_callable=AsyncMock,
             ) as mock_start,
             patch(
-                "lexigram.app.runner.stop_application", new_callable=AsyncMock,
+                "oridecon.app.runner.stop_application", new_callable=AsyncMock,
             ),
         ):
             mock_start.side_effect = KeyboardInterrupt()
@@ -207,10 +207,10 @@ class TestRunApplication:
         """Test run_application handles exceptions"""
         with (
             patch(
-                "lexigram.app.runner.start_application", new_callable=AsyncMock,
+                "oridecon.app.runner.start_application", new_callable=AsyncMock,
             ) as mock_start,
             patch(
-                "lexigram.app.runner.stop_application", new_callable=AsyncMock,
+                "oridecon.app.runner.stop_application", new_callable=AsyncMock,
             ),
         ):
             mock_start.side_effect = Exception("Application error")
@@ -224,10 +224,10 @@ class TestRunApplication:
 
         with (
             patch(
-                "lexigram.app.runner.start_application", new_callable=AsyncMock,
+                "oridecon.app.runner.start_application", new_callable=AsyncMock,
             ) as mock_start,
             patch(
-                "lexigram.app.runner.stop_application", new_callable=AsyncMock,
+                "oridecon.app.runner.stop_application", new_callable=AsyncMock,
             ) as mock_stop,
             patch("asyncio.Event.wait", new_callable=AsyncMock) as mock_wait,
         ):

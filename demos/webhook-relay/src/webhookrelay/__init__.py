@@ -1,4 +1,4 @@
-"""Webhook relay demo — Lexigram subscriptions and HMAC verification.
+"""Webhook relay demo — Oridecon subscriptions and HMAC verification.
 
 The public surface is intentionally small: a standalone application factory,
 its typed ingress config, and the lifecycle provider that composes the

@@ -6,7 +6,7 @@ import math
 
 import pytest
 
-from lexigram.contracts.ai.llm import EmbeddingClientProtocol
+from oridecon.contracts.ai.llm import EmbeddingClientProtocol
 
 from rag_docs.repository.embedder import EMBEDDING_DIMENSION, HashingEmbedder
 

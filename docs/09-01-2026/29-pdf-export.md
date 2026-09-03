@@ -31,8 +31,8 @@ bar are format-agnostic.
 New module-level helper in `pages.py`:
 
 - `page_format_available(key)` — `csv`/`json` always `True`; `xlsx` reads
-  `lexigram.admin.services.export.xlsx.HAS_OPENPYXL`; `pdf` reads
-  `lexigram.admin.services.export.adapters.pdf.HAS_REPORTLAB`. Flags are
+  `oridecon.admin.services.export.xlsx.HAS_OPENPYXL`; `pdf` reads
+  `oridecon.admin.services.export.adapters.pdf.HAS_REPORTLAB`. Flags are
   read **at call time via the module attribute** so tests can monkeypatch
   them (same technique as R29's `HAS_OPENPYXL` tests).
 - `_create_form` only offers available formats — no dead options.

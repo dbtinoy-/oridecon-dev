@@ -27,17 +27,17 @@ from rbac_console.domain.articles import ArticleStore
 from rbac_console.domain.personas import PERSONAS, PersonaDirectory
 from starlette.requests import Request
 
-from lexigram.auth import SessionCookieBackend, UserService
-from lexigram.auth.authz import AuthorizationService
-from lexigram.contracts.exceptions import (
+from oridecon.auth import SessionCookieBackend, UserService
+from oridecon.auth.authz import AuthorizationService
+from oridecon.contracts.exceptions import (
     AuthenticationError,
     NotFoundError,
     PermissionDeniedError,
     ValidationError,
 )
-from lexigram.result import Err, Ok, Result
-from lexigram.serialization import loads as json_loads
-from lexigram.web import Controller, JSONResponse, get, post
+from oridecon.result import Err, Ok, Result
+from oridecon.serialization import loads as json_loads
+from oridecon.web import Controller, JSONResponse, get, post
 
 PERSONA_PASSWORD = "Demo-Password-1"
 # (action, resource) pairs the matrix renders; required permission is
@@ -64,12 +64,12 @@ def _granted(verdict: Result[bool, Any]) -> bool:
 class RbacApiController(Controller):
     """RBAC API consumed by the UI's vanilla-JS client.
 
-    Lexigram pattern: controllers are stateless handlers that receive
+    Oridecon pattern: controllers are stateless handlers that receive
     collaborators via constructor injection.  The framework resolves the
     controller when a request matches its routes — you never instantiate
     it manually.
 
-    Route decorators (@get, @post) come from lexigram.web, not Starlette
+    Route decorators (@get, @post) come from oridecon.web, not Starlette
     directly — they integrate with the framework's middleware stack.
     """
 
@@ -225,7 +225,7 @@ class RbacApiController(Controller):
 
         Pattern: authenticate → authorize → act.  If either check fails,
         return an Err and let the pipeline map it to the correct HTTP status.
-        This is the standard Lexigram guard pattern.
+        This is the standard Oridecon guard pattern.
         """
         user_result = await self._authenticated_user(request)
         if user_result.is_err():

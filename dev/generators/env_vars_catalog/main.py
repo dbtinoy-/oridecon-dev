@@ -80,13 +80,13 @@ def _select_roots(
     standalone family must not be documented.  Same-name collisions across
     packages stay separate entries here, so e.g. core's ``SecurityConfig``
     (section=security) is not suppressed by web's section-less child class of
-    the same name.  ``LexigramConfig`` is a root despite having no section
-    (its fold validator consumes ``LEX_LEXIGRAM__*``).
+    the same name.  ``OrideconConfig`` is a root despite having no section
+    (its fold validator consumes ``ORI_ORIDECON__*``).
     """
     roots = {
         key: entry
         for key, entry in registry.items()
-        if entry.cls.config_section or entry.name == "LexigramConfig"
+        if entry.cls.config_section or entry.name == "OrideconConfig"
     }
 
     def _resolve_ref_keys(
@@ -169,8 +169,8 @@ def main() -> None:
     for root_key in sorted(roots, key=lambda k: (k[1], k[0])):
         entry = roots[root_key]
         owner_pkg, root_name = entry.owner, entry.name
-        section = entry.cls.config_section or "lexigram"
-        prefix = f"LEX_{section.upper()}__"
+        section = entry.cls.config_section or "oridecon"
+        prefix = f"ORI_{section.upper()}__"
 
         # Home package's classes shadow same-named classes elsewhere during
         # child resolution.
@@ -238,7 +238,7 @@ def _render_markdown(
 ) -> list[str]:
     """Render the REF_ENV_VARS markdown body from deduplicated entries."""
     lines: list[str] = []
-    lines.append("# REF_ENV_VARS.md — Lexigram Framework Environment Variables")
+    lines.append("# REF_ENV_VARS.md — Oridecon Framework Environment Variables")
     lines.append("")
     lines.append(f"**Date:** {datetime.now(UTC).strftime('%Y-%m-%d')}")
     lines.append(f"**Total entries:** {total_unique}")

@@ -1,6 +1,6 @@
 # Storage — Artifact Vault
 
-A focused, browser-first example of **Lexigram StorageModule**. It uses only
+A focused, browser-first example of **Oridecon StorageModule**. It uses only
 the storage domain module plus `WebModule`, with the package's deterministic
 in-memory blob driver and no cloud credentials.
 
@@ -12,7 +12,7 @@ in-memory blob driver and no cloud credentials.
 4. Open **Access** to see the active driver's public URL and its honest
    presigned-URL capability.
 
-## Lexigram surface
+## Oridecon surface
 
 - `StorageModule.configure()` and `StorageProvider` lifecycle
 - DI-injected `BlobStoreProtocol`
@@ -44,7 +44,7 @@ The hub embeds this console at `/demos/artifact-vault/`.
 | DELETE | `/api/artifacts/{name}` | Delete an object |
 | GET | `/api/artifacts/health` | Check the active storage backend |
 
-## Lexigram Concepts
+## Oridecon Concepts
 
 | Concept | How it's used |
 |---------|---------------|

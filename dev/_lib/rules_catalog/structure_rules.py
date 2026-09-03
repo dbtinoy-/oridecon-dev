@@ -1,4 +1,4 @@
-"""Structural and import-boundary rules for the Lexigram rule catalog."""
+"""Structural and import-boundary rules for the Oridecon rule catalog."""
 
 from __future__ import annotations
 
@@ -78,14 +78,14 @@ def _detect_cross_extension_imports(
     source_file: RuleSourceFile,
     context: RuleCatalogContext,
 ) -> tuple[RuleFinding, ...]:
-    """Flag forbidden direct imports across Lexigram package boundaries."""
+    """Flag forbidden direct imports across Oridecon package boundaries."""
 
     if not (
         _is_extension_package(source_file.package_name)
-        or source_file.package_name == "lexigram"
+        or source_file.package_name == "oridecon"
     ):
         return ()
-    if source_file.package_name == "lexigram-testing":
+    if source_file.package_name == "oridecon-testing":
         return ()
 
     findings: list[RuleFinding] = []
@@ -94,14 +94,14 @@ def _detect_cross_extension_imports(
         owner = context.resolve_import_owner(imported_module)
         if owner is None or owner == source_file.package_name:
             continue
-        if owner == "lexigram-ui":
+        if owner == "oridecon-ui":
             # Shared UI primitive layer: every package's admin pages
-            # compose lexigram-ui atoms (sanctioned for admin/web).
+            # compose oridecon-ui atoms (sanctioned for admin/web).
             continue
-        if source_file.package_name == "lexigram":
+        if source_file.package_name == "oridecon":
             if not _is_extension_package(owner):
                 continue
-            import_description = f"core lexigram directly imports {owner}"
+            import_description = f"core oridecon directly imports {owner}"
         else:
             if not _is_extension_package(owner):
                 continue
@@ -204,9 +204,9 @@ def _iter_import_targets(tree: ast.Module) -> tuple[tuple[ast.AST, str], ...]:
 
 
 def _is_extension_package(package_name: str) -> bool:
-    """Return whether a top-level Lexigram package is an extension package."""
+    """Return whether a top-level Oridecon package is an extension package."""
 
-    return package_name.startswith("lexigram-") and package_name != "lexigram-contracts"
+    return package_name.startswith("oridecon-") and package_name != "oridecon-contracts"
 
 
 def _is_enum_base(base: ast.expr) -> bool:

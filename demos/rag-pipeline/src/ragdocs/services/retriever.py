@@ -1,15 +1,15 @@
-"""Retriever built on Lexigram's vector collection protocol."""
+"""Retriever built on Oridecon's vector collection protocol."""
 
 from __future__ import annotations
 
 from typing import Any
 
-from lexigram.contracts.data.vector import SearchQuery, VectorCollectionProtocol
+from oridecon.contracts.data.vector import SearchQuery, VectorCollectionProtocol
 from ragdocs.vector_store import DeterministicEmbedder
 
 
 class Retriever:
-    """Retrieve relevant chunks from one Lexigram vector collection."""
+    """Retrieve relevant chunks from one Oridecon vector collection."""
 
     def __init__(
         self,

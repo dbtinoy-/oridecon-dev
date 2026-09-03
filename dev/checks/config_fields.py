@@ -2,11 +2,11 @@
 
 Config classes are contracts; fields nothing consumes erode that contract
 (first known case: EvaluationConfig.default_seed /
-LEX_AI_EVALUATION__DEFAULT_SEED parses but has zero readers).
+ORI_AI_EVALUATION__DEFAULT_SEED parses but has zero readers).
 
-Coverage: every ``lexigram.*`` member the workspace env can import — the
+Coverage: every ``oridecon.*`` member the workspace env can import — the
 merged namespace exposes core, packages, and experimental subtrees alike
-(members extend ``lexigram.__path__`` via pkgutil.extend_path). Each class's
+(members extend ``oridecon.__path__`` via pkgutil.extend_path). Each class's
 scan root is derived from its module ``__file__`` up to the enclosing ``src/``
 directory, so ``.venv`` trees are never traversed.
 
@@ -60,13 +60,13 @@ def _config_classes() -> list[tuple[object, str]]:
     import pkgutil
 
     try:
-        package = importlib.import_module("lexigram")
+        package = importlib.import_module("oridecon")
     except ImportError:
         return []
     # Import side effects (structlog lines) write to stdout; keep the report clean.
     with redirect_stdout(io.StringIO()):
-        for module_info in pkgutil.walk_packages(package.__path__, prefix="lexigram."):
-            if module_info.name.startswith("lexigram.testing"):
+        for module_info in pkgutil.walk_packages(package.__path__, prefix="oridecon."):
+            if module_info.name.startswith("oridecon.testing"):
                 continue  # test-support modules reference everything; pure noise
             try:
                 importlib.import_module(module_info.name)
@@ -78,8 +78,8 @@ def _config_classes() -> list[tuple[object, str]]:
     src_roots: set[str] = set()
     for module in list(sys.modules.values()):
         name = getattr(module, "__name__", "")
-        if not name.startswith("lexigram") or name.startswith(
-            ("lexigram.testing", "lexigram.contracts")
+        if not name.startswith("oridecon") or name.startswith(
+            ("oridecon.testing", "oridecon.contracts")
         ):
             continue
         module_file = getattr(module, "__file__", None)
@@ -92,7 +92,7 @@ def _config_classes() -> list[tuple[object, str]]:
             if not (
                 inspect.isclass(value)
                 and value.__name__.endswith("Config")
-                and getattr(value, "__module__", "").startswith("lexigram")
+                and getattr(value, "__module__", "").startswith("oridecon")
                 and getattr(value, "__annotations__", None)
             ):
                 continue

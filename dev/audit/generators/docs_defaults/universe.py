@@ -326,7 +326,7 @@ class DefaultUniverse:
     def resolve(self, key: str) -> list[DefaultEntry]:
         """Return candidate default entries for a doc key (empty when unresolvable)."""
         entries: list[DefaultEntry] = []
-        if key.startswith("LEX_") and "__" in key:
+        if key.startswith("ORI_") and "__" in key:
             ok, desc = _verify_env_var(key, self.validity, self.direct_reads)
             if ok:
                 path = _desc_to_path(desc)

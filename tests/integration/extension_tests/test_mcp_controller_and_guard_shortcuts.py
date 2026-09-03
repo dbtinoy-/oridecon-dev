@@ -21,7 +21,7 @@ import pytest
 
 class TestToolDecorator:
     def test_sets_tool_config_on_method(self) -> None:
-        from lexigram.ai.mcp.controllers import tool
+        from oridecon.ai.mcp.controllers import tool
 
         class Ctrl:
             @tool("get_item", description="Get an item by ID")
@@ -33,7 +33,7 @@ class TestToolDecorator:
         assert Ctrl.get_item._tool_config["description"] == "Get an item by ID"
 
     def test_tool_config_without_description_defaults_to_empty(self) -> None:
-        from lexigram.ai.mcp.controllers import tool
+        from oridecon.ai.mcp.controllers import tool
 
         class Ctrl:
             @tool("list_items")
@@ -43,7 +43,7 @@ class TestToolDecorator:
         assert Ctrl.list_items._tool_config["description"] == ""
 
     def test_tool_returns_original_function_identity(self) -> None:
-        from lexigram.ai.mcp.controllers import tool
+        from oridecon.ai.mcp.controllers import tool
 
         async def my_handler(self) -> None: ...
 
@@ -53,7 +53,7 @@ class TestToolDecorator:
 
 class TestResourceDecorator:
     def test_sets_resource_config_on_method(self) -> None:
-        from lexigram.ai.mcp.controllers import resource
+        from oridecon.ai.mcp.controllers import resource
 
         class Ctrl:
             @resource("users://{user_id}", description="A user resource")
@@ -66,7 +66,7 @@ class TestResourceDecorator:
         assert cfg["name"] == "users://{user_id}"  # default name
 
     def test_resource_custom_name(self) -> None:
-        from lexigram.ai.mcp.controllers import resource
+        from oridecon.ai.mcp.controllers import resource
 
         class Ctrl:
             @resource("users://{id}", name="User Resource")
@@ -78,7 +78,7 @@ class TestResourceDecorator:
 
 class TestPromptDecorator:
     def test_sets_prompt_config_on_method(self) -> None:
-        from lexigram.ai.mcp.controllers import prompt
+        from oridecon.ai.mcp.controllers import prompt
 
         class Ctrl:
             @prompt("summarize", description="Generate summary")
@@ -92,7 +92,7 @@ class TestPromptDecorator:
 
 class TestMCPController:
     def test_collect_tools_returns_decorated_methods(self) -> None:
-        from lexigram.ai.mcp.controllers import MCPController, tool
+        from oridecon.ai.mcp.controllers import MCPController, tool
 
         class MyCtrl(MCPController):
             @tool("do_thing", description="Does a thing")
@@ -111,7 +111,7 @@ class TestMCPController:
         assert do["description"] == "Does a thing"
 
     def test_collect_tools_skips_non_decorated_methods(self) -> None:
-        from lexigram.ai.mcp.controllers import MCPController, tool
+        from oridecon.ai.mcp.controllers import MCPController, tool
 
         class MyCtrl(MCPController):
             @tool("a")
@@ -122,7 +122,7 @@ class TestMCPController:
         assert len(MyCtrl.collect_tools()) == 1
 
     def test_collect_resources_returns_decorated_methods(self) -> None:
-        from lexigram.ai.mcp.controllers import MCPController, resource
+        from oridecon.ai.mcp.controllers import MCPController, resource
 
         class MyCtrl(MCPController):
             @resource("items://{id}")
@@ -135,7 +135,7 @@ class TestMCPController:
         assert resources[0]["handler_name"] == "get_item"
 
     def test_collect_prompts_returns_decorated_methods(self) -> None:
-        from lexigram.ai.mcp.controllers import MCPController, prompt
+        from oridecon.ai.mcp.controllers import MCPController, prompt
 
         class MyCtrl(MCPController):
             @prompt("my_prompt")
@@ -147,7 +147,7 @@ class TestMCPController:
         assert prompts[0]["name"] == "my_prompt"
 
     def test_collect_tools_inherits_from_base_class(self) -> None:
-        from lexigram.ai.mcp.controllers import MCPController, tool
+        from oridecon.ai.mcp.controllers import MCPController, tool
 
         class Base(MCPController):
             @tool("base_tool")
@@ -163,7 +163,7 @@ class TestMCPController:
         assert "child_tool" in names
 
     def test_collect_tools_ignores_private_methods(self) -> None:
-        from lexigram.ai.mcp.controllers import MCPController
+        from oridecon.ai.mcp.controllers import MCPController
 
         class MyCtrl(MCPController):
             async def _private(self) -> None: ...
@@ -177,7 +177,7 @@ class TestMCPController:
 class TestControllerToolProvider:
     @pytest.mark.asyncio
     async def test_list_tools_returns_all_tool_definitions(self) -> None:
-        from lexigram.ai.mcp.controllers import ControllerToolProvider, MCPController, tool
+        from oridecon.ai.mcp.controllers import ControllerToolProvider, MCPController, tool
 
         class Ctrl(MCPController):
             @tool("search", description="Search items")
@@ -194,7 +194,7 @@ class TestControllerToolProvider:
 
     @pytest.mark.asyncio
     async def test_list_tools_required_params_no_default(self) -> None:
-        from lexigram.ai.mcp.controllers import ControllerToolProvider, MCPController, tool
+        from oridecon.ai.mcp.controllers import ControllerToolProvider, MCPController, tool
 
         class Ctrl(MCPController):
             @tool("fetch")
@@ -208,7 +208,7 @@ class TestControllerToolProvider:
 
     @pytest.mark.asyncio
     async def test_list_tools_optional_params_not_in_required(self) -> None:
-        from lexigram.ai.mcp.controllers import ControllerToolProvider, MCPController, tool
+        from oridecon.ai.mcp.controllers import ControllerToolProvider, MCPController, tool
 
         class Ctrl(MCPController):
             @tool("search")
@@ -221,7 +221,7 @@ class TestControllerToolProvider:
 
     @pytest.mark.asyncio
     async def test_call_tool_dispatches_to_handler(self) -> None:
-        from lexigram.ai.mcp.controllers import ControllerToolProvider, MCPController, tool
+        from oridecon.ai.mcp.controllers import ControllerToolProvider, MCPController, tool
 
         class Ctrl(MCPController):
             @tool("greet")
@@ -234,8 +234,8 @@ class TestControllerToolProvider:
 
     @pytest.mark.asyncio
     async def test_call_tool_raises_for_unknown_tool(self) -> None:
-        from lexigram.ai.mcp.controllers import ControllerToolProvider
-        from lexigram.contracts.mcp.exceptions import MCPToolCallError
+        from oridecon.ai.mcp.controllers import ControllerToolProvider
+        from oridecon.contracts.mcp.exceptions import MCPToolCallError
 
         provider = ControllerToolProvider([])
         with pytest.raises(MCPToolCallError):
@@ -243,7 +243,7 @@ class TestControllerToolProvider:
 
     @pytest.mark.asyncio
     async def test_aggregates_tools_from_multiple_controllers(self) -> None:
-        from lexigram.ai.mcp.controllers import ControllerToolProvider, MCPController, tool
+        from oridecon.ai.mcp.controllers import ControllerToolProvider, MCPController, tool
 
         class CtrlA(MCPController):
             @tool("a")
@@ -265,7 +265,7 @@ class TestControllerToolProvider:
 class TestControllerResourceProvider:
     @pytest.mark.asyncio
     async def test_list_resources_returns_all(self) -> None:
-        from lexigram.ai.mcp.controllers import (
+        from oridecon.ai.mcp.controllers import (
             ControllerResourceProvider,
             MCPController,
             resource,
@@ -284,7 +284,7 @@ class TestControllerResourceProvider:
 
     @pytest.mark.asyncio
     async def test_read_resource_dispatches_via_pattern(self) -> None:
-        from lexigram.ai.mcp.controllers import (
+        from oridecon.ai.mcp.controllers import (
             ControllerResourceProvider,
             MCPController,
             resource,
@@ -301,8 +301,8 @@ class TestControllerResourceProvider:
 
     @pytest.mark.asyncio
     async def test_read_resource_raises_for_unmatched_uri(self) -> None:
-        from lexigram.ai.mcp.controllers import ControllerResourceProvider
-        from lexigram.contracts.mcp.exceptions import MCPResourceError
+        from oridecon.ai.mcp.controllers import ControllerResourceProvider
+        from oridecon.contracts.mcp.exceptions import MCPResourceError
 
         provider = ControllerResourceProvider([])
         with pytest.raises(MCPResourceError):
@@ -310,7 +310,7 @@ class TestControllerResourceProvider:
 
     @pytest.mark.asyncio
     async def test_list_templates_returns_only_pattern_uris(self) -> None:
-        from lexigram.ai.mcp.controllers import (
+        from oridecon.ai.mcp.controllers import (
             ControllerResourceProvider,
             MCPController,
             resource,
@@ -337,7 +337,7 @@ class TestControllerResourceProvider:
 class TestControllerPromptProvider:
     @pytest.mark.asyncio
     async def test_list_prompts_returns_all(self) -> None:
-        from lexigram.ai.mcp.controllers import (
+        from oridecon.ai.mcp.controllers import (
             ControllerPromptProvider,
             MCPController,
             prompt,
@@ -356,7 +356,7 @@ class TestControllerPromptProvider:
 
     @pytest.mark.asyncio
     async def test_get_prompt_str_result_normalized_to_mcp_format(self) -> None:
-        from lexigram.ai.mcp.controllers import (
+        from oridecon.ai.mcp.controllers import (
             ControllerPromptProvider,
             MCPController,
             prompt,
@@ -374,8 +374,8 @@ class TestControllerPromptProvider:
 
     @pytest.mark.asyncio
     async def test_get_prompt_raises_for_unknown_prompt(self) -> None:
-        from lexigram.ai.mcp.controllers import ControllerPromptProvider
-        from lexigram.contracts.mcp.exceptions import MCPPromptError
+        from oridecon.ai.mcp.controllers import ControllerPromptProvider
+        from oridecon.contracts.mcp.exceptions import MCPPromptError
 
         provider = ControllerPromptProvider([])
         with pytest.raises(MCPPromptError):
@@ -387,8 +387,8 @@ class TestControllerPromptProvider:
 
 class TestMCPModuleControllers:
     def test_mcp_module_accepts_controllers_param(self) -> None:
-        from lexigram.ai.mcp import MCPModule
-        from lexigram.ai.mcp.controllers import MCPController
+        from oridecon.ai.mcp import MCPModule
+        from oridecon.ai.mcp.controllers import MCPController
 
         class MyCtrl(MCPController):
             pass
@@ -401,7 +401,7 @@ class TestMCPModuleControllers:
         )
 
     def test_mcp_module_controllers_defaults_to_empty(self) -> None:
-        from lexigram.ai.mcp import MCPModule
+        from oridecon.ai.mcp import MCPModule
 
         module = MCPModule.configure()
         providers = module.providers
@@ -411,7 +411,7 @@ class TestMCPModuleControllers:
         )
 
     def test_mcp_module_importable_from_package(self) -> None:
-        from lexigram.ai.mcp import MCPController, MCPModule, prompt, resource, tool
+        from oridecon.ai.mcp import MCPController, MCPModule, prompt, resource, tool
 
         assert MCPModule is not None
         assert MCPController is not None
@@ -425,13 +425,13 @@ class TestMCPModuleControllers:
 
 class TestGuardShortcut:
     def test_guard_importable_from_web(self) -> None:
-        from lexigram.web import guard
+        from oridecon.web import guard
 
         assert callable(guard)
 
     def test_guard_is_alias_for_use_guards(self) -> None:
-        from lexigram.web.security.guards import use_guards
-        from lexigram.web.security.shortcuts import guard
+        from oridecon.web.security.guards import use_guards
+        from oridecon.web.security.shortcuts import guard
 
         # Both should return a decorator when called with a guard class
         mock_guard_class = MagicMock()
@@ -445,7 +445,7 @@ class TestGuardShortcut:
         assert callable(result_use_guards)
 
     def test_guard_stores_guards_metadata_on_decorated_func(self) -> None:
-        from lexigram.web.security.shortcuts import guard
+        from oridecon.web.security.shortcuts import guard
 
         mock_guard_class = MagicMock()
         mock_guard_instance = MagicMock(spec=["can_activate"])
@@ -461,30 +461,30 @@ class TestGuardShortcut:
 
 class TestRolesShortcut:
     def test_roles_importable_from_web(self) -> None:
-        from lexigram.web import roles
+        from oridecon.web import roles
 
         assert callable(roles)
 
     def test_roles_importable_from_shortcuts(self) -> None:
-        from lexigram.web.security.shortcuts import roles
+        from oridecon.web.security.shortcuts import roles
 
         assert callable(roles)
 
     def test_roles_produces_callable_decorator(self) -> None:
-        from lexigram.web.security.shortcuts import roles
+        from oridecon.web.security.shortcuts import roles
 
         mock_authorizer = object()
         decorator = roles("admin", authorizer=mock_authorizer)
         assert callable(decorator)
 
     def test_roles_multiple_role_names(self) -> None:
-        from lexigram.web.security.shortcuts import roles
+        from oridecon.web.security.shortcuts import roles
 
         mock_authorizer = object()
         decorator = roles("admin", "moderator", "staff", authorizer=mock_authorizer)
         assert callable(decorator)
 
     def test_guard_importable_from_shortcuts(self) -> None:
-        from lexigram.web.security.shortcuts import guard
+        from oridecon.web.security.shortcuts import guard
 
         assert callable(guard)

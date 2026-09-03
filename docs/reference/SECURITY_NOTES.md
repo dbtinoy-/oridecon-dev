@@ -9,7 +9,7 @@ components.
 
 ## DNS rebinding in `is_safe_url_for_request` (2026-08-22)
 
-**Primitive:** `lexigram-contracts/security/url_safety.py::is_safe_url_for_request`
+**Primitive:** `oridecon-contracts/security/url_safety.py::is_safe_url_for_request`
 resolves the hostname at *check* time via `getaddrinfo` and rejects when any
 resolved address is private/reserved. The actual connection is made later by
 aiohttp/httpx, which re-resolves DNS independently — an attacker controlling
@@ -18,9 +18,9 @@ with `127.0.0.1`/RFC1918.
 
 **Affected consumers:**
 
-- `packages/lexigram-http` `HTTPClient._assert_url_safe` (all outbound calls;
+- `packages/oridecon-http` `HTTPClient._assert_url_safe` (all outbound calls;
   redirect hops re-validated as of this change)
-- `packages/lexigram-webhook` subscription/delivery URLs
+- `packages/oridecon-webhook` subscription/delivery URLs
 - relay-gateway channel upstreams (boundary-IP literal check only; see
   `_validate_upstream_url`)
 
@@ -41,4 +41,4 @@ and connection pooling.
 URLs fetched server-side, or removal of deployment egress restrictions.
 At that point implement a pinning connector
 (`aiohttp.TCPConnector(resolver=PinningResolver)` that caches the checked
-addresses) in `lexigram-http` and route all consumers through it.
+addresses) in `oridecon-http` and route all consumers through it.

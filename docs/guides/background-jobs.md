@@ -1,9 +1,9 @@
 ---
 title: "Background Jobs & Tasks"
-description: "Run deferred work, scheduled jobs, and distributed queues with lexigram-tasks."
+description: "Run deferred work, scheduled jobs, and distributed queues with oridecon-tasks."
 ---
 
-`lexigram-tasks` runs long-running or deferred work outside the request/response cycle, with pluggable backends (in-memory, Redis, AMQP, Postgres), scheduling, retries, and a dead-letter queue. For queue transport specifically, it builds on `lexigram-queue`.
+`oridecon-tasks` runs long-running or deferred work outside the request/response cycle, with pluggable backends (in-memory, Redis, AMQP, Postgres), scheduling, retries, and a dead-letter queue. For queue transport specifically, it builds on `oridecon-queue`.
 
 ---
 
@@ -12,7 +12,7 @@ description: "Run deferred work, scheduled jobs, and distributed queues with lex
 Decorate an async function with `@task`. Tasks should be idempotent — they may be retried on failure. Dependencies are resolved from the container when a worker executes the task.
 
 ```python
-from lexigram.tasks import task
+from oridecon.tasks import task
 
 
 @task
@@ -27,7 +27,7 @@ async def send_welcome_email(user_id: str, email: str) -> None:
 Use `@scheduled` for recurring work:
 
 ```python
-from lexigram.tasks import scheduled
+from oridecon.tasks import scheduled
 
 
 @scheduled(cron="0 0 * * *")   # every night at midnight
@@ -44,8 +44,8 @@ Enable the scheduler in config (see below) so a worker runs due jobs.
 Inject the queue contract and enqueue work from your services. `enqueue()` returns a `Result` with the job id:
 
 ```python
-from lexigram.contracts.infra.tasks import TaskQueueProtocol
-from lexigram.result import Result
+from oridecon.contracts.infra.tasks import TaskQueueProtocol
+from oridecon.result import Result
 
 
 class EnrollmentService:
@@ -59,7 +59,7 @@ class EnrollmentService:
         job_id = result.unwrap()
 ```
 
-See the [`lexigram-tasks` package docs](/packages/lexigram-tasks/) for handler registration and the full enqueue API.
+See the [`oridecon-tasks` package docs](/packages/oridecon-tasks/) for handler registration and the full enqueue API.
 
 ---
 
@@ -103,7 +103,7 @@ Tasks follow a distributed-worker pattern: your app enqueues jobs to a broker; o
 
 ```mermaid
 graph LR
-    App[Lexigram App] -- enqueue --> Broker((Broker / Queue))
+    App[Oridecon App] -- enqueue --> Broker((Broker / Queue))
     Broker -- pull --> W1[Worker 1]
     Broker -- pull --> W2[Worker 2]
 ```
@@ -118,8 +118,8 @@ Declare named backends to route different workloads independently (e.g. a fast `
 
 ```python
 from typing import Annotated
-from lexigram.contracts.infra.tasks import TaskQueueProtocol
-from lexigram.di.markers import Named
+from oridecon.contracts.infra.tasks import TaskQueueProtocol
+from oridecon.di.markers import Named
 
 
 class Mailer:
@@ -133,4 +133,4 @@ class Mailer:
 
 - [Event-Driven Architecture](/guides/event-driven/) — reacting to domain events
 - [Configuration](/getting-started/configuration/) — sections and profiles
-- [`lexigram-tasks` package](/packages/lexigram-tasks/) — full API
+- [`oridecon-tasks` package](/packages/oridecon-tasks/) — full API

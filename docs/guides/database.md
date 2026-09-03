@@ -3,9 +3,9 @@ title: "Database & Persistence"
 description: "Async SQL with the repository pattern, domain models, and migrations."
 ---
 
-`lexigram-sql` provides async database access for Postgres, MySQL, and SQLite. It favours a protocol-first **repository pattern**: your domain logic depends on contracts, not on a specific ORM, which keeps services clean and trivially testable.
+`oridecon-sql` provides async database access for Postgres, MySQL, and SQLite. It favours a protocol-first **repository pattern**: your domain logic depends on contracts, not on a specific ORM, which keeps services clean and trivially testable.
 
-For the complete API and performance tuning, see the [`lexigram-sql` package docs](/packages/lexigram-sql/).
+For the complete API and performance tuning, see the [`oridecon-sql` package docs](/packages/oridecon-sql/).
 
 ---
 
@@ -15,7 +15,7 @@ Define a **Protocol** that describes how data is accessed — your services depe
 
 ```python
 from typing import Protocol, runtime_checkable
-from lexigram.result import Result
+from oridecon.result import Result
 from my_app.domain.models import Product
 
 
@@ -28,8 +28,8 @@ class ProductRepository(Protocol):
 Implement it in your infrastructure layer:
 
 ```python
-from lexigram import singleton
-from lexigram.result import Result, Ok, Err
+from oridecon import singleton
+from oridecon.result import Result, Ok, Err
 from my_app.domain.models import Product
 from my_app.repositories.base import ProductRepository
 
@@ -54,11 +54,11 @@ async def register(self, container: ContainerRegistrarProtocol) -> None:
 
 ## 2. Domain Models
 
-Lexigram models are lightweight dataclasses built on `DomainModel` — **not** SQLAlchemy ORM classes. SQLAlchemy is used internally by `lexigram-sql` for query building; your domain stays framework-agnostic.
+Oridecon models are lightweight dataclasses built on `DomainModel` — **not** SQLAlchemy ORM classes. SQLAlchemy is used internally by `oridecon-sql` for query building; your domain stays framework-agnostic.
 
 ```python
 from dataclasses import dataclass
-from lexigram.domain import DomainModel
+from oridecon.domain import DomainModel
 
 
 @dataclass
@@ -68,10 +68,10 @@ class Product(DomainModel):
     stock: int = 0
 ```
 
-For common CRUD, `lexigram-sql` ships a `GenericRepository` you can compose against a table:
+For common CRUD, `oridecon-sql` ships a `GenericRepository` you can compose against a table:
 
 ```python
-from lexigram.sql import GenericRepository
+from oridecon.sql import GenericRepository
 
 repo = GenericRepository[Product, str](
     provider=db_provider,
@@ -88,8 +88,8 @@ repo = GenericRepository[Product, str](
 Add the provider and configure the `sql` section. The connection URL uses an async driver (`postgresql+asyncpg://`, `mysql+aiomysql://`, `sqlite+aiosqlite://`):
 
 ```python
-from lexigram import Application
-from lexigram.sql import DatabaseProvider
+from oridecon import Application
+from oridecon.sql import DatabaseProvider
 
 app = Application(name="my-app")
 app.add_provider(DatabaseProvider())
@@ -113,7 +113,7 @@ sql:
 The provider registers a `DatabaseService` (and `DatabaseProviderProtocol`) in the container. Inject it like any other dependency:
 
 ```python
-from lexigram.contracts.data import DatabaseProviderProtocol
+from oridecon.contracts.data import DatabaseProviderProtocol
 
 
 class ReportService:
@@ -150,8 +150,8 @@ sql:
 
 ```python
 from typing import Annotated
-from lexigram.contracts.data import DatabaseProviderProtocol
-from lexigram.di.markers import Named
+from oridecon.contracts.data import DatabaseProviderProtocol
+from oridecon.di.markers import Named
 
 
 class AnalyticsService:
@@ -167,12 +167,12 @@ class AnalyticsService:
 
 ## 6. Migrations
 
-`lexigram-cli` drives schema migrations:
+`oridecon-cli` drives schema migrations:
 
 ```bash
-lexigram db migrate "create products"    # generate a migration
-lexigram db upgrade                       # apply pending migrations
-lexigram db inspect                       # view current schema
+oridecon db migrate "create products"    # generate a migration
+oridecon db upgrade                       # apply pending migrations
+oridecon db inspect                       # view current schema
 ```
 
 ---

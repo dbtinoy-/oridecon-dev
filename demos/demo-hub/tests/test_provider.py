@@ -7,7 +7,7 @@ from types import SimpleNamespace
 import pytest
 
 from demo_hub.di.provider import HubProvider
-from lexigram.contracts.core.health import HealthStatus
+from oridecon.contracts.core.health import HealthStatus
 
 
 class TestHubProviderHealth:

@@ -21,16 +21,16 @@ from rbac_console.domain.articles import ArticleStore
 from rbac_console.domain.personas import PersonaDirectory
 from rbac_console.repository.session_repository import InMemorySessionRepository
 
-from lexigram.auth import SessionCookieBackend, UserService
-from lexigram.auth.authz import AuthorizationService
-from lexigram.auth.config import AuthConfig
-from lexigram.contracts.auth import SessionRepositoryProtocol
-from lexigram.contracts.core.di import (
+from oridecon.auth import SessionCookieBackend, UserService
+from oridecon.auth.authz import AuthorizationService
+from oridecon.auth.config import AuthConfig
+from oridecon.contracts.auth import SessionRepositoryProtocol
+from oridecon.contracts.core.di import (
     BootContainerProtocol,
     ContainerRegistrarProtocol,
 )
-from lexigram.di.provider import Provider
-from lexigram.logging import get_logger
+from oridecon.di.provider import Provider
+from oridecon.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -71,7 +71,7 @@ class RbacProvider(Provider):
         # AuthorizationService) that the auth module owns.  Your app never
         # creates these directly — they come from AuthModule.configure().
         async def build_users(resolver):
-            from lexigram.auth import AuthenticationService
+            from oridecon.auth import AuthenticationService
 
             authn = await resolver.resolve(AuthenticationService)
             return UserService(

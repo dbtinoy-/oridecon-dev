@@ -1,18 +1,18 @@
 # ==============================================================================
 # application.example.yaml
-# Lexigram Framework — complete configuration reference.
+# Oridecon Framework — complete configuration reference.
 #
 # All values shown are exact defaults taken from each package's config class.
 # Secrets:  prefer environment variables or a vault over plaintext.
 #           Syntax: "${ENV_VAR_NAME}" lets the loader substitute at runtime.
 # Env-var overrides use double-underscore nesting, e.g.:
-#   LEX_WEB__SERVER__PORT=9000  →  web.server.port = 9000
+#   ORI_WEB__SERVER__PORT=9000  →  web.server.port = 9000
 # ==============================================================================
 
-# ── Core Framework (lexigram) ──────────────────────────────────────────────────
-# config_section: root (folded by LexigramConfig._fold_lexigram_env_section)
+# ── Core Framework (oridecon) ──────────────────────────────────────────────────
+# config_section: root (folded by OrideconConfig._fold_oridecon_env_section)
 # Core config fields live at the root level of the YAML.
-app_name: "lexigram-app"
+app_name: "oridecon-app"
 debug: false
 env: development
 logging:
@@ -22,7 +22,7 @@ modules: []
 discovery:
   auto_discover: true
   package_patterns:
-    - "lexigram_*"
+    - "oridecon_*"
 health:
   enabled: true
   path: /health

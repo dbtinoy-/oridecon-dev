@@ -1,6 +1,6 @@
 """Audit + SQL + Web audit trail scenario.
 
-Packages under test: lexigram-audit, lexigram-sql, lexigram-web
+Packages under test: oridecon-audit, oridecon-sql, oridecon-web
 Infrastructure: in-memory SQLite (no live service required)
 
 Scenario:

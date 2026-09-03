@@ -1,4 +1,4 @@
-"""Shared types for the Lexigram architectural rule catalog."""
+"""Shared types for the Oridecon architectural rule catalog."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 class RuleSeverity(str, Enum):
-    """Severity level for a Lexigram architectural rule finding."""
+    """Severity level for a Oridecon architectural rule finding."""
 
     CRITICAL = "critical"
     IMPORTANT = "important"
@@ -24,48 +24,48 @@ SEVERITY_ORDER = {
 }
 
 ALLOWED_CROSS_EXTENSION_IMPORTS: dict[str, frozenset[str]] = {
-    "lexigram-admin": frozenset(
+    "oridecon-admin": frozenset(
         {
-            "lexigram-auth",
-            "lexigram-cache",
-            "lexigram-features",
-            "lexigram-resilience",
-            "lexigram-ui",
+            "oridecon-auth",
+            "oridecon-cache",
+            "oridecon-features",
+            "oridecon-resilience",
+            "oridecon-ui",
         }
     ),
-    "lexigram-web": frozenset({"lexigram-ui"}),
-    "lexigram-events": frozenset({"lexigram-resilience"}),
-    "lexigram-tasks": frozenset({"lexigram-resilience"}),
-    "lexigram-monitor": frozenset({"lexigram-tasks"}),
-    "lexigram-multimedia": frozenset(
+    "oridecon-web": frozenset({"oridecon-ui"}),
+    "oridecon-events": frozenset({"oridecon-resilience"}),
+    "oridecon-tasks": frozenset({"oridecon-resilience"}),
+    "oridecon-monitor": frozenset({"oridecon-tasks"}),
+    "oridecon-multimedia": frozenset(
         {
-            "lexigram-multimedia-beat",
-            "lexigram-multimedia-image",
-            "lexigram-multimedia-interpolate",
-            "lexigram-multimedia-music",
-            "lexigram-multimedia-tts",
-            "lexigram-multimedia-upscale",
-            "lexigram-multimedia-video",
-            "lexigram-tasks",
+            "oridecon-multimedia-beat",
+            "oridecon-multimedia-image",
+            "oridecon-multimedia-interpolate",
+            "oridecon-multimedia-music",
+            "oridecon-multimedia-tts",
+            "oridecon-multimedia-upscale",
+            "oridecon-multimedia-video",
+            "oridecon-tasks",
         }
     ),
-    "lexigram-ai-governance": frozenset({"lexigram-tasks"}),
-    "lexigram-ai": frozenset(
+    "oridecon-ai-governance": frozenset({"oridecon-tasks"}),
+    "oridecon-ai": frozenset(
         {
-            "lexigram-vector",
-            "lexigram-ai-agents",
-            "lexigram-ai-feedback",
-            "lexigram-ai-governance",
-            "lexigram-ai-guard",
-            "lexigram-ai-llm",
-            "lexigram-ai-mcp",
-            "lexigram-ai-memory",
-            "lexigram-ai-observability",
-            "lexigram-ai-prompt",
-            "lexigram-ai-rag",
-            "lexigram-ai-session",
-            "lexigram-ai-skills",
-            "lexigram-ai-workers",
+            "oridecon-vector",
+            "oridecon-ai-agents",
+            "oridecon-ai-feedback",
+            "oridecon-ai-governance",
+            "oridecon-ai-guard",
+            "oridecon-ai-llm",
+            "oridecon-ai-mcp",
+            "oridecon-ai-memory",
+            "oridecon-ai-observability",
+            "oridecon-ai-prompt",
+            "oridecon-ai-rag",
+            "oridecon-ai-session",
+            "oridecon-ai-skills",
+            "oridecon-ai-workers",
         }
     ),
 }
@@ -73,7 +73,7 @@ ALLOWED_CROSS_EXTENSION_IMPORTS: dict[str, frozenset[str]] = {
 
 @dataclass(frozen=True, slots=True)
 class RuleFinding:
-    """Single rule violation captured from static Lexigram analysis."""
+    """Single rule violation captured from static Oridecon analysis."""
 
     rule_id: str
     severity: RuleSeverity
@@ -122,7 +122,7 @@ class RuleCatalogContext:
 
 @dataclass(frozen=True, slots=True)
 class RuleDefinition:
-    """Metadata and detector callback for one Lexigram rule."""
+    """Metadata and detector callback for one Oridecon rule."""
 
     rule_id: str
     severity: RuleSeverity

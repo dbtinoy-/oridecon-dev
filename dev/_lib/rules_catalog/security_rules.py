@@ -1,4 +1,4 @@
-"""Security rules for the Lexigram rule catalog."""
+"""Security rules for the Oridecon rule catalog."""
 
 from __future__ import annotations
 

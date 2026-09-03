@@ -5,8 +5,8 @@ from __future__ import annotations
 import hashlib
 from typing import Any
 
-from lexigram.contracts.data.vector import VectorCollectionProtocol
-from lexigram.web import Controller, get, post
+from oridecon.contracts.data.vector import VectorCollectionProtocol
+from oridecon.web import Controller, get, post
 from ragdocs.vector_store import DeterministicEmbedder
 
 
@@ -58,7 +58,7 @@ class RagApiController(Controller):
 
     @post("/search")
     async def search(self, body: dict[str, Any]) -> dict[str, Any]:
-        """Search the Lexigram collection for similar chunks."""
+        """Search the Oridecon collection for similar chunks."""
         query = body.get("query", "")
         if not query:
             return {"error": "Query is required"}

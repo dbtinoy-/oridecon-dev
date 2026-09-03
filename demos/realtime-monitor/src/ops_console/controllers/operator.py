@@ -5,7 +5,7 @@ connection lifecycle (accept, message loop, disconnect cleanup). The handler
 pushes each received JSON payload into the shared :class:`EventStreamService`
 so every SSE dashboard and the operator room see the same events.
 
-The class is also a :class:`~lexigram.web.Controller`: the ``@websocket``
+The class is also a :class:`~oridecon.web.Controller`: the ``@websocket``
 decorated entrypoint is discovered by the web layer's standard route
 collection and mounted as a ``WebSocketRoute`` — no manual router surgery.
 """
@@ -14,9 +14,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from lexigram.web import Controller, WebSocket
-from lexigram.web.routing.decorators import websocket
-from lexigram.web.websocket.handler import AbstractWebSocketHandler
+from oridecon.web import Controller, WebSocket
+from oridecon.web.routing.decorators import websocket
+from oridecon.web.websocket.handler import AbstractWebSocketHandler
 from ops_console.domain import Severity, SystemEvent
 from ops_console.services.event_stream import EventStreamService
 

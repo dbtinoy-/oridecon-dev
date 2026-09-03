@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from lexigram.result import Ok
+from oridecon.result import Ok
 
 from support_agent.repository.scripted_llm import EmptyScriptError, ScriptedLLM
 

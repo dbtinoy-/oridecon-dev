@@ -106,19 +106,19 @@ PKG_HEADER = re.compile(r"^### `([^`]+)` \((\d+) vars\)$")
 
 # Prefill sensible values for services the docker-compose provides.
 SERVICE_DEFAULTS = {
-    "LEX_SQL__BACKEND__URL": "postgresql://lexigram:lexigram@localhost:5432/lexigram",
-    "LEX_TASKS__BACKEND__REDIS_URL": "redis://localhost:6379/0",
-    "LEX_TASKS__REDIS_URL": "redis://localhost:6379/0",
-    "LEX_TEST_REDIS_URL": "redis://localhost:6379/0",
-    "LEX_TESTING__REDIS_URL": "redis://localhost:6379/0",
-    "LEX_CACHE__BACKENDS__REDIS__URL": "redis://localhost:6379/0",
-    "LEX_AUTH__JWT__SECRET": "change-me-in-production",
-    "LEX_WEB__SECURITY__CSRF__SECRET_KEY": "change-me-in-production",
-    "LEX_SQL__AUDIT_HMAC_KEY": "change-me-in-production",
-    "LEX_DEBUG": "false",
-    "LEX_ENV": "development",
-    "LEX_PROFILE": "development",
-    "LEX_QUIET": "false",
+    "ORI_SQL__BACKEND__URL": "postgresql://oridecon:oridecon@localhost:5432/oridecon",
+    "ORI_TASKS__BACKEND__REDIS_URL": "redis://localhost:6379/0",
+    "ORI_TASKS__REDIS_URL": "redis://localhost:6379/0",
+    "ORI_TEST_REDIS_URL": "redis://localhost:6379/0",
+    "ORI_TESTING__REDIS_URL": "redis://localhost:6379/0",
+    "ORI_CACHE__BACKENDS__REDIS__URL": "redis://localhost:6379/0",
+    "ORI_AUTH__JWT__SECRET": "change-me-in-production",
+    "ORI_WEB__SECURITY__CSRF__SECRET_KEY": "change-me-in-production",
+    "ORI_SQL__AUDIT_HMAC_KEY": "change-me-in-production",
+    "ORI_DEBUG": "false",
+    "ORI_ENV": "development",
+    "ORI_PROFILE": "development",
+    "ORI_QUIET": "false",
 }
 # Vars that should be flagged as required secrets, not left blank.
 SECRET_SUFFIX = (
@@ -133,32 +133,32 @@ SECRET_SUFFIX = (
 )
 
 # Env vars read directly in source (os.getenv / os.environ) that are NOT
-# part of the LEX_* config catalog. Kept here so .env.example regeneration
+# part of the ORI_* config catalog. Kept here so .env.example regeneration
 # is lossless. Name -> (placeholder value, inline comment).
 SUPPLEMENTAL_VARS: dict[str, tuple[str, str]] = {
-    "ADMIN_BASE": ("http://127.0.0.1:9003", "lexigram-admin e2e test base URL"),
-    "ADMIN_SETUP_TOKEN": ("changeme", "lexigram-admin boot token (integration/CI)"),
+    "ADMIN_BASE": ("http://127.0.0.1:9003", "oridecon-admin e2e test base URL"),
+    "ADMIN_SETUP_TOKEN": ("changeme", "oridecon-admin boot token (integration/CI)"),
     "ANTHROPIC_API_KEY": ("sk-ant-changeme", "Anthropic provider key (AI doctor)"),
     "APNS_KEY_PATH": ("", "Apple push notification key path"),
     "APP_ENV": ("development", "generic app environment read"),
     "AUDIT_HMAC_KEY": ("changeme", "audit doctor / signing key"),
-    "AUTH_JWT_SECRET": ("changeme", "lexigram-auth JWT secret"),
-    "AUTH_SECRET": ("changeme", "lexigram-cli environment validation"),
-    "LEX_CONFIG_ALLOW_UNKNOWN": (
+    "AUTH_JWT_SECRET": ("changeme", "oridecon-auth JWT secret"),
+    "AUTH_SECRET": ("changeme", "oridecon-cli environment validation"),
+    "ORI_CONFIG_ALLOW_UNKNOWN": (
         "false",
         "bypass strict unknown-key errors (true/false)",
     ),
     "OAUTH_CLIENT_SECRET": ("change-me-oauth-client-secret", "app startup secret hook"),
     "BROKER_URL": ("amqp://guest:guest@localhost:5672//", "queue doctor broker URL"),
     "DATABASE_URL": (
-        "postgresql://lexigram:lexigram@localhost:5432/lexigram",
+        "postgresql://oridecon:oridecon@localhost:5432/oridecon",
         "SQL doctor / DB URL",
     ),
     "ENVIRONMENT": ("development", "legacy app-environment compatibility reads"),
     "F5_TTS_REFERENCE_ROOT": ("", "multimedia-tts reference audio root"),
     "FCM_SERVER_KEY": ("changeme", "Firebase Cloud Messaging key"),
     "JWT_SECRET": ("changeme", "app startup secret hook (JWT signing)"),
-    "LEXIGRAM_EXPERIMENT_SEED": ("", "demos/llm-experiment seed"),
+    "ORIDECON_EXPERIMENT_SEED": ("", "demos/llm-experiment seed"),
     "LEXI_SECRET": ("changeme", "secrets store test fixture"),
     "LOG_LEVEL": ("info", "SQL logging level read"),
     "OPENAI_API_KEY": ("sk-changeme", "OpenAI provider key (AI doctor)"),
@@ -177,12 +177,12 @@ SUPPLEMENTAL_VARS: dict[str, tuple[str, str]] = {
         "",
         (
             "Sentry DSN; error tracking falls back to this when "
-            "LEX_MONITOR__ERROR_TRACKING__DSN is unset"
+            "ORI_MONITOR__ERROR_TRACKING__DSN is unset"
         ),
     ),
     "SMTP_HOST": ("localhost:25", "notification doctor SMTP host"),
     "TEST_POSTGRES_DSN": (
-        "postgresql://lexigram:lexigram@localhost:5432/lexigram_test",
+        "postgresql://oridecon:oridecon@localhost:5432/oridecon_test",
         "events/tasks postgres integration tests",
     ),
     "VECTOR_BACKEND": ("memory", "vector doctor backend name"),
@@ -196,7 +196,7 @@ SUPPLEMENTAL_HEADER = [
     "# unset values fall back to code defaults. Keep in sync with source usage.",
     "#",
     "# Required by other demos:",
-    "#   LEXIGRAM_EXPERIMENT_SEED (llm-experiment), REALTIME_PORT (realtime-monitor)",
+    "#   ORIDECON_EXPERIMENT_SEED (llm-experiment), REALTIME_PORT (realtime-monitor)",
     "# Referenced by core framework source / doctor CLIs:",
     "#   ANTHROPIC_API_KEY, APNS_KEY_PATH, APP_ENV, AUDIT_HMAC_KEY, AUTH_JWT_SECRET,",
     "#   BROKER_URL, DATABASE_URL, F5_TTS_REFERENCE_ROOT, FCM_SERVER_KEY, JWT_SECRET,",
@@ -213,7 +213,7 @@ def generate() -> None:
     """Write .env.full.example from the env var catalog."""
     sections = parse(CATALOG)
     lines = [
-        "# Lexigram Framework full environment configuration example.",
+        "# Oridecon Framework full environment configuration example.",
         "#",
         "# Copy to .env and adjust values for your deployment:",
         "#   cp .env.full.example .env",
@@ -227,7 +227,7 @@ def generate() -> None:
         "# Critical secrets MUST be set in production:",
         "#   * any value shown as <change-me-in-production>",
         "#   * provider API keys (OpenAI, Anthropic, Google, ...) supplied through",
-        "#     your secrets manager or LEX_*_SECRET_NAME references",
+        "#     your secrets manager or ORI_*_SECRET_NAME references",
     ]
     for pkg, rows in sections:
         lines.append("")

@@ -17,13 +17,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from lexigram.ai.evaluation.evaluators.criteria import CriteriaEvaluator
-from lexigram.ai.evaluation.harness.runner import EvaluationHarness
-from lexigram.contracts.ai.evaluation import (
+from oridecon.ai.evaluation.evaluators.criteria import CriteriaEvaluator
+from oridecon.ai.evaluation.harness.runner import EvaluationHarness
+from oridecon.contracts.ai.evaluation import (
     EvaluationDataset,
     EvaluationHarnessProtocol,
 )
-from lexigram.logging import get_logger
+from oridecon.logging import get_logger
 from prompt_lab.repository.cases import CASES, CRITERIA
 
 if TYPE_CHECKING:

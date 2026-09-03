@@ -1,6 +1,6 @@
 """Web + Auth session scenario.
 
-Packages under test: lexigram-web, lexigram-auth
+Packages under test: oridecon-web, oridecon-auth
 Infrastructure: in-memory auth store (no live service)
 
 Scenario:

@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from lexigram.serialization.backends import json as json_backend
+from oridecon.serialization.backends import json as json_backend
 from dev.audit.index import (
     build_audit_index,
     render_index_json,
@@ -21,13 +21,13 @@ class _FakeGenerator:
 
 def _write_sample_workspace(root: Path) -> None:
     (root / "pyproject.toml").write_text('[project]\nname = "workspace"\n', encoding="utf-8")
-    package_root = root / "lexigram"
+    package_root = root / "oridecon"
     package_root.mkdir()
     (package_root / "pyproject.toml").write_text(
-        '[project]\nname = "lexigram"\n',
+        '[project]\nname = "oridecon"\n',
         encoding="utf-8",
     )
-    config_dir = package_root / "src" / "lexigram"
+    config_dir = package_root / "src" / "oridecon"
     config_dir.mkdir(parents=True)
     (config_dir / "config.py").write_text(
         """
@@ -44,7 +44,7 @@ class NestedConfig:
 
 class AppConfig:
     model_config: ClassVar[ConfigDict] = ConfigDict(
-        env_prefix=\"LEX_APP__\",
+        env_prefix=\"ORI_APP__\",
         env_nested_delimiter=\"__\",
     )
     debug: bool = Field(default=False, description=\"Enable debug mode.\")
@@ -78,7 +78,7 @@ def test_audit_index_includes_tool_health_rules_and_package_coverage(tmp_path: P
 | Tool | Status | Exit Code | Duration | Command |
 |------|--------|-----------|----------|---------|
 | `Ruff` | **PASS** | 0 | 10 ms | `uv run ruff check .` |
-| `Mypy` | **FAIL** | 1 | 22 ms | `uv run mypy lexigram/src/` |
+| `Mypy` | **FAIL** | 1 | 22 ms | `uv run mypy oridecon/src/` |
 | `Pytest` | **PASS** | 0 | 33 ms | `uv run pytest tests/scripts -q --no-cov` |
 """.strip()
         + "\n",
@@ -100,9 +100,9 @@ def test_audit_index_includes_tool_health_rules_and_package_coverage(tmp_path: P
 
 | File | Line | Rule ID | Severity | Message |
 |------|------|---------|----------|---------|
-| `lexigram-admin/src/example.py` | 10 | `no-cross-extension-import` | `critical` | first critical drift |
-| `lexigram-web/src/example.py` | 20 | `init-no-logic` | `important` | init logic drift |
-| `lexigram-web/src/other.py` | 30 | `import-absolute-only` | `important` | import drift |
+| `oridecon-admin/src/example.py` | 10 | `no-cross-extension-import` | `critical` | first critical drift |
+| `oridecon-web/src/example.py` | 20 | `init-no-logic` | `important` | init logic drift |
+| `oridecon-web/src/other.py` | 30 | `import-absolute-only` | `important` | import drift |
 
 ## Package Coverage
 
@@ -113,7 +113,7 @@ def test_audit_index_includes_tool_health_rules_and_package_coverage(tmp_path: P
 
 ### Missing Packages
 
-- `lexigram-vector`
+- `oridecon-vector`
 """.strip()
         + "\n",
         encoding="utf-8",
@@ -127,7 +127,7 @@ def test_audit_index_includes_tool_health_rules_and_package_coverage(tmp_path: P
 | Label | Scope | Command | Exit Code | Duration | Parsed Summary | Example Failures |
 |-------|-------|---------|-----------|----------|----------------|------------------|
 | Scripts audit smoke | `tests/scripts` | `uv run pytest tests/scripts -q --no-cov` | 0 | 11 ms | `2 passed in 0.11s` | none |
-| Package smoke sample | `lexigram/tests` | `uv run pytest lexigram/tests -q --no-cov` | 1 | 22 ms | `1 failed in 0.22s` | `lexigram/tests/test_sample.py::test_sample` |
+| Package smoke sample | `oridecon/tests` | `uv run pytest oridecon/tests -q --no-cov` | 1 | 22 ms | `1 failed in 0.22s` | `oridecon/tests/test_sample.py::test_sample` |
 """.strip()
         + "\n",
         encoding="utf-8",
@@ -167,13 +167,13 @@ def test_audit_index_includes_tool_health_rules_and_package_coverage(tmp_path: P
     assert "no-cross-extension-import" in markdown
     assert "import-absolute-only" in markdown
     assert "## Package Coverage" in markdown
-    assert "`lexigram-vector`" in markdown
+    assert "`oridecon-vector`" in markdown
     assert payload["tool_health"]["ruff"]["status"] == "PASS"
     assert payload["tool_health"]["mypy"]["status"] == "FAIL"
     assert payload["tool_health"]["pytest"]["status"] == "FAIL"
     assert payload["rules_summary"]["critical"] == 2
     assert payload["rules_summary"]["important"] == 4
     assert payload["rules_summary"]["top_misalignments"][0]["rule_id"] == "import-absolute-only"
-    assert payload["package_coverage"]["missing_packages"] == ["lexigram-vector"]
+    assert payload["package_coverage"]["missing_packages"] == ["oridecon-vector"]
     assert payload["reports"]
     assert any(report["report_path"] == "AUDIT_ENV_VARS.md" for report in payload["reports"])

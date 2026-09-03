@@ -9,7 +9,7 @@ from approval_flow.app import create_app
 
 async def serve() -> None:
     """Start the approval flow server and block until shutdown."""
-    from lexigram.web.server.runner import run_server
+    from oridecon.web.server.runner import run_server
 
     app = create_app()
     await app.start()

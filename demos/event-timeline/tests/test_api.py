@@ -1,4 +1,4 @@
-"""HTTP integration contract for lexigram-events + WebModule."""
+"""HTTP integration contract for oridecon-events + WebModule."""
 
 from __future__ import annotations
 

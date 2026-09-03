@@ -1,6 +1,6 @@
 """The guarded request pipeline — gates, guards, cost, ledger.
 
-This is the core domain service.  It follows the Lexigram
+This is the core domain service.  It follows the Oridecon
 pattern: accept contracts (protocols), not concrete implementations.
 Every dependency is injected — the service knows nothing about how
 guards or governance are configured, only that they implement their
@@ -14,9 +14,9 @@ from dataclasses import dataclass
 from guard_gate.domain.policy import PolicyToggle
 from guard_gate.repository.acts import PROVIDER
 
-from lexigram.ai.governance import AIAuditStore, AuditQuery
-from lexigram.contracts.ai import AIGovernanceProtocol, GuardPipelineProtocol
-from lexigram.logging import get_logger
+from oridecon.ai.governance import AIAuditStore, AuditQuery
+from oridecon.contracts.ai import AIGovernanceProtocol, GuardPipelineProtocol
+from oridecon.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -25,7 +25,7 @@ logger = get_logger(__name__)
 class Outcome:
     """Value result of one handled request — denial-as-data.
 
-    Frozen dataclasses are the Lexigram convention for value
+    Frozen dataclasses are the Oridecon convention for value
     types that cross boundaries.  They're immutable, hashable, and
     serializable.  The `kind` field acts as a discriminated union tag.
     """
@@ -78,7 +78,7 @@ class GuardedAssistant:
 
         This method returns Outcome (not Result) because all
         "failures" are expected outcomes (blocked, denied, redacted) —
-        not exceptions.  In Lexigram, Result[T, E] is for operations
+        not exceptions.  In Oridecon, Result[T, E] is for operations
         where callers need to handle errors programmatically.  Here,
         the Outcome type itself encodes the success/failure semantics.
         """

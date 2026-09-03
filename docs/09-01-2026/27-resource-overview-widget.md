@@ -95,10 +95,10 @@ error-card behavior all come for free from the existing pipeline.
 
 ## 3. Implementation steps
 
-1. `src/lexigram/admin/dashboard/resource_inventory.py` — new module.
-2. `src/lexigram/admin/di/mount/contributors.py` — wire inventory at end of
+1. `src/oridecon/admin/dashboard/resource_inventory.py` — new module.
+2. `src/oridecon/admin/di/mount/contributors.py` — wire inventory at end of
    `_mount_contributors`.
-3. `src/lexigram/admin/contributors/core.py` — setter + widget definition +
+3. `src/oridecon/admin/contributors/core.py` — setter + widget definition +
    render branch.
 4. Tests:
    - `tests/unit/dashboard/test_resource_inventory.py` — snapshot counts,

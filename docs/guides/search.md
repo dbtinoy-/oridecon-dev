@@ -3,20 +3,20 @@ title: "Full-Text Search"
 description: "Index and query documents through a single protocol over Elasticsearch, Meilisearch, Typesense, or a SQL fallback."
 ---
 
-`lexigram-search` provides async full-text search behind a single protocol. Application code depends on `SearchEngineProtocol`; the backend (Meilisearch, Elasticsearch, Typesense, Postgres, MySQL, SQLite, MongoDB, or in-memory) is chosen in configuration. The same indexing and query code runs on a zero-dependency SQLite FTS5 backend in development and on a managed Elasticsearch cluster in production.
+`oridecon-search` provides async full-text search behind a single protocol. Application code depends on `SearchEngineProtocol`; the backend (Meilisearch, Elasticsearch, Typesense, Postgres, MySQL, SQLite, MongoDB, or in-memory) is chosen in configuration. The same indexing and query code runs on a zero-dependency SQLite FTS5 backend in development and on a managed Elasticsearch cluster in production.
 
-For the full configuration reference and backend matrix, see the [`lexigram-search` package docs](/packages/lexigram-search/).
+For the full configuration reference and backend matrix, see the [`oridecon-search` package docs](/packages/oridecon-search/).
 
 ---
 
 ## 1. The Contract
 
-All backends implement `SearchEngineProtocol` from `lexigram-contracts`. The protocol covers indexing, bulk indexing, query execution, deletion, and health:
+All backends implement `SearchEngineProtocol` from `oridecon-contracts`. The protocol covers indexing, bulk indexing, query execution, deletion, and health:
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.contracts.core import HealthCheckResult
-from lexigram.contracts.data import QueryResult
+from oridecon.contracts.core import HealthCheckResult
+from oridecon.contracts.data import QueryResult
 
 
 @runtime_checkable
@@ -66,9 +66,9 @@ graph LR
 Register `SearchModule` and configure the `search:` block. `SearchModule.configure()` requires an explicit `SearchConfig`; use `SearchModule.stub()` for tests.
 
 ```python
-from lexigram import Application
-from lexigram.di.module import Module, module
-from lexigram.search import SearchModule, SearchConfig
+from oridecon import Application
+from oridecon.di.module import Module, module
+from oridecon.search import SearchModule, SearchConfig
 
 
 @module(imports=[SearchModule.configure(SearchConfig())])
@@ -123,7 +123,7 @@ Analyzer, tokenizer, and typo-tolerance behaviour differ between backends. A que
 Inject `SearchEngineProtocol` and index documents as plain dicts. The document ID is separate from the document payload:
 
 ```python
-from lexigram.contracts.search import SearchEngineProtocol
+from oridecon.contracts.search import SearchEngineProtocol
 from my_app.domain.models import Product
 
 
@@ -185,7 +185,7 @@ class ProductSearch:
         }
 ```
 
-`SearchResponse` (from `lexigram.search.types`) carries:
+`SearchResponse` (from `oridecon.search.types`) carries:
 
 - `results: list[SearchResult]` — each with `id`, `score`, `data`, optional `highlights`
 - `total: int` — total matching documents (not just the returned page)
@@ -226,8 +226,8 @@ search:
 
 ```python
 from typing import Annotated
-from lexigram.contracts.search import SearchEngineProtocol
-from lexigram.di.markers import Named
+from oridecon.contracts.search import SearchEngineProtocol
+from oridecon.di.markers import Named
 
 
 class AuditTrail:
@@ -248,9 +248,9 @@ class AuditTrail:
 For unit tests, `SearchModule.stub()` wires an in-memory (null) backend that satisfies `SearchEngineProtocol` with no external service:
 
 ```python
-from lexigram import Application
-from lexigram.search import SearchModule
-from lexigram.contracts.search import SearchEngineProtocol
+from oridecon import Application
+from oridecon.search import SearchModule
+from oridecon.contracts.search import SearchEngineProtocol
 
 
 async def test_indexes_and_finds_product() -> None:
@@ -269,4 +269,4 @@ For integration tests against real search semantics, prefer `SearchModule.config
 
 - [Database & Persistence](/guides/database/) — the source of truth for reindex jobs and the home of the SQL-backed search options
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding `SearchEngineProtocol` to a backend
-- [`lexigram-search` package](/packages/lexigram-search/) — full backend matrix, analytics, suggestion engine, and federated search
+- [`oridecon-search` package](/packages/oridecon-search/) — full backend matrix, analytics, suggestion engine, and federated search

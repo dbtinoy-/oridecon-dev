@@ -21,11 +21,11 @@ from feedback_loop.errors import (
 )
 from feedback_loop.repository import BOT, TRACE_IDS
 from feedback_loop.services.regression import build_dataset
-from lexigram.contracts.ai.evaluation import EvaluationHarnessProtocol
-from lexigram.contracts.ai.experiment import ExperimentConfig, RunStatus
-from lexigram.contracts.ai.feedback import FeedbackType
-from lexigram.logging import get_logger
-from lexigram.result import Err, Ok, Result
+from oridecon.contracts.ai.evaluation import EvaluationHarnessProtocol
+from oridecon.contracts.ai.experiment import ExperimentConfig, RunStatus
+from oridecon.contracts.ai.feedback import FeedbackType
+from oridecon.logging import get_logger
+from oridecon.result import Err, Ok, Result
 
 logger = get_logger(__name__)
 
@@ -77,7 +77,7 @@ class LoopService:
         if harness is not None:
             self._harness = harness
         else:
-            from lexigram.ai.evaluation.harness.runner import EvaluationHarness
+            from oridecon.ai.evaluation.harness.runner import EvaluationHarness
 
             self._harness = EvaluationHarness(pass_threshold=PASS_THRESHOLD)
         self._tracker = tracker
@@ -205,12 +205,12 @@ class LoopService:
 
     async def report(self, run_id: str):
         """Post-hoc error analysis over a tracked run."""
-        from lexigram.ai.evaluation.analysis import ErrorAnalysis
+        from oridecon.ai.evaluation.analysis import ErrorAnalysis
 
         return await ErrorAnalysis(self._tracker).report(run_id)
 
     def _qa_evaluator(self):
         """QA scorer (keyword overlap vs per-case reference bars)."""
-        from lexigram.ai.evaluation.evaluators.qa import QAEvaluator
+        from oridecon.ai.evaluation.evaluators.qa import QAEvaluator
 
         return QAEvaluator()

@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import pytest
 
-from lexigram.contracts.exceptions.domain import (
+from oridecon.contracts.exceptions.domain import (
     ConflictError,
     NotFoundError,
     ValidationError,

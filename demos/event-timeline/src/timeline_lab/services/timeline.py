@@ -1,4 +1,4 @@
-"""Browser-facing scenario built on Lexigram Events public contracts."""
+"""Browser-facing scenario built on Oridecon Events public contracts."""
 
 from __future__ import annotations
 
@@ -7,13 +7,13 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID, uuid4
 
-from lexigram.contracts.events import (
+from oridecon.contracts.events import (
     EventBusDiagnosticsProtocol,
     EventBusProtocol,
     EventReplayProtocol,
     EventStoreProtocol,
 )
-from lexigram.result import Result
+from oridecon.result import Result
 from timeline_lab.config import TimelineLabConfig
 from timeline_lab.events import TimelineEvent
 

@@ -1,13 +1,13 @@
 ---
 title: The Ecosystem
-description: Every open-source Lexigram package, grouped by what it does.
+description: Every open-source Oridecon package, grouped by what it does.
 sidebar:
   order: 1
 ---
 
-Lexigram is a monorepo of small, focused packages. The two foundation packages — `lexigram` and `lexigram-contracts` — are all you need to start. Everything else is an **extension**: install only what your application uses.
+Oridecon is a monorepo of small, focused packages. The two foundation packages — `oridecon` and `oridecon-contracts` — are all you need to start. Everything else is an **extension**: install only what your application uses.
 
-Every extension depends **only** on `lexigram` and `lexigram-contracts`, never on another extension. That boundary is what keeps the ecosystem composable — see [Architecture](/fundamentals/architecture/).
+Every extension depends **only** on `oridecon` and `oridecon-contracts`, never on another extension. That boundary is what keeps the ecosystem composable — see [Architecture](/fundamentals/architecture/).
 
 :::note[Maturity]
 All packages are **alpha (0.1.x)** and MIT-licensed. Public APIs may change before 1.0.
@@ -15,7 +15,7 @@ All packages are **alpha (0.1.x)** and MIT-licensed. Public APIs may change befo
 
 ```bash
 # Install the foundation plus only the extensions you need
-pip install lexigram lexigram-web lexigram-sql lexigram-auth
+pip install oridecon oridecon-web oridecon-sql oridecon-auth
 ```
 
 ---
@@ -24,8 +24,8 @@ pip install lexigram lexigram-web lexigram-sql lexigram-auth
 
 | Package | What it does |
 |---------|--------------|
-| [`lexigram`](/packages/lexigram/) | Async-first DI container, `Application` lifecycle, modules, providers, config, and the `Result` type. |
-| [`lexigram-contracts`](/packages/lexigram-contracts/) | Zero-dependency protocols, value types, and exceptions shared across every package. |
+| [`oridecon`](/packages/oridecon/) | Async-first DI container, `Application` lifecycle, modules, providers, config, and the `Result` type. |
+| [`oridecon-contracts`](/packages/oridecon-contracts/) | Zero-dependency protocols, value types, and exceptions shared across every package. |
 
 ---
 
@@ -33,9 +33,9 @@ pip install lexigram lexigram-web lexigram-sql lexigram-auth
 
 | Package | What it does |
 |---------|--------------|
-| [`lexigram-web`](/packages/lexigram-web/) | ASGI web layer — controllers, routing, middleware, OpenAPI docs, CORS, CSRF, rate limiting. `WebProvider`. |
-| [`lexigram-graphql`](/packages/lexigram-graphql/) | GraphQL server (Strawberry) — schema, subscriptions, depth/complexity limits, persisted queries. |
-| [`lexigram-http`](/packages/lexigram-http/) | Outbound HTTP client with resilience and observability built in. |
+| [`oridecon-web`](/packages/oridecon-web/) | ASGI web layer — controllers, routing, middleware, OpenAPI docs, CORS, CSRF, rate limiting. `WebProvider`. |
+| [`oridecon-graphql`](/packages/oridecon-graphql/) | GraphQL server (Strawberry) — schema, subscriptions, depth/complexity limits, persisted queries. |
+| [`oridecon-http`](/packages/oridecon-http/) | Outbound HTTP client with resilience and observability built in. |
 
 ---
 
@@ -43,13 +43,13 @@ pip install lexigram lexigram-web lexigram-sql lexigram-auth
 
 | Package | What it does |
 |---------|--------------|
-| [`lexigram-sql`](/packages/lexigram-sql/) | Async SQL for Postgres / MySQL / SQLite — repositories, migrations, query building. `DatabaseProvider`. |
-| [`lexigram-nosql`](/packages/lexigram-nosql/) | Document-store abstraction (MongoDB, DynamoDB, Firestore). |
-| [`lexigram-cache`](/packages/lexigram-cache/) | Multi-backend caching — Redis, Memcached, in-memory — behind `CacheBackendProtocol`. |
-| [`lexigram-storage`](/packages/lexigram-storage/) | Unified blob storage — S3, GCS, Azure Blob, R2, local filesystem. |
-| [`lexigram-search`](/packages/lexigram-search/) | Full-text search — Elasticsearch, Meilisearch, Typesense, and SQL backends. |
-| [`lexigram-vector`](/packages/lexigram-vector/) | Vector store backends (pgvector, Qdrant, Pinecone, in-memory) for embeddings. |
-| [`lexigram-graph`](/packages/lexigram-graph/) | Graph database support (Neo4j, in-memory). |
+| [`oridecon-sql`](/packages/oridecon-sql/) | Async SQL for Postgres / MySQL / SQLite — repositories, migrations, query building. `DatabaseProvider`. |
+| [`oridecon-nosql`](/packages/oridecon-nosql/) | Document-store abstraction (MongoDB, DynamoDB, Firestore). |
+| [`oridecon-cache`](/packages/oridecon-cache/) | Multi-backend caching — Redis, Memcached, in-memory — behind `CacheBackendProtocol`. |
+| [`oridecon-storage`](/packages/oridecon-storage/) | Unified blob storage — S3, GCS, Azure Blob, R2, local filesystem. |
+| [`oridecon-search`](/packages/oridecon-search/) | Full-text search — Elasticsearch, Meilisearch, Typesense, and SQL backends. |
+| [`oridecon-vector`](/packages/oridecon-vector/) | Vector store backends (pgvector, Qdrant, Pinecone, in-memory) for embeddings. |
+| [`oridecon-graph`](/packages/oridecon-graph/) | Graph database support (Neo4j, in-memory). |
 
 ---
 
@@ -57,20 +57,20 @@ pip install lexigram lexigram-web lexigram-sql lexigram-auth
 
 | Package | What it does |
 |---------|--------------|
-| [`lexigram-ai`](/packages/lexigram-ai/) | Orchestration layer that discovers and wires the AI subsystems below. |
-| [`lexigram-ai-llm`](/packages/lexigram-ai-llm/) | Multi-provider LLM client (OpenAI, Anthropic, Gemini, Ollama, Groq, Mistral, …) with routing and thinking suppression. |
-| [`lexigram-ai-rag`](/packages/lexigram-ai-rag/) | Retrieval-augmented generation — chunking, retrieval, synthesis, citations. |
-| [`lexigram-ai-agents`](/packages/lexigram-ai-agents/) | Agents with tools and strategies (ReAct, plan-and-execute). |
-| [`lexigram-ai-memory`](/packages/lexigram-ai-memory/) | Episodic, semantic, and working memory for AI systems. |
-| [`lexigram-ai-skills`](/packages/lexigram-ai-skills/) | Skill/tool registry, executor, and built-in tools. |
-| [`lexigram-ai-session`](/packages/lexigram-ai-session/) | AI conversation sessions — branching, checkpointing, multi-agent. |
-| [`lexigram-ai-mcp`](/packages/lexigram-ai-mcp/) | Model Context Protocol server and client for AI agents. |
-| [`lexigram-ai-workers`](/packages/lexigram-ai-workers/) | Background AI work — batch embedding, document ingestion, maintenance. |
-| [`lexigram-ai-feedback`](/packages/lexigram-ai-feedback/) | Collect, process, and store feedback on AI responses. |
-| [`lexigram-ai-guard`](/packages/lexigram-ai-guard/) | Input/output guard pipeline — LLM safety and content filtering. |
-| [`lexigram-ai-governance`](/packages/lexigram-ai-governance/) | AI governance — policy enforcement, audit trails, budget tracking. |
-| [`lexigram-ai-evaluation`](/packages/lexigram-ai-evaluation/) | Evaluation framework — benchmarks and quality gates for AI outputs. |
-| [`lexigram-ai-prompt`](/packages/lexigram-ai-prompt/) | Prompt management — templates, composition, optimization. |
+| [`oridecon-ai`](/packages/oridecon-ai/) | Orchestration layer that discovers and wires the AI subsystems below. |
+| [`oridecon-ai-llm`](/packages/oridecon-ai-llm/) | Multi-provider LLM client (OpenAI, Anthropic, Gemini, Ollama, Groq, Mistral, …) with routing and thinking suppression. |
+| [`oridecon-ai-rag`](/packages/oridecon-ai-rag/) | Retrieval-augmented generation — chunking, retrieval, synthesis, citations. |
+| [`oridecon-ai-agents`](/packages/oridecon-ai-agents/) | Agents with tools and strategies (ReAct, plan-and-execute). |
+| [`oridecon-ai-memory`](/packages/oridecon-ai-memory/) | Episodic, semantic, and working memory for AI systems. |
+| [`oridecon-ai-skills`](/packages/oridecon-ai-skills/) | Skill/tool registry, executor, and built-in tools. |
+| [`oridecon-ai-session`](/packages/oridecon-ai-session/) | AI conversation sessions — branching, checkpointing, multi-agent. |
+| [`oridecon-ai-mcp`](/packages/oridecon-ai-mcp/) | Model Context Protocol server and client for AI agents. |
+| [`oridecon-ai-workers`](/packages/oridecon-ai-workers/) | Background AI work — batch embedding, document ingestion, maintenance. |
+| [`oridecon-ai-feedback`](/packages/oridecon-ai-feedback/) | Collect, process, and store feedback on AI responses. |
+| [`oridecon-ai-guard`](/packages/oridecon-ai-guard/) | Input/output guard pipeline — LLM safety and content filtering. |
+| [`oridecon-ai-governance`](/packages/oridecon-ai-governance/) | AI governance — policy enforcement, audit trails, budget tracking. |
+| [`oridecon-ai-evaluation`](/packages/oridecon-ai-evaluation/) | Evaluation framework — benchmarks and quality gates for AI outputs. |
+| [`oridecon-ai-prompt`](/packages/oridecon-ai-prompt/) | Prompt management — templates, composition, optimization. |
 
 ---
 
@@ -78,11 +78,11 @@ pip install lexigram lexigram-web lexigram-sql lexigram-auth
 
 | Package | What it does |
 |---------|--------------|
-| [`lexigram-events`](/packages/lexigram-events/) | Event sourcing and CQRS — domain events, aggregates, command/query buses, projections. |
-| [`lexigram-queue`](/packages/lexigram-queue/) | Message bus / queue with named multi-backend support (Redis, RabbitMQ, Kafka, SQS, …). |
-| [`lexigram-notification`](/packages/lexigram-notification/) | Email, SMS, and push delivery with multi-backend support. |
-| [`lexigram-webhook`](/packages/lexigram-webhook/) | Webhook management — subscriptions, delivery tracking, HMAC verification, dead-letter queue. |
-| [`lexigram-workflow`](/packages/lexigram-workflow/) | Workflow orchestration — pipelines, bulk ops, sagas, graph engine. |
+| [`oridecon-events`](/packages/oridecon-events/) | Event sourcing and CQRS — domain events, aggregates, command/query buses, projections. |
+| [`oridecon-queue`](/packages/oridecon-queue/) | Message bus / queue with named multi-backend support (Redis, RabbitMQ, Kafka, SQS, …). |
+| [`oridecon-notification`](/packages/oridecon-notification/) | Email, SMS, and push delivery with multi-backend support. |
+| [`oridecon-webhook`](/packages/oridecon-webhook/) | Webhook management — subscriptions, delivery tracking, HMAC verification, dead-letter queue. |
+| [`oridecon-workflow`](/packages/oridecon-workflow/) | Workflow orchestration — pipelines, bulk ops, sagas, graph engine. |
 
 ---
 
@@ -90,7 +90,7 @@ pip install lexigram lexigram-web lexigram-sql lexigram-auth
 
 | Package | What it does |
 |---------|--------------|
-| [`lexigram-tasks`](/packages/lexigram-tasks/) | Background tasks — scheduling, workers, and job queues over memory / Redis / AMQP / Postgres. |
+| [`oridecon-tasks`](/packages/oridecon-tasks/) | Background tasks — scheduling, workers, and job queues over memory / Redis / AMQP / Postgres. |
 
 ---
 
@@ -98,10 +98,10 @@ pip install lexigram lexigram-web lexigram-sql lexigram-auth
 
 | Package | What it does |
 |---------|--------------|
-| [`lexigram-monitor`](/packages/lexigram-monitor/) | Health checks, metrics, tracing, and structured logging (Prometheus / OpenTelemetry). |
-| [`lexigram-resilience`](/packages/lexigram-resilience/) | Circuit breaker, retry, bulkhead, rate limiting, throttle, fallback. |
-| [`lexigram-audit`](/packages/lexigram-audit/) | Append-only, HMAC-verified, retention-managed audit trail. |
-| [`lexigram-ai-observability`](/packages/lexigram-ai-observability/) | Tracing, metrics, and health checks specific to AI calls. |
+| [`oridecon-monitor`](/packages/oridecon-monitor/) | Health checks, metrics, tracing, and structured logging (Prometheus / OpenTelemetry). |
+| [`oridecon-resilience`](/packages/oridecon-resilience/) | Circuit breaker, retry, bulkhead, rate limiting, throttle, fallback. |
+| [`oridecon-audit`](/packages/oridecon-audit/) | Append-only, HMAC-verified, retention-managed audit trail. |
+| [`oridecon-ai-observability`](/packages/oridecon-ai-observability/) | Tracing, metrics, and health checks specific to AI calls. |
 
 ---
 
@@ -109,9 +109,9 @@ pip install lexigram lexigram-web lexigram-sql lexigram-auth
 
 | Package | What it does |
 |---------|--------------|
-| [`lexigram-auth`](/packages/lexigram-auth/) | Authentication & authorization — JWT, OAuth2, RBAC, password hashing, web guards. |
-| [`lexigram-tenancy`](/packages/lexigram-tenancy/) | Multi-tenant resolution, lifecycle, and isolation strategies. |
-| [`lexigram-features`](/packages/lexigram-features/) | Feature-flag management with caching and pluggable providers. |
+| [`oridecon-auth`](/packages/oridecon-auth/) | Authentication & authorization — JWT, OAuth2, RBAC, password hashing, web guards. |
+| [`oridecon-tenancy`](/packages/oridecon-tenancy/) | Multi-tenant resolution, lifecycle, and isolation strategies. |
+| [`oridecon-features`](/packages/oridecon-features/) | Feature-flag management with caching and pluggable providers. |
 
 ---
 
@@ -119,8 +119,8 @@ pip install lexigram lexigram-web lexigram-sql lexigram-auth
 
 | Package | What it does |
 |---------|--------------|
-| [`lexigram-cli`](/packages/lexigram-cli/) | `lexigram` command — project scaffolding (`new`), dev server (`run`/`dev`), migrations (`db`), inspection. |
-| [`lexigram-testing`](/packages/lexigram-testing/) | Fakes, test clients/beds, fixed clock, and protocol compliance suites for fast, decoupled tests. |
+| [`oridecon-cli`](/packages/oridecon-cli/) | `oridecon` command — project scaffolding (`new`), dev server (`run`/`dev`), migrations (`db`), inspection. |
+| [`oridecon-testing`](/packages/oridecon-testing/) | Fakes, test clients/beds, fixed clock, and protocol compliance suites for fast, decoupled tests. |
 
 ---
 
@@ -129,10 +129,10 @@ pip install lexigram lexigram-web lexigram-sql lexigram-auth
 A typical web application starts with:
 
 ```bash
-pip install lexigram lexigram-web lexigram-sql lexigram-auth lexigram-cache
+pip install oridecon oridecon-web oridecon-sql oridecon-auth oridecon-cache
 ```
 
-Add capabilities as you need them — `lexigram-ai-llm` for an LLM feature, `lexigram-tasks` for background jobs, `lexigram-events` for an event-driven domain. Because every package targets a contract, you can adopt one without rewriting the rest of your app.
+Add capabilities as you need them — `oridecon-ai-llm` for an LLM feature, `oridecon-tasks` for background jobs, `oridecon-events` for an event-driven domain. Because every package targets a contract, you can adopt one without rewriting the rest of your app.
 
 ---
 
@@ -140,4 +140,4 @@ Add capabilities as you need them — `lexigram-ai-llm` for an LLM feature, `lex
 
 - [Installation](/getting-started/installation/) — set up your environment
 - [Architecture](/fundamentals/architecture/) — the boundary rules that hold the ecosystem together
-- [Your First App](/getting-started/first-app/) — wire `lexigram-web` end to end
+- [Your First App](/getting-started/first-app/) — wire `oridecon-web` end to end

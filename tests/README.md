@@ -1,6 +1,6 @@
 # Tests
 
-This directory contains the test suite for the Lexigram framework.
+This directory contains the test suite for the Oridecon framework.
 
 ## Structure
 
@@ -48,7 +48,7 @@ uv run pytest tests/integration/scenarios/ -v
 uv run pytest -k "test_user"
 
 # One package's tests
-uv run pytest packages/lexigram-web/tests/
+uv run pytest packages/oridecon-web/tests/
 
 # One test
 uv run pytest tests/dev/test_registry.py::test_audit_registry_contains_expected_generators -v
@@ -58,7 +58,7 @@ uv run pytest tests/dev/test_registry.py::test_audit_registry_contains_expected_
 
 The `tests/integration/scenarios/` directory contains cross-package integration tests
 that run **entirely in-memory** — no live Postgres, Redis, or Docker required. Each
-scenario boots a minimal Lexigram application configured for a specific package
+scenario boots a minimal Oridecon application configured for a specific package
 composition (CRUD, events, web auth, audit, cache, tasks, tenancy).
 
 These are integration-marked and run only with `-m integration` or explicitly
@@ -74,10 +74,10 @@ For tests requiring external infrastructure:
 
 | Service | Port | Purpose |
 |---------|------|---------|
-| PostgreSQL | 15432 | Database tests (lexigram-sql) |
-| Redis | 16379 | Cache tests (lexigram-cache) |
-| Kafka | 19092 | Queue tests (lexigram-queue) |
-| MinIO | 19000 | Storage tests (lexigram-storage) |
+| PostgreSQL | 15432 | Database tests (oridecon-sql) |
+| Redis | 16379 | Cache tests (oridecon-cache) |
+| Kafka | 19092 | Queue tests (oridecon-queue) |
+| MinIO | 19000 | Storage tests (oridecon-storage) |
 
 ```bash
 docker compose up -d

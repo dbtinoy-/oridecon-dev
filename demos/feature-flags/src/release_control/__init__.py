@@ -1,4 +1,4 @@
-"""Release Control Lab — a focused Lexigram feature-flags demo."""
+"""Release Control Lab — a focused Oridecon feature-flags demo."""
 
 from __future__ import annotations
 

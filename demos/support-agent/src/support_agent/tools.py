@@ -20,8 +20,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from lexigram.ai.agents import tool
-from lexigram.primitives import Registry
+from oridecon.ai.agents import tool
+from oridecon.primitives import Registry
 from support_agent.repository.fixtures import KB, ORDERS
 
 # Refund policy thresholds (days since delivery).

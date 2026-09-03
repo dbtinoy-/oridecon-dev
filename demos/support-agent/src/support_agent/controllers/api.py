@@ -18,11 +18,11 @@ from typing import Any
 
 from starlette.requests import Request
 
-from lexigram.contracts.ai.agents import AgentError
-from lexigram.contracts.exceptions.domain import NotFoundError, ValidationError
-from lexigram.result import Err, Ok, Result
-from lexigram.serialization import loads as json_loads
-from lexigram.web import Controller, get, post
+from oridecon.contracts.ai.agents import AgentError
+from oridecon.contracts.exceptions.domain import NotFoundError, ValidationError
+from oridecon.result import Err, Ok, Result
+from oridecon.serialization import loads as json_loads
+from oridecon.web import Controller, get, post
 from support_agent.repository.scenarios import SCENARIOS
 from support_agent.repository.scripted_llm import ScriptedLLM
 from support_agent.services.support_service import (

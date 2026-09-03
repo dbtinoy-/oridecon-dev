@@ -1,16 +1,16 @@
 ---
 title: "Modules"
-description: "Encapsulating logic and defining public APIs with the Lexigram module system."
+description: "Encapsulating logic and defining public APIs with the Oridecon module system."
 ---
 
-In Lexigram, a **Module** is a high-level organizational unit that groups related providers, services, and configuration. It serves as an encapsulation boundary, defining a strict "public API" for other parts of the application.
+In Oridecon, a **Module** is a high-level organizational unit that groups related providers, services, and configuration. It serves as an encapsulation boundary, defining a strict "public API" for other parts of the application.
 
 ## 1. The `@module` Decorator
 
-Use the `@module` decorator to define a module. This tells Lexigram how to treat the package during auto-discovery and DI resolution.
+Use the `@module` decorator to define a module. This tells Oridecon how to treat the package during auto-discovery and DI resolution.
 
 ```python
-from lexigram.di.module import module
+from oridecon.di.module import module
 
 @module(
     providers=[ChatProvider],
@@ -62,7 +62,7 @@ graph LR
 A `@global_module`'s exports are visible to all modules without explicit import:
 
 ```python
-from lexigram.di.module import global_module, Module
+from oridecon.di.module import global_module, Module
 
 @global_module
 class LoggingModule(Module):
@@ -78,7 +78,7 @@ class LoggingModule(Module):
 Sometimes you need to configure a module dynamically before adding it to the application. Use the `Module.configure()` pattern for this.
 
 ```python
-from lexigram.di.module import module, Module, DynamicModule
+from oridecon.di.module import module, Module, DynamicModule
 
 @module()
 class DatabaseModule(Module):
@@ -96,7 +96,7 @@ class DatabaseModule(Module):
 ### Usage in Application
 
 ```python
-from lexigram import Application
+from oridecon import Application
 
 app = Application(name="my-app")
 app.add_module(DatabaseModule.configure("postgresql://localhost/mydb"))
@@ -180,7 +180,7 @@ The application maintains a global `ModuleRegistry` which tracks all loaded modu
 
 ### Visibility Enforcement
 
-If a module tries to inject a service that's not in its exports or a global module's exports, Lexigram raises `ModuleVisibilityError`:
+If a module tries to inject a service that's not in its exports or a global module's exports, Oridecon raises `ModuleVisibilityError`:
 
 ```
 Module 'billing' cannot resolve 'UserRepository': not exported by 'auth' module.
@@ -193,7 +193,7 @@ Hint: Import 'AuthModule' into 'billing', or make 'UserRepository' global.
 
 ```python
 # src/my_platform/modules/auth/__init__.py
-from lexigram.di.module import module, Module
+from oridecon.di.module import module, Module
 
 from my_platform.modules.auth.provider import AuthProvider
 from my_platform.modules.auth.protocols import AuthServiceProtocol
@@ -210,15 +210,15 @@ class AuthModule(Module):
 
 ```python
 # src/my_platform/app.py
-from lexigram import Application, LexigramConfig
-from lexigram.di.module import DynamicModule
+from oridecon import Application, OrideconConfig
+from oridecon.di.module import DynamicModule
 
 from my_platform.modules.auth import AuthModule
 from my_platform.modules.billing import BillingModule
 from my_platform.infrastructure import InfraModule
 
 def create_app() -> Application:
-    config = LexigramConfig.from_yaml()
+    config = OrideconConfig.from_yaml()
     app = Application(name="my-platform", config=config)
     
     app.add_module(InfraModule)

@@ -8,7 +8,7 @@ Result-bridge maps them to semantic HTTP statuses automatically.
 
 from __future__ import annotations
 
-from lexigram.contracts.exceptions import (
+from oridecon.contracts.exceptions import (
     ConflictError,
     NotFoundError,
     ValidationError,

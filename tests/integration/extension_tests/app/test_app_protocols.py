@@ -2,7 +2,7 @@
 
 import pytest
 
-from lexigram.app.protocols import AppLifecycleProtocol
+from oridecon.app.protocols import AppLifecycleProtocol
 
 
 class TestAppLifecycleProtocol:
@@ -26,7 +26,7 @@ class TestAppLifecycleProtocol:
 
     def test_protocol_exported(self) -> None:
         """Test protocol is exported."""
-        from lexigram.app.protocols import __all__ as protocols_all
+        from oridecon.app.protocols import __all__ as protocols_all
 
         assert "AppLifecycleProtocol" in protocols_all
 

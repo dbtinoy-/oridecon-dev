@@ -1,47 +1,47 @@
 ---
 title: Migrating from FastAPI
-description: Map FastAPI concepts to Lexigram equivalents and migrate your application
+description: Map FastAPI concepts to Oridecon equivalents and migrate your application
 ---
 
-Lexigram and FastAPI share a common ancestor in Starlette, but they solve different problems. FastAPI is a web framework with optional DI. Lexigram is an application platform with a web layer — DI, lifecycle, contract-based extensibility, and the provider pattern are first-class, not add-ons.
+Oridecon and FastAPI share a common ancestor in Starlette, but they solve different problems. FastAPI is a web framework with optional DI. Oridecon is an application platform with a web layer — DI, lifecycle, contract-based extensibility, and the provider pattern are first-class, not add-ons.
 
-This guide maps FastAPI concepts to their Lexigram counterparts and walks through migrating a real application.
+This guide maps FastAPI concepts to their Oridecon counterparts and walks through migrating a real application.
 
 ---
 
 ## 1. Why Migrate?
 
-Lexigram offers a different architectural philosophy from FastAPI:
+Oridecon offers a different architectural philosophy from FastAPI:
 
 **Constructor injection vs `Depends()`.** Dependencies are declared as typed constructor parameters — no runtime `Depends()` calls, no nesting trees of dependency functions. The container resolves everything at instantiation time.
 
-**Contracts over direct coupling.** Services depend on protocols from `lexigram-contracts`, not on concrete implementations or third-party SDKs. Swap databases, caches, and LLM providers through configuration, not refactors.
+**Contracts over direct coupling.** Services depend on protocols from `oridecon-contracts`, not on concrete implementations or third-party SDKs. Swap databases, caches, and LLM providers through configuration, not refactors.
 
 **Provider pattern.** Every component's lifecycle — registration, boot, shutdown — is managed by a `Provider`. Boot order is explicit via `ProviderPriority`. No scattered `@app.on_event("startup")` handlers.
 
-**Multi-package ecosystem.** Extensions (`lexigram-sql`, `lexigram-cache`, `lexigram-web`, etc.) are independent packages that share only contracts. Install what you need; no hidden dependency trees.
+**Multi-package ecosystem.** Extensions (`oridecon-sql`, `oridecon-cache`, `oridecon-web`, etc.) are independent packages that share only contracts. Install what you need; no hidden dependency trees.
 
 :::tip
-You don't need to migrate everything at once. Lexigram's contract-based design means you can adopt it incrementally — start with a single new endpoint or service, then expand.
+You don't need to migrate everything at once. Oridecon's contract-based design means you can adopt it incrementally — start with a single new endpoint or service, then expand.
 :::
 
 ---
 
 ## 2. Concept Mapping
 
-| FastAPI | Lexigram |
+| FastAPI | Oridecon |
 |---------|----------|
 | `FastAPI()` | `Application.boot(name="...", modules=[...])` |
 | `@app.get("/")` | `@http.get("/")` in a `Controller` subclass |
 | `@app.post("/")` | `@http.post("/")` in a `Controller` subclass |
 | `app.add_middleware()` | Provider-based middleware via `WebProvider(middleware=[...])` |
 | `Depends()` | Constructor injection with container resolution |
-| `BackgroundTasks` | `lexigram-tasks` with provider registration (or direct injection of a task service) |
+| `BackgroundTasks` | `oridecon-tasks` with provider registration (or direct injection of a task service) |
 | `APIRouter` | Module + `Controller` class with `prefix` |
-| `pydantic.BaseModel` | Dataclasses + `lexigram.contracts.domain` value objects (Pydantic is still usable for request shapes) |
-| `SQLAlchemy` / async session | `lexigram-sql` with `DatabaseProviderProtocol` |
-| `httpx.AsyncClient` | `lexigram-http` with `HTTPClientProtocol` |
-| `pytest` + `TestClient` | `lexigram-testing` with `WebTestBed` or `ContainerTestFixture` |
+| `pydantic.BaseModel` | Dataclasses + `oridecon.contracts.domain` value objects (Pydantic is still usable for request shapes) |
+| `SQLAlchemy` / async session | `oridecon-sql` with `DatabaseProviderProtocol` |
+| `httpx.AsyncClient` | `oridecon-http` with `HTTPClientProtocol` |
+| `pytest` + `TestClient` | `oridecon-testing` with `WebTestBed` or `ContainerTestFixture` |
 | `@app.on_event("startup")` | `Provider.boot()` |
 | `@app.on_event("shutdown")` | `Provider.shutdown()` |
 | `app.include_router()` | `WebProvider.auto_discover("my_app.controllers")` |
@@ -53,7 +53,7 @@ You don't need to migrate everything at once. Lexigram's contract-based design m
 
 ## 3. Step-by-Step Migration
 
-The sections below walk through converting a FastAPI application to Lexigram, one layer at a time.
+The sections below walk through converting a FastAPI application to Oridecon, one layer at a time.
 
 ### 3.1 Start with a Controller
 
@@ -71,8 +71,8 @@ async def get_user(user_id: str):
 ```
 
 ```python
-# Lexigram
-from lexigram.web import Controller, get
+# Oridecon
+from oridecon.web import Controller, get
 
 
 class UserController(Controller):
@@ -101,10 +101,10 @@ async def get_user(user_id: str, db: Session = Depends(get_db)):
 ```
 
 ```python
-# Lexigram — logic in a service
-from lexigram.contracts.data.sql.database import DatabaseProviderProtocol
-from lexigram.result import Result, Ok, Err
-from lexigram.contracts.exceptions.domain import NotFoundError
+# Oridecon — logic in a service
+from oridecon.contracts.data.sql.database import DatabaseProviderProtocol
+from oridecon.result import Result, Ok, Err
+from oridecon.contracts.exceptions.domain import NotFoundError
 
 
 class UserService:
@@ -137,8 +137,8 @@ class UserController(Controller):
 The service needs to be registered so the container can inject it:
 
 ```python
-from lexigram.di.provider import Provider
-from lexigram.contracts.core.di import ContainerRegistrarProtocol
+from oridecon.di.provider import Provider
+from oridecon.contracts.core.di import ContainerRegistrarProtocol
 
 
 class UserServiceProvider(Provider):
@@ -150,7 +150,7 @@ class UserServiceProvider(Provider):
 Or use the `@singleton` decorator for auto-registration:
 
 ```python
-from lexigram import singleton
+from oridecon import singleton
 
 
 @singleton
@@ -163,8 +163,8 @@ class UserService:
 Wire everything together at the `Application` root:
 
 ```python
-from lexigram import Application
-from lexigram.web import WebProvider
+from oridecon import Application
+from oridecon.web import WebProvider
 
 
 async def main():
@@ -190,7 +190,7 @@ app.add_provider(WebProvider.auto_discover("my_app.controllers"))
 
 ## 4. Dependency Injection Deep Dive
 
-FastAPI's `Depends()` is a runtime callable that resolves a dependency at the point of the path operation. Lexigram's DI is constructor-based and container-resolved.
+FastAPI's `Depends()` is a runtime callable that resolves a dependency at the point of the path operation. Oridecon's DI is constructor-based and container-resolved.
 
 ### Constructor Injection
 
@@ -205,7 +205,7 @@ async def list_orders(
 ```
 
 ```python
-# Lexigram — constructor injection at the class level
+# Oridecon — constructor injection at the class level
 class OrderController(Controller):
     prefix = "/orders"
 
@@ -236,13 +236,13 @@ async def boot(self, container: BootContainerProtocol) -> None:
 
 ### Scoped vs Singleton
 
-| Scope | FastAPI | Lexigram |
+| Scope | FastAPI | Oridecon |
 |-------|---------|----------|
 | Singleton | `@lru_cache` or manual | `@singleton` or `container.singleton()` |
 | Request-scoped | `Depends()` with `yield` | `@scoped` or `container.scoped()` |
 | Transient | Default `Depends()` | `@transient` or `container.transient()` |
 
-Lexigram's scoped container is particularly useful for per-request units of work:
+Oridecon's scoped container is particularly useful for per-request units of work:
 
 ```python
 @scoped
@@ -264,7 +264,7 @@ class UnitOfWork:
 
 ## 5. Testing
 
-FastAPI tests use `TestClient` against the `FastAPI` app directly. Lexigram tests boot the container and resolve services — or use test beds from `lexigram-testing`.
+FastAPI tests use `TestClient` against the `FastAPI` app directly. Oridecon tests boot the container and resolve services — or use test beds from `oridecon-testing`.
 
 ### Controller Tests
 
@@ -279,10 +279,10 @@ def test_get_user():
 ```
 
 ```python
-# Lexigram
-from lexigram import Application
-from lexigram.web import WebModule
-from lexigram.testing import WebTestBed
+# Oridecon
+from oridecon import Application
+from oridecon.web import WebModule
+from oridecon.testing import WebTestBed
 
 
 async def test_get_user():
@@ -297,14 +297,14 @@ async def test_get_user():
 
 ### Service Tests with Fakes
 
-FastAPI encourages monkey-patching or `app.dependency_overrides`. Lexigram uses protocol-based fakes — no monkey-patching needed:
+FastAPI encourages monkey-patching or `app.dependency_overrides`. Oridecon uses protocol-based fakes — no monkey-patching needed:
 
 ```python
 # FastAPI
 app.dependency_overrides[get_db] = lambda: FakeDB()
 
-# Lexigram — inject the fake directly
-from lexigram.testing import FakeCache
+# Oridecon — inject the fake directly
+from oridecon.testing import FakeCache
 
 
 async def test_order_service():
@@ -358,7 +358,7 @@ async def boot(self, container):
 
 ### Using Exceptions for Domain Errors
 
-FastAPI raises `HTTPException` for expected failures. Lexigram uses the `Result` type:
+FastAPI raises `HTTPException` for expected failures. Oridecon uses the `Result` type:
 
 ```python
 # FastAPI
@@ -366,7 +366,7 @@ if not user:
     raise HTTPException(status_code=404, detail="User not found")
 return user
 
-# Lexigram — return Result
+# Oridecon — return Result
 if not user:
     return Err(NotFoundError(f"User {user_id} not found"))
 return Ok(user)
@@ -376,24 +376,24 @@ Domain errors go through `Result`. Infrastructure errors (connection loss, timeo
 
 ### Direct Imports Across Extension Packages
 
-FastAPI projects often import directly from e.g. `sqlalchemy` in route files. Lexigram enforces a strict dependency boundary:
+FastAPI projects often import directly from e.g. `sqlalchemy` in route files. Oridecon enforces a strict dependency boundary:
 
 ```python
 # ❌ Wrong — importing SQL implementation in a controller
-from lexigram.sql import DatabaseProvider  # Cross-extension import
+from oridecon.sql import DatabaseProvider  # Cross-extension import
 
 # ✅ Correct — depend on the protocol
-from lexigram.contracts.data.sql.database import DatabaseProviderProtocol
+from oridecon.contracts.data.sql.database import DatabaseProviderProtocol
 ```
 
-Cross-extension communication goes through contracts in `lexigram-contracts`, never through direct imports. See the [Architecture](/fundamentals/architecture/) doc for details.
+Cross-extension communication goes through contracts in `oridecon-contracts`, never through direct imports. See the [Architecture](/fundamentals/architecture/) doc for details.
 
 ### Expecting Starlette's Request Object Everywhere
 
-FastAPI exposes the `Request` object in route handlers. Lexigram controllers typically don't need it — route parameters, body, and query params are extracted automatically. If you need the raw ASGI scope, inject `Request` from `lexigram.web`:
+FastAPI exposes the `Request` object in route handlers. Oridecon controllers typically don't need it — route parameters, body, and query params are extracted automatically. If you need the raw ASGI scope, inject `Request` from `oridecon.web`:
 
 ```python
-from lexigram.web import Request
+from oridecon.web import Request
 
 
 class UserController(Controller):
@@ -405,13 +405,13 @@ class UserController(Controller):
 
 ### Using `app.state` for Shared State
 
-FastAPI uses `app.state.db = ...` as a makeshift container. Lexigram's container is the single source of truth:
+FastAPI uses `app.state.db = ...` as a makeshift container. Oridecon's container is the single source of truth:
 
 ```python
 # FastAPI
 app.state.db = Database()
 
-# Lexigram — register in the container
+# Oridecon — register in the container
 container.singleton(DatabaseProviderProtocol, MyDatabase)
 
 # Then inject wherever needed

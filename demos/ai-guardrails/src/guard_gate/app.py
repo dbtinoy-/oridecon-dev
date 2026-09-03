@@ -1,10 +1,10 @@
 """Composition root for the ai-guardrails demo — start reading here.
 
-Every Lexigram application has exactly one place that knows how the pieces
+Every Oridecon application has exactly one place that knows how the pieces
 fit together: the **composition root**.  Everything else (controllers,
 services, templates) is inert until *this file* wires it.
 
-The mental model has three layers.  Once these click, every Lexigram app
+The mental model has three layers.  Once these click, every Oridecon app
 reads the same way:
 
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -12,12 +12,12 @@ reads the same way:
 │    ``application.yaml`` holds your values.  The framework loads it,     │
 │    merges overrides on top (highest → lowest):                          │
 │                                                                         │
-│        LEX_WEB__SERVER__PORT=9000   env vars   ← win over everything    │
+│        ORI_WEB__SERVER__PORT=9000   env vars   ← win over everything    │
 │        application.production.yaml  profile overlay                     │
 │        application.yaml             base file                           │
 │        dataclass field defaults     last resort                         │
 │                                                                         │
-│    Result: ONE typed ``LexigramConfig`` object.                         │
+│    Result: ONE typed ``OrideconConfig`` object.                         │
 │                                                                         │
 │ 2. CAPABILITIES (declarative)                                           │
 │    ``Module.configure(...)`` switches framework packages on and tells   │
@@ -48,12 +48,12 @@ from __future__ import annotations
 from guard_gate.controllers.api import GuardApiController
 from guard_gate.di.provider import GuardrailsProvider
 from guard_gate.ui.pages import PlaygroundPageController
-from lexigram.ai.governance import GovernanceModule
-from lexigram.ai.guard import GuardModule
-from lexigram.app import Application
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider
-from lexigram.web.module import WebModule
+from oridecon.ai.governance import GovernanceModule
+from oridecon.ai.guard import GuardModule
+from oridecon.app import Application
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider
+from oridecon.web.module import WebModule
 
 
 def build_modules() -> list[object]:
@@ -94,7 +94,7 @@ def build_providers() -> list[Provider]:
     return [GuardrailsProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create the application in ``CREATED`` state (not yet started).
 
     Use this in tests (boot it yourself) or hand to ``main.py`` which

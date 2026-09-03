@@ -1,6 +1,6 @@
 """Playground page — static serving only (logic lives in the API controller).
 
-Lexigram separates concerns: pages.py serves HTML/CSS/JS,
+Oridecon separates concerns: pages.py serves HTML/CSS/JS,
 api.py handles business logic.  This controller is stateless — no
 dependencies injected.  In a real app with a SPA frontend, you might
 delete this controller entirely and serve static files via WebModule
@@ -13,7 +13,7 @@ from pathlib import Path
 
 from starlette.requests import Request
 
-from lexigram.web import Controller, FileResponse, get
+from oridecon.web import Controller, FileResponse, get
 
 UI_ROOT = Path(__file__).resolve().parent
 VIEWS_ROOT = UI_ROOT / "views"
@@ -34,7 +34,7 @@ def _static(name: str, media_type: str) -> FileResponse:
 class PlaygroundPageController(Controller):
     """Serve the guardrails playground; every handler reads from ui/.
 
-    FileResponse is a Lexigram web primitive for serving
+    FileResponse is a Oridecon web primitive for serving
     static files.  The ui/ directory structure (views/, static/) is
     a convention — not enforced by the framework.  Put your HTML
     templates in views/ and assets in static/.

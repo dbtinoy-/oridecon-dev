@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from lexigram.web import Controller, delete, get, post, put
+from oridecon.web import Controller, delete, get, post, put
 from taskapp.repository.tasks import TaskRepository
 
 

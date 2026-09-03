@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Empirically verify that every documented ``LEX_*`` variable actually binds.
+"""Empirically verify that every documented ``ORI_*`` variable actually binds.
 
-Reads ``.env.example`` and runs each ``LEX_*`` entry through
+Reads ``.env.example`` and runs each ``ORI_*`` entry through
 ``dev._lib.env_binding.check_var``, which loads the owning config family
 through its real ``from_yaml()`` path and checks whether the variable
 reaches a declared field.  Exits non-zero when any documented variable is
@@ -66,7 +66,7 @@ def run_check(
     unknown: list[str] = []
     skipped = 0
     for name in names:
-        if not name.startswith("LEX_"):
+        if not name.startswith("ORI_"):
             skipped += 1
             continue
         verdict = probe(name)
@@ -130,54 +130,54 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 MARKER = "LEXBINDCHECK"
 
 # Root config class per documented prefix family, resolved lazily at probe time.
-# The key is the exact prefix between "LEX_" and the first "__" — i.e. the
+# The key is the exact prefix between "ORI_" and the first "__" — i.e. the
 # YAML/config_section namespace the variables are written against.
 FAMILY_ROOTS: dict[str, tuple[str, str | None]] = {
     # prefix segment -> (module, root Config class)
-    "LEXIGRAM": ("lexigram.config.main", "LexigramConfig"),
-    "SECURITY": ("lexigram.security.config", "SecurityConfig"),
-    "WEB": ("lexigram.web.config", "WebConfig"),
-    "AUTH": ("lexigram.auth.config", "AuthConfig"),
-    "SEARCH": ("lexigram.search.config", "SearchConfig"),
-    "CACHE": ("lexigram.cache.config", "CacheConfig"),
-    "EVENTS": ("lexigram.events.config", "EventsConfig"),
-    "MONITOR": ("lexigram.monitor.config", "MonitorConfig"),
-    "SQL": ("lexigram.sql.config", "DatabaseConfig"),
-    "STORAGE": ("lexigram.storage.config", "StorageConfig"),
-    "TASKS": ("lexigram.tasks.config", None),
-    "GRAPHQL": ("lexigram.graphql.config", None),
-    "MULTIMEDIA": ("lexigram.multimedia.config", "MultimediaConfig"),
-    "VECTOR": ("lexigram.vector.config", None),
-    "AI": ("lexigram.ai.config", "AIConfig"),
-    "ADMIN": ("lexigram.admin.config", "AdminConfig"),
-    "UI": ("lexigram.ui.config", "UIConfig"),
-    "NOSQL": ("lexigram.nosql.config", None),
-    "GRAPH": ("lexigram.graph.config", None),
-    "TENANCY": ("lexigram.tenancy.config", "TenancyConfig"),
-    "NOTIFICATION": ("lexigram.notification.config", "NotificationConfig"),
-    "AUDIT": ("lexigram.audit.config", "AuditConfig"),
-    "FEATURES": ("lexigram.features.config", "FeatureFlagsConfig"),
-    "RESILIENCE": ("lexigram.resilience.config", "ResilienceConfig"),
-    "HTTP": ("lexigram.http.config", None),
-    "QUEUE": ("lexigram.queue.config", None),
-    "SECRETS": ("lexigram.secrets.config", None),
-    "WORKFLOW": ("lexigram.workflow.config", None),
+    "ORIDECON": ("oridecon.config.main", "OrideconConfig"),
+    "SECURITY": ("oridecon.security.config", "SecurityConfig"),
+    "WEB": ("oridecon.web.config", "WebConfig"),
+    "AUTH": ("oridecon.auth.config", "AuthConfig"),
+    "SEARCH": ("oridecon.search.config", "SearchConfig"),
+    "CACHE": ("oridecon.cache.config", "CacheConfig"),
+    "EVENTS": ("oridecon.events.config", "EventsConfig"),
+    "MONITOR": ("oridecon.monitor.config", "MonitorConfig"),
+    "SQL": ("oridecon.sql.config", "DatabaseConfig"),
+    "STORAGE": ("oridecon.storage.config", "StorageConfig"),
+    "TASKS": ("oridecon.tasks.config", None),
+    "GRAPHQL": ("oridecon.graphql.config", None),
+    "MULTIMEDIA": ("oridecon.multimedia.config", "MultimediaConfig"),
+    "VECTOR": ("oridecon.vector.config", None),
+    "AI": ("oridecon.ai.config", "AIConfig"),
+    "ADMIN": ("oridecon.admin.config", "AdminConfig"),
+    "UI": ("oridecon.ui.config", "UIConfig"),
+    "NOSQL": ("oridecon.nosql.config", None),
+    "GRAPH": ("oridecon.graph.config", None),
+    "TENANCY": ("oridecon.tenancy.config", "TenancyConfig"),
+    "NOTIFICATION": ("oridecon.notification.config", "NotificationConfig"),
+    "AUDIT": ("oridecon.audit.config", "AuditConfig"),
+    "FEATURES": ("oridecon.features.config", "FeatureFlagsConfig"),
+    "RESILIENCE": ("oridecon.resilience.config", "ResilienceConfig"),
+    "HTTP": ("oridecon.http.config", None),
+    "QUEUE": ("oridecon.queue.config", None),
+    "SECRETS": ("oridecon.secrets.config", None),
+    "WORKFLOW": ("oridecon.workflow.config", None),
     # AI extension families (section names use underscores, prefixes don't)
-    "AI_AGENTS": ("lexigram.ai.agents.config", "AgentConfig"),
-    "AI_EVALUATION": ("lexigram.ai.evaluation.config", "EvaluationConfig"),
-    "AI_FEEDBACK": ("lexigram.ai.feedback.config", "FeedbackConfig"),
-    "AI_GOVERNANCE": ("lexigram.ai.governance.config", "GovernanceConfig"),
-    "AI_GUARD": ("lexigram.ai.guard.config", "GuardConfig"),
-    "AI_LLM": ("lexigram.ai.llm.config", "ClientConfig"),
-    "AI_MCP": ("lexigram.ai.mcp.config", "MCPConfig"),
-    "AI_MEMORY": ("lexigram.ai.memory.config", "MemoryConfig"),
-    "AI_OBSERVABILITY": ("lexigram.ai.observability.config", "ObservabilityConfig"),
-    "AI_PROMPT": ("lexigram.ai.prompt.config", "PromptConfig"),
-    "AI_RAG": ("lexigram.ai.rag.config", "RAGConfig"),
-    "AI_SESSION": ("lexigram.ai.session.config", "SessionConfig"),
-    "AI_SKILLS": ("lexigram.ai.skills.config", "SkillsConfig"),
-    "AI_WORKERS": ("lexigram.ai.workers.config", "WorkersConfig"),
-    "WEBHOOK": ("lexigram.webhook.config", "WebhookConfig"),
+    "AI_AGENTS": ("oridecon.ai.agents.config", "AgentConfig"),
+    "AI_EVALUATION": ("oridecon.ai.evaluation.config", "EvaluationConfig"),
+    "AI_FEEDBACK": ("oridecon.ai.feedback.config", "FeedbackConfig"),
+    "AI_GOVERNANCE": ("oridecon.ai.governance.config", "GovernanceConfig"),
+    "AI_GUARD": ("oridecon.ai.guard.config", "GuardConfig"),
+    "AI_LLM": ("oridecon.ai.llm.config", "ClientConfig"),
+    "AI_MCP": ("oridecon.ai.mcp.config", "MCPConfig"),
+    "AI_MEMORY": ("oridecon.ai.memory.config", "MemoryConfig"),
+    "AI_OBSERVABILITY": ("oridecon.ai.observability.config", "ObservabilityConfig"),
+    "AI_PROMPT": ("oridecon.ai.prompt.config", "PromptConfig"),
+    "AI_RAG": ("oridecon.ai.rag.config", "RAGConfig"),
+    "AI_SESSION": ("oridecon.ai.session.config", "SessionConfig"),
+    "AI_SKILLS": ("oridecon.ai.skills.config", "SkillsConfig"),
+    "AI_WORKERS": ("oridecon.ai.workers.config", "WorkersConfig"),
+    "WEBHOOK": ("oridecon.webhook.config", "WebhookConfig"),
 }
 
 # Minimal YAML bodies that satisfy required fields so from_yaml() succeeds.
@@ -299,12 +299,12 @@ def _probe(cls: type, var: str, yaml_body: str) -> bool | None:
 
 
 def check_var(var: str) -> bool | None:
-    """Empirically test one ``LEX_*`` variable against its family root config.
+    """Empirically test one ``ORI_*`` variable against its family root config.
 
     Returns True/False for a verdict, or None when the variable belongs to no
     known family (or every probe errored).
     """
-    if not var.startswith("LEX_"):
+    if not var.startswith("ORI_"):
         return None
     segment = var[4:].split("__", 1)[0]
     entry = FAMILY_ROOTS.get(segment)
@@ -384,7 +384,7 @@ def _probe_typed(
     merely swapped a typed child model for a raw dict (the coercion engine's
     silent bail-out on unknown keys), which reaches no declared field.
     """
-    segment = var[4:].split("__", 1)[0] if var.startswith("LEX_") else ""
+    segment = var[4:].split("__", 1)[0] if var.startswith("ORI_") else ""
     body = FAMILY_BASE_YAML.get(segment, yaml_body)
 
     def _load() -> tuple[str | None, dict[str, str] | None]:
@@ -459,7 +459,7 @@ def _probe_value(cls: type, var: str, value: str) -> bool | None:
     """Probe with a specific value; True only if the value landed verbatim."""
     segment = None
     yaml_body = "{}\n"
-    if var.startswith("LEX_") and "__" in var[4:]:
+    if var.startswith("ORI_") and "__" in var[4:]:
         segment = var[4:].split("__", 1)[0]
         yaml_body = FAMILY_BASE_YAML.get(segment, "{}\n")
     with tempfile.NamedTemporaryFile("w", suffix=".yaml", delete=False) as f:

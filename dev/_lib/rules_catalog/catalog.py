@@ -1,4 +1,4 @@
-"""Static catalog wiring every Lexigram architectural rule."""
+"""Static catalog wiring every Oridecon architectural rule."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ from dev._lib.rules_catalog.types import RuleDefinition, RuleSeverity
 
 
 def build_rules_catalog() -> tuple[RuleDefinition, ...]:
-    """Return the static catalog of Lexigram architectural rules."""
+    """Return the static catalog of Oridecon architectural rules."""
 
     return (
         RuleDefinition(

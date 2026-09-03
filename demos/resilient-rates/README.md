@@ -2,7 +2,7 @@
 
 > Module name: `rates` — run with `PYTHONPATH=src uv run python -m rates`
 
-Demonstrates the **resilience + cache subsystems** of Lexigram.
+Demonstrates the **resilience + cache subsystems** of Oridecon.
 
 This demo is a small FX rate desk in front of a hostile upstream. Every read
 flows through a **cache-aside** lookup (60s TTL) and a **resilience pipeline**
@@ -14,7 +14,7 @@ locks collapse concurrent misses into one upstream call.
 No network, broker, or external service is required — the upstream is a
 deterministic seeded random-walk provider whose faults you script live.
 
-## Lexigram concepts used
+## Oridecon concepts used
 
 | Concept | Where in this demo | Your app |
 |---------|-------------------|----------|
@@ -27,7 +27,7 @@ deterministic seeded random-walk provider whose faults you script live.
 
 ## What it shows
 
-| Piece | Where | Lexigram API used |
+| Piece | Where | Oridecon API used |
 |-------|-------|-------------------|
 | Resilience pipeline (retry → breaker → timeout) | `services/rates_service.py` | `ResiliencePipelineFactoryProtocol`, `RetryConfig`, `CircuitBreakerConfig`, `TimeoutConfig` |
 | Cache-aside reads + TTL writes | `services/rates_service.py` | `CacheBackendProtocol`, `Result[Ok, Err]` cache results |

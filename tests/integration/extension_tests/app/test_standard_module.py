@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from lexigram.app.base import Application
-from lexigram.app.standard import StandardModule
-from lexigram.config.main import LexigramConfig
-from lexigram.contracts.core.serialization import JsonSerializerProtocol
+from oridecon.app.base import Application
+from oridecon.app.standard import StandardModule
+from oridecon.config.main import OrideconConfig
+from oridecon.contracts.core.serialization import JsonSerializerProtocol
 
 
 def test_standard_module_re_exports_core_exports() -> None:
@@ -11,5 +11,5 @@ def test_standard_module_re_exports_core_exports() -> None:
     dynamic_module = StandardModule.configure()
 
     assert Application in dynamic_module.exports
-    assert LexigramConfig in dynamic_module.exports
+    assert OrideconConfig in dynamic_module.exports
     assert JsonSerializerProtocol in dynamic_module.exports

@@ -16,18 +16,18 @@ class NonConfigEnvSource:
 
 NON_CONFIG_ENV_SOURCES: tuple[NonConfigEnvSource, ...] = (
     NonConfigEnvSource(
-        source_file="core/lexigram/src/lexigram/logging/debug.py",
-        env_var="LEX_DEBUG",
+        source_file="core/oridecon/src/oridecon/logging/debug.py",
+        env_var="ORI_DEBUG",
         rationale="Early-boot logging toggle before typed config is available.",
     ),
     NonConfigEnvSource(
-        source_file="core/lexigram/src/lexigram/app/base.py",
-        env_var="LEX_QUIET",
+        source_file="core/oridecon/src/oridecon/app/base.py",
+        env_var="ORI_QUIET",
         rationale="Controls startup banner suppression during process bootstrap.",
     ),
     NonConfigEnvSource(
-        source_file="experimental/apps/lexigram-cli/src/lexigram/cli/lib/config_loader.py",
-        env_var="LEX_CONFIG",
+        source_file="experimental/apps/oridecon-cli/src/oridecon/cli/lib/config_loader.py",
+        env_var="ORI_CONFIG",
         rationale="CLI override for explicit configuration file path.",
     ),
 )

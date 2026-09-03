@@ -8,7 +8,7 @@ from timeline_lab.app import create_app
 
 
 async def serve() -> None:
-    from lexigram.web.server.runner import run_server
+    from oridecon.web.server.runner import run_server
 
     application = create_app()
     await application.start()

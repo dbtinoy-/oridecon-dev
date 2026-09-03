@@ -1,10 +1,10 @@
 """Composition root for the sql-repository demo — start reading here.
 
-Every Lexigram application has exactly one place that knows how the pieces
+Every Oridecon application has exactly one place that knows how the pieces
 fit together: the **composition root**.  Everything else (controllers,
 services, templates) is inert until *this file* wires it.
 
-The mental model has three layers.  Once these click, every Lexigram app
+The mental model has three layers.  Once these click, every Oridecon app
 reads the same way:
 
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -12,12 +12,12 @@ reads the same way:
 │    ``application.yaml`` holds your values.  The framework loads it,     │
 │    merges overrides on top (highest → lowest):                          │
 │                                                                         │
-│        LEX_DEMO__KEY=value  env vars  ← win                            │
+│        ORI_DEMO__KEY=value  env vars  ← win                            │
 │        application.production.yaml  profile overlay                     │
 │        application.yaml             base file                           │
 │        dataclass field defaults     last resort                         │
 │                                                                         │
-│    Result: ONE typed ``LexigramConfig`` object.                         │
+│    Result: ONE typed ``OrideconConfig`` object.                         │
 │                                                                         │
 │ 2. CAPABILITIES (declarative)                                           │
 │    ``Module.configure(...)`` switches framework packages on and tells   │
@@ -36,12 +36,12 @@ Run with::
 
 from __future__ import annotations
 
-from lexigram.app.base import Application
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider
-from lexigram.sql.config import DatabaseConfig
-from lexigram.sql.module import DatabaseModule
-from lexigram.web.module import WebModule
+from oridecon.app.base import Application
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider
+from oridecon.sql.config import DatabaseConfig
+from oridecon.sql.module import DatabaseModule
+from oridecon.web.module import WebModule
 from taskapp.controllers.api import TasksApiController
 from taskapp.di.provider import TaskProvider
 from taskapp.ui.pages import TasksPageController
@@ -53,9 +53,9 @@ def build_modules() -> list[object]:
     Each ``Module.configure(...)`` returns a DynamicModule: a recipe the
     framework expands into providers at boot.  Because every provider in
     the bundle declares ``config_key`` / ``config_model``, the orchestrator
-    injects the matching typed section of ``LexigramConfig`` into
+    injects the matching typed section of ``OrideconConfig`` into
     ``provider.config`` right before ``register()`` runs — YAML values and
-    ``LEX_*`` environment overrides already merged.
+    ``ORI_*`` environment overrides already merged.
     """
     return [
         # DatabaseModule owns SQLite connection lifecycle and exposes the
@@ -72,17 +72,17 @@ def build_modules() -> list[object]:
 def build_providers() -> list[Provider]:
     """Imperative services owned by this demo.
 
-    A Provider is Lexigram's unit of lifecycle management: ``register()``
+    A Provider is Oridecon's unit of lifecycle management: ``register()``
     binds services into the DI container, ``boot()`` runs post-registration
     setup, ``shutdown()`` cleans up.
     """
     return [TaskProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create the application in ``CREATED`` state (not yet started).
 
-    Accepts an optional ``LexigramConfig`` for scenarios where the config
+    Accepts an optional ``OrideconConfig`` for scenarios where the config
     is loaded explicitly (e.g. hub mounting).  When called standalone,
     the framework auto-discovers ``application.yaml`` from the working
     directory.

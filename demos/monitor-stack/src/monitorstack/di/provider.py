@@ -4,20 +4,20 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from lexigram.contracts.core.health import (
+from oridecon.contracts.core.health import (
     HealthCheckCategory,
     HealthCheckResult,
     HealthStatus,
 )
-from lexigram.contracts.observability.metrics import MetricsCollectorProtocol
-from lexigram.contracts.observability.tracing import TracerProtocol
-from lexigram.di.provider import Provider
-from lexigram.monitor.health import HealthCheckRegistry
+from oridecon.contracts.observability.metrics import MetricsCollectorProtocol
+from oridecon.contracts.observability.tracing import TracerProtocol
+from oridecon.di.provider import Provider
+from oridecon.monitor.health import HealthCheckRegistry
 from monitorstack.config import MonitorStackConfig
 from monitorstack.controllers.api import MonitorApiController
 
 if TYPE_CHECKING:
-    from lexigram.contracts.core.di import (
+    from oridecon.contracts.core.di import (
         ContainerRegistrarProtocol,
         ContainerResolverProtocol,
     )
@@ -44,7 +44,7 @@ class MonitorStackProvider(Provider):
         container.singleton(MonitorApiController, MonitorApiController)
 
     async def boot(self, container: ContainerResolverProtocol) -> None:
-        """Resolve Lexigram monitor capabilities and register the self-check."""
+        """Resolve Oridecon monitor capabilities and register the self-check."""
         cfg = await container.resolve(MonitorStackConfig)
         metrics = await container.resolve(MetricsCollectorProtocol)
         tracer = await container.resolve(TracerProtocol)

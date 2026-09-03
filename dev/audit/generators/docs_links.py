@@ -195,7 +195,7 @@ class DocsLinksAuditGenerator(MarkdownAuditGenerator):
         total_links = len(rows)
 
         lines = [
-            "# AUDIT_DOC_LINKS.md — Lexigram Documentation Link Audit",
+            "# AUDIT_DOC_LINKS.md — Oridecon Documentation Link Audit",
             "",
             "> **Source**: Internal markdown links inside `docs/`.",
             "> A link is *dead* when its target file does not exist, when a",

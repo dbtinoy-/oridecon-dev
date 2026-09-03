@@ -1,10 +1,10 @@
-"""Browser API for the focused Lexigram feature-flags demo."""
+"""Browser API for the focused Oridecon feature-flags demo."""
 
 from __future__ import annotations
 
 from typing import Any
 
-from lexigram.web import Controller, get, post
+from oridecon.web import Controller, get, post
 from release_control.services.control import ReleaseControlService
 
 

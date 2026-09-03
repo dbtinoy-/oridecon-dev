@@ -14,15 +14,15 @@ from __future__ import annotations
 from guard_gate.domain.guarded_assistant import GuardedAssistant
 from guard_gate.domain.policy import PolicyToggle
 from guard_gate.repository.acts import COST_PER_TURN
-from lexigram.ai.governance import AIAuditStore
-from lexigram.contracts.ai import AIGovernanceProtocol
-from lexigram.contracts.core.di import (
+from oridecon.ai.governance import AIAuditStore
+from oridecon.contracts.ai import AIGovernanceProtocol
+from oridecon.contracts.core.di import (
     BootContainerProtocol,
     ContainerRegistrarProtocol,
 )
-from lexigram.contracts.exceptions import UnresolvableDependencyError
-from lexigram.di.provider import Provider
-from lexigram.logging import get_logger
+from oridecon.contracts.exceptions import UnresolvableDependencyError
+from oridecon.di.provider import Provider
+from oridecon.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -54,8 +54,8 @@ class GuardrailsProvider(Provider):
         container.singleton(PolicyToggle, instance=toggle)
 
         async def build_assistant(resolver):
-            from lexigram.ai.governance import GovernanceConfig, InMemoryAuditStore
-            from lexigram.contracts.ai import GuardPipelineProtocol
+            from oridecon.ai.governance import GovernanceConfig, InMemoryAuditStore
+            from oridecon.contracts.ai import GuardPipelineProtocol
 
             pipeline = await resolver.resolve(GuardPipelineProtocol)
             governance = await resolver.resolve(AIGovernanceProtocol)

@@ -4,20 +4,20 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from lexigram.contracts.core.health import (
+from oridecon.contracts.core.health import (
     HealthCheckCategory,
     HealthCheckResult,
     HealthStatus,
 )
-from lexigram.contracts.data import DatabaseProviderProtocol
-from lexigram.di.provider import Provider
+from oridecon.contracts.data import DatabaseProviderProtocol
+from oridecon.di.provider import Provider
 from taskapp.config import TaskAppConfig
 from taskapp.controllers.api import TasksApiController
 from taskapp.repository.fixtures import SEED_TASKS
 from taskapp.repository.tasks import TaskRepository
 
 if TYPE_CHECKING:
-    from lexigram.contracts.core.di import (
+    from oridecon.contracts.core.di import (
         ContainerRegistrarProtocol,
         ContainerResolverProtocol,
     )
@@ -51,7 +51,7 @@ class TaskProvider(Provider):
         container.bind(TasksApiController, TasksApiController(repository=repository))
 
     async def health_check(self, timeout: float = 5.0) -> HealthCheckResult:
-        """Delegate readiness to the Lexigram database provider when available."""
+        """Delegate readiness to the Oridecon database provider when available."""
         if self._database is None:
             return HealthCheckResult(
                 component=self.name,

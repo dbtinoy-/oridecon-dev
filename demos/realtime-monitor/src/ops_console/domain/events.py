@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from lexigram.primitives import clock
+from oridecon.primitives import clock
 from ops_console.domain.severity import Severity
 
 

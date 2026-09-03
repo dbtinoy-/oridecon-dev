@@ -1,7 +1,7 @@
 # ── Metadata ────────────────────────────────────────────────────────────────
 name: demo-hub
 version: 0.1.0
-description: Central dashboard for browsing and launching all Lexigram demos
+description: Central dashboard for browsing and launching all Oridecon demos
 # ────────────────────────────────────────────────────────────────────────────
 # ══════════════════════════════════════════════════════════════════════════════
 # Demo Hub — Complete Configuration Reference
@@ -21,12 +21,12 @@ description: Central dashboard for browsing and launching all Lexigram demos
 #   1. web:        HTTP server, security, CSRF
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 #

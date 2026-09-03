@@ -1,8 +1,8 @@
-# Contributing to Lexigram Framework
+# Contributing to Oridecon Framework
 
-Thank you for your interest in contributing to the Lexigram Framework!
+Thank you for your interest in contributing to the Oridecon Framework!
 
-> **Note**: Lexigram is **alpha (0.1.x)** and licensed under the [MIT License](./LICENSE).
+> **Note**: Oridecon is **alpha (0.1.x)** and licensed under the [MIT License](./LICENSE).
 > External contributions are welcome.
 > All contributions are accepted under the MIT License — sign off your commits
 > (`git commit -s`) to certify the [DCO](https://developercertificate.org/).
@@ -19,8 +19,8 @@ Thank you for your interest in contributing to the Lexigram Framework!
 
 ```bash
 # Clone the repository
-git clone https://github.com/dbtinoy-/lexigram.git
-cd lexigram
+git clone https://github.com/dbtinoy-/oridecon.git
+cd oridecon
 
 # Install dependencies
 make dev
@@ -119,8 +119,8 @@ make integration-stop
 
 ### Run Specific Tests
 ```bash
-make test-pkg PKG=lexigram-web
-uv run pytest packages/lexigram-web/tests/unit/ -v
+make test-pkg PKG=oridecon-web
+uv run pytest packages/oridecon-web/tests/unit/ -v
 ```
 
 For the complete command reference (lint, format, type, coverage, CI, versioning) see [DEVELOPMENT.md](./DEVELOPMENT.md).
@@ -198,13 +198,13 @@ cd <pkg> && uv build && uv publish
 ### Add a New Package
 ```bash
 # Create the package structure under the right tier:
-#   core/            lexigram, lexigram-contracts
+#   core/            oridecon, oridecon-contracts
 #   packages/        backend packages (web, sql, cache, ...)
 #   experimental/    ai/, apps/, multimedia/ families
-mkdir -p packages/lexigram-newfeature/src/lexigram/newfeature
-cd packages/lexigram-newfeature
+mkdir -p packages/oridecon-newfeature/src/oridecon/newfeature
+cd packages/oridecon-newfeature
 # copy pyproject.toml / README.md skeletons from a sibling package
-# (e.g. packages/lexigram-http), then edit them for the new package
+# (e.g. packages/oridecon-http), then edit them for the new package
 ```
 
 ### Add a Dependency
@@ -227,8 +227,8 @@ Edit `.importlinter` to define new contracts before implementing the feature.
 
 - **Questions**: Open a GitHub Discussion
 - **Bugs**: Open a GitHub Issue with a minimal reproduction
-- **Security issues**: Report to security@lexigram.dev (do not open public issues — see [SECURITY.md](./SECURITY.md))
+- **Security issues**: Report to security@oridecon.dev (do not open public issues — see [SECURITY.md](./SECURITY.md))
 
 ---
 
-**Thank you for contributing to Lexigram Framework!** 🚀
+**Thank you for contributing to Oridecon Framework!** 🚀

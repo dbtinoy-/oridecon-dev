@@ -17,19 +17,19 @@ description: Prompt template versioning, A/B testing, and rollback
 #   2. ai_prompt:  Prompt template rendering, sanitisation, limits
 #
 # For full reference see:
-#   - Lexigram Web:    packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram Prompt: experimental/ai/lexigram-ai-prompt/src/lexigram/ai/prompt/config.py
+#   - Oridecon Web:    packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon Prompt: experimental/ai/oridecon-ai-prompt/src/oridecon/ai/prompt/config.py
 #
 # ENVIRONMENT VARIABLE OVERRIDE:
-#   Every key can be overridden via LEX_* env vars with __ as delimiter.
+#   Every key can be overridden via ORI_* env vars with __ as delimiter.
 #   Examples:
-#     LEX_WEB__SERVER__PORT=9000
-#     LEX_AI_PROMPT__SANITIZE_INPUTS=false
+#     ORI_WEB__SERVER__PORT=9000
+#     ORI_AI_PROMPT__SANITIZE_INPUTS=false
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 #
@@ -66,7 +66,7 @@ web:
       # excluded_paths: []              # paths exempt from CSRF validation
       # exclude_content_types: []       # Content-Types that bypass CSRF
       # exclude_auth_schemes: []        # Auth schemes that bypass CSRF
-      # secret_key: null                # HMAC key (LEX_WEB__SECURITY__CSRF__SECRET_KEY)
+      # secret_key: null                # HMAC key (ORI_WEB__SECURITY__CSRF__SECRET_KEY)
 
     # ── CORS ───────────────────────────────────────────────────────────────
     # cors:
@@ -135,7 +135,7 @@ web:
 
 
 # ── AI Prompt ────────────────────────────────────────────────────────────────
-# Lexigram AI Prompt manages template registration, rendering, input
+# Oridecon AI Prompt manages template registration, rendering, input
 # sanitisation, and variable validation.  The PromptModule reads this
 # section automatically via config_key="ai_prompt" / config_model=PromptConfig.
 #
@@ -143,8 +143,8 @@ web:
 # the result into PromptProvider.config before register() runs.
 #
 # ENVIRONMENT VARIABLE OVERRIDE:
-#   LEX_AI_PROMPT__DEFAULT_FORMAT=jinja2
-#   LEX_AI_PROMPT__SANITIZE_INPUTS=false
+#   ORI_AI_PROMPT__DEFAULT_FORMAT=jinja2
+#   ORI_AI_PROMPT__SANITIZE_INPUTS=false
 # ─────────────────────────────────────────────────────────────────────────────
 # ai_prompt:
   # enabled: true                      # master switch for prompt subsystem

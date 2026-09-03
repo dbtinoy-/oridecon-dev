@@ -1,16 +1,16 @@
-# docker-compose.test.yml — Lexigram integration test infrastructure
+# docker-compose.test.yml — Oridecon integration test infrastructure
 #
 # All services run on non-standard ports to avoid conflicts with dev services.
 #
 # ─── Profiles ─────────────────────────────────────────────────────────────────
 #
-#   core       — postgres + redis  (lexigram-sql, lexigram-cache, lexigram-auth)
-#   messaging  — kafka             (lexigram-events, lexigram-queue)
-#   storage    — minio             (lexigram-storage)
-#   search     — elasticsearch     (lexigram-search)
-#   nosql      — mongo             (lexigram-nosql)
-#   vector     — qdrant            (lexigram-vector)
-#   graph      — neo4j             (lexigram-graph)
+#   core       — postgres + redis  (oridecon-sql, oridecon-cache, oridecon-auth)
+#   messaging  — kafka             (oridecon-events, oridecon-queue)
+#   storage    — minio             (oridecon-storage)
+#   search     — elasticsearch     (oridecon-search)
+#   nosql      — mongo             (oridecon-nosql)
+#   vector     — qdrant            (oridecon-vector)
+#   graph      — neo4j             (oridecon-graph)
 #   full       — all services
 #
 #   Usage:
@@ -19,35 +19,35 @@
 #
 # ─── Connection strings (match IntegrationTestConfig defaults exactly) ────────
 #
-#   LEX_TEST_POSTGRES_DSN=postgresql+asyncpg://lexigram:lexigram@localhost:15432/lexigram_test
-#   LEX_TEST_POSTGRES_DSN_RAW=postgresql://lexigram:lexigram@localhost:15432/lexigram_test
-#   LEX_TEST_REDIS_URL=redis://localhost:16379/15
-#   LEX_TEST_KAFKA_BOOTSTRAP=localhost:19092
-#   LEX_TEST_MINIO_ENDPOINT=localhost:19000
-#   LEX_TEST_MINIO_ACCESS_KEY=minioadmin
-#   LEX_TEST_MINIO_SECRET_KEY=minioadmin
-#   LEX_TEST_ELASTICSEARCH_URL=http://localhost:19200
-#   LEX_TEST_MONGODB_DSN=mongodb://localhost:17017
-#   LEX_TEST_QDRANT_URL=http://localhost:16333
-#   LEX_TEST_NEO4J_URL=bolt://localhost:17687
-#   LEX_TEST_NEO4J_AUTH=neo4j/testpassword
+#   ORI_TEST_POSTGRES_DSN=postgresql+asyncpg://oridecon:oridecon@localhost:15432/oridecon_test
+#   ORI_TEST_POSTGRES_DSN_RAW=postgresql://oridecon:oridecon@localhost:15432/oridecon_test
+#   ORI_TEST_REDIS_URL=redis://localhost:16379/15
+#   ORI_TEST_KAFKA_BOOTSTRAP=localhost:19092
+#   ORI_TEST_MINIO_ENDPOINT=localhost:19000
+#   ORI_TEST_MINIO_ACCESS_KEY=minioadmin
+#   ORI_TEST_MINIO_SECRET_KEY=minioadmin
+#   ORI_TEST_ELASTICSEARCH_URL=http://localhost:19200
+#   ORI_TEST_MONGODB_DSN=mongodb://localhost:17017
+#   ORI_TEST_QDRANT_URL=http://localhost:16333
+#   ORI_TEST_NEO4J_URL=bolt://localhost:17687
+#   ORI_TEST_NEO4J_AUTH=neo4j/testpassword
 #
 # ─────────────────────────────────────────────────────────────────────────────
 
 networks:
-  lexigram-test:
+  oridecon-test:
     driver: bridge
 
 volumes:
-  lexigram_test_postgres:
-  lexigram_test_redis:
-  lexigram_test_mongo:
-  lexigram_test_elasticsearch:
-  lexigram_test_minio:
-  lexigram_test_kafka:
-  lexigram_test_qdrant:
-  lexigram_test_neo4j_data:
-  lexigram_test_neo4j_logs:
+  oridecon_test_postgres:
+  oridecon_test_redis:
+  oridecon_test_mongo:
+  oridecon_test_elasticsearch:
+  oridecon_test_minio:
+  oridecon_test_kafka:
+  oridecon_test_qdrant:
+  oridecon_test_neo4j_data:
+  oridecon_test_neo4j_logs:
 
 services:
 
@@ -57,17 +57,17 @@ services:
     image: postgres:16-alpine
     restart: "no"
     networks:
-      - lexigram-test
+      - oridecon-test
     ports:
       - "15432:5432"
     environment:
-      POSTGRES_DB: lexigram_test
-      POSTGRES_USER: lexigram
-      POSTGRES_PASSWORD: lexigram
+      POSTGRES_DB: oridecon_test
+      POSTGRES_USER: oridecon
+      POSTGRES_PASSWORD: oridecon
     volumes:
-      - lexigram_test_postgres:/var/lib/postgresql/data
+      - oridecon_test_postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U lexigram -d lexigram_test"]
+      test: ["CMD-SHELL", "pg_isready -U oridecon -d oridecon_test"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -80,11 +80,11 @@ services:
     image: redis:7-alpine
     restart: "no"
     networks:
-      - lexigram-test
+      - oridecon-test
     ports:
       - "16379:6379"
     volumes:
-      - lexigram_test_redis:/data
+      - oridecon_test_redis:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -99,11 +99,11 @@ services:
     image: mongo:7
     restart: "no"
     networks:
-      - lexigram-test
+      - oridecon-test
     ports:
       - "17017:27017"
     volumes:
-      - lexigram_test_mongo:/data/db
+      - oridecon_test_mongo:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')", "--quiet"]
       interval: 10s
@@ -118,7 +118,7 @@ services:
     image: elasticsearch:8.13.0
     restart: "no"
     networks:
-      - lexigram-test
+      - oridecon-test
     ports:
       - "19200:9200"
     environment:
@@ -126,7 +126,7 @@ services:
       xpack.security.enabled: "false"
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
     volumes:
-      - lexigram_test_elasticsearch:/usr/share/elasticsearch/data
+      - oridecon_test_elasticsearch:/usr/share/elasticsearch/data
     healthcheck:
       test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health | grep -qv '\"status\":\"red\"'"]
       interval: 10s
@@ -141,7 +141,7 @@ services:
     image: minio/minio:RELEASE.2024-03-21T23-13-43Z
     restart: "no"
     networks:
-      - lexigram-test
+      - oridecon-test
     ports:
       - "19000:9000"   # S3 API
       - "19001:9001"   # Web console
@@ -151,7 +151,7 @@ services:
       MC_HOST_local: "http://minioadmin:minioadmin@localhost:9000"
     command: server /data --console-address ":9001"
     volumes:
-      - lexigram_test_minio:/data
+      - oridecon_test_minio:/data
     healthcheck:
       test: ["CMD", "mc", "ready", "local"]
       interval: 5s
@@ -166,7 +166,7 @@ services:
     image: confluentinc/cp-kafka:7.6.1
     restart: "no"
     networks:
-      - lexigram-test
+      - oridecon-test
     ports:
       - "19092:9092"    # broker
       - "19093:9093"    # controller
@@ -192,7 +192,7 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_LOG_DIRS: "/var/lib/kafka/data"
     volumes:
-      - lexigram_test_kafka:/var/lib/kafka/data
+      - oridecon_test_kafka:/var/lib/kafka/data
     healthcheck:
       test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 > /dev/null 2>&1"]
       interval: 10s
@@ -207,12 +207,12 @@ services:
     image: qdrant/qdrant:v1.9.2
     restart: "no"
     networks:
-      - lexigram-test
+      - oridecon-test
     ports:
       - "16333:6333"   # REST / HTTP
       - "16334:6334"   # gRPC
     volumes:
-      - lexigram_test_qdrant:/qdrant/storage
+      - oridecon_test_qdrant:/qdrant/storage
     healthcheck:
       test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/6333'"]
       interval: 5s
@@ -227,14 +227,14 @@ services:
     image: neo4j:5.19-community
     restart: "no"
     networks:
-      - lexigram-test
+      - oridecon-test
     ports:
       - "17687:7687"   # Bolt
     environment:
       NEO4J_AUTH: none
     volumes:
-      - lexigram_test_neo4j_data:/data
-      - lexigram_test_neo4j_logs:/logs
+      - oridecon_test_neo4j_data:/data
+      - oridecon_test_neo4j_logs:/logs
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:7474 > /dev/null 2>&1"]
       interval: 10s

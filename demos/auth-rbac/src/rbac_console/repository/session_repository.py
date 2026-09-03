@@ -1,6 +1,6 @@
 """Dict-backed session storage — the **protocol binding** lesson.
 
-``SessionRepositoryProtocol`` lives in ``lexigram.contracts.auth``; the
+``SessionRepositoryProtocol`` lives in ``oridecon.contracts.auth``; the
 auth framework depends on the *protocol*, this demo supplies the
 implementation.  ``di/provider.py`` binds both sides::
 
@@ -11,7 +11,7 @@ implementation.  ``di/provider.py`` binds both sides::
 concrete class.  Swap this file for a Postgres implementation and
 nothing else changes.
 
-Uses the ambient clock (``lexigram.primitives.clock``)
+Uses the ambient clock (``oridecon.primitives.clock``)
 for testable time — tests can freeze it via ``clock.use(FixedClock(...))``.
 """
 
@@ -20,8 +20,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from lexigram.contracts.auth import SessionRepositoryProtocol
-from lexigram.primitives import clock
+from oridecon.contracts.auth import SessionRepositoryProtocol
+from oridecon.primitives import clock
 
 
 @dataclass
@@ -29,7 +29,7 @@ class InMemorySessionRepository(SessionRepositoryProtocol):
     """Process-local session store implementing the storage contract.
 
     This is the **protocol binding** pattern: ``SessionRepositoryProtocol``
-    lives in ``lexigram.contracts.auth.repositories``; this class supplies
+    lives in ``oridecon.contracts.auth.repositories``; this class supplies
     the implementation.  ``di/provider.py`` binds both to the same instance,
     so framework code resolves the protocol while tests can import the
     concrete class.
@@ -41,7 +41,7 @@ class InMemorySessionRepository(SessionRepositoryProtocol):
     _rows: dict[str, dict] = field(default_factory=dict)
 
     async def insert(self, payload: dict) -> None:
-        """Insert a session row.  Uses ambient clock (lexigram.primitives.clock)
+        """Insert a session row.  Uses ambient clock (oridecon.primitives.clock)
         for testable time — tests can freeze it with ``clock.use(FixedClock(...))``.
         """
         row = dict(payload)

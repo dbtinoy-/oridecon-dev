@@ -1,13 +1,13 @@
 """Composition root for the auth-mfa demo — start reading here.
 
-Every Lexigram application has exactly one place that knows how the pieces
+Every Oridecon application has exactly one place that knows how the pieces
 fit together: the **composition root**.  Everything else (controllers,
 services, templates) is inert until *this file* wires it.
 
 Three layers:
 
 1. CONFIGURATION — ``application.yaml`` holds your values.  The framework
-   loads it; ``LEX_*`` env vars win over yaml.
+   loads it; ``ORI_*`` env vars win over yaml.
 
 2. CAPABILITIES (declarative) — ``Module.configure(...)`` switches
    framework packages on.  Each reads its own yaml section automatically.
@@ -23,11 +23,11 @@ Run with::
 
 from __future__ import annotations
 
-from lexigram.app.base import Application  # Application = the bootable object
-from lexigram.auth.module import AuthModule  # framework module — owns auth providers
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider  # base class for your DI registrations
-from lexigram.web.module import WebModule  # framework module — owns web server
+from oridecon.app.base import Application  # Application = the bootable object
+from oridecon.auth.module import AuthModule  # framework module — owns auth providers
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider  # base class for your DI registrations
+from oridecon.web.module import WebModule  # framework module — owns web server
 from mfa_console.controllers.api import MfaApiController  # your HTTP surface
 from mfa_console.di.provider import MfaProvider  # your service registrations
 from mfa_console.ui.pages import PagesController  # page controller (optional)
@@ -39,9 +39,9 @@ def build_modules() -> list[object]:
     Each ``Module.configure(...)`` returns a DynamicModule: a recipe the
     framework expands into providers at boot.  Because every provider in
     the bundle declares ``config_key`` / ``config_model``, the orchestrator
-    injects the matching typed section of ``LexigramConfig`` into
+    injects the matching typed section of ``OrideconConfig`` into
     ``provider.config`` right before ``register()`` runs — YAML values and
-    ``LEX_*`` environment overrides already merged.
+    ``ORI_*`` environment overrides already merged.
     """
     return [
         AuthModule.configure(),  # sessions, tokens, RBAC roles
@@ -57,14 +57,14 @@ def build_modules() -> list[object]:
 def build_providers() -> list[Provider]:
     """Imperative services owned by this demo.
 
-    A Provider is Lexigram's unit of lifecycle management: ``register()``
+    A Provider is Oridecon's unit of lifecycle management: ``register()``
     binds services into the DI container, ``boot()`` runs post-registration
     setup (here: seeding personas, enrolling TOTP), ``shutdown()`` cleans up.
     """
     return [MfaProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create the application in ``CREATED`` state (not yet started).
 
     Use this directly in tests (boot it yourself so you control the

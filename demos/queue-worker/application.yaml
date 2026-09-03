@@ -21,14 +21,14 @@ description: Message queue with publish/subscribe and background processing
 #   2. queueworker: Worker topic and message retry metadata
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram Queue:     packages/lexigram-queue/
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon Queue:     packages/oridecon-queue/
 #   - Demo config:        demos/queue-worker/src/queueworker/config.py
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -80,7 +80,7 @@ web:
 # QueueWorkerProvider reads this section automatically via
 # config_key="queueworker" / config_model=QueueWorkerConfig.
 #
-# QueueModule.stub() supplies Lexigram's in-memory QueueProtocol backend.
+# QueueModule.stub() supplies Oridecon's in-memory QueueProtocol backend.
 # The custom provider subscribes one MessageConsumer to this topic. Swap the
 # module configuration for a broker-backed QueueConfig in a production app.
 # ─────────────────────────────────────────────────────────────────────────────

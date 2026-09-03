@@ -24,21 +24,21 @@ def _write_workspace(root: Path) -> None:
         encoding="utf-8",
     )
     (docs / "ecosystem" / "index.md").write_text(
-        "- [Web package](/packages/lexigram-web/)\n", encoding="utf-8"
+        "- [Web package](/packages/oridecon-web/)\n", encoding="utf-8"
     )
 
     # A documented package (owner of docs/) and one without docs/.
-    (root / "lexigram-web" / "docs").mkdir(parents=True)
-    (root / "lexigram-web" / "docs" / "index.md").write_text("# web\n", encoding="utf-8")
-    (root / "lexigram-bare").mkdir()
+    (root / "oridecon-web" / "docs").mkdir(parents=True)
+    (root / "oridecon-web" / "docs" / "index.md").write_text("# web\n", encoding="utf-8")
+    (root / "oridecon-bare").mkdir()
 
     # Workspace manifest required by the package inventory (dev/_lib/package_inventory.py).
     (root / "pyproject.toml").write_text(
-        "[tool.uv.workspace]\nmembers = [\"lexigram-web\", \"lexigram-bare\"]\n",
+        "[tool.uv.workspace]\nmembers = [\"oridecon-web\", \"oridecon-bare\"]\n",
         encoding="utf-8",
     )
-    (root / "lexigram-web" / "pyproject.toml").write_text("", encoding="utf-8")
-    (root / "lexigram-bare" / "pyproject.toml").write_text("", encoding="utf-8")
+    (root / "oridecon-web" / "pyproject.toml").write_text("", encoding="utf-8")
+    (root / "oridecon-bare" / "pyproject.toml").write_text("", encoding="utf-8")
 
 
 def test_docs_links_generator_reports_dead_links(tmp_path: Path) -> None:
@@ -64,7 +64,7 @@ def test_docs_links_generator_package_route_checks_docs_folder(tmp_path: Path) -
 
     _write_workspace(tmp_path)
     (tmp_path / "docs" / "ecosystem" / "index.md").write_text(
-        "- [Bare package](/packages/lexigram-bare/)\n", encoding="utf-8"
+        "- [Bare package](/packages/oridecon-bare/)\n", encoding="utf-8"
     )
 
     generator = DocsLinksAuditGenerator()
@@ -72,7 +72,7 @@ def test_docs_links_generator_package_route_checks_docs_folder(tmp_path: Path) -
     markdown = (tmp_path / "AUDIT_DOC_LINKS.md").read_text(encoding="utf-8")
 
     assert result.success is False
-    assert "`/packages/lexigram-bare/`" in markdown
+    assert "`/packages/oridecon-bare/`" in markdown
 
 
 def test_docs_links_generator_clean_corpus(tmp_path: Path) -> None:

@@ -67,7 +67,7 @@ class SecurityAuditGenerator(MarkdownAuditGenerator):
             rows, sec_findings, ruff_findings, vulnerable_packages
         )
 
-        markdown = """# AUDIT_SECURITY.md — Lexigram Framework Security Audit
+        markdown = """# AUDIT_SECURITY.md — Oridecon Framework Security Audit
 
 > **Source**: Live command evidence (pip-audit, ruff bandit rules), framework security rules, and the audit tracker (`docs/AUDIT_TRACKER.md`).
 
@@ -314,9 +314,9 @@ def _render_ruff_section(
     )
     markdown += (
         "- **S603** (subprocess, 10 sites): nine operator CLI tooling sites "
-        "annotated (argv lists, no shell); one genuine fix — `lexigram-cli` MCP "
+        "annotated (argv lists, no shell); one genuine fix — `oridecon-cli` MCP "
         "self-invocation switched from `sys.argv[0]` to "
-        "`sys.executable -m lexigram.cli.runtime.main` (argv[0] independence).\n"
+        "`sys.executable -m oridecon.cli.runtime.main` (argv[0] independence).\n"
     )
     markdown += (
         "- **S607/S104/S704/S701** (17 sites): static PATH tools invoked by the "

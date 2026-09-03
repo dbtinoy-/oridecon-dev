@@ -12,9 +12,9 @@ uv run python -m orders demo
 :::
 
 
-`lexigram-workflow` provides three orchestration primitives: **pipelines** for sequential step execution, **sagas** for long-running processes with compensation, and **graph workflows** for DAG-based execution with branching and gates.
+`oridecon-workflow` provides three orchestration primitives: **pipelines** for sequential step execution, **sagas** for long-running processes with compensation, and **graph workflows** for DAG-based execution with branching and gates.
 
-For the full configuration reference, workflow graph DSL, and advanced saga patterns, see the [`lexigram-workflow` package docs](/packages/lexigram-workflow/).
+For the full configuration reference, workflow graph DSL, and advanced saga patterns, see the [`oridecon-workflow` package docs](/packages/oridecon-workflow/).
 
 ---
 
@@ -23,8 +23,8 @@ For the full configuration reference, workflow graph DSL, and advanced saga patt
 A `Pipeline` executes steps in registration order. Each step receives a shared `PipelineContext` and produces a `Result`:
 
 ```python
-from lexigram.result import Result, Ok, Err
-from lexigram.workflow import Pipeline, FunctionStep, PipelineContext
+from oridecon.result import Result, Ok, Err
+from oridecon.workflow import Pipeline, FunctionStep, PipelineContext
 
 
 class OrderPipeline:
@@ -57,7 +57,7 @@ class OrderPipeline:
 ### Conditional & Parallel Steps
 
 ```python
-from lexigram.workflow import ConditionalStep, ParallelStep
+from oridecon.workflow import ConditionalStep, ParallelStep
 
 conditional = ConditionalStep(
     name="check_risk",
@@ -82,8 +82,8 @@ parallel = ParallelStep(
 A saga coordinates a multi-step process with compensating actions. Extend `AbstractSaga` and add steps:
 
 ```python
-from lexigram.result import Result, Ok, Err
-from lexigram.workflow import AbstractSaga, SagaStep
+from oridecon.result import Result, Ok, Err
+from oridecon.workflow import AbstractSaga, SagaStep
 
 
 class BookingSaga(AbstractSaga):
@@ -128,7 +128,7 @@ Compensation actions must be **idempotent**. A saga may call `compensate()` mult
 Sagas transition through `SagaState`: `PENDING → RUNNING → COMPLETED` or `PENDING → RUNNING → COMPENSATING → FAILED`. The state is persisted via `SagaStoreProtocol`:
 
 ```python
-from lexigram.contracts.workflow.protocols import SagaStoreProtocol, SagaState
+from oridecon.contracts.workflow.protocols import SagaStoreProtocol, SagaState
 
 
 class SagaPersistence:
@@ -150,7 +150,7 @@ class SagaPersistence:
 For DAG-based workflows, use `WorkflowBuilder` and `WorkflowEngine`. Build a directed graph of nodes with gates and edges:
 
 ```python
-from lexigram.workflow import WorkflowBuilder, WorkflowEngine
+from oridecon.workflow import WorkflowBuilder, WorkflowEngine
 
 
 class DocumentApprovalFlow:
@@ -185,7 +185,7 @@ class DocumentApprovalFlow:
 The engine supports checkpointing — enable it via `GraphConfig` on the builder (settings are configured programmatically, not from YAML):
 
 ```python
-from lexigram.workflow import WorkflowBuilder, GraphConfig
+from oridecon.workflow import WorkflowBuilder, GraphConfig
 
 builder = WorkflowBuilder()
 builder.configure(GraphConfig(
@@ -209,7 +209,7 @@ result = await engine.resume(checkpoint_state, "approved")
 `StateMachineProtocol` provides finite-state-machine orchestration within workflows:
 
 ```python
-from lexigram.contracts.workflow.protocols import StateMachineProtocol
+from oridecon.contracts.workflow.protocols import StateMachineProtocol
 
 
 class OrderStateMachine:
@@ -233,7 +233,7 @@ class OrderStateMachine:
 Process items in batches with retries and progress tracking:
 
 ```python
-from lexigram.workflow import BulkOperationConfig, BulkOperation
+from oridecon.workflow import BulkOperationConfig, BulkOperation
 
 config = BulkOperationConfig(
     batch_size=10, max_concurrency=5,
@@ -249,8 +249,8 @@ async for batch in operation.execute(items):
 ## 6. Configuration & Module
 
 ```python
-from lexigram import Application
-from lexigram.workflow import WorkflowModule, BulkOperationConfig
+from oridecon import Application
+from oridecon.workflow import WorkflowModule, BulkOperationConfig
 
 app = Application(name="my-app")
 app.add_module(WorkflowModule.configure(
@@ -278,8 +278,8 @@ The `workflow:` section maps to `BulkOperationConfig`. The graph engine's settin
 `WorkflowModule.stub()` uses in-memory stores with no external dependencies:
 
 ```python
-from lexigram import Application
-from lexigram.workflow import WorkflowModule, Pipeline, FunctionStep
+from oridecon import Application
+from oridecon.workflow import WorkflowModule, Pipeline, FunctionStep
 
 
 async def test_pipeline_executes_steps() -> None:
@@ -297,4 +297,4 @@ async def test_pipeline_executes_steps() -> None:
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding protocols to implementations
 - [Providers](/fundamentals/providers/) — how `WorkflowProvider` hooks into application boot
 - [Testing](/guides/testing/) — substituting stubs for infrastructure
-- [`lexigram-workflow` package](/packages/lexigram-workflow/) — saga patterns, decorators (`@workflow`, `@saga_step`), graph engine DSL, event hooks
+- [`oridecon-workflow` package](/packages/oridecon-workflow/) — saga patterns, decorators (`@workflow`, `@saga_step`), graph engine DSL, event hooks

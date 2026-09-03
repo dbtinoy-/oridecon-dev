@@ -34,7 +34,7 @@ def _workspace(tmp_path: Path, members: list[str]) -> Path:
 
 
 def test_discover_packages_returns_every_workspace_member() -> None:
-    # Glob-derived, so adding a member (e.g. lexigram-builder) never breaks it.
+    # Glob-derived, so adding a member (e.g. oridecon-builder) never breaks it.
     assert len(discover_packages(REPO_ROOT)) == _workspace_member_count(REPO_ROOT)
 
 
@@ -48,10 +48,10 @@ def test_discover_packages_is_sorted_and_unique() -> None:
 def test_discover_packages_excludes_non_members() -> None:
     packages = discover_packages(REPO_ROOT)
 
-    assert "lexigram_workspace.egg-info" not in packages
+    assert "oridecon_workspace.egg-info" not in packages
     assert all(not package.startswith(".") for package in packages)
     # stray top-level package dirs are never member-detected
-    assert "lexigram-all" not in packages
+    assert "oridecon-all" not in packages
 
 
 def test_discover_package_paths_returns_paths_relative_to_root() -> None:
@@ -64,22 +64,22 @@ def test_discover_package_paths_returns_paths_relative_to_root() -> None:
 
 def test_globs_expand(tmp_path: Path) -> None:
     root = _workspace(tmp_path, ["core/*"])
-    for name in ("lexigram", "lexigram-contracts"):
+    for name in ("oridecon", "oridecon-contracts"):
         pkg = root / "core" / name
         pkg.mkdir(parents=True)
         (pkg / "pyproject.toml").write_text("")
 
-    assert discover_packages(root) == ["lexigram", "lexigram-contracts"]
+    assert discover_packages(root) == ["oridecon", "oridecon-contracts"]
     assert discover_package_paths(root) == [
-        Path("core/lexigram"),
-        Path("core/lexigram-contracts"),
+        Path("core/oridecon"),
+        Path("core/oridecon-contracts"),
     ]
 
 
 def test_directories_without_pyproject_are_ignored(tmp_path: Path) -> None:
     root = _workspace(tmp_path, ["packages/*"])
-    (root / "packages" / "lexigram-real").mkdir(parents=True)
-    (root / "packages" / "lexigram-real" / "pyproject.toml").write_text("")
+    (root / "packages" / "oridecon-real").mkdir(parents=True)
+    (root / "packages" / "oridecon-real" / "pyproject.toml").write_text("")
     (root / "packages" / "not-a-package").mkdir(parents=True)
 
-    assert discover_packages(root) == ["lexigram-real"]
+    assert discover_packages(root) == ["oridecon-real"]

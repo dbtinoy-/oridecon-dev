@@ -145,7 +145,7 @@ class DocsDefaultsAuditGenerator(MarkdownAuditGenerator):
                     )
 
         lines = [
-            "# AUDIT_DOC_DEFAULTS.md — Lexigram Documentation Default Claims Audit",
+            "# AUDIT_DOC_DEFAULTS.md — Oridecon Documentation Default Claims Audit",
             "",
             "> **Source**: Every default-value claim in every package `docs/*.md` file",
             "> (config-table `Default` columns, inline `(default: X)`, prose `defaults to`)",

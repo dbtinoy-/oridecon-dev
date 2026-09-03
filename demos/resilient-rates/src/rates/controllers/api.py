@@ -29,8 +29,8 @@ from dataclasses import asdict
 
 from starlette.requests import Request
 
-from lexigram.logging import get_logger
-from lexigram.web import (
+from oridecon.logging import get_logger
+from oridecon.web import (
     Controller,
     JSONResponse,
     ProblemDetail,

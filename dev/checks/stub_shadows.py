@@ -27,7 +27,7 @@ import pkgutil
 import sys
 import textwrap
 
-ROOT_PACKAGES = ("lexigram",)
+ROOT_PACKAGES = ("oridecon",)
 
 
 def _body_statements(tree: ast.Module) -> list[ast.stmt]:
@@ -89,7 +89,7 @@ def _import_workspace_packages() -> None:
     # Module import side effects (structlog lines) write to stdout; keep the
     # gate's report clean by swallowing everything emitted during discovery.
     # stderr is redirected too: scaffold templates shipped under
-    # lexigram.cli.templates contain Jinja2 syntax and raise SyntaxError on
+    # oridecon.cli.templates contain Jinja2 syntax and raise SyntaxError on
     # import — pkgutil.walk_packages would otherwise re-raise it and crash
     # the gate (see the onerror handler below).
     import contextlib
@@ -118,15 +118,15 @@ def _import_workspace_packages() -> None:
 
 
 def _workspace_classes() -> set[type]:
-    # Only classes *defined* in lexigram modules — re-exported stdlib/3rd-party
+    # Only classes *defined* in oridecon modules — re-exported stdlib/3rd-party
     # classes (e.g. ``from collections import Counter``) are out of scope.
     return {
         value
         for module in list(sys.modules.values())
-        if getattr(module, "__name__", "").startswith("lexigram")
+        if getattr(module, "__name__", "").startswith("oridecon")
         for value in vars(module).values()
         if inspect.isclass(value)
-        and getattr(value, "__module__", "").startswith("lexigram")
+        and getattr(value, "__module__", "").startswith("oridecon")
     }
 
 

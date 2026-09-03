@@ -3,9 +3,9 @@ title: "Model Context Protocol (MCP)"
 description: "Expose tools, resources, and prompts through the MCP protocol — server and client."
 ---
 
-`lexigram-ai-mcp` provides an MCP (Model Context Protocol) server and client built on JSON-RPC 2.0. The server exposes tools, resources, and prompts to AI clients over SSE or stdio transport. The client connects to external MCP servers and injects them as DI-resolvable services.
+`oridecon-ai-mcp` provides an MCP (Model Context Protocol) server and client built on JSON-RPC 2.0. The server exposes tools, resources, and prompts to AI clients over SSE or stdio transport. The client connects to external MCP servers and injects them as DI-resolvable services.
 
-For the full configuration reference and advanced features (connector config, MCP controller patterns), see the [`lexigram-ai-mcp` package docs](/packages/lexigram-ai-mcp/).
+For the full configuration reference and advanced features (connector config, MCP controller patterns), see the [`oridecon-ai-mcp` package docs](/packages/oridecon-ai-mcp/).
 
 ---
 
@@ -14,7 +14,7 @@ For the full configuration reference and advanced features (connector config, MC
 Add the module and configure the `ai_mcp:` section:
 
 ```python
-from lexigram.ai.mcp import MCPModule
+from oridecon.ai.mcp import MCPModule
 
 app.add_module(
     MCPModule.configure(
@@ -82,7 +82,7 @@ ai_mcp:
 Create an `MCPController` subclass and decorate methods:
 
 ```python
-from lexigram.ai.mcp import MCPController, tool, resource, prompt
+from oridecon.ai.mcp import MCPController, tool, resource, prompt
 
 
 class DataToolsController(MCPController):
@@ -128,7 +128,7 @@ Glob patterns in `include_methods` control which public methods become MCP tools
 Decorate standalone functions in any module:
 
 ```python
-from lexigram.ai.mcp import tool
+from oridecon.ai.mcp import tool
 
 
 @tool("current_time", description="Get the current server time")
@@ -143,7 +143,7 @@ async def current_time(timezone: str = "UTC") -> dict:
 The `MCPServer` (resolved from the container) handles MCP JSON-RPC methods over SSE transport at `/mcp/sse` and receives messages via POST at `/mcp/messages`:
 
 ```python
-from lexigram.ai.mcp import MCPServer
+from oridecon.ai.mcp import MCPServer
 
 
 async with app.boot() as container:
@@ -171,7 +171,7 @@ The JSON-RPC methods handled automatically:
 Connect to external MCP servers and call their tools via DI-injected clients:
 
 ```python
-from lexigram.ai.mcp import MCPClientModule, MCPConnection
+from oridecon.ai.mcp import MCPClientModule, MCPConnection
 
 
 app.add_module(
@@ -194,7 +194,7 @@ app.add_module(
 Inject `MCPClientRegistry` for multi-connection access:
 
 ```python
-from lexigram.ai.mcp import MCPClientRegistry, MCPClient
+from oridecon.ai.mcp import MCPClientRegistry, MCPClient
 
 
 class ReportService:
@@ -235,8 +235,8 @@ async with MCPClient(transport) as client:
 Use `MCPModule.stub()` for unit tests — it uses in-memory transport with streaming disabled:
 
 ```python
-from lexigram import Application
-from lexigram.ai.mcp import MCPModule, MCPServer
+from oridecon import Application
+from oridecon.ai.mcp import MCPModule, MCPServer
 
 
 async def test_server_resolves() -> None:
@@ -271,4 +271,4 @@ MCPModule.configure(
 - [Providers](/fundamentals/providers/) — how `MCPProvider` hooks into application boot
 - [Testing](/guides/testing/) — substituting stubs for infrastructure
 - [Real-Time & WebSockets](/guides/real-time/) — SSE transport details
-- [`lexigram-ai-mcp` package](/packages/lexigram-ai-mcp/) — connector config, controller patterns
+- [`oridecon-ai-mcp` package](/packages/oridecon-ai-mcp/) — connector config, controller patterns

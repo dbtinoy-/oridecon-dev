@@ -6,7 +6,7 @@ Run::
     PYTHONPATH=src uv run python -m ops_console
 
 Host/port are read automatically from ``application.yaml`` — no manual
-config wiring needed. Override via env vars: ``LEX_WEB__SERVER__PORT=9000``.
+config wiring needed. Override via env vars: ``ORI_WEB__SERVER__PORT=9000``.
 Use the dashboard's Publish form to send events into the live stream.
 """
 
@@ -24,7 +24,7 @@ async def serve() -> None:
     register → freeze → boot (heartbeat starts here) → server start.
     The ``finally`` block ensures ``stop()`` runs even on errors.
     """
-    from lexigram.web.server.runner import run_server
+    from oridecon.web.server.runner import run_server
 
     app = create_app()
     await app.start()

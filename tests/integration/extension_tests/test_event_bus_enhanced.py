@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from lexigram.contracts.domain.events import DomainEvent
-from lexigram.testing.memory.event_bus import InMemoryEventBus
+from oridecon.contracts.domain.events import DomainEvent
+from oridecon.testing.memory.event_bus import InMemoryEventBus
 
 
 class SampleEvent(DomainEvent):

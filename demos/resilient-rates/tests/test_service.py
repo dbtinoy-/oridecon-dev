@@ -8,9 +8,9 @@ from typing import Any
 
 import pytest
 
-from lexigram.cache.backends.memory.backend import MemoryCacheBackend
-from lexigram.cache.service.stampede import StampedeProtectedCache
-from lexigram.resilience import (
+from oridecon.cache.backends.memory.backend import MemoryCacheBackend
+from oridecon.cache.service.stampede import StampedeProtectedCache
+from oridecon.resilience import (
     CircuitBreakerConfig,
     ResiliencePipeline,
     RetryConfig,

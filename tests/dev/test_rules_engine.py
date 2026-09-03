@@ -18,25 +18,25 @@ def _write_package(root: Path, name: str) -> Path:
 def _write_sample_workspace(root: Path) -> None:
     (root / "pyproject.toml").write_text(
         '[project]\nname = "workspace"\n\n[tool.uv.workspace]\n'
-        'members = ["lexigram", "lexigram-admin", "lexigram-auth", "lexigram-cache", '
-        '"lexigram-ui", "lexigram-vector"]\n',
+        'members = ["oridecon", "oridecon-admin", "oridecon-auth", "oridecon-cache", '
+        '"oridecon-ui", "oridecon-vector"]\n',
         encoding="utf-8",
     )
 
-    core_root = _write_package(root, "lexigram")
-    core_src = core_root / "src" / "lexigram"
+    core_root = _write_package(root, "oridecon")
+    core_src = core_root / "src" / "oridecon"
     core_src.mkdir(parents=True)
     (core_src / "__init__.py").write_text("", encoding="utf-8")
     (core_src / "forbidden_extension_import.py").write_text(
-        "from __future__ import annotations\n\nfrom lexigram.cache.backend import CacheBackend\n",
+        "from __future__ import annotations\n\nfrom oridecon.cache.backend import CacheBackend\n",
         encoding="utf-8",
     )
 
-    _write_package(root, "lexigram-ui")
-    _write_package(root, "lexigram-vector")
+    _write_package(root, "oridecon-ui")
+    _write_package(root, "oridecon-vector")
 
-    admin_root = _write_package(root, "lexigram-admin")
-    admin_src = admin_root / "src" / "lexigram" / "admin"
+    admin_root = _write_package(root, "oridecon-admin")
+    admin_src = admin_root / "src" / "oridecon" / "admin"
     admin_src.mkdir(parents=True)
     (admin_src / "__init__.py").write_text(
         "from __future__ import annotations\n\n\ndef build_admin() -> str:\n    return 'admin'\n",
@@ -51,11 +51,11 @@ def _write_sample_workspace(root: Path) -> None:
         encoding="utf-8",
     )
     (admin_src / "allowed_import.py").write_text(
-        "from __future__ import annotations\n\nfrom lexigram.ui.components import Button\n",
+        "from __future__ import annotations\n\nfrom oridecon.ui.components import Button\n",
         encoding="utf-8",
     )
 
-    ui_src = root / "lexigram-ui" / "src" / "lexigram" / "ui"
+    ui_src = root / "oridecon-ui" / "src" / "oridecon" / "ui"
     ui_src.mkdir(parents=True)
     (ui_src / "__init__.py").write_text("", encoding="utf-8")
     (ui_src / "components.py").write_text(
@@ -63,12 +63,12 @@ def _write_sample_workspace(root: Path) -> None:
         encoding="utf-8",
     )
 
-    auth_root = _write_package(root, "lexigram-auth")
-    auth_src = auth_root / "src" / "lexigram" / "auth"
+    auth_root = _write_package(root, "oridecon-auth")
+    auth_src = auth_root / "src" / "oridecon" / "auth"
     auth_src.mkdir(parents=True)
     (auth_src / "__init__.py").write_text("", encoding="utf-8")
     (auth_src / "cross_import.py").write_text(
-        "from __future__ import annotations\n\nfrom lexigram.cache.backend import CacheBackend\n",
+        "from __future__ import annotations\n\nfrom oridecon.cache.backend import CacheBackend\n",
         encoding="utf-8",
     )
     (auth_src / "pseudo_enum.py").write_text(
@@ -80,8 +80,8 @@ def _write_sample_workspace(root: Path) -> None:
         encoding="utf-8",
     )
 
-    cache_root = _write_package(root, "lexigram-cache")
-    cache_src = cache_root / "src" / "lexigram" / "cache"
+    cache_root = _write_package(root, "oridecon-cache")
+    cache_src = cache_root / "src" / "oridecon" / "cache"
     cache_src.mkdir(parents=True)
     (cache_src / "__init__.py").write_text("", encoding="utf-8")
     (cache_src / "backend.py").write_text(
@@ -100,15 +100,15 @@ def test_run_rules_detects_expected_findings_and_coverage(tmp_path: Path) -> Non
         finding for finding in result.findings if finding.rule_id == "no-cross-extension-import"
     ]
 
-    assert result.coverage.missing_packages == frozenset({"lexigram-vector"})
+    assert result.coverage.missing_packages == frozenset({"oridecon-vector"})
     assert result.coverage.success is False
     assert findings_by_rule["init-no-logic"].severity is RuleSeverity.IMPORTANT
     assert findings_by_rule["init-no-logic"].line == 4
     assert findings_by_rule["import-absolute-only"].severity is RuleSeverity.IMPORTANT
     assert findings_by_rule["import-absolute-only"].line == 3
     assert cross_import_findings[0].severity is RuleSeverity.CRITICAL
-    assert any("lexigram-auth directly imports lexigram-cache" in finding.message for finding in cross_import_findings)
-    assert any("core lexigram directly imports lexigram-cache" in finding.message for finding in cross_import_findings)
+    assert any("oridecon-auth directly imports oridecon-cache" in finding.message for finding in cross_import_findings)
+    assert any("core oridecon directly imports oridecon-cache" in finding.message for finding in cross_import_findings)
     assert findings_by_rule["enum-must-use-enum"].severity is RuleSeverity.MINOR
     assert findings_by_rule["enum-must-use-enum"].line == 3
     assert findings_by_rule["python-syntax-error"].severity is RuleSeverity.IMPORTANT

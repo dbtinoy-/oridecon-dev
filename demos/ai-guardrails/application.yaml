@@ -18,21 +18,21 @@ description: Input/output guard pipeline with budget tracking and audit log
 #   3. ai_governance:  Budget, restricted models, rate limits, audit
 #
 # For full reference see:
-#   - Lexigram Web:          packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram AI Guard:     experimental/ai/lexigram-ai-guard/src/lexigram/ai/guard/config.py
-#   - Lexigram AI Governance: experimental/ai/lexigram-ai-governance/src/lexigram/ai/governance/config.py
+#   - Oridecon Web:          packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon AI Guard:     experimental/ai/oridecon-ai-guard/src/oridecon/ai/guard/config.py
+#   - Oridecon AI Governance: experimental/ai/oridecon-ai-governance/src/oridecon/ai/governance/config.py
 #
 # ENVIRONMENT VARIABLE OVERRIDE:
-#   Every key can be overridden via LEX_* env vars with __ as delimiter.
+#   Every key can be overridden via ORI_* env vars with __ as delimiter.
 #   Examples:
-#     LEX_AI_GUARD__MAX_INPUT_CHARS=2000
-#     LEX_AI_GOVERNANCE__MONTHLY_BUDGET=1.00
-#     LEX_WEB__SERVER__PORT=9000
+#     ORI_AI_GUARD__MAX_INPUT_CHARS=2000
+#     ORI_AI_GOVERNANCE__MONTHLY_BUDGET=1.00
+#     ORI_WEB__SERVER__PORT=9000
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 # ─────────────────────────────────────────────────────────────────────────────

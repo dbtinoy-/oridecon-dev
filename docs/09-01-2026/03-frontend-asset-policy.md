@@ -1,12 +1,12 @@
 # 03 — Frontend Asset Policy (vendoring, pinning, CSP)
 
-Standing policy for all browser-facing JavaScript/CSS in lexigram-admin.
+Standing policy for all browser-facing JavaScript/CSS in oridecon-admin.
 Adopted 2026-09-01 after the lucide/SortableJS incident (bug B6, doc 01).
 
 ## Policy
 
 1. **All shell-critical assets are vendored** under
-   `src/lexigram/admin/static/` and served from the admin's own static
+   `src/oridecon/admin/static/` and served from the admin's own static
    mount (`{prefix}/static/...`). The admin panel must render fully — icons
    included — with **zero external network access**. Air-gapped and
    egress-restricted deployments are first-class.
@@ -63,7 +63,7 @@ Still open:
 | Site | Ref | Plan |
 | ---- | --- | ---- |
 | `services/charts.py` | Chart.js **pinned to 4.4.1** and Plotly 2.27.0 — both class-attribute `script_url`s (2026-09-01) | Override `ChartJSRenderer.script_url` / `PlotlyRenderer.script_url` to self-host; vendor when charts ship in the default dashboard. Note: the default CSP blocks these CDNs — chart users must extend `script-src` or self-host. |
-| `lexigram-ui` `HeadConfig.icon_library_url` | lucide 0.263.1 (unpkg, pinned) | Different package with external consumers; keep the configurable default, document pointing it at a local copy. Admin does not use this path. |
+| `oridecon-ui` `HeadConfig.icon_library_url` | lucide 0.263.1 (unpkg, pinned) | Different package with external consumers; keep the configurable default, document pointing it at a local copy. Admin does not use this path. |
 
 ## How to add or update a vendored asset
 
@@ -74,7 +74,7 @@ mkdir -p /tmp/pkg && tar xzf /tmp/pkg.tgz -C /tmp/pkg
 
 # 2. Copy the minified UMD build
 cp /tmp/pkg/package/dist/... \
-   experimental/apps/lexigram-admin/src/lexigram/admin/static/js/<name>.min.js
+   experimental/apps/oridecon-admin/src/oridecon/admin/static/js/<name>.min.js
 ```
 
 Then: reference it via the derived asset prefix in every layout that needs

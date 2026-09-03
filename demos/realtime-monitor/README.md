@@ -2,7 +2,7 @@
 
 > Module name: `ops_console` — run with `PYTHONPATH=src uv run python -m ops_console`
 
-Demonstrates the **real-time web** subsystem of Lexigram.
+Demonstrates the **real-time web** subsystem of Oridecon.
 
 This demo is a small production-style ops console. System events stream into a
 browser dashboard over **Server-Sent Events (SSE)**. An operator can connect
@@ -10,7 +10,7 @@ over a **WebSocket** channel and publish events straight into the same stream
 so every dashboard updates live. No external services, databases, or CDN
 assets are required — the browser client is a dependency-free `EventSource`.
 
-## Lexigram concepts used
+## Oridecon concepts used
 
 | Concept | Where in this demo | Your app |
 |---------|-------------------|----------|
@@ -23,13 +23,13 @@ assets are required — the browser client is a dependency-free `EventSource`.
 
 ## What it shows
 
-| Piece | Where | Lexigram API used |
+| Piece | Where | Oridecon API used |
 |-------|-------|-------------------|
 | In-process pub/sub bus with history replay and bounded queues | `services/event_stream.py` | plain `asyncio` primitives |
 | SSE streaming endpoint (replay-then-live + heartbeats) | `controllers/console.py` | `AbstractSSEHandler`, `EventSourceResponse` |
 | HTTP publish endpoint (`POST /api/events`) | `controllers/console.py` | `Controller` + `@get` / `@post` |
 | WebSocket operator channel (bidirectional) | `controllers/operator.py` | `AbstractWebSocketHandler` |
-| Dashboard page (vanilla JS `EventSource`, no frameworks) | `ui/pages.py` | `lexigram.ui` + `HTMLContent` |
+| Dashboard page (vanilla JS `EventSource`, no frameworks) | `ui/pages.py` | `oridecon.ui` + `HTMLContent` |
 | DI wiring + heartbeat producer + route hookup | `di/provider.py` | `Provider`, provider lifecycle priorities |
 
 ## Run it
@@ -73,7 +73,7 @@ demos/realtime-monitor/
 │   │   └── event_stream.py    # EventStreamService (pub/sub + replay)
 │   └── ui/
 │       └── pages.py           # Dashboard HTML page
-├── application.yaml           # web + demo sections (LEX_* overrides win)
+├── application.yaml           # web + demo sections (ORI_* overrides win)
 └── tests/                     # bus isolation + HTTP/WebSocket tests
 ```
 

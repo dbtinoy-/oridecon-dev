@@ -20,7 +20,7 @@ SAMPLE = """\
 
 ### Verified-clean surfaces
 
-- `lexigram-testing`'s fakes — reviewed and confirmed clean; no findings.
+- `oridecon-testing`'s fakes — reviewed and confirmed clean; no findings.
 - Fernet encryption usage — confirmed consistent.
 """
 
@@ -68,7 +68,7 @@ def test_row_is_done_reads_status_column() -> None:
 
 def test_parse_verified_clean_extracts_bullets() -> None:
     assert parse_verified_clean(SAMPLE) == (
-        "`lexigram-testing`'s fakes — reviewed and confirmed clean; no findings.",
+        "`oridecon-testing`'s fakes — reviewed and confirmed clean; no findings.",
         "Fernet encryption usage — confirmed consistent.",
     )
 

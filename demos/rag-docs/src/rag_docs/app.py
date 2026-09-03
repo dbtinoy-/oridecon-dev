@@ -1,10 +1,10 @@
 """Composition root for the rag-docs demo — start reading here.
 
-Every Lexigram application has exactly one place that knows how the pieces
+Every Oridecon application has exactly one place that knows how the pieces
 fit together: the **composition root**.  Everything else (controllers,
 services, templates) is inert until *this file* wires it.
 
-The mental model has three layers.  Once these click, every Lexigram app
+The mental model has three layers.  Once these click, every Oridecon app
 reads the same way:
 
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -12,12 +12,12 @@ reads the same way:
 │    ``application.yaml`` holds your values.  The framework loads it,     │
 │    merges overrides on top (highest → lowest):                          │
 │                                                                         │
-│        LEX_WEB__SERVER__PORT=9000   env vars   ← win over everything    │
+│        ORI_WEB__SERVER__PORT=9000   env vars   ← win over everything    │
 │        application.production.yaml  profile overlay                     │
 │        application.yaml             base file                           │
 │        dataclass field defaults     last resort                         │
 │                                                                         │
-│    Result: ONE typed ``LexigramConfig`` object.                         │
+│    Result: ONE typed ``OrideconConfig`` object.                         │
 │                                                                         │
 │ 2. CAPABILITIES (declarative)                                           │
 │    ``Module.configure(...)`` switches framework packages on and tells   │
@@ -42,10 +42,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from lexigram.app.base import Application  # Application = the bootable object
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider  # base class for your DI registrations
-from lexigram.web.module import WebModule  # framework module — owns web server
+from oridecon.app.base import Application  # Application = the bootable object
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider  # base class for your DI registrations
+from oridecon.web.module import WebModule  # framework module — owns web server
 from rag_docs.controllers.api import DocsAskApiController  # your HTTP surface
 from rag_docs.di.provider import DocsAskProvider  # your service registrations
 from rag_docs.ui.pages import DocsPageController  # page controller (optional)
@@ -57,9 +57,9 @@ def build_modules() -> list[object]:
     Each ``Module.configure(...)`` returns a DynamicModule: a recipe the
     framework expands into providers at boot.  Because every provider in
     the bundle declares ``config_key`` / ``config_model``, the orchestrator
-    injects the matching typed section of ``LexigramConfig`` into
+    injects the matching typed section of ``OrideconConfig`` into
     ``provider.config`` right before ``register()`` runs — YAML values and
-    ``LEX_*`` environment overrides already merged.
+    ``ORI_*`` environment overrides already merged.
     """
     return [
         # WebModule is the only module that needs your controllers list —
@@ -74,7 +74,7 @@ def build_modules() -> list[object]:
 def build_providers(docs_dir: Path | None = None) -> list[Provider]:
     """Imperative services owned by this demo.
 
-    A Provider is Lexigram's unit of lifecycle management: ``register()``
+    A Provider is Oridecon's unit of lifecycle management: ``register()``
     binds services into the DI container, ``boot()`` runs post-registration
     setup (here: ingest the corpus and build the vector index), ``shutdown()``
     cleans up.
@@ -87,7 +87,7 @@ def build_providers(docs_dir: Path | None = None) -> list[Provider]:
 
 def create_app(
     docs_dir: Path | None = None,
-    config: LexigramConfig | None = None,
+    config: OrideconConfig | None = None,
 ) -> Application:
     """Create the application in ``CREATED`` state (not yet started).
 

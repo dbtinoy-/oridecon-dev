@@ -3,26 +3,26 @@ title: "AI Evaluation"
 description: "Evaluate LLM outputs and run reproducible experiments — evaluators, a harness, seed-stable tracking, checkpoints, ablations, and error analysis."
 ---
 
-`lexigram-ai-evaluation` provides an AI evaluation framework: pluggable evaluators, a harness that runs them over datasets, and reproducible experiment tracking. Run ids are derived deterministically from the experiment name, seed, and knob config, so rerunning the same seed and knobs resumes the same run and produces byte-identical artifacts.
+`oridecon-ai-evaluation` provides an AI evaluation framework: pluggable evaluators, a harness that runs them over datasets, and reproducible experiment tracking. Run ids are derived deterministically from the experiment name, seed, and knob config, so rerunning the same seed and knobs resumes the same run and produces byte-identical artifacts.
 
-For full configuration details, see the [`lexigram-ai-evaluation` package docs](/packages/lexigram-ai-evaluation/).
+For full configuration details, see the [`oridecon-ai-evaluation` package docs](/packages/oridecon-ai-evaluation/).
 
 ---
 
 ## 1. The Contracts
 
-Evaluation and experiment types come from `lexigram.contracts.ai`:
+Evaluation and experiment types come from `oridecon.contracts.ai`:
 
 - `EvaluatorProtocol`, `EvaluationHarnessProtocol`, `EvaluationDataset`, `EvaluationSample`, `EvaluationResult`, `RunReport`, `EvaluationScoreType` — the evaluation surface.
 - `ExperimentTrackerProtocol`, `CheckpointStoreProtocol`, `ExperimentConfig`, `ExperimentRun`, `MetricRecord`, `ErrorRecord`, `RunStatus`, `Checkpoint`, `AblationResult`, `AnalysisReport` — the reproducibility surface.
 
 ```python
-from lexigram.contracts.ai.evaluation import (
+from oridecon.contracts.ai.evaluation import (
     EvaluationDataset,
     EvaluationSample,
     EvaluatorProtocol,
 )
-from lexigram.contracts.ai.experiment import (
+from oridecon.contracts.ai.experiment import (
     CheckpointStoreProtocol,
     ExperimentConfig,
     ExperimentTrackerProtocol,
@@ -45,7 +45,7 @@ Every evaluator implements `EvaluatorProtocol`: it takes `input`, `output`, and 
 | `CriteriaEvaluator` | `exact_match` | Rule-based checks: `exact_match`, `contains`, `contains_all`, `regex` |
 
 ```python
-from lexigram.ai.evaluation.evaluators import QAEvaluator, StringDistanceEvaluator
+from oridecon.ai.evaluation.evaluators import QAEvaluator, StringDistanceEvaluator
 
 qa = QAEvaluator()
 result = await qa.evaluate(
@@ -59,7 +59,7 @@ assert result.is_ok()
 Criteria-based checks are declared, not coded:
 
 ```python
-from lexigram.ai.evaluation.evaluators import CriteriaEvaluator
+from oridecon.ai.evaluation.evaluators import CriteriaEvaluator
 
 evaluator = CriteriaEvaluator(
     criteria=[
@@ -76,8 +76,8 @@ evaluator = CriteriaEvaluator(
 `EvaluationHarness` runs an evaluator over a dataset and produces a `RunReport` with the average score, pass rate (against a configurable threshold), and per-sample results.
 
 ```python
-from lexigram.ai.evaluation.harness import EvaluationHarness
-from lexigram.contracts.ai.evaluation import (
+from oridecon.ai.evaluation.harness import EvaluationHarness
+from oridecon.contracts.ai.evaluation import (
     EvaluationDataset,
     EvaluationSample,
 )
@@ -108,7 +108,7 @@ if report.is_ok():
 `LocalTracker` persists runs as JSON manifests plus JSONL metric/error streams under `<root>/runs/<run_id>/`. The run id is derived from the experiment name, seed, and canonicalized knob config:
 
 ```python
-from lexigram.ai.evaluation import LocalTracker, make_run_id
+from oridecon.ai.evaluation import LocalTracker, make_run_id
 
 assert make_run_id("probe", 42, {"model": "gpt-4o"}) == make_run_id(
     "probe", 42, {"model": "gpt-4o"}
@@ -141,7 +141,7 @@ snapshot = await tracker.snapshot(run.run_id)
 `FileCheckpointStore` persists run state under `<root>/runs/<run_id>/checkpoints/<slug>.json`. Every payload is written with a SHA-256 digest of its canonicalized JSON; loads re-verify that digest, so tampered or corrupted checkpoints are never returned as valid state.
 
 ```python
-from lexigram.ai.evaluation import FileCheckpointStore
+from oridecon.ai.evaluation import FileCheckpointStore
 
 store = FileCheckpointStore(root="runs")
 await store.save(run.run_id, "baseline", {"score": 0.87, "latency_ms": 120.5})
@@ -155,7 +155,7 @@ checkpoint = await store.load(run.run_id, "baseline")  # digest-verified
 `AblationRunner` compares a baseline checkpoint against an ablated one — a rerun with one knob removed or changed — and produces per-metric deltas plus a digest-stable `AblationResult`.
 
 ```python
-from lexigram.ai.evaluation import AblationRunner
+from oridecon.ai.evaluation import AblationRunner
 
 runner = AblationRunner(store)
 result = await runner.compare(
@@ -175,7 +175,7 @@ if result.is_ok():
 `ErrorAnalysis` aggregates a tracked run's metric and error records into an `AnalysisReport`: error-kind counts, score mean/min/max, and the most frequent errors — the input for post-hoc analysis of failed trials.
 
 ```python
-from lexigram.ai.evaluation import ErrorAnalysis
+from oridecon.ai.evaluation import ErrorAnalysis
 
 report = await ErrorAnalysis(tracker).report(run.run_id)
 print(report.error_kinds, report.score_mean, report.top_errors)
@@ -188,9 +188,9 @@ print(report.error_kinds, report.score_mean, report.top_errors)
 Register the subsystem through `EvaluationModule` — the container provides `EvaluatorProtocol`, `EvaluationHarnessProtocol`, `ExperimentTrackerProtocol`, and `CheckpointStoreProtocol`.
 
 ```python
-from lexigram.ai.evaluation import EvaluationModule
-from lexigram.ai.evaluation.config import EvaluationConfig
-from lexigram.di.module import Module, module
+from oridecon.ai.evaluation import EvaluationModule
+from oridecon.ai.evaluation.config import EvaluationConfig
+from oridecon.di.module import Module, module
 
 
 @module(
@@ -215,7 +215,7 @@ ai_evaluation:
 Resolve and use the services:
 
 ```python
-from lexigram.contracts.ai.experiment import ExperimentTrackerProtocol
+from oridecon.contracts.ai.experiment import ExperimentTrackerProtocol
 
 tracker = await container.resolve(ExperimentTrackerProtocol)
 ```

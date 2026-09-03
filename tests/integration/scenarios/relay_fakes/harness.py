@@ -45,7 +45,7 @@ class RelayAppHarness:
     """A booted relay application plus the fakes that drove its boot.
 
     Attributes:
-        app: The booted :class:`~lexigram.app.base.Application`.
+        app: The booted :class:`~oridecon.app.base.Application`.
         container: The application DI container.
         fakes: The fakes injected into the composition.
     """
@@ -97,7 +97,7 @@ class StubFlagManager:
         self, key: str, context: dict[str, object] | None = None
     ) -> object:
         """Return a disabled :class:`FlagEvaluation`."""
-        from lexigram.contracts.feature_flags import FlagEvaluation
+        from oridecon.contracts.feature_flags import FlagEvaluation
 
         return FlagEvaluation(key=key, value=False)
 
@@ -126,13 +126,13 @@ class _StubPool:
 class StubDatabaseProvider:
     """No-op database provider that satisfies admin boot requirements.
 
-    Implemented against ``lexigram.contracts.data.DatabaseProviderProtocol``.
+    Implemented against ``oridecon.contracts.data.DatabaseProviderProtocol``.
     Queries return empty results; nothing is ever persisted.
     """
 
     def __init__(self) -> None:
         """Create the stub and its pseudo-connection pool."""
-        from lexigram.contracts.data import QueryResult
+        from oridecon.contracts.data import QueryResult
 
         self._empty = QueryResult(
             rows=[], row_count=0, execution_time=0.0, success=True

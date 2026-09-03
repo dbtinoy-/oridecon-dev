@@ -44,7 +44,7 @@ R26 delivered `.xlsx` **import** parity, but export is still asymmetric:
    `attachment` + `no-store` headers, and `HX-Reswap: none` — same contract
    as CSV.
 5. **UI**: include `export_xlsx` in both button-renderer download sets. The
-   shared `LexigramDownloadBulk` JS already posts `data-bulk-action`
+   shared `OrideconDownloadBulk` JS already posts `data-bulk-action`
    verbatim and downloads the blob — no client change needed.
 
 Non-goals: PDF direct download (needs a layout story), changing the
@@ -90,6 +90,6 @@ toolbar (R28 infra; a jobs UI remains queued).
   right-alignment (bool is an int subclass); bytes decode as UTF-8 with
   replacement.
 - **Deliberately unchanged:** JSON/CSV encodings byte-for-byte; the R25
-  filtered-export caps and parser; the `LexigramDownloadBulk` client (it
+  filtered-export caps and parser; the `OrideconDownloadBulk` client (it
   posts `data-bulk-action` verbatim, so `export_xlsx` needed no JS).
 

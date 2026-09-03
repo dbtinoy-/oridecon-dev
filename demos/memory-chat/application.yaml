@@ -22,19 +22,19 @@ description: Multi-owner chat with fact extraction and working memory
 #   2. ai_memory:  Working/episodic/semantic memory tiers, consolidation
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram Memory:    experimental/ai/lexigram-ai-memory/src/lexigram/ai/memory/config.py
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon Memory:    experimental/ai/oridecon-ai-memory/src/oridecon/ai/memory/config.py
 #
 # ENVIRONMENT VARIABLE OVERRIDE:
-#   Every key can be overridden via LEX_* env vars with __ as delimiter.
+#   Every key can be overridden via ORI_* env vars with __ as delimiter.
 #   Examples:
-#     LEX_WEB__SERVER__PORT=9000
-#     LEX_AI_MEMORY__DEFAULT_BACKEND=cache
+#     ORI_WEB__SERVER__PORT=9000
+#     ORI_AI_MEMORY__DEFAULT_BACKEND=cache
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 #
@@ -71,7 +71,7 @@ web:
       # excluded_paths: []              # paths exempt from CSRF validation
       # exclude_content_types: []       # Content-Types that bypass CSRF
       # exclude_auth_schemes: []        # Auth schemes that bypass CSRF
-      # secret_key: null                # HMAC key (LEX_WEB__SECURITY__CSRF__SECRET_KEY)
+      # secret_key: null                # HMAC key (ORI_WEB__SECURITY__CSRF__SECRET_KEY)
 
     # ── CORS ───────────────────────────────────────────────────────────────
     # cors:
@@ -140,7 +140,7 @@ web:
 
 
 # ── AI Memory ────────────────────────────────────────────────────────────────
-# Lexigram AI Memory provides three-tier memory: working (token-budgeted
+# Oridecon AI Memory provides three-tier memory: working (token-budgeted
 # context), episodic (past interactions), and semantic (facts/triples).
 # The MemoryModule reads this section automatically via
 # config_key="ai_memory" / config_model=MemoryConfig.

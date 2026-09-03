@@ -7,17 +7,17 @@ from pathlib import Path
 
 def _write_workspace(root: Path) -> None:
     (root / "pyproject.toml").write_text(
-        '[project]\nname = "workspace"\n\n[tool.uv.workspace]\nmembers = ["lexigram-demo"]\n',
+        '[project]\nname = "workspace"\n\n[tool.uv.workspace]\nmembers = ["oridecon-demo"]\n',
         encoding="utf-8",
     )
-    package_dir = root / "lexigram-demo"
+    package_dir = root / "oridecon-demo"
     package_dir.mkdir()
     (package_dir / "pyproject.toml").write_text(
-        '[project]\nname = "lexigram-demo"\ndependencies = ["rich"]\n'
+        '[project]\nname = "oridecon-demo"\ndependencies = ["rich"]\n'
         '[project.optional-dependencies]\nextra = ["requests"]\n',
         encoding="utf-8",
     )
-    src = package_dir / "src" / "lexigram_demo"
+    src = package_dir / "src" / "oridecon_demo"
     src.mkdir(parents=True)
 
     (src / "declared.py").write_text(
@@ -58,7 +58,7 @@ def test_optional_imports_generator_ignores_guarded_and_type_checking_imports(
     from dev.audit.generators.optional_imports import OptionalImportsAuditGenerator
 
     _write_workspace(tmp_path)
-    (tmp_path / "lexigram-demo" / "src" / "lexigram_demo" / "violation.py").unlink()
+    (tmp_path / "oridecon-demo" / "src" / "oridecon_demo" / "violation.py").unlink()
 
     generator = OptionalImportsAuditGenerator()
     result = generator.run(root=tmp_path, all_mode=True)

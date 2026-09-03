@@ -14,15 +14,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from lexigram.contracts.core.health import HealthCheckResult
-from lexigram.di.provider import Provider
-from lexigram.logging import get_logger
+from oridecon.contracts.core.health import HealthCheckResult
+from oridecon.di.provider import Provider
+from oridecon.logging import get_logger
 from prompt_lab.repository.templates import TEMPLATES
 from prompt_lab.services.ab_runner import ABRunner
 from prompt_lab.services.versioning import LabVersions
 
 if TYPE_CHECKING:
-    from lexigram.contracts.core.di import (
+    from oridecon.contracts.core.di import (
         BootContainerProtocol,
         ContainerRegistrarProtocol,
     )

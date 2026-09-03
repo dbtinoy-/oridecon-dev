@@ -1,12 +1,12 @@
-"""HTTP controls for the focused Lexigram queue-worker demo."""
+"""HTTP controls for the focused Oridecon queue-worker demo."""
 
 from __future__ import annotations
 
 from typing import Any
 
-from lexigram.contracts.queue.protocols import QueueProtocol
-from lexigram.contracts.queue.types import BusMessage
-from lexigram.web import Controller, get, post
+from oridecon.contracts.queue.protocols import QueueProtocol
+from oridecon.contracts.queue.types import BusMessage
+from oridecon.web import Controller, get, post
 from queueworker.services.processor import MessageProcessor
 
 
@@ -27,7 +27,7 @@ class QueueApiController(Controller):
 
     @post("/publish")
     async def publish(self, body: dict[str, Any]) -> dict[str, Any]:
-        """Publish a Lexigram ``BusMessage`` to the worker's topic."""
+        """Publish a Oridecon ``BusMessage`` to the worker's topic."""
         topic = body.get("topic", self._processor.topic)
         topic_error = self._topic_error(topic)
         if topic_error:

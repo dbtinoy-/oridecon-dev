@@ -1,4 +1,4 @@
-"""Interactive approval flow backed by Lexigram workflow primitives."""
+"""Interactive approval flow backed by Oridecon workflow primitives."""
 
 from __future__ import annotations
 
@@ -6,13 +6,13 @@ from datetime import UTC, datetime
 from typing import Any
 
 from approval_flow.config import ApprovalFlowConfig
-from lexigram.contracts.workflow import StateMachineProtocol
-from lexigram.workflow.approval import (
+from oridecon.contracts.workflow import StateMachineProtocol
+from oridecon.workflow.approval import (
     ApprovalChain,
     ApprovalPolicy,
     ApprovalStep,
 )
-from lexigram.workflow.state import State, StateError, StateMachine, Transition
+from oridecon.workflow.state import State, StateError, StateMachine, Transition
 
 
 def build_approval_state_machine() -> StateMachine:
@@ -60,7 +60,7 @@ def build_approval_state_machine() -> StateMachine:
 
 
 class ApprovalFlowService:
-    """Keep one purchase request moving through a real Lexigram state machine.
+    """Keep one purchase request moving through a real Oridecon state machine.
 
     The state machine is deliberately rebuilt for a new request and the
     service keeps a small browser-facing event ledger. Approval-chain preview

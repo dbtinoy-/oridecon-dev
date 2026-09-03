@@ -28,14 +28,14 @@ REPO_ROOT = Path.cwd()
 # ── helpers ──────────────────────────────────────────────────────────────
 
 def run_cli(*args: str) -> str:
-    """Run `uv run lexigram <args>` and return stdout."""
-    cmd = ["uv", "run", "lexigram", *args]
+    """Run `uv run oridecon <args>` and return stdout."""
+    cmd = ["uv", "run", "oridecon", *args]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True,
                                 timeout=60, cwd=REPO_ROOT)
         return result.stdout
     except subprocess.TimeoutExpired:
-        print(f"  ⚠  timeout: uv run lexigram {' '.join(args)}")
+        print(f"  ⚠  timeout: uv run oridecon {' '.join(args)}")
         return ""
     except FileNotFoundError:
         print("  ⚠  uv not found")
@@ -56,7 +56,7 @@ def _extract_box_content(line: str) -> str | None:
 
 
 def parse_typer_help(text: str) -> list[dict[str, str]]:
-    """Parse ``lexigram --help`` output into a list of {name, description}."""
+    """Parse ``oridecon --help`` output into a list of {name, description}."""
     commands: list[dict[str, str]] = []
     in_commands = False
     for line in text.splitlines():
@@ -88,7 +88,7 @@ def parse_typer_help(text: str) -> list[dict[str, str]]:
 # ── contributor discovery via pyproject.toml ────────────────────────────
 
 def scan_contributor_entry_points() -> list[dict[str, str]]:
-    """Read lexigram.cli.contributors from all pyproject.toml files."""
+    """Read oridecon.cli.contributors from all pyproject.toml files."""
     groups: list[dict[str, str]] = []
     for rel in discover_package_paths(REPO_ROOT):
         tf = REPO_ROOT / rel / "pyproject.toml"
@@ -98,7 +98,7 @@ def scan_contributor_entry_points() -> list[dict[str, str]]:
         except Exception:
             continue
         for m in re.finditer(
-            r'\[project\.entry-points\.("?)lexigram\.cli\.contributors\1\]\s*(.+?)(?=\n\[|\Z)',
+            r'\[project\.entry-points\.("?)oridecon\.cli\.contributors\1\]\s*(.+?)(?=\n\[|\Z)',
             text, re.DOTALL
         ):
             block = m.group(2)
@@ -185,7 +185,7 @@ def main() -> None:
         sub = parse_typer_help(detail)
         builtin_sub[cmd["name"]] = sub
 
-    # ── Generators from `lexigram gen` ──
+    # ── Generators from `oridecon gen` ──
     gen_help = run_cli("gen", "--help")
     generators = parse_typer_help(gen_help)
     # Remove the built-in "list" from generators list
@@ -195,8 +195,8 @@ def main() -> None:
     # ── Source files table via AST ──
     src_entries: list[tuple[str, str, str]] = []
 
-    # lexigram-cli commands/
-    cli_cmds_dir = REPO_ROOT / "lexigram-cli" / "src" / "lexigram" / "cli" / "commands"
+    # oridecon-cli commands/
+    cli_cmds_dir = REPO_ROOT / "oridecon-cli" / "src" / "oridecon" / "cli" / "commands"
     if cli_cmds_dir.exists():
         for pyfile in sorted(cli_cmds_dir.glob("*.py")):
             if pyfile.name == "__init__.py":
@@ -205,18 +205,18 @@ def main() -> None:
             names = [c["name"] for c in cmds]
             if names:
                 rel = pyfile.relative_to(REPO_ROOT)
-                src_entries.append(("lexigram-cli", str(rel), ", ".join(names[:6])))
+                src_entries.append(("oridecon-cli", str(rel), ", ".join(names[:6])))
 
     # main.py
-    main_py = REPO_ROOT / "lexigram-cli" / "src" / "lexigram" / "cli" / "runtime" / "main.py"
+    main_py = REPO_ROOT / "oridecon-cli" / "src" / "oridecon" / "cli" / "runtime" / "main.py"
     if main_py.exists():
         rel = main_py.relative_to(REPO_ROOT)
-        src_entries.append(("lexigram-cli", str(rel), "entry point, command registration"))
+        src_entries.append(("oridecon-cli", str(rel), "entry point, command registration"))
 
     # Extension cli/commands.py
     for cg in contributed_groups:
         pkg = cg["package"]
-        inner = pkg.replace("lexigram-", "lexigram/", 1).replace("-", "/")
+        inner = pkg.replace("oridecon-", "oridecon/", 1).replace("-", "/")
         cmds_file = REPO_ROOT / pkg / "src" / inner / "cli" / "commands.py"
         if cmds_file.exists():
             cmds = extract_typer_commands(cmds_file)
@@ -229,7 +229,7 @@ def main() -> None:
 
     # ── Build markdown ──
     lines: list[str] = []
-    lines.append("# REF_CLI_COMMANDS.md — Lexigram CLI Command Registry")
+    lines.append("# REF_CLI_COMMANDS.md — Oridecon CLI Command Registry")
     lines.append("")
     lines.append(f"**Date:** {datetime.now(UTC).strftime('%Y-%m-%d')}")
     lines.append(f"**Total entries:** {len(top_commands) + len(gen_commands)}")
@@ -242,7 +242,7 @@ def main() -> None:
     lines.append("## Command Tree")
     lines.append("")
     lines.append("```")
-    lines.append("lexigram")
+    lines.append("oridecon")
     for cmd in builtin_top:
         n = cmd["name"]
         d = cmd["description"]
@@ -270,7 +270,7 @@ def main() -> None:
     lines.append("| Generator | Description |")
     lines.append("|-----------|-------------|")
     for g in gen_commands:
-        lines.append(f"| `lexigram gen {g['name']}` | {g['description']} |")
+        lines.append(f"| `oridecon gen {g['name']}` | {g['description']} |")
     lines.append("")
 
     # ── Contributed Command Groups ──
@@ -278,7 +278,7 @@ def main() -> None:
     lines.append("")
     lines.append("## Contributed Command Groups")
     lines.append("")
-    lines.append("These command groups are registered via the `lexigram.cli.contributors`")
+    lines.append("These command groups are registered via the `oridecon.cli.contributors`")
     lines.append("entry-point and loaded at runtime by the CLI's contributor discovery system.")
     lines.append("")
     lines.append(f"**{len(contributed_groups)} groups across {len({g['package'] for g in contributed_groups})} packages**")
@@ -286,7 +286,7 @@ def main() -> None:
     lines.append("| Group | Package | Target |")
     lines.append("|-------|---------|--------|")
     for cg in contributed_groups:
-        lines.append(f"| `lexigram {cg['name']}` | {cg['package']} | `{cg['target']}` |")
+        lines.append(f"| `oridecon {cg['name']}` | {cg['package']} | `{cg['target']}` |")
     lines.append("")
 
     # ── Source Files ──

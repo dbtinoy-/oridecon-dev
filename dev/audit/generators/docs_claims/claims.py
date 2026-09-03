@@ -13,7 +13,7 @@ from dev.audit.generators.docs_claims.introspect import _iter_python_blocks
 
 
 def _collect_env_claims(md_text: str) -> tuple[str, ...]:
-    """Return every distinct non-error-code ``LEX_*`` token in a doc."""
+    """Return every distinct non-error-code ``ORI_*`` token in a doc."""
     seen: set[str] = set()
     for block in _iter_python_blocks(md_text):
         seen.update(_ENV_TOKEN_RE.findall(block))
@@ -83,7 +83,7 @@ def _verify_env_var(
         return False, f"no variable starts with prefix `{prefix}__`"
     if "__" not in normalized:
         return False, (
-            "not a section/key mapping (`LEX_<SECTION>__<KEY>`), nor read directly"
+            "not a section/key mapping (`ORI_<SECTION>__<KEY>`), nor read directly"
         )
     section = normalized[4:].split("__", 1)[0]
     if not section:

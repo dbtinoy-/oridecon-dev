@@ -1,4 +1,4 @@
-# AUDIT_PROTOCOLS.md — Lexigram Framework Protocol Inventory
+# AUDIT_PROTOCOLS.md — Oridecon Framework Protocol Inventory
 
 > **Source**: `class *Protocol` declarations across framework source trees.
 

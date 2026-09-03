@@ -13,9 +13,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from lexigram.contracts.ai import EvaluationDataset
-from lexigram.contracts.ai.feedback import FeedbackItem
-from lexigram.logging import get_logger
+from oridecon.contracts.ai import EvaluationDataset
+from oridecon.contracts.ai.feedback import FeedbackItem
+from oridecon.logging import get_logger
 
 logger = get_logger(__name__)
 

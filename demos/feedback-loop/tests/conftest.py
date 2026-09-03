@@ -27,7 +27,7 @@ from starlette.applications import Starlette
 
 _DEMO_ROOT = Path(__file__).resolve().parent.parent
 
-# Lexigram discovers application.yaml from cwd — pin it so tests work
+# Oridecon discovers application.yaml from cwd — pin it so tests work
 # from any invocation point (repo root or in-demo).
 os.chdir(_DEMO_ROOT)
 # Add src/ to sys.path so ``from feedback_loop...`` resolves in tests.
@@ -36,7 +36,7 @@ sys.path.insert(0, str(_DEMO_ROOT / "src"))
 from feedback_loop.app import create_app  # noqa: E402 — after sys.path setup
 from feedback_loop.services import LoopService  # noqa: E402
 
-from lexigram.web import WebProvider  # noqa: E402
+from oridecon.web import WebProvider  # noqa: E402
 
 
 @pytest.fixture(autouse=True)

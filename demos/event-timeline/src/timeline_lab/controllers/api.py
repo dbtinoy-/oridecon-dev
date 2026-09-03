@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from lexigram.web import Controller, get, post
+from oridecon.web import Controller, get, post
 from timeline_lab.services.timeline import TimelineService
 
 

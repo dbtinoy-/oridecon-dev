@@ -13,7 +13,7 @@ all admin interactivity.
 The industry-standard way to approach a CSP tightening is **not** a
 big-bang flip: it is to ship the strict candidate policy in
 **`Content-Security-Policy-Report-Only`** alongside the enforced policy,
-collect real violation reports, drive them to zero, then flip. lexigram-admin
+collect real violation reports, drive them to zero, then flip. oridecon-admin
 has none of that machinery: no report-only header, no reporting endpoint,
 no way for an operator to see what strict CSP would break. This round
 builds exactly that groundwork — fully server-verifiable, zero risk of

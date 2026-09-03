@@ -1,4 +1,4 @@
-# AUDIT_DEPENDENCIES.md — Lexigram Framework Dependency Freshness Snapshot
+# AUDIT_DEPENDENCIES.md — Oridecon Framework Dependency Freshness Snapshot
 
 > **Source**: Live command evidence from `uv pip list --outdated` and workspace
 > manifest scans against `dev/checks/dep_pins.py`.
@@ -39,59 +39,59 @@
 
 | Member | Own pyproject | Unbounded third-party pins |
 |--------|---------------|----------------------------|
-| `lexigram` | yes | 15 |
-| `lexigram-admin` | yes | 35 |
-| `lexigram-ai` | yes | 80 |
-| `lexigram-ai-agents` | yes | 8 |
-| `lexigram-ai-evaluation` | yes | 0 |
-| `lexigram-ai-feedback` | yes | 7 |
-| `lexigram-ai-governance` | yes | 8 |
-| `lexigram-ai-guard` | yes | 8 |
-| `lexigram-ai-llm` | yes | 33 |
-| `lexigram-ai-mcp` | yes | 8 |
-| `lexigram-ai-memory` | yes | 8 |
-| `lexigram-ai-observability` | yes | 7 |
-| `lexigram-ai-prompt` | yes | 8 |
-| `lexigram-ai-rag` | yes | 21 |
-| `lexigram-ai-relay` | yes | 7 |
-| `lexigram-ai-relay-gateway` | yes | 9 |
-| `lexigram-ai-session` | yes | 7 |
-| `lexigram-ai-skills` | yes | 8 |
-| `lexigram-ai-workers` | yes | 7 |
-| `lexigram-audit` | yes | 8 |
-| `lexigram-auth` | yes | 29 |
-| `lexigram-cache` | yes | 25 |
-| `lexigram-cli` | yes | 19 |
-| `lexigram-contracts` | yes | 7 |
-| `lexigram-events` | yes | 30 |
-| `lexigram-features` | yes | 8 |
-| `lexigram-graph` | yes | 7 |
-| `lexigram-graphql` | yes | 20 |
-| `lexigram-http` | yes | 9 |
-| `lexigram-monitor` | yes | 24 |
-| `lexigram-multimedia` | yes | 6 |
-| `lexigram-multimedia-beat` | yes | 13 |
-| `lexigram-multimedia-image` | yes | 8 |
-| `lexigram-multimedia-interpolate` | yes | 8 |
-| `lexigram-multimedia-music` | yes | 8 |
-| `lexigram-multimedia-tts` | yes | 8 |
-| `lexigram-multimedia-upscale` | yes | 8 |
-| `lexigram-multimedia-video` | yes | 8 |
-| `lexigram-nosql` | yes | 11 |
-| `lexigram-notification` | yes | 20 |
-| `lexigram-queue` | yes | 4 |
-| `lexigram-resilience` | yes | 6 |
-| `lexigram-search` | yes | 33 |
-| `lexigram-secrets` | yes | 13 |
-| `lexigram-sql` | yes | 25 |
-| `lexigram-storage` | yes | 22 |
-| `lexigram-tasks` | yes | 26 |
-| `lexigram-tenancy` | yes | 8 |
-| `lexigram-testing` | yes | 25 |
-| `lexigram-ui` | yes | 15 |
-| `lexigram-vector` | yes | 15 |
-| `lexigram-web` | yes | 37 |
-| `lexigram-webhook` | yes | 2 |
-| `lexigram-workflow` | yes | 8 |
+| `oridecon` | yes | 15 |
+| `oridecon-admin` | yes | 35 |
+| `oridecon-ai` | yes | 80 |
+| `oridecon-ai-agents` | yes | 8 |
+| `oridecon-ai-evaluation` | yes | 0 |
+| `oridecon-ai-feedback` | yes | 7 |
+| `oridecon-ai-governance` | yes | 8 |
+| `oridecon-ai-guard` | yes | 8 |
+| `oridecon-ai-llm` | yes | 33 |
+| `oridecon-ai-mcp` | yes | 8 |
+| `oridecon-ai-memory` | yes | 8 |
+| `oridecon-ai-observability` | yes | 7 |
+| `oridecon-ai-prompt` | yes | 8 |
+| `oridecon-ai-rag` | yes | 21 |
+| `oridecon-ai-relay` | yes | 7 |
+| `oridecon-ai-relay-gateway` | yes | 9 |
+| `oridecon-ai-session` | yes | 7 |
+| `oridecon-ai-skills` | yes | 8 |
+| `oridecon-ai-workers` | yes | 7 |
+| `oridecon-audit` | yes | 8 |
+| `oridecon-auth` | yes | 29 |
+| `oridecon-cache` | yes | 25 |
+| `oridecon-cli` | yes | 19 |
+| `oridecon-contracts` | yes | 7 |
+| `oridecon-events` | yes | 30 |
+| `oridecon-features` | yes | 8 |
+| `oridecon-graph` | yes | 7 |
+| `oridecon-graphql` | yes | 20 |
+| `oridecon-http` | yes | 9 |
+| `oridecon-monitor` | yes | 24 |
+| `oridecon-multimedia` | yes | 6 |
+| `oridecon-multimedia-beat` | yes | 13 |
+| `oridecon-multimedia-image` | yes | 8 |
+| `oridecon-multimedia-interpolate` | yes | 8 |
+| `oridecon-multimedia-music` | yes | 8 |
+| `oridecon-multimedia-tts` | yes | 8 |
+| `oridecon-multimedia-upscale` | yes | 8 |
+| `oridecon-multimedia-video` | yes | 8 |
+| `oridecon-nosql` | yes | 11 |
+| `oridecon-notification` | yes | 20 |
+| `oridecon-queue` | yes | 4 |
+| `oridecon-resilience` | yes | 6 |
+| `oridecon-search` | yes | 33 |
+| `oridecon-secrets` | yes | 13 |
+| `oridecon-sql` | yes | 25 |
+| `oridecon-storage` | yes | 22 |
+| `oridecon-tasks` | yes | 26 |
+| `oridecon-tenancy` | yes | 8 |
+| `oridecon-testing` | yes | 25 |
+| `oridecon-ui` | yes | 15 |
+| `oridecon-vector` | yes | 15 |
+| `oridecon-web` | yes | 37 |
+| `oridecon-webhook` | yes | 2 |
+| `oridecon-workflow` | yes | 8 |
 
 Baseline guard: `dev/checks/dep_pins.py` fails CI on unbounded third-party pins not covered by `dev/dep_pins_baseline.json`; regenerate deliberately with `--write-baseline`.

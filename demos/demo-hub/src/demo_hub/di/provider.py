@@ -20,16 +20,16 @@ from typing import TYPE_CHECKING
 from demo_hub.controllers.api import HubApiController
 from demo_hub.fleet import Fleet
 from demo_hub.services.registry import ServiceRegistry
-from lexigram.contracts.core.health import (
+from oridecon.contracts.core.health import (
     HealthCheckCategory,
     HealthCheckResult,
     HealthStatus,
 )
-from lexigram.di.provider import Provider
-from lexigram.logging import get_logger
+from oridecon.di.provider import Provider
+from oridecon.logging import get_logger
 
 if TYPE_CHECKING:
-    from lexigram.contracts.core.di import (
+    from oridecon.contracts.core.di import (
         ContainerRegistrarProtocol,
         ContainerResolverProtocol,
     )

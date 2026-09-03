@@ -1,6 +1,6 @@
 # Workflow — Approval Flow
 
-A focused, browser-first example of **Lexigram WorkflowModule**. It models a
+A focused, browser-first example of **Oridecon WorkflowModule**. It models a
 purchase request with an interactive state machine and a separate approval
 policy preview. It uses only the workflow domain module plus `WebModule`.
 
@@ -13,7 +13,7 @@ policy preview. It uses only the workflow domain module plus `WebModule`.
 4. Run the `ApprovalChain` preview with either gate unchecked.
 5. Inspect the append-only transition history and optimistic version counter.
 
-## Lexigram surface
+## Oridecon surface
 
 - `WorkflowModule.configure()` and provider lifecycle
 - `StateMachine`, `State`, and `Transition`
@@ -41,7 +41,7 @@ The hub embeds this console at `/demos/approval-flow/`.
 | POST | `/api/workflow/retry` | Retry a rejected flow |
 | POST | `/api/workflow/rollback` | Compensate an approved flow |
 
-## Lexigram Concepts
+## Oridecon Concepts
 
 | Concept | How it's used |
 |---------|---------------|

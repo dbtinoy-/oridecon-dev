@@ -5,8 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from lexigram.contracts.auth import SessionRepositoryProtocol
-from lexigram.primitives import clock
+from oridecon.contracts.auth import SessionRepositoryProtocol
+from oridecon.primitives import clock
 
 
 @dataclass

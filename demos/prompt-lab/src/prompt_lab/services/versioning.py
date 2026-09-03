@@ -15,8 +15,8 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-from lexigram.ai.prompt.registry.versioned import VersionedPromptStore
-from lexigram.ai.prompt.template.chat import ChatPromptTemplate
+from oridecon.ai.prompt.registry.versioned import VersionedPromptStore
+from oridecon.ai.prompt.template.chat import ChatPromptTemplate
 
 _STORE_KEY: dict[str, str] = {
     "v1": "support-v1",

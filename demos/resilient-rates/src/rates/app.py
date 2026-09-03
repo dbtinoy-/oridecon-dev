@@ -1,10 +1,10 @@
 """Composition root for the resilient-rates demo — start reading here.
 
-Every Lexigram application has exactly one place that knows how the pieces
+Every Oridecon application has exactly one place that knows how the pieces
 fit together: the **composition root**.  Everything else (controllers,
 services, templates) is inert until *this file* wires it.
 
-The mental model has three layers.  Once these click, every Lexigram app
+The mental model has three layers.  Once these click, every Oridecon app
 reads the same way:
 
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -12,12 +12,12 @@ reads the same way:
 │    ``application.yaml`` holds your values.  The framework loads it,     │
 │    merges overrides on top (highest → lowest):                          │
 │                                                                         │
-│        LEX_DEMO__UPSTREAM_SCENARIO=down  env vars  ← win               │
+│        ORI_DEMO__UPSTREAM_SCENARIO=down  env vars  ← win               │
 │        application.production.yaml  profile overlay                     │
 │        application.yaml             base file                           │
 │        dataclass field defaults     last resort                         │
 │                                                                         │
-│    Result: ONE typed ``LexigramConfig`` object.                         │
+│    Result: ONE typed ``OrideconConfig`` object.                         │
 │                                                                         │
 │ 2. CAPABILITIES (declarative)                                           │
 │    ``Module.configure(...)`` switches framework packages on and tells   │
@@ -48,19 +48,19 @@ Run with::
 
 from __future__ import annotations
 
-from lexigram.app.base import Application  # Application = the bootable object
-from lexigram.cache.module import CacheModule  # framework module — in-memory cache
-from lexigram.config.main import LexigramConfig  # typed config from application.yaml
-from lexigram.di.provider import Provider  # base class for your DI registrations
-from lexigram.resilience.module import (
+from oridecon.app.base import Application  # Application = the bootable object
+from oridecon.cache.module import CacheModule  # framework module — in-memory cache
+from oridecon.config.main import OrideconConfig  # typed config from application.yaml
+from oridecon.di.provider import Provider  # base class for your DI registrations
+from oridecon.resilience.module import (
     ResilienceModule,  # framework module — retry + circuit breaker
 )
-from lexigram.web.module import WebModule  # framework module — owns web server
+from oridecon.web.module import WebModule  # framework module — owns web server
 from rates.controllers.api import RatesApiController  # your HTTP surface
 from rates.di.provider import RatesProvider  # your service registrations
 from rates.ui.pages import RatesPageController  # page controller (optional)
 
-# Lexigram follows a strict dependency direction: application code imports
+# Oridecon follows a strict dependency direction: application code imports
 # framework packages, never the reverse.  This file is the only place
 # that references both framework modules AND your controllers/providers.
 
@@ -71,9 +71,9 @@ def build_modules() -> list[object]:
     Each ``Module.configure(...)`` returns a DynamicModule: a recipe the
     framework expands into providers at boot.  Because every provider in
     the bundle declares ``config_key`` / ``config_model``, the orchestrator
-    injects the matching typed section of ``LexigramConfig`` into
+    injects the matching typed section of ``OrideconConfig`` into
     ``provider.config`` right before ``register()`` runs — YAML values and
-    ``LEX_*`` environment overrides already merged.
+    ``ORI_*`` environment overrides already merged.
     """
     return [
         # ResilienceModule reads the ``resilience:`` section from yaml.
@@ -96,17 +96,17 @@ def build_modules() -> list[object]:
 def build_providers() -> list[Provider]:
     """Imperative services owned by this demo.
 
-    A Provider is Lexigram's unit of lifecycle management: ``register()``
+    A Provider is Oridecon's unit of lifecycle management: ``register()``
     binds services into the DI container, ``boot()`` runs post-registration
     setup (here: wiring the upstream simulator), ``shutdown()`` cleans up.
     """
     return [RatesProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create the application in ``CREATED`` state (not yet started).
 
-    Accepts an optional ``LexigramConfig`` for scenarios where the config
+    Accepts an optional ``OrideconConfig`` for scenarios where the config
     is loaded explicitly (e.g. hub mounting).  When called standalone,
     the framework auto-discovers ``application.yaml`` from the working
     directory.

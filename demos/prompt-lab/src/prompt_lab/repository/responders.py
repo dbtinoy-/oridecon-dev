@@ -1,7 +1,7 @@
 """Variant-keyed canned completion styles — Registry dispatch, no LLM.
 
 Instead of calling a real language model, each variant maps to a canned
-reply function registered in a ``lexigram.primitives.Registry``.  This
+reply function registered in a ``oridecon.primitives.Registry``.  This
 keeps the A/B loop deterministic and byte-stable: same inputs always
 produce the same outputs, so scores are reproducible.
 
@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from lexigram.primitives import Registry
+from oridecon.primitives import Registry
 
 __all__ = ["RESPONDERS"]
 

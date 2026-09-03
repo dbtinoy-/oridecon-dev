@@ -1,6 +1,6 @@
 """Application composition root for the auth web demo.
 
-Every Lexigram application has exactly one place that knows how the pieces
+Every Oridecon application has exactly one place that knows how the pieces
 fit together: the composition root.  Everything else (controllers,
 services, views) is inert until this file wires it.
 
@@ -16,11 +16,11 @@ from __future__ import annotations
 from auth_web.controllers.api import AuthApiController
 from auth_web.di.provider import AuthWebProvider
 from auth_web.ui.pages import PagesController
-from lexigram.app.base import Application
-from lexigram.auth.module import AuthModule
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider
-from lexigram.web.module import WebModule
+from oridecon.app.base import Application
+from oridecon.auth.module import AuthModule
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider
+from oridecon.web.module import WebModule
 
 
 def build_modules() -> list[object]:
@@ -29,7 +29,7 @@ def build_modules() -> list[object]:
     Each ``Module.configure(...)`` returns a DynamicModule: a recipe the
     framework expands into providers at boot.  Because every provider in
     the bundle declares ``config_key`` / ``config_model``, the orchestrator
-    injects the matching typed section of ``LexigramConfig`` into
+    injects the matching typed section of ``OrideconConfig`` into
     ``provider.config`` right before ``register()`` runs.
     """
     return [
@@ -45,7 +45,7 @@ def build_providers() -> list[Provider]:
     return [AuthWebProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create the application in CREATED state (not yet started).
 
     Modules declare capabilities; providers fill services.

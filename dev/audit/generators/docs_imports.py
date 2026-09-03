@@ -1,11 +1,11 @@
-"""Audit generator: verify every ``lexigram.*`` import cited in package docs resolves.
+"""Audit generator: verify every ``oridecon.*`` import cited in package docs resolves.
 
-Scans every ``docs/*.md`` file under each ``lexigram`` / ``lexigram-*`` package and
-checks that each ``from lexigram... import ...`` / ``import lexigram...`` statement
+Scans every ``docs/*.md`` file under each ``oridecon`` / ``oridecon-*`` package and
+checks that each ``from oridecon... import ...`` / ``import oridecon...`` statement
 inside a fenced python block resolves at runtime — the module must import and every
 imported attribute must exist. Placeholder domain names from examples (e.g. an
 ``EmailConfig`` that lives inside the user's app) are deliberately ignored because
-they never carry a ``lexigram.*`` module path.
+they never carry a ``oridecon.*`` module path.
 """
 
 from __future__ import annotations
@@ -19,18 +19,18 @@ from dev.audit.generators.base import AuditRunResult, MarkdownAuditGenerator
 
 _PYTHON_FENCE_RE = re.compile(r"```(?:python|py)\s*\n(.*?)```", re.DOTALL)
 
-# `from <lexigram module> import <names>` — names may be parenthesized across lines.
+# `from <oridecon module> import <names>` — names may be parenthesized across lines.
 _FROM_IMPORT_RE = re.compile(
-    r"^\s*from\s+(lexigram(?:\.\w+)*)\s+import\s+(.*)$", re.MULTILINE
+    r"^\s*from\s+(oridecon(?:\.\w+)*)\s+import\s+(.*)$", re.MULTILINE
 )
-# `import lexigram.module[.module]` — plain module import.
-_PLAIN_IMPORT_RE = re.compile(r"^\s*import\s+(lexigram(?:\.\w+)+)\s*$", re.MULTILINE)
+# `import oridecon.module[.module]` — plain module import.
+_PLAIN_IMPORT_RE = re.compile(r"^\s*import\s+(oridecon(?:\.\w+)+)\s*$", re.MULTILINE)
 _NAME_START = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 
 
 @dataclass(frozen=True, slots=True)
 class DocImport:
-    """One ``lexigram.*`` import statement found in a doc's python block."""
+    """One ``oridecon.*`` import statement found in a doc's python block."""
 
     module: str
     names: tuple[str, ...]
@@ -70,7 +70,7 @@ def _split_names(raw: str) -> tuple[str, ...]:
 
 
 def _collect_imports(md_text: str) -> tuple[DocImport, ...]:
-    """Collect every ``lexigram.*`` import from the doc's python blocks.
+    """Collect every ``oridecon.*`` import from the doc's python blocks.
 
     Blocks are truncated at the first line containing a ``❌`` marker — the
     convention for deliberately-wrong anti-examples (e.g. PUBLIC_API.md's
@@ -120,11 +120,11 @@ def _verify(imp: DocImport) -> str | None:
 
 
 class DocsImportsAuditGenerator(MarkdownAuditGenerator):
-    """Audit every ``lexigram.*`` import in package docs against the live package."""
+    """Audit every ``oridecon.*`` import in package docs against the live package."""
 
     name = "docs-imports"
     description = (
-        "Generate AUDIT_DOC_IMPORTS.md by resolving every `lexigram.*` import "
+        "Generate AUDIT_DOC_IMPORTS.md by resolving every `oridecon.*` import "
         "cited in package docs python blocks against the installed framework."
     )
     output_file = "AUDIT_DOC_IMPORTS.md"
@@ -187,9 +187,9 @@ class DocsImportsAuditGenerator(MarkdownAuditGenerator):
             by_doc.setdefault(issue.doc, []).append(issue)
 
         lines = [
-            "# AUDIT_DOC_IMPORTS.md — Lexigram Documentation Import Audit",
+            "# AUDIT_DOC_IMPORTS.md — Oridecon Documentation Import Audit",
             "",
-            "> **Source**: Every `lexigram.*` `from`/`import` statement in the python",
+            "> **Source**: Every `oridecon.*` `from`/`import` statement in the python",
             "> blocks of every package `docs/*.md` file, resolved against the installed",
             "> framework with `importlib`. An import fails when its module cannot be",
             "> imported or when an imported name is missing from that module.",
@@ -212,7 +212,7 @@ class DocsImportsAuditGenerator(MarkdownAuditGenerator):
                 )
             lines.append("")
         else:
-            lines.append("No unresolved `lexigram.*` imports detected.")
+            lines.append("No unresolved `oridecon.*` imports detected.")
             lines.append("")
 
         return "\n".join(lines), len(issues)

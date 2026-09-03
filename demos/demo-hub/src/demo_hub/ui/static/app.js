@@ -4,7 +4,7 @@ const $ = (id) => document.getElementById(id);
 let filter = "all";
 let query = "";
 const groupLabels = { standard: "Standard modules", "multi-module": "Multi-module apps" };
-const groupDescriptions = { standard: "One domain module plus WebModule — learn a capability in isolation.", "multi-module": "Composed applications — see several Lexigram capabilities work together." };
+const groupDescriptions = { standard: "One domain module plus WebModule — learn a capability in isolation.", "multi-module": "Composed applications — see several Oridecon capabilities work together." };
 function esc(value) { const el = document.createElement("span"); el.textContent = String(value ?? ""); return el.innerHTML; }
 function matches(service) { const haystack = [service.name, service.blurb, ...(service.capabilities || [])].join(" ").toLowerCase(); return !query || haystack.includes(query); }
 async function load() {

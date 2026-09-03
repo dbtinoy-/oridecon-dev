@@ -1,6 +1,6 @@
 """Composition root for the feedback-loop demo.
 
-Every Lexigram application has exactly one place that knows how the pieces
+Every Oridecon application has exactly one place that knows how the pieces
 fit together: the composition root.  Everything else (controllers,
 services, views) is inert until this file wires it.
 
@@ -19,12 +19,12 @@ from __future__ import annotations
 from feedback_loop.controllers import LoopApiController
 from feedback_loop.di import LoopProvider
 from feedback_loop.ui import LoopPageController
-from lexigram.ai.evaluation import EvaluationModule
-from lexigram.ai.feedback import FeedbackModule
-from lexigram.app.base import Application
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider
-from lexigram.web import WebModule
+from oridecon.ai.evaluation import EvaluationModule
+from oridecon.ai.feedback import FeedbackModule
+from oridecon.app.base import Application
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider
+from oridecon.web import WebModule
 
 
 def build_modules() -> list[object]:
@@ -33,7 +33,7 @@ def build_modules() -> list[object]:
     Each ``Module.configure(...)`` returns a DynamicModule: a recipe the
     framework expands into providers at boot.  Because every provider in
     the bundle declares ``config_key`` / ``config_model``, the orchestrator
-    injects the matching typed section of ``LexigramConfig`` into
+    injects the matching typed section of ``OrideconConfig`` into
     ``provider.config`` right before ``register()`` runs.
     """
     return [
@@ -56,7 +56,7 @@ def build_providers() -> list[Provider]:
     return [LoopProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create the application in CREATED state (not yet started).
 
     Modules declare capabilities; providers fill services.

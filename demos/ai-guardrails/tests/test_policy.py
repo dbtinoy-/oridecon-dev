@@ -2,7 +2,7 @@
 
 Unit tests for pure domain objects — no DI, no container.
 These validate the Registry pattern (register/get/keys) and the
-toggle state machine.  In Lexigram, unit tests for domain models
+toggle state machine.  In Oridecon, unit tests for domain models
 are simple and fast — no framework boot required.
 """
 

@@ -12,7 +12,7 @@ description: In-memory task management with CRUD API and SQL-like queries
 # defaults.  Each section maps 1:1 to a typed config model — the
 # framework validates your yaml against it at boot time.
 #
-# DEMO FOCUS: Lexigram DatabaseModule + one SQL-backed task repository.
+# DEMO FOCUS: Oridecon DatabaseModule + one SQL-backed task repository.
 #
 # LEARNING PATH:
 #   1. app.py:     DatabaseModule.configure(SQLite) + WebModule
@@ -20,13 +20,13 @@ description: In-memory task management with CRUD API and SQL-like queries
 #   3. browser:    parameterized CRUD against the live SQLite table
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
 #   - Demo config:        demos/sql-repository/src/taskapp/config.py
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 # ─────────────────────────────────────────────────────────────────────────────

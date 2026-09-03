@@ -3,7 +3,7 @@
 import pytest
 from unittest.mock import AsyncMock, MagicMock
 
-from lexigram.app.invoker import Invoker
+from oridecon.app.invoker import Invoker
 
 
 async def _passthrough_invoke(fn, *a, **kw):

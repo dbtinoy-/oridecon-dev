@@ -8,8 +8,8 @@ import httpx
 import pytest
 from starlette.applications import Starlette
 
-from lexigram.auth.authn.mfa import DEFAULT_TOTP_PERIOD, generate_totp_code
-from lexigram.auth.authn.user_service import UserService
+from oridecon.auth.authn.mfa import DEFAULT_TOTP_PERIOD, generate_totp_code
+from oridecon.auth.authn.user_service import UserService
 
 # Test credentials — must match application.yaml auth.users
 PLAIN_EMAIL = "plain@mfa.demo"

@@ -14,27 +14,27 @@ from auth_web.config import AuthWebConfig
 from auth_web.services.account_verification import DemoAccountVerificationService
 from auth_web.services.password_change import PasswordChangeService
 from auth_web.services.password_reset import DemoPasswordResetService
-from lexigram.auth import (
+from oridecon.auth import (
     AuthenticationService,
     SessionCookieBackend,
     TokenError,
     User,
 )
-from lexigram.auth.authn import RegisterRequest
-from lexigram.auth.authz import AuthorizationService
-from lexigram.auth.exceptions import (
+from oridecon.auth.authn import RegisterRequest
+from oridecon.auth.authz import AuthorizationService
+from oridecon.auth.exceptions import (
     AccountLockedError,
     AuthenticationError,
     EmailExistsError,
     InvalidCredentialsError,
     PasswordPolicyError,
 )
-from lexigram.contracts.auth import SessionRepositoryProtocol
-from lexigram.logging import get_logger
-from lexigram.primitives import clock
-from lexigram.result import Err, Ok, Result
-from lexigram.serialization import loads as json_loads
-from lexigram.web import Controller, JSONResponse, NotFoundError, get, post
+from oridecon.contracts.auth import SessionRepositoryProtocol
+from oridecon.logging import get_logger
+from oridecon.primitives import clock
+from oridecon.result import Err, Ok, Result
+from oridecon.serialization import loads as json_loads
+from oridecon.web import Controller, JSONResponse, NotFoundError, get, post
 
 logger = get_logger(__name__)
 

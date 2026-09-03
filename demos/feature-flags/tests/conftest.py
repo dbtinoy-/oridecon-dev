@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 os.chdir(ROOT)
 sys.path.insert(0, str(ROOT / "src"))
 
-from lexigram.web import WebProvider  # noqa: E402
+from oridecon.web import WebProvider  # noqa: E402
 from release_control.app import create_app  # noqa: E402
 
 

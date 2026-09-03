@@ -3,24 +3,24 @@ title: "AI Feedback"
 description: "Collect, process, and store feedback on AI responses — ratings, corrections, and signals."
 ---
 
-`lexigram-ai-feedback` provides a protocol-based feedback collection system. Application code depends on `FeedbackProtocol`; the storage backend (in-memory, database) is chosen in configuration. Feedback items carry a `FeedbackType` and `value`, with optional context and metadata for auditing and analytics.
+`oridecon-ai-feedback` provides a protocol-based feedback collection system. Application code depends on `FeedbackProtocol`; the storage backend (in-memory, database) is chosen in configuration. Feedback items carry a `FeedbackType` and `value`, with optional context and metadata for auditing and analytics.
 
-For the full configuration reference and advanced features (processor pipelines, middleware, events), see the [`lexigram-ai-feedback` package docs](/packages/lexigram-ai-feedback/).
+For the full configuration reference and advanced features (processor pipelines, middleware, events), see the [`oridecon-ai-feedback` package docs](/packages/oridecon-ai-feedback/).
 
 ---
 
 ## 1. The Contract
 
-All feedback operations happen through two protocols from `lexigram.contracts.ai.feedback`:
+All feedback operations happen through two protocols from `oridecon.contracts.ai.feedback`:
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.contracts.ai.feedback import (
+from oridecon.contracts.ai.feedback import (
     FeedbackItem,
     FeedbackType,
     FeedbackSummary,
 )
-from lexigram.result import Result
+from oridecon.result import Result
 
 
 @runtime_checkable
@@ -74,7 +74,7 @@ graph LR
 Add the provider and configure the `ai_feedback` section:
 
 ```python
-from lexigram.ai.feedback import FeedbackModule, FeedbackConfig
+from oridecon.ai.feedback import FeedbackModule, FeedbackConfig
 
 app.add_module(
     FeedbackModule.configure(
@@ -107,7 +107,7 @@ For local development the default in-memory store needs no external service. Swa
 Inject `FeedbackProtocol` into any service and call `submit_feedback()`:
 
 ```python
-from lexigram.contracts.ai.feedback import FeedbackProtocol
+from oridecon.contracts.ai.feedback import FeedbackProtocol
 
 
 class RatingCollector:
@@ -156,7 +156,7 @@ Every feedback item carries a `FeedbackType` and a value:
 A `FeedbackItem` is an immutable dataclass:
 
 ```python
-from lexigram.contracts.ai.feedback import FeedbackItem, FeedbackType
+from oridecon.contracts.ai.feedback import FeedbackItem, FeedbackType
 
 
 item = FeedbackItem(
@@ -170,7 +170,7 @@ item = FeedbackItem(
 You can query stored items by session or type, and aggregate statistics:
 
 ```python
-from lexigram.contracts.ai.feedback import FeedbackStoreProtocol
+from oridecon.contracts.ai.feedback import FeedbackStoreProtocol
 
 
 class AnalyticsService:
@@ -193,9 +193,9 @@ class AnalyticsService:
 For unit tests, use `FeedbackModule.stub()` which provides in-memory storage with no external dependencies:
 
 ```python
-from lexigram import Application
-from lexigram.ai.feedback import FeedbackModule
-from lexigram.contracts.ai.feedback import FeedbackProtocol, FeedbackItem, FeedbackType
+from oridecon import Application
+from oridecon.ai.feedback import FeedbackModule
+from oridecon.contracts.ai.feedback import FeedbackProtocol, FeedbackItem, FeedbackType
 
 
 async def test_submits_rating() -> None:
@@ -220,4 +220,4 @@ You can also bind a hand-rolled fake to `FeedbackProtocol` in any test container
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding protocols to implementations
 - [Providers](/fundamentals/providers/) — how `FeedbackProvider` hooks into application boot
 - [Testing](/guides/testing/) — substituting stubs for infrastructure
-- [`lexigram-ai-feedback` package](/packages/lexigram-ai-feedback/) — processor pipelines, middleware, events
+- [`oridecon-ai-feedback` package](/packages/oridecon-ai-feedback/) — processor pipelines, middleware, events

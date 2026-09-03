@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-The Lexigram Framework follows the `0.Y.Z` versioning scheme. Security fixes
+The Oridecon Framework follows the `0.Y.Z` versioning scheme. Security fixes
 are released as patch releases on the latest minor series.
 
 | Version | Supported |
@@ -47,5 +47,5 @@ The framework follows these security practices across the codebase:
 - **Dependencies** — pinned and scanned; baseline guards fail CI on new
   unbounded pins.
 
-See `core/lexigram/docs/SECURITY.md` for the core package's full threat
+See `core/oridecon/docs/SECURITY.md` for the core package's full threat
 model and security configuration guidance.

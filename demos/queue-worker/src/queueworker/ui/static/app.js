@@ -1,4 +1,4 @@
-/* Browser controls for the Lexigram QueueModule + MessageConsumer demo. */
+/* Browser controls for the Oridecon QueueModule + MessageConsumer demo. */
 "use strict";
 
 const $ = (id) => document.getElementById(id);

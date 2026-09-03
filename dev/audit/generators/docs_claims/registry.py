@@ -93,8 +93,8 @@ def _config_modules(pkg_root: Path, pkg_mod_name: str) -> tuple[str, ...]:
     """Dotted module paths of a package's config-bearing modules.
 
     Any module whose path contains a ``config`` component or that ends in
-    ``config.py`` (e.g. ``lexigram.logging.config``,
-    ``lexigram.app.config.models``, ``lexigram.web.security.config``).
+    ``config.py`` (e.g. ``oridecon.logging.config``,
+    ``oridecon.app.config.models``, ``oridecon.web.security.config``).
     """
     src_dir = pkg_root / "src"
     if not src_dir.is_dir():
@@ -124,13 +124,13 @@ def _build_declared_prefixes() -> set[str]:
     """Env prefixes declared as constants in framework source.
 
     Some packages declare an env prefix constant (``GRAPH_ENV_PREFIX =
-    "LEX_WORKFLOW__GRAPH__"``) without wiring it into ``model_config``;
+    "ORI_WORKFLOW__GRAPH__"``) without wiring it into ``model_config``;
     tokens under a declared prefix are still legitimate claims.
     """
     root = Path(__file__).resolve().parents[4]
     declared: set[str] = set()
     prefix_re = re.compile(
-        r'\w*PREFIX\w*\s*(?::\s*\w+\s*)?=\s*["\'](LEX_[A-Z0-9_]+__)["\']'
+        r'\w*PREFIX\w*\s*(?::\s*\w+\s*)?=\s*["\'](ORI_[A-Z0-9_]+__)["\']'
     )
     for rel in discover_package_paths(root):
         pkg = root / rel
@@ -145,10 +145,10 @@ def _build_declared_prefixes() -> set[str]:
             if "PREFIX" not in text:
                 continue
             declared.update(prefix_re.findall(text))
-    # Package-level headers (`LEX_SQL__`) declare a namespace, not specific
-    # vars — only sub-section prefixes (`LEX_WORKFLOW__GRAPH__`) count as
+    # Package-level headers (`ORI_SQL__`) declare a namespace, not specific
+    # vars — only sub-section prefixes (`ORI_WORKFLOW__GRAPH__`) count as
     # declared variables.
-    return {p for p in declared if p[p.index("LEX_") + 4 :].count("__") >= 2}
+    return {p for p in declared if p[p.index("ORI_") + 4 :].count("__") >= 2}
 
 
 def _build_env_validity() -> dict[str, str]:
@@ -156,26 +156,26 @@ def _build_env_validity() -> dict[str, str]:
 
     Two families cover the framework's env patterns:
 
-    1. Core prefix ``LEX_`` + config-class section: ``LEX_LOGGING__JSON_FORMAT``
+    1. Core prefix ``ORI_`` + config-class section: ``ORI_LOGGING__JSON_FORMAT``
        (any package's ``*Config`` class, nested keys joined with ``__``).
-    2. Package prefix ``LEX_<PACKAGE>`` + nested key path: extension packages
-       register their own prefix (e.g. ``LEX_SQL``) with keys straight from the
-       package's config classes (e.g. ``LEX_SQL__BACKEND__URL``).
+    2. Package prefix ``ORI_<PACKAGE>`` + nested key path: extension packages
+       register their own prefix (e.g. ``ORI_SQL``) with keys straight from the
+       package's config classes (e.g. ``ORI_SQL__BACKEND__URL``).
     """
     validity: dict[str, str] = {}
     root = Path(__file__).resolve().parents[4]
     packages = sorted(root / p for p in discover_package_paths(root))
     for pkg in packages:
         pkg_mod_name = (
-            "lexigram" if pkg.name == "lexigram" else pkg.name.replace("-", ".")
+            "oridecon" if pkg.name == "oridecon" else pkg.name.replace("-", ".")
         )
         classes = list(_config_classes(_try_import(pkg_mod_name)))
         for mod_path in _config_modules(pkg, pkg_mod_name):
             classes += _config_classes(_try_import(mod_path))
         pkg_short = (
             None
-            if pkg.name == "lexigram"
-            else pkg.name[len("lexigram-") :].replace("-", "_")
+            if pkg.name == "oridecon"
+            else pkg.name[len("oridecon-") :].replace("-", "_")
         )
         for config_cls in classes:
             declared_section = getattr(config_cls, "config_section", None)
@@ -199,11 +199,11 @@ def _build_env_validity() -> dict[str, str]:
                         f"{env_prefix}{keypath}".lower()
                     )
                     continue
-                validity[f"LEX_{section.upper()}__{parts}"] = (
+                validity[f"ORI_{section.upper()}__{parts}"] = (
                     f"{section}.{keypath}"
                 )
                 if pkg_short is not None:
-                    validity[f"LEX_{pkg_short.upper()}__{parts}"] = (
+                    validity[f"ORI_{pkg_short.upper()}__{parts}"] = (
                         f"{pkg_short}.{keypath}"
                     )
     return validity
@@ -213,7 +213,7 @@ def _build_direct_reads() -> set[str]:
     """Env vars read directly by framework source code."""
     root = Path(__file__).resolve().parents[4]
     found: set[str] = set(_DIRECT_READ_ENV_VARS)
-    get_re = re.compile(r"os\.environ\.get\(\s*[\"'](LEX_[A-Z0-9_]+)[\"']")
+    get_re = re.compile(r"os\.environ\.get\(\s*[\"'](ORI_[A-Z0-9_]+)[\"']")
     for rel in discover_package_paths(root):
         pkg = root / rel
         src_dir = pkg / "src"

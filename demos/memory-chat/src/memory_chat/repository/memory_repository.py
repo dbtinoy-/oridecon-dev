@@ -18,7 +18,7 @@ not abstraction over abstraction.
 
 from __future__ import annotations
 
-from lexigram.contracts.ai.memory import (
+from oridecon.contracts.ai.memory import (
     EpisodicMemoryProtocol,
     MemoryEntry,
     MemoryQuery,
@@ -34,7 +34,7 @@ class MemoryRepository:
 
     This is the **protocol binding** pattern: ``WorkingMemoryProtocol``,
     ``EpisodicMemoryProtocol``, and ``SemanticMemoryProtocol`` live in
-    ``lexigram.contracts.ai.memory``; this class supplies a unified
+    ``oridecon.contracts.ai.memory``; this class supplies a unified
     facade over all three.  ``di/provider.py`` resolves the protocols
     from the container and hands them here — the service never touches
     store APIs directly.
@@ -56,7 +56,7 @@ class MemoryRepository:
     async def record_turn(self, entry: MemoryEntry) -> None:
         """Append one conversational entry to episodic memory.
 
-        Uses ambient clock (``lexigram.primitives.clock``) for testable
+        Uses ambient clock (``oridecon.primitives.clock``) for testable
         time — tests can freeze it with ``clock.use(FixedClock(...))``.
         """
         await self._episodic.record(entry)

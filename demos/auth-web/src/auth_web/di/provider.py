@@ -14,23 +14,23 @@ from auth_web.services.account_verification import DemoAccountVerificationServic
 from auth_web.services.password_change import PasswordChangeService
 from auth_web.services.password_reset import DemoPasswordResetService
 from auth_web.ui.pages import PagesController
-from lexigram.auth import (
+from oridecon.auth import (
     AuthConfig,
     AuthenticationService,
     SessionCookieBackend,
     UserService,
 )
-from lexigram.auth.authz import AuthorizationService
-from lexigram.contracts.auth import (
+from oridecon.auth.authz import AuthorizationService
+from oridecon.contracts.auth import (
     PasswordHasherProtocol,
     SessionRepositoryProtocol,
 )
-from lexigram.contracts.core.di import (
+from oridecon.contracts.core.di import (
     BootContainerProtocol,
     ContainerRegistrarProtocol,
 )
-from lexigram.di.provider import Provider
-from lexigram.logging import get_logger
+from oridecon.di.provider import Provider
+from oridecon.logging import get_logger
 
 logger = get_logger(__name__)
 

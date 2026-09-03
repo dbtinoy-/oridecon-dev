@@ -23,8 +23,8 @@ from typing import Any
 
 from starlette.requests import Request
 
-from lexigram.web import Controller, get, post
-from lexigram.web.sse.handler import AbstractSSEHandler
+from oridecon.web import Controller, get, post
+from oridecon.web.sse.handler import AbstractSSEHandler
 from ops_console.config import RealtimeConfig
 from ops_console.services.event_stream import EventStreamService
 

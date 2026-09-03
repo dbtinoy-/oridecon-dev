@@ -1,6 +1,6 @@
 # 19 — Import Upload End-to-End (R23 / B31) (Full Plan)
 
-**Date:** 2026-09-02 · **Status:** 🚧 In progress · **Branch:** `arena/01a05b98-lexigram`
+**Date:** 2026-09-02 · **Status:** 🚧 In progress · **Branch:** `arena/01a05b98-oridecon`
 
 ## 1. Findings
 
@@ -24,8 +24,8 @@ admin cannot actually import anything.
 
 | File | Change |
 |---|---|
-| `actions/standard/imports.py` | `ImportAction.render_button` override: renders a plain button with `data-import-upload-url="{prefix}/import"` + `data-import-accept` (from new `accept_extensions` config, default `.csv,.json,.jsonl` — the formats `AdminImportService.parse` supports) and `onclick="return window.LexigramImportUpload(this);"`. No more dead `hx-get`. |
-| lexigram-ui `molecules/data_table_client_logic.py` | New `window.LexigramImportUpload` (‖-guarded like the download helper, so it ships on every DataTable page in **both** stacks): opens a file picker, then `fetch`-POSTs the file + CSRF token (table hidden input / `window.__lexigramCsrfToken` / `[data-csrf-token]`) with an `HX-Request` header; success → toast/alert + reload; failure → error message. |
+| `actions/standard/imports.py` | `ImportAction.render_button` override: renders a plain button with `data-import-upload-url="{prefix}/import"` + `data-import-accept` (from new `accept_extensions` config, default `.csv,.json,.jsonl` — the formats `AdminImportService.parse` supports) and `onclick="return window.OrideconImportUpload(this);"`. No more dead `hx-get`. |
+| oridecon-ui `molecules/data_table_client_logic.py` | New `window.OrideconImportUpload` (‖-guarded like the download helper, so it ships on every DataTable page in **both** stacks): opens a file picker, then `fetch`-POSTs the file + CSRF token (table hidden input / `window.__orideconCsrfToken` / `[data-csrf-token]`) with an `HX-Request` header; success → toast/alert + reload; failure → error message. |
 | `core/routing.py` | Handler stack: `POST {prefix}/import` → `ResourceHandler(..., "import")`, placed with the other fixed-path routes before the `{id}` catch-all. |
 | `resources/handler.py` | Permission map gains `"import": "has_add_permission"` (imports create records). |
 | `resources/action_handlers.py` | `ImportActionHandler` now also handles `import` POSTs: reads the uploaded file from the CSRF-middleware-parsed form, validates it (missing → 400, empty → 400, over the `import_max_bytes` cap, default 10 MiB → 413), builds an `ActionContext` with `file_content`/`filename` + the resource data source, runs the declared `ImportAction`, and answers fragment callers with an `HX-Trigger` toast + `refresh-list` (plus a failed-report download link when rows failed); non-fragment callers get a 302 back to the list. |
@@ -35,7 +35,7 @@ admin cannot actually import anything.
 ## 3. Verification
 
 - New tests green; existing import tests green; full admin unit + e2e
-  suites green; lexigram-ui unit suite green (shared script changed).
+  suites green; oridecon-ui unit suite green (shared script changed).
 - Live playground check of `POST /admin/<resource>/import` via curl.
 
 ## 4. Implementation notes (post-verify)
@@ -63,7 +63,7 @@ admin cannot actually import anything.
 - Existing `test_resource_controller.py` route-count expectation updated
   17 → 18 (new POST route).
 - **Verification:** 14 new tests; admin unit **5430 passed / 8 skipped**;
-  lexigram-ui unit **1275 passed / 76.64 % cov**; admin e2e **72 passed /
+  oridecon-ui unit **1275 passed / 76.64 % cov**; admin e2e **72 passed /
   2 skipped**; ruff clean.
 
 ## 5. Deferred follow-ups

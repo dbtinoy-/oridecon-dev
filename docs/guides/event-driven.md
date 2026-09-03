@@ -1,15 +1,15 @@
 ---
 title: "Event-Driven Architecture"
-description: "Commands, events, CQRS, and event sourcing with lexigram-events."
+description: "Commands, events, CQRS, and event sourcing with oridecon-events."
 ---
 
-`lexigram-events` provides a full CQRS and event-sourcing stack: command, query, and event buses, an event store, projections, and sagas. It decouples your domain from transactional infrastructure.
+`oridecon-events` provides a full CQRS and event-sourcing stack: command, query, and event buses, an event store, projections, and sagas. It decouples your domain from transactional infrastructure.
 
 ---
 
 ## 1. Commands vs. Events
 
-Lexigram separates two kinds of message:
+Oridecon separates two kinds of message:
 
 1. **Commands** — an intent to change state (`RegisterUser`). Routed to exactly **one** handler via the **Command Bus**.
 2. **Events** — a fact that already happened (`UserRegistered`). Broadcast to **many** subscribers via the **Event Bus**.
@@ -29,7 +29,7 @@ graph LR
 A command is a simple message; the `CommandBus` routes it to its single handler. Inject the bus contract and dispatch:
 
 ```python
-from lexigram.events import Command, CommandBus
+from oridecon.events import Command, CommandBus
 
 
 class RegisterUser(Command):
@@ -47,7 +47,7 @@ class RegistrationController:
         )
 ```
 
-See the [`lexigram-events` package docs](/packages/lexigram-events/) for command-handler registration.
+See the [`oridecon-events` package docs](/packages/oridecon-events/) for command-handler registration.
 
 ---
 
@@ -56,7 +56,7 @@ See the [`lexigram-events` package docs](/packages/lexigram-events/) for command
 Events notify the rest of the system of a state change. Define a `DomainEvent`:
 
 ```python
-from lexigram.events import DomainEvent
+from oridecon.events import DomainEvent
 
 
 class UserRegistered(DomainEvent):
@@ -67,7 +67,7 @@ class UserRegistered(DomainEvent):
 ### Subscribing with a decorator
 
 ```python
-from lexigram.events import event_handler
+from oridecon.events import event_handler
 
 
 @event_handler(UserRegistered)
@@ -121,4 +121,4 @@ events:
 
 - [Background Jobs](/guides/background-jobs/) — offloading event side effects to workers
 - [Multi-Tenancy](/guides/multi-tenancy/) — tenant-scoped event streams
-- [`lexigram-events` package](/packages/lexigram-events/) — sagas, projections, and store backends
+- [`oridecon-events` package](/packages/oridecon-events/) — sagas, projections, and store backends

@@ -23,40 +23,40 @@ from typing import Any
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-from lexigram.app.base import Application
-from lexigram.audit import AuditModule
-from lexigram.audit.config import AuditConfig
-from lexigram.audit.store.memory import InMemoryAuditStore
-from lexigram.audit.store.sql import entry_to_row
-from lexigram.audit.verification.checksum import compute_audit_checksum
-from lexigram.auth import AuthModule
-from lexigram.auth.authn.jwt import JWTTokenManager
-from lexigram.auth.storage.token_store import UserStoreProtocol
-from lexigram.cache import CacheModule
-from lexigram.contracts.audit import AuditEntry, AuditStoreProtocol
-from lexigram.contracts.auth import PasswordHasherProtocol
-from lexigram.contracts.data import DatabaseProviderProtocol
-from lexigram.contracts.infra.cache import CacheBackendProtocol
-from lexigram.contracts.infra.tasks import TaskQueueProtocol
-from lexigram.di.module import DynamicModule
-from lexigram.di.provider import Provider
-from lexigram.events.buses import EventBusImpl
-from lexigram.events.messages.event import Event
-from lexigram.events.module import EventsModule
-from lexigram.sql.config import DatabaseConfig
-from lexigram.sql.module import DatabaseModule
-from lexigram.tasks.backends.memory import MemoryTaskQueue
-from lexigram.tasks.di.provider import TaskProvider
-from lexigram.tasks.module import TasksModule
-from lexigram.tasks.results.core import ResultStore
-from lexigram.tenancy.module import TenancyModule
-from lexigram.tenancy.resolution.chain import CompositeResolver
-from lexigram.tenancy.types import TenantResolutionContext
-from lexigram.web import delete, get, post, put
-from lexigram.web.config import ServerConfig, WebConfig
-from lexigram.web.module import WebModule
-from lexigram.web.routing.controllers import Controller
-from lexigram.web.security.config import CSRFConfig, SecurityConfig
+from oridecon.app.base import Application
+from oridecon.audit import AuditModule
+from oridecon.audit.config import AuditConfig
+from oridecon.audit.store.memory import InMemoryAuditStore
+from oridecon.audit.store.sql import entry_to_row
+from oridecon.audit.verification.checksum import compute_audit_checksum
+from oridecon.auth import AuthModule
+from oridecon.auth.authn.jwt import JWTTokenManager
+from oridecon.auth.storage.token_store import UserStoreProtocol
+from oridecon.cache import CacheModule
+from oridecon.contracts.audit import AuditEntry, AuditStoreProtocol
+from oridecon.contracts.auth import PasswordHasherProtocol
+from oridecon.contracts.data import DatabaseProviderProtocol
+from oridecon.contracts.infra.cache import CacheBackendProtocol
+from oridecon.contracts.infra.tasks import TaskQueueProtocol
+from oridecon.di.module import DynamicModule
+from oridecon.di.provider import Provider
+from oridecon.events.buses import EventBusImpl
+from oridecon.events.messages.event import Event
+from oridecon.events.module import EventsModule
+from oridecon.sql.config import DatabaseConfig
+from oridecon.sql.module import DatabaseModule
+from oridecon.tasks.backends.memory import MemoryTaskQueue
+from oridecon.tasks.di.provider import TaskProvider
+from oridecon.tasks.module import TasksModule
+from oridecon.tasks.results.core import ResultStore
+from oridecon.tenancy.module import TenancyModule
+from oridecon.tenancy.resolution.chain import CompositeResolver
+from oridecon.tenancy.types import TenantResolutionContext
+from oridecon.web import delete, get, post, put
+from oridecon.web.config import ServerConfig, WebConfig
+from oridecon.web.module import WebModule
+from oridecon.web.routing.controllers import Controller
+from oridecon.web.security.config import CSRFConfig, SecurityConfig
 
 # ---------------------------------------------------------------------------
 # Shared helpers
@@ -652,7 +652,7 @@ class _TasksHandlerProvider(Provider):
         self._flaky_attempts = flaky_attempts
 
     async def boot(self, container: Any) -> None:
-        from lexigram.tasks.execution.registry import HandlerRegistry
+        from oridecon.tasks.execution.registry import HandlerRegistry
 
         registry = await container.resolve(HandlerRegistry)
 
@@ -673,7 +673,7 @@ class _TasksHandlerProvider(Provider):
         registry.register("flaky_task", flaky_task)
         registry.register("always_fail_task", always_fail_task)
 
-        from lexigram.tasks.di.provider import TaskProvider
+        from oridecon.tasks.di.provider import TaskProvider
 
         provider = await container.resolve(TaskProvider)
         provider.refresh_worker_handlers()

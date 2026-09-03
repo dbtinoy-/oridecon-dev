@@ -20,8 +20,8 @@ try:
 except ImportError:
     pytest_asyncio = None
 
-from lexigram.events.messages.event import Event
-from lexigram.events.streaming.publisher import EventPublisher
+from oridecon.events.messages.event import Event
+from oridecon.events.streaming.publisher import EventPublisher
 
 
 class TestEventPublisher:

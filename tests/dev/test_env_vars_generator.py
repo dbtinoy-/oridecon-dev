@@ -7,16 +7,16 @@ from dev.audit.generators.env_vars import EnvVarsAuditGenerator
 
 def _write_sample_workspace(root: Path) -> None:
     (root / "pyproject.toml").write_text(
-        '[project]\nname = "workspace"\n\n[tool.uv.workspace]\nmembers = ["lexigram"]\n',
+        '[project]\nname = "workspace"\n\n[tool.uv.workspace]\nmembers = ["oridecon"]\n',
         encoding="utf-8",
     )
-    package_root = root / "lexigram"
+    package_root = root / "oridecon"
     package_root.mkdir()
     (package_root / "pyproject.toml").write_text(
-        '[project]\nname = "lexigram"\n',
+        '[project]\nname = "oridecon"\n',
         encoding="utf-8",
     )
-    config_dir = package_root / "src" / "lexigram"
+    config_dir = package_root / "src" / "oridecon"
     config_dir.mkdir(parents=True)
     (config_dir / "config.py").write_text(
         """
@@ -33,7 +33,7 @@ class NestedConfig:
 
 class AppConfig:
     model_config: ClassVar[ConfigDict] = ConfigDict(
-        env_prefix="LEX_APP__",
+        env_prefix="ORI_APP__",
         env_nested_delimiter="__",
     )
     debug: bool = Field(default=False, description="Enable debug mode.")
@@ -55,5 +55,5 @@ def test_env_vars_generator_emits_non_config_section_and_known_variable(
 
     assert result.success is True
     assert "## Non-Config ENV Sources" in markdown
-    assert "LEX_DEBUG" in markdown
-    assert "LEX_APP__DEBUG" in markdown
+    assert "ORI_DEBUG" in markdown
+    assert "ORI_APP__DEBUG" in markdown

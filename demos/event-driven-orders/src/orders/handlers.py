@@ -22,8 +22,8 @@ from __future__ import annotations
 
 from decimal import Decimal
 
-from lexigram.contracts.domain import DomainEvent
-from lexigram.logging import get_logger
+from oridecon.contracts.domain import DomainEvent
+from oridecon.logging import get_logger
 from orders.commands import PayOrder, PlaceOrder, ShipOrder
 from orders.domain import (
     Order,

@@ -1,6 +1,6 @@
 # SQL Repository Demo
 
-A focused, browser-first example of a **Lexigram SQL repository**. The demo
+A focused, browser-first example of a **Oridecon SQL repository**. The demo
 uses `DatabaseModule` with an in-memory SQLite database, a typed
 `DatabaseProviderProtocol`, and a small `TaskRepository`. It is intentionally
 about one resource: tasks.

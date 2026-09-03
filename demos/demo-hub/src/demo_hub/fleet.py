@@ -1,6 +1,6 @@
 """Fleet: boot every demo Application in-process and mount it on the hub.
 
-Each child is a complete Lexigram ``Application`` (own DI container, own
+Each child is a complete Oridecon ``Application`` (own DI container, own
 providers) whose Starlette app is mounted under ``/demos/<slug>/``. Demos
 keep working standalone — embedding simply reuses their module factories.
 """
@@ -16,12 +16,12 @@ from starlette.applications import Starlette
 
 from demo_hub.services.registry import ServiceRegistry
 from demo_hub.subsite import SubsiteMiddleware
-from lexigram.config.main import LexigramConfig
-from lexigram.logging import get_logger
-from lexigram.web.di.provider import WebProvider
+from oridecon.config.main import OrideconConfig
+from oridecon.logging import get_logger
+from oridecon.web.di.provider import WebProvider
 
 if TYPE_CHECKING:
-    from lexigram.app import Application
+    from oridecon.app import Application
 
 logger = get_logger(__name__)
 
@@ -58,7 +58,7 @@ class Fleet:
             if str(src) not in sys.path:
                 sys.path.append(str(src))
 
-    def _load_child_config(self, svc: ServiceRegistry.DemoService) -> LexigramConfig:
+    def _load_child_config(self, svc: ServiceRegistry.DemoService) -> OrideconConfig:
         """Load the child demo's own ``application.yaml``.
 
         When the hub mounts a child, cwd is the hub's directory, so the
@@ -68,8 +68,8 @@ class Fleet:
         """
         yaml_path = REPO_ROOT / "demos" / svc.demo_dir / "application.yaml"
         if yaml_path.exists():
-            return LexigramConfig.from_yaml(yaml_path)
-        return LexigramConfig()
+            return OrideconConfig.from_yaml(yaml_path)
+        return OrideconConfig()
 
     async def mount_all(self, parent: Starlette) -> None:
         """Boot every web demo and mount it under ``/demos/<slug>/``.

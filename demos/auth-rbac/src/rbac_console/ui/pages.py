@@ -1,6 +1,6 @@
 """Server-rendered pages + static assets for the RBAC console.
 
-Demonstrates the *page controller* half of a Lexigram web app: HTML lives
+Demonstrates the *page controller* half of a Oridecon web app: HTML lives
 in ``ui/views/``, assets in ``ui/static/``, and this controller serves
 them with zero business logic — every dynamic interaction goes through
 the JSON API in ``controllers/api.py`` instead.  HTMX/vanilla-JS in the
@@ -13,7 +13,7 @@ from pathlib import Path
 
 from starlette.requests import Request
 
-from lexigram.web import Controller, FileResponse, RedirectResponse, get
+from oridecon.web import Controller, FileResponse, RedirectResponse, get
 
 UI_ROOT = Path(__file__).resolve().parent
 VIEWS_ROOT = UI_ROOT / "views"
@@ -32,7 +32,7 @@ def _static(name: str, media_type: str) -> FileResponse:
 class PagesController(Controller):
     """Serve the console's HTML/JS/CSS; logic lives in the API controller.
 
-    Lexigram convention: page controllers are stateless — they serve
+    Oridecon convention: page controllers are stateless — they serve
     files and redirect, nothing more.  All dynamic behavior goes through
     the JSON API (RbacApiController).  HTMX/vanilla-JS in the views
     calls those endpoints directly.

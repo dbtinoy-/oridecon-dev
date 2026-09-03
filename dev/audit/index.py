@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
-from lexigram.serialization.backends import json as json_backend
+from oridecon.serialization.backends import json as json_backend
 from dev.audit.generators.base import AuditGeneratorProtocol
 from dev._lib.registry import GeneratorRegistry
 from dev._lib.validation import (
@@ -152,7 +152,7 @@ def render_index_markdown(
 ) -> str:
     """Render the audit index as markdown."""
 
-    markdown = f"""# {output_markdown} — Lexigram Framework Audit Index
+    markdown = f"""# {output_markdown} — Oridecon Framework Audit Index
 
 > **Source**: Registered audit generators and derived report summaries.
 > **Generated JSON**: `{output_json}`

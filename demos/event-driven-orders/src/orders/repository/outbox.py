@@ -25,8 +25,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-from lexigram.contracts.events import EventBusProtocol
-from lexigram.result import Err, Ok, Result
+from oridecon.contracts.events import EventBusProtocol
+from oridecon.result import Err, Ok, Result
 
 
 class OutboxStatus(str, Enum):

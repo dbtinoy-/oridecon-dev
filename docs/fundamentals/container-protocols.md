@@ -3,7 +3,7 @@ title: "Container Protocols"
 description: "Type-safe dependency injection via structural protocols."
 ---
 
-Lexigram uses **structural subtyping** to provide full type safety on the DI container. Rather than typing `container` parameters as a concrete class, you use Protocol types that describe exactly what operations a piece of code needs.
+Oridecon uses **structural subtyping** to provide full type safety on the DI container. Rather than typing `container` parameters as a concrete class, you use Protocol types that describe exactly what operations a piece of code needs.
 
 ## 1. Protocol Hierarchy
 
@@ -38,9 +38,9 @@ graph TB
 ## 2. Register vs. Boot
 
 ```python
-from lexigram.di.provider import Provider
-from lexigram.contracts.core.provider import ProviderPriority
-from lexigram.contracts.core.di import (
+from oridecon.di.provider import Provider
+from oridecon.contracts.core.provider import ProviderPriority
+from oridecon.contracts.core.di import (
     ContainerRegistrarProtocol,
     BootContainerProtocol,
 )
@@ -65,7 +65,7 @@ class BillingProvider(Provider):
 **Key principle:** The `register()` phase is purely declarative — it says *what* services exist, not *how* they are initialized. The `boot()` phase is where initialization and wiring happen.
 
 :::note
-The container is **frozen** before `boot()` runs — calling `singleton()`, `transient()`, or `scoped()` there raises `ContainerError` (LEX_ERR_DI_001). To replace an already-registered singleton during boot (e.g. wrapping a store with a decorator), use `container.bind(service_type, instance)`.
+The container is **frozen** before `boot()` runs — calling `singleton()`, `transient()`, or `scoped()` there raises `ContainerError` (ORI_ERR_DI_001). To replace an already-registered singleton during boot (e.g. wrapping a store with a decorator), use `container.bind(service_type, instance)`.
 :::
 
 ---
@@ -118,8 +118,8 @@ The dual `@overload` signatures on `singleton()`, `resolve()`, `resolve_optional
 You never inherit from a Protocol — any object that has the required methods satisfies it:
 
 ```python
-from lexigram.di.container import Container
-from lexigram.contracts.core.di import BootContainerProtocol
+from oridecon.di.container import Container
+from oridecon.contracts.core.di import BootContainerProtocol
 
 container = Container()
 assert isinstance(container, BootContainerProtocol)  # True
@@ -150,7 +150,7 @@ Run mypy on your provider package to confirm the container is fully typed:
 ```bash
 make type  # core + web + all qualified packages
 # or for just one package:
-make type-pkg PKG=lexigram-web
+make type-pkg PKG=oridecon-web
 ```
 
 Any `# type: ignore[attr-defined]` or `# type: ignore[type-abstract]` on container method calls indicates a signature needs updating.

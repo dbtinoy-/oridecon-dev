@@ -1,13 +1,13 @@
 # Events Timeline / Replay Lab
 
-A focused, offline integration contract for **`lexigram-events` + `WebModule`**.
+A focused, offline integration contract for **`oridecon-events` + `WebModule`**.
 
 The lab is a small event journal for one deterministic stream. The browser can:
 
 - publish `open`, `approve`, and intentionally failing `fail` events;
 - inspect the in-memory event-store history and global sequence numbers;
 - observe an event subscriber and a retrying handler failure;
-- replay stored history through Lexigram's optional `EventReplayProtocol`; and
+- replay stored history through Oridecon's optional `EventReplayProtocol`; and
 - check the lab's readiness, dispatch diagnostics, and offline backend details.
 
 There is no broker, database, worker, or external API. `EventsModule.configure()`
@@ -57,7 +57,7 @@ The standalone port is `8102`. The demo is also listed in Demo Hub as
    bus's retained asynchronous dispatch error count; successful publication
    remains an enqueue result by design.
 
-## Lexigram Concepts
+## Oridecon Concepts
 
 | Concept | How it's used |
 |---------|---------------|
@@ -67,7 +67,7 @@ The standalone port is `8102`. The demo is also listed in Demo Hub as
 | Event Subscribers | `event_bus.subscribe(TimelineEvent, ...)` registers two handlers: `record_delivery` for projections and `failure_probe` for retry visibility |
 | Event Replay | `EventReplayProtocol.replay_events()` replays stored history through subscribers without appending duplicates |
 | Event Diagnostics | `EventBusDiagnosticsProtocol.dispatch_errors` exposes bus-level async dispatch error counts for health reporting |
-| Result Pattern | `Result[T, E]` from `lexigram.result` wraps publish outcomes — `Ok` for enqueued, `Err` for rejected |
+| Result Pattern | `Result[T, E]` from `oridecon.result` wraps publish outcomes — `Ok` for enqueued, `Err` for rejected |
 | Provider Pattern | `TimelineLabProvider` extends `Provider` with `register()`, `boot()`, `shutdown()`, and `health_check()` lifecycle hooks |
 | Dependency Injection | Container `register()` binds types; `boot()` resolves `EventBusProtocol` and `EventStoreProtocol` and wires subscribers |
 | Health Checks | `HealthCheckResult` with `HealthStatus` reports provider wiring state; component-level health via optional `health_check()` protocol |

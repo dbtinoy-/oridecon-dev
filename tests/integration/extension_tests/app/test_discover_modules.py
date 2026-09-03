@@ -5,11 +5,11 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from lexigram.app.discovery import (
+from oridecon.app.discovery import (
     discover_modules_from_directories,
     discover_modules_from_entry_points,
 )
-from lexigram.di.module import Module, module
+from oridecon.di.module import Module, module
 
 
 class TestDiscoverModulesFromEntryPoints:
@@ -68,10 +68,10 @@ class TestDiscoverModulesFromEntryPoints:
             discover_modules_from_entry_points(group="myapp.modules")
         mock_ep.assert_called_once_with(group="myapp.modules")
 
-    def test_default_group_is_lexigram_modules(self) -> None:
+    def test_default_group_is_oridecon_modules(self) -> None:
         with patch("importlib.metadata.entry_points", return_value=[]) as mock_ep:
             discover_modules_from_entry_points()
-        mock_ep.assert_called_once_with(group="lexigram.modules")
+        mock_ep.assert_called_once_with(group="oridecon.modules")
 
 
 class TestDiscoverModulesFromDirectories:
@@ -86,7 +86,7 @@ class TestDiscoverModulesFromDirectories:
     def test_discovers_module_from_plugin_py(self, tmp_path: Path) -> None:
         plugin_file = tmp_path / "plugin.py"
         plugin_file.write_text(
-            "from lexigram.di.module import Module, module\n"
+            "from oridecon.di.module import Module, module\n"
             "\n"
             "@module()\n"
             "class MyModule(Module):\n"

@@ -1,6 +1,6 @@
 """Persona directory — role-keyed seeded users for the console.
 
-Lexigram convention: ``domain/`` holds framework-agnostic models and
+Oridecon convention: ``domain/`` holds framework-agnostic models and
 services.  This catalog is plain Python — no framework imports.
 
 Three personas ship with the demo — ``viewer``, ``editor``, ``admin`` —

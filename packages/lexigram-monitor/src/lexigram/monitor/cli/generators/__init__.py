@@ -1,1 +1,0 @@
-"""Monitor CLI generators."""

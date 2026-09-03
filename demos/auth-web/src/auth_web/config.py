@@ -5,9 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import ClassVar, cast
 
-from lexigram.config import BaseConfig
-from lexigram.contracts.core.config import Environment
-from lexigram.validation import ConfigDict, Field
+from oridecon.config import BaseConfig
+from oridecon.contracts.core.config import Environment
+from oridecon.validation import ConfigDict, Field
 
 
 @dataclass(init=False)
@@ -93,7 +93,7 @@ class AuthWebConfig(BaseConfig):
     model_config = cast(
         "ConfigDict",
         {
-            "env_prefix": "LEX_AUTH_WEB__",
+            "env_prefix": "ORI_AUTH_WEB__",
             "env_nested_delimiter": "__",
             "extra": "ignore",
         },

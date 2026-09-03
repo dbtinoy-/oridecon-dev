@@ -20,12 +20,12 @@ EXCLUDED_DIRS = {
 
 # Regex for direct env var access
 DIRECT_ENV_RE = re.compile(
-    r'(?:os\.environ\.get|os\.getenv|environ\.get|getenv)\s*\(\s*["\'](LEX_[A-Z0-9_]+)["\']'
+    r'(?:os\.environ\.get|os\.getenv|environ\.get|getenv)\s*\(\s*["\'](ORI_[A-Z0-9_]+)["\']'
 )
 
 # ENV_PREFIX or env_prefix constant
 ENV_PREFIX_RE = re.compile(
-    r'(?:ENV_PREFIX|env_prefix)\s*[=:]\s*["\'](LEX_[A-Z0-9_]+)["\']'
+    r'(?:ENV_PREFIX|env_prefix)\s*[=:]\s*["\'](ORI_[A-Z0-9_]+)["\']'
 )
 
 # Classes considered "config roots" — base classes for config models
@@ -35,22 +35,22 @@ CONFIG_BASE_CLASSES = {"BaseConfig", "BaseDomainConfig"}
 # Each is excluded from REF_ENV_VARS.md and .env.example; the YAML key keeps
 # working, only the env override is dead.
 #
-# - LEX_LEXIGRAM__HEALTH__STARTUP__TIMEOUT: HealthConfig/StartupProbeConfig
+# - ORI_ORIDECON__HEALTH__STARTUP__TIMEOUT: HealthConfig/StartupProbeConfig
 #   are plain dataclasses; pydantic coerces the direct ``health`` field but
 #   leaves the nested ``startup`` dict unconverted, so no env value reaches
 #   StartupProbeConfig.timeout (and no runtime consumer reads the raw dict).
-# - LEX_WEB__SECURITY__CSP__DIRECTIVES: CSPConfig.directives expects a dict;
+# - ORI_WEB__SECURITY__CSP__DIRECTIVES: CSPConfig.directives expects a dict;
 #   EnvironmentConfigSource delivers a string, CSPConfig construction raises,
 #   and the coercion fallback replaces the whole csp node with a raw dict.
-# - LEX_AI_MCP__CONNECTORS__*: ConnectorsConfig is a plain dataclass nested
+# - ORI_AI_MCP__CONNECTORS__*: ConnectorsConfig is a plain dataclass nested
 #   inside pydantic MCPConfig. The first level coerces, but each connector
 #   child (slack/github/sql/...) flips to a raw dict when an env var targets
 #   it — the value never reaches the typed connector config fields.
 YAML_ONLY_FIELDS: set[str] = {
-    "LEX_LEXIGRAM__HEALTH__STARTUP__TIMEOUT",
-    "LEX_WEB__SECURITY__CSP__DIRECTIVES",
+    "ORI_ORIDECON__HEALTH__STARTUP__TIMEOUT",
+    "ORI_WEB__SECURITY__CSP__DIRECTIVES",
 } | {
-    f"LEX_AI_MCP__CONNECTORS__{leaf}"
+    f"ORI_AI_MCP__CONNECTORS__{leaf}"
     for leaf in (
         "FILESYSTEM__READ_ONLY",
         "FILESYSTEM__ROOT_DIR",

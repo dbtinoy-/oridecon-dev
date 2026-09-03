@@ -1,6 +1,6 @@
 """The protected resource — an in-memory article store.
 
-Lexigram convention: ``domain/`` holds framework-agnostic models and
+Oridecon convention: ``domain/`` holds framework-agnostic models and
 services.  No framework imports here — just plain dataclasses.  The DI
 container treats them like any other service (see ``di/provider.py``),
 and swapping this in-memory implementation for Postgres later changes
@@ -24,7 +24,7 @@ class Article:
     """One demo article row.
 
     Plain dataclass — no framework imports, no Pydantic, no ORM.
-    Lexigram convention: domain models are framework-agnostic dataclasses.
+    Oridecon convention: domain models are framework-agnostic dataclasses.
     The DI container treats them like any other service.
     """
 

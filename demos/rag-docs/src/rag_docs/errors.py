@@ -20,7 +20,7 @@ Usage::
 
 from __future__ import annotations
 
-from lexigram.contracts.ai.exceptions import RAGError
+from oridecon.contracts.ai.exceptions import RAGError
 
 
 class DocsAskError(RAGError):

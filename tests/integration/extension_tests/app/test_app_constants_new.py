@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from lexigram.app.constants import (
+from oridecon.app.constants import (
     ENV_PREFIX,
     ENV_NESTED_DELIMITER,
     DEFAULT_APP_NAME,
@@ -15,13 +15,13 @@ class TestAppConstants:
     """Tests for app constants."""
 
     def test_env_prefix(self) -> None:
-        assert ENV_PREFIX == "LEX_APP__"
+        assert ENV_PREFIX == "ORI_APP__"
 
     def test_env_nested_delimiter(self) -> None:
         assert ENV_NESTED_DELIMITER == "__"
 
     def test_default_app_name(self) -> None:
-        assert DEFAULT_APP_NAME == "lexigram-app"
+        assert DEFAULT_APP_NAME == "oridecon-app"
 
     def test_default_shutdown_timeout(self) -> None:
         assert DEFAULT_SHUTDOWN_TIMEOUT == 30.0

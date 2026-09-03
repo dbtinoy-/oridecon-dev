@@ -1,8 +1,8 @@
-"""Version drift check + bump for the Lexigram workspace.
+"""Version drift check + bump for the Oridecon workspace.
 
 Compares the local version in each package's pyproject.toml against the
 latest version published on PyPI, and computes the next version following
-the Lexigram scheme (AGENTS.md §3.6):
+the Oridecon scheme (AGENTS.md §3.6):
 
     0.<minor>.<patch><build>      e.g. 0.1.2, 0.1.3001, 0.1.3002
 
@@ -89,7 +89,7 @@ def pypi_latest(name: str) -> str | None:
 
 
 def split_version(version: str) -> tuple[int, int, int]:
-    """Return (minor, patch, build) from a Lexigram version string."""
+    """Return (minor, patch, build) from a Oridecon version string."""
     parts = version.split(".")
     minor = int(parts[1]) if len(parts) > 1 and parts[1].isdigit() else 0
     tail = parts[2] if len(parts) > 2 and parts[2].isdigit() else "0"
@@ -106,7 +106,7 @@ def format_version(minor: int, patch: int, build: int) -> str:
 
 
 def next_version(version: str, bump: str = "build") -> str:
-    """Next version following the Lexigram scheme from the given base."""
+    """Next version following the Oridecon scheme from the given base."""
     minor, patch, build = split_version(version)
     if bump == "minor":
         return format_version(minor + 1, 1, 1)

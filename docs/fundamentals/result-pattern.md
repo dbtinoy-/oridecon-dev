@@ -3,14 +3,14 @@ title: "Result Pattern"
 description: "Functional error handling using Result[T, E] for predictable application flow."
 ---
 
-Lexigram discourages the use of exceptions for expected, recoverable business failures (e.g., "User Not Found" or "Validation Failed"). Instead, we use the **Result Pattern**, which forces explicit handling of failure states at the type level.
+Oridecon discourages the use of exceptions for expected, recoverable business failures (e.g., "User Not Found" or "Validation Failed"). Instead, we use the **Result Pattern**, which forces explicit handling of failure states at the type level.
 
 ## 1. Ok and Err
 
 The `Result` type is a union of two states: `Ok` (success) and `Err` (failure).
 
 ```python
-from lexigram.result import Result, Ok, Err
+from oridecon.result import Result, Ok, Err
 
 def divide(a: int, b: int) -> Result[float, str]:
     if b == 0:
@@ -20,11 +20,11 @@ def divide(a: int, b: int) -> Result[float, str]:
 
 ### Result Type Origin
 
-`Result`, `Ok`, and `Err` live in `lexigram.contracts.core.result` and are re-exported via:
+`Result`, `Ok`, and `Err` live in `oridecon.contracts.core.result` and are re-exported via:
 
 ```python
-from lexigram.result import Result, Ok, Err  # Canonical import
-from lexigram import Result, Ok, Err          # Also available from top-level
+from oridecon.result import Result, Ok, Err  # Canonical import
+from oridecon import Result, Ok, Err          # Also available from top-level
 ```
 
 ---
@@ -70,7 +70,7 @@ match result:
 ### Fluent Mapping
 
 ```python
-from lexigram.result import pipeline
+from oridecon.result import pipeline
 
 # Chain operations with ResultPipeline
 name = (
@@ -90,7 +90,7 @@ You can chain operations without explicit error checks at every step. If any ste
 ### Map and Then
 
 ```python
-from lexigram.result import Result, Ok, Err
+from oridecon.result import Result, Ok, Err
 
 async def fetch_user(user_id: str) -> Result[User, DomainError]: ...
 async def check_permissions(user: User) -> Result[User, PermissionError]: ...
@@ -126,7 +126,7 @@ valid = result.filter(lambda u: u.is_active, InactiveUserError())
 ### Decorators
 
 ```python
-from lexigram.result import as_result, as_result_sync
+from oridecon.result import as_result, as_result_sync
 
 @as_result(IOError, TimeoutError)
 async def fetch(url: str) -> bytes:
@@ -140,7 +140,7 @@ def parse(data: str) -> int:
 ### Collect and Partition
 
 ```python
-from lexigram.result import collect, partition
+from oridecon.result import collect, partition
 
 results = [ok1, err1, ok2, err2]
 
@@ -154,7 +154,7 @@ oks, errs = partition(results)
 ### Try/Catch
 
 ```python
-from lexigram.result import try_catch, try_catch_sync
+from oridecon.result import try_catch, try_catch_sync
 
 # Async
 result = await try_catch((IOError, TimeoutError), fetch, url)
@@ -170,8 +170,8 @@ result = try_catch_sync((ValueError, KeyError), parse, "42")
 ### Domain Errors (Expected Failures)
 
 ```python
-from lexigram.result import Result
-from lexigram.contracts.exceptions.domain import DomainError, NotFoundError
+from oridecon.result import Result
+from oridecon.contracts.exceptions.domain import DomainError, NotFoundError
 
 async def find_user(self, user_id: str) -> Result[User, DomainError]:
     user = await self.repo.get(user_id)

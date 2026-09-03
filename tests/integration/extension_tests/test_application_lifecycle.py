@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from lexigram.app.base import Application, AppState
-from lexigram.app.events import (
+from oridecon.app.base import Application, AppState
+from oridecon.app.events import (
     ApplicationStarted,
     ApplicationStarting,
     ApplicationStopped,
@@ -14,9 +14,9 @@ from lexigram.app.events import (
     ProviderBooted,
     ProviderRegistered,
 )
-from lexigram.app.invoker import Invoker
-from lexigram.app.di.provider import CoreProvider
-from lexigram.contracts.core import MiddlewarePipelineProtocol
+from oridecon.app.invoker import Invoker
+from oridecon.app.di.provider import CoreProvider
+from oridecon.contracts.core import MiddlewarePipelineProtocol
 
 # ---------------------------------------------------------------------------
 # Lifecycle event dataclasses
@@ -88,8 +88,8 @@ class TestContainerAwareApplication:
     async def test_container_resolve_after_boot(self) -> None:
         app = Application(name="test")
         # Register manually to avoid full provider boot
-        from lexigram.contracts.events import EventBusProtocol
-        from lexigram.testing.memory.event_bus import InMemoryEventBus
+        from oridecon.contracts.events import EventBusProtocol
+        from oridecon.testing.memory.event_bus import InMemoryEventBus
 
         bus = InMemoryEventBus()
         app.container.singleton(EventBusProtocol, bus)

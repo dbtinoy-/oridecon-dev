@@ -1,11 +1,11 @@
-"""Browser API for the focused Lexigram workflow demo."""
+"""Browser API for the focused Oridecon workflow demo."""
 
 from __future__ import annotations
 
 from typing import Any
 
 from approval_flow.services.flow import ApprovalFlowService
-from lexigram.web import Controller, get, post
+from oridecon.web import Controller, get, post
 
 
 class ApprovalFlowApiController(Controller):

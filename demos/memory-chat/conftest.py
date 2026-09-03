@@ -25,7 +25,7 @@ from starlette.applications import Starlette
 
 _DEMO_ROOT = Path(__file__).resolve().parent
 
-# Lexigram discovers application.yaml from cwd — pin it so tests work
+# Oridecon discovers application.yaml from cwd — pin it so tests work
 # from any invocation point (repo root or in-demo).
 os.chdir(_DEMO_ROOT)
 # Add src/ to sys.path so ``from memory_chat...`` resolves in tests.
@@ -35,9 +35,9 @@ from datetime import UTC, datetime  # noqa: E402
 
 from memory_chat.app import create_app  # noqa: E402 — after sys.path setup
 
-from lexigram.primitives import clock  # noqa: E402
-from lexigram.testing.clock import FixedClock  # noqa: E402
-from lexigram.web.di.provider import WebProvider  # noqa: E402
+from oridecon.primitives import clock  # noqa: E402
+from oridecon.testing.clock import FixedClock  # noqa: E402
+from oridecon.web.di.provider import WebProvider  # noqa: E402
 
 _TURN_EPOCH = datetime(2026, 1, 1, tzinfo=UTC)
 

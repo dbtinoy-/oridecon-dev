@@ -18,7 +18,7 @@ the `export` extra) — so `.xlsx` uploads failing with
   - `openpyxl` is imported lazily behind the same `HAS_OPENPYXL` guard
     pattern as the Excel export adapter. When missing, the parser
     returns a **file-level error** ("Excel import requires the optional
-    'openpyxl' dependency — install `lexigram-admin[export]`"), which
+    'openpyxl' dependency — install `oridecon-admin[export]`"), which
     `parse()` already turns into a clean `Err` — no crash, no traceback.
   - `load_workbook(read_only=True, data_only=True)` (formula *results*,
     never formulas), active sheet, first row = headers. Unnamed columns
@@ -41,7 +41,7 @@ the `export` extra) — so `.xlsx` uploads failing with
 |---|---|
 | `services/import_/service.py` | Guarded `openpyxl` import; `_parse_xlsx()`; `.xlsx` dispatch branch; updated unsupported-format message. |
 | `actions/standard/imports.py` | `DEFAULT_ACCEPT_EXTENSIONS` += `.xlsx`. |
-| `lexigram-ui/.../data_table_client_logic.py` | File-picker default accept += `.xlsx`. |
+| `oridecon-ui/.../data_table_client_logic.py` | File-picker default accept += `.xlsx`. |
 | tests | Round-trip parse of a real openpyxl workbook (skipped when openpyxl is absent), string-strip/None semantics, blank-row/ragged-row handling, column_map remapping, corrupt-file Err, missing-openpyxl Err (monkeypatched guard), accept-extension defaults. |
 
 ## 4. Implementation notes (post-verify)

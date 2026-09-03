@@ -7,7 +7,7 @@ turn 1 shape replies turns later — and never leak across owners. No model
 anywhere: a deterministic template responder proves the memory subsystem
 works standalone.
 
-## Lexigram concepts used
+## Oridecon concepts used
 
 | Concept | Where in this demo | Your app |
 |---------|-------------------|----------|
@@ -22,7 +22,7 @@ works standalone.
 
 ## What it shows
 
-| Piece | Where | Lexigram API used |
+| Piece | Where | Oridecon API used |
 |-------|-------|-------------------|
 | Three-tier memory | `app.py` | `MemoryModule` registers working/episodic/semantic protocols |
 | Episodic record + recall | `repository/memory_repository.py` | `EpisodicMemoryProtocol.record`, `.recall(MemoryQuery)` |
@@ -66,7 +66,7 @@ PYTHONPATH=src uv run python -m memory_chat
 
 Open http://127.0.0.1:8083. The chat page has alice/bob tabs, a shared
 thread view, and a facts sidebar.  Override the port without touching
-yaml: `LEX_WEB__SERVER__PORT=9000`.
+yaml: `ORI_WEB__SERVER__PORT=9000`.
 
 ## API Endpoints
 
@@ -84,7 +84,7 @@ whole two-session story.
 ## Layout — read it in this order
 
 Start at the composition root and follow the wiring outward.
-Each file has teaching comments explaining the Lexigram convention it follows.
+Each file has teaching comments explaining the Oridecon convention it follows.
 
 | # | File | Lesson |
 |---|------|--------|
@@ -117,7 +117,7 @@ demos/memory-chat/
 │   │   └── responder.py                # template reply renderer
 │   ├── ui/                             # pages controller + views/ + static/
 │   └── data/                           # empty (memory is the data layer)
-├── application.yaml                    # web/ai_memory sections (LEX_* overrides win)
+├── application.yaml                    # web/ai_memory sections (ORI_* overrides win)
 └── tests/                              # 23 tests: service, extraction, responder, e2e
 ```
 

@@ -1,7 +1,7 @@
 # Demos
 
 > **Twenty-two runnable, fully-gated demo apps** — each one is a living tutorial
-> for Lexigram, built on the editable framework packages in this repository:
+> for Oridecon, built on the editable framework packages in this repository:
 > a hub console plus focused capability and infrastructure demos, all
 > web-first and deterministic where the domain allows it.
 
@@ -136,7 +136,7 @@ Close the quality loop without a model call:
 
 ### [auth-web](auth-web/) — browser account lifecycle
 
-Register, log in, manage sessions and passwords over `lexigram-auth`:
+Register, log in, manage sessions and passwords over `oridecon-auth`:
 
 - **Cookie sessions** — `SessionCookieBackend` with revocation across
   browsers, HttpOnly by default
@@ -188,7 +188,7 @@ Content generation and structured extraction without an API key:
 - **Content generation** — style control and retry handling
 - **Structured extraction** — parse model output into typed product data
 
-### [monitor-stack](monitor-stack/) — the Lexigram MonitorModule
+### [monitor-stack](monitor-stack/) — the Oridecon MonitorModule
 
 A browser console over the package's real observability protocols:
 
@@ -196,7 +196,7 @@ A browser console over the package's real observability protocols:
 - **Metrics** — counters, gauges, histograms, and instrument introspection
 - **Tracing** — timed spans with IDs and attributes through DI
 
-### [queue-worker](queue-worker/) — an automatic Lexigram consumer
+### [queue-worker](queue-worker/) — an automatic Oridecon consumer
 
 Publish to one `tasks` topic and watch the package consumer handle messages:
 
@@ -204,7 +204,7 @@ Publish to one `tasks` topic and watch the package consumer handle messages:
 - **MessageConsumer** — subscription starts at provider boot; no pull CLI
 - **Retry metadata** — `BusMessage` receives the configured retry policy
 
-### [rag-pipeline](rag-pipeline/) — Lexigram VectorModule retrieval
+### [rag-pipeline](rag-pipeline/) — Oridecon VectorModule retrieval
 
 A complete retrieval pipeline without an external vector database:
 
@@ -212,7 +212,7 @@ A complete retrieval pipeline without an external vector database:
 - **Chunking** — split documents into indexable pieces
 - **Context synthesis** — format ranked sources for generation
 
-### [sql-repository](sql-repository/) — Lexigram DatabaseModule CRUD
+### [sql-repository](sql-repository/) — Oridecon DatabaseModule CRUD
 
 A single task resource backed by an in-memory SQLite database:
 
@@ -220,7 +220,7 @@ A single task resource backed by an in-memory SQLite database:
 - **Repository boundary** — SQL stays out of the thin HTTP controller
 - **Browser mutations** — create, update, delete, and aggregate stats
 
-### [webhook-relay](webhook-relay/) — Lexigram WebhookModule verification
+### [webhook-relay](webhook-relay/) — Oridecon WebhookModule verification
 
 A browser-visible inbound webhook flow without an external receiver:
 
@@ -228,7 +228,7 @@ A browser-visible inbound webhook flow without an external receiver:
 - **HMAC-SHA256** — verify canonical raw payloads in constant time
 - **Accepted ledger** — keep the demo focused while making results visible
 
-### [feature-flags](feature-flags/) — Lexigram FeatureFlagsModule
+### [feature-flags](feature-flags/) — Oridecon FeatureFlagsModule
 
 A release desk for controlled rollouts:
 
@@ -236,7 +236,7 @@ A release desk for controlled rollouts:
 - **Runtime controls** — force a flag on/off, clear overrides, and flush TTL cache
 - **Audit trail** — inspect the package-owned FlagManager override history
 
-### [approval-flow](approval-flow/) — Lexigram WorkflowModule
+### [approval-flow](approval-flow/) — Oridecon WorkflowModule
 
 An interactive purchase approval state machine:
 
@@ -244,7 +244,7 @@ An interactive purchase approval state machine:
 - **ApprovalChain preview** — run an ALL policy without mutating the request
 - **Retry and compensation** — recover rejected or approved flows and inspect transition history
 
-### [artifact-vault](artifact-vault/) — Lexigram StorageModule
+### [artifact-vault](artifact-vault/) — Oridecon StorageModule
 
 A browser object-storage workbench using the memory driver:
 
@@ -252,7 +252,7 @@ A browser object-storage workbench using the memory driver:
 - **Preview and delete** — exercise list, info, download, and delete operations
 - **Honest access capabilities** — see public URL behavior and why memory has no presigned URL
 
-### [event-timeline](event-timeline/) — Lexigram EventsModule + WebModule
+### [event-timeline](event-timeline/) — Oridecon EventsModule + WebModule
 
 A focused event journal for one in-memory stream:
 

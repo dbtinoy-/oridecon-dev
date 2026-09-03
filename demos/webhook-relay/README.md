@@ -1,7 +1,7 @@
 # Webhook Relay Demo
 
-A focused, browser-first example of **Lexigram WebhookModule** for inbound
-event verification. Lexigram owns subscription storage, secret generation,
+A focused, browser-first example of **Oridecon WebhookModule** for inbound
+event verification. Oridecon owns subscription storage, secret generation,
 constant-time HMAC verification, delivery infrastructure, and lifecycle. The
 demo adds only a local event ledger so accepted events are visible immediately
 without a second receiver service.
@@ -60,7 +60,7 @@ Open the URL printed by the server and send a sample event.
 
 | Method | Path | Description |
 |--------|------|-------------|
-| `POST` | `/api/webhook/subscriptions` | Create a Lexigram subscription |
+| `POST` | `/api/webhook/subscriptions` | Create a Oridecon subscription |
 | `GET` | `/api/webhook/subscriptions` | List active subscriptions |
 | `POST` | `/api/webhook/receive` | Accept an event; optionally verify it |
 | `POST` | `/api/webhook/validate` | Verify a raw payload with the demo key |
@@ -71,7 +71,7 @@ Open the URL printed by the server and send a sample event.
 ## Generating a valid raw-payload signature
 
 ```python
-from lexigram.webhook.verification.hmac import HMACSignatureVerifier
+from oridecon.webhook.verification.hmac import HMACSignatureVerifier
 
 verifier = HMACSignatureVerifier()
 signature = verifier.compute_signature(

@@ -1,6 +1,6 @@
-# AUDIT_DOC_LINKS.md — Lexigram Documentation Link Audit
+# AUDIT_DOC_LINKS.md — Oridecon Documentation Link Audit
 
-> **Source**: Internal markdown links inside `docs/lexigram-docs/`.
+> **Source**: Internal markdown links inside `docs/oridecon-docs/`.
 > A link is *dead* when its target file does not exist, when a
 > `/packages/<name>/` route points at a package without a `docs/`
 > folder, or when its heading anchor is missing from the target.

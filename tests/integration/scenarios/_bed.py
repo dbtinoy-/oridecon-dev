@@ -1,7 +1,7 @@
 """Scenario test-bed helpers for the cross-package integration suite.
 
 The scenario tests use a small `ScenarioTestBed` facade over
-:class:`~lexigram.testing.harness.testbed.AppTestBed`. It exposes the two
+:class:`~oridecon.testing.harness.testbed.AppTestBed`. It exposes the two
 conveniences the scenario files assume:
 
 - ``bed.db`` — ``fetch_one``/``fetch_all`` over the real DatabaseService.
@@ -19,7 +19,7 @@ from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from lexigram.testing.harness.testbed import AppTestBed
+    from oridecon.testing.harness.testbed import AppTestBed
 
 
 class ScenarioDatabase:
@@ -36,7 +36,7 @@ class ScenarioDatabase:
 
     async def _service(self) -> Any:
         if self._db is None:
-            from lexigram.contracts.data import DatabaseProviderProtocol
+            from oridecon.contracts.data import DatabaseProviderProtocol
 
             self._db = await self._container.resolve(DatabaseProviderProtocol)
         return self._db
@@ -65,7 +65,7 @@ class ScenarioEvents:
 
     async def _service(self) -> Any:
         if self._bus is None:
-            from lexigram.events.buses import EventBusImpl
+            from oridecon.events.buses import EventBusImpl
 
             self._bus = await self._container.resolve(EventBusImpl)
         return self._bus
@@ -93,15 +93,15 @@ class ScenarioAudit:
 
     async def _store_service(self) -> Any:
         if self._store is None:
-            from lexigram.contracts.audit import AuditStoreProtocol
+            from oridecon.contracts.audit import AuditStoreProtocol
 
             self._store = await self._container.resolve(AuditStoreProtocol)
         return self._store
 
     async def _verifier_service(self) -> Any:
         if self._verifier is None:
-            from lexigram.audit.config import AuditConfig
-            from lexigram.audit.verification.verifier import AuditVerifier
+            from oridecon.audit.config import AuditConfig
+            from oridecon.audit.verification.verifier import AuditVerifier
 
             store = await self._store_service()
             config = await self._container.resolve(AuditConfig)
@@ -110,7 +110,7 @@ class ScenarioAudit:
 
     async def entries(self, resource_id: str) -> list[Any]:
         """Return audit entries recorded for *resource_id*."""
-        from lexigram.contracts.audit import AuditQuery
+        from oridecon.contracts.audit import AuditQuery
 
         store = await self._store_service()
         return await store.query(
@@ -133,21 +133,21 @@ class ScenarioTasks:
 
     async def _queue_service(self) -> Any:
         if self._queue is None:
-            from lexigram.contracts.infra.tasks import TaskQueueProtocol
+            from oridecon.contracts.infra.tasks import TaskQueueProtocol
 
             self._queue = await self._container.resolve(TaskQueueProtocol)
         return self._queue
 
     async def _result_service(self) -> Any:
         if self._result_store is None:
-            from lexigram.tasks.results.core import ResultStore
+            from oridecon.tasks.results.core import ResultStore
 
             self._result_store = await self._container.resolve(ResultStore)
         return self._result_store
 
     async def enqueue(self, name: str, **kwargs: Any) -> str:
         """Enqueue a job and return its id."""
-        from lexigram.tasks.models.job import JobProtocol
+        from oridecon.tasks.models.job import JobProtocol
 
         queue = await self._queue_service()
         # ``JobProtocol.__post_init__`` fills the id when it is empty.
@@ -157,7 +157,7 @@ class ScenarioTasks:
 
     async def wait(self, job_id: str, timeout: float = 10.0) -> Any:
         """Wait for the job result and return it (or ``None`` on timeout)."""
-        from lexigram.tasks.models.job import JobResult
+        from oridecon.tasks.models.job import JobResult
 
         store = await self._result_service()
         result = await store.wait(job_id, timeout=timeout)
@@ -198,7 +198,7 @@ async def scenario_bed(
     factory: Any, overrides: dict[type, Any] | None = None
 ) -> AsyncIterator[ScenarioTestBed]:
     """Boot an app via ``AppTestBed`` and yield a :class:`ScenarioTestBed`."""
-    from lexigram.testing.harness.testbed import AppTestBed
+    from oridecon.testing.harness.testbed import AppTestBed
 
     async with AppTestBed.from_factory(factory, overrides=overrides) as bed:
         yield ScenarioTestBed(bed)

@@ -5,12 +5,12 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import Any
 
-from lexigram.contracts.queue.types import BusMessage
-from lexigram.queue.consumers.consumer import MessageConsumer
+from oridecon.contracts.queue.types import BusMessage
+from oridecon.queue.consumers.consumer import MessageConsumer
 
 
 class MessageProcessor(MessageConsumer):
-    """Lexigram ``MessageConsumer`` that records handled task messages."""
+    """Oridecon ``MessageConsumer`` that records handled task messages."""
 
     def __init__(self, queue: Any, topic: str = "tasks") -> None:
         super().__init__(queue)
@@ -34,7 +34,7 @@ class MessageProcessor(MessageConsumer):
         return len(self._processed)
 
     def is_running(self) -> bool:
-        """Return whether the Lexigram consumer subscription is active."""
+        """Return whether the Oridecon consumer subscription is active."""
         return self._running
 
     def get_processed(self) -> list[dict[str, Any]]:

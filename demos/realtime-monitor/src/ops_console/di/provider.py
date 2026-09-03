@@ -11,18 +11,18 @@ from __future__ import annotations
 
 import asyncio
 
-from lexigram.contracts.core.di import (
+from oridecon.contracts.core.di import (
     BootContainerProtocol,
     ContainerRegistrarProtocol,
 )
-from lexigram.contracts.core.health import (
+from oridecon.contracts.core.health import (
     HealthCheckCategory,
     HealthCheckResult,
     HealthStatus,
 )
-from lexigram.contracts.core.provider import ProviderPriority
-from lexigram.di.provider import Provider
-from lexigram.logging import get_logger
+from oridecon.contracts.core.provider import ProviderPriority
+from oridecon.di.provider import Provider
+from oridecon.logging import get_logger
 from ops_console.config import RealtimeConfig
 from ops_console.controllers.api import ConsoleController, EventsStreamHandler
 from ops_console.controllers.operator import OperatorHandler

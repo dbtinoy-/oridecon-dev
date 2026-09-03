@@ -25,7 +25,7 @@ from starlette.applications import Starlette
 
 _DEMO_ROOT = Path(__file__).resolve().parent
 
-# Lexigram discovers application.yaml from cwd — pin it so tests work
+# Oridecon discovers application.yaml from cwd — pin it so tests work
 # from any invocation point (repo root or in-demo).
 os.chdir(_DEMO_ROOT)
 # Add src/ to sys.path so ``from support_agent...`` resolves in tests.
@@ -46,7 +46,7 @@ async def app() -> AsyncIterator[Starlette]:
     application = create_app()
     await application.start()
     try:
-        from lexigram.web.di.provider import WebProvider
+        from oridecon.web.di.provider import WebProvider
 
         web = await application.container.resolve(WebProvider)
         yield web.starlette

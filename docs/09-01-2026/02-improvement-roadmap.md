@@ -1,6 +1,6 @@
-# 02 — Improvement Roadmap: Professional-Grade lexigram-admin
+# 02 — Improvement Roadmap: Professional-Grade oridecon-admin
 
-Goal: take lexigram-admin from "feature-rich but rough on first contact" to
+Goal: take oridecon-admin from "feature-rich but rough on first contact" to
 a tool an operator can install, boot, and trust in production without
 reading source code. Items are ordered by leverage; each lists intent,
 approach, and acceptance criteria so any contributor can pick one up.
@@ -16,7 +16,7 @@ The first 15 minutes decide whether a team adopts an admin framework.
 
 - **R1. One-call bootstrap — DONE.** `create_app()` now returns a working,
   mounted app with sane SQLite defaults; `container=`/`database_url=`
-  escape hatches for real deployments. *Follow-up:* a `lexigram admin dev`
+  escape hatches for real deployments. *Follow-up:* a `oridecon admin dev`
   CLI command that runs `create_app` + uvicorn with auto-reload.
 - **R2. Un-brickable first run — DONE.** Setup-token-verified first admin
   (B3), truthful setup outcome on all drivers (B8), super-admin actually
@@ -30,7 +30,7 @@ The first 15 minutes decide whether a team adopts an admin framework.
 ## Phase 2 — Trust: errors, observability, coherence
 
 - **R4. Friendly-error discipline — DONE (2026-09-01).** Shared
-  `controllers/_errors.py::humanize_error()` strips `[LEX_ERR_*]` codes and
+  `controllers/_errors.py::humanize_error()` strips `[ORI_ERR_*]` codes and
   `→ Fix:`/`→ See:` annotations **anywhere** in chained messages (the old
   helper only handled a leading prefix); `_humanize_error` in auth/core now
   delegates to it. The last raw-exception render (setup wizard's
@@ -43,7 +43,7 @@ The first 15 minutes decide whether a team adopts an admin framework.
   SQL stores (temp SQLite, default security settings) and walks
   setup → login → dashboard → list → create → edit → logout, plus a
   second-submission lockout scenario. Every page is checked for hygiene
-  (single title, no CDN refs, no `LEX_ERR` leaks). Guards B1–B8.
+  (single title, no CDN refs, no `ORI_ERR` leaks). Guards B1–B8.
 - **R8. Silence expected contributor failures at boot — DONE (2026-09-01).**
   Two layers: the admin contributor sub-provider now catches
   `UnresolvableDependencyError` from `on_admin_boot` and logs a one-line
@@ -51,7 +51,7 @@ The first 15 minutes decide whether a team adopts an admin framework.
   faults); the webhook contributor does the same on its own resolve path
   (`webhook.admin_contributor_disabled`). Verified: playground boot log now
   contains **zero** tracebacks. *Follow-up:* other contributors
-  (web/cache/auth/events/queue) still log multi-line LEX_ERR text in their
+  (web/cache/auth/events/queue) still log multi-line ORI_ERR text in their
   single-line warnings — normalize to the same terse pattern.
 - **R6. Unify the permission scheme — DONE (2026-09-01).** New canonical
   module `auth/permission_scheme.py`: `.view/.create/.update/.delete` are
@@ -80,12 +80,12 @@ The first 15 minutes decide whether a team adopts an admin framework.
   browser and stays machine-readable for `Accept: application/json`.
 - **R9. De-duplicate log emission — DONE (2026-09-01).** Every
   INSERT/UPDATE/DELETE was logged twice: `DatabaseOperationContext.__aexit__`
-  (lexigram-sql `crud_operations.py`) emitted its own query-log entry while
+  (oridecon-sql `crud_operations.py`) emitted its own query-log entry while
   the inner `QueryExecutor.execute_modify` also logged the same statement in
   its `finally`. The context manager no longer logs — the query executor is
   the single source of query-log emission; the context keeps connection
   lifecycle, timing, and `DatabaseError` normalisation. Regression tests:
-  `packages/lexigram-sql/tests/unit/test_query_log_single_emission.py`
+  `packages/oridecon-sql/tests/unit/test_query_log_single_emission.py`
   (one entry per INSERT/UPDATE/DELETE/SELECT, including the failure path).
   Verified live: audit-log INSERT lines now appear exactly once at boot.
 
@@ -144,7 +144,7 @@ The first 15 minutes decide whether a team adopts an admin framework.
   (`admin_schema_markers`) skips the eight sequential store ensures on warm
   boots (~18 DDL statements → 3); staleness-guard test auto-invalidates the
   marker whenever store DDL changes. Verification also uncovered and fixed
-  **B12** (lexigram-sql `DatabaseService.execute` never committed DML on
+  **B12** (oridecon-sql `DatabaseService.execute` never committed DML on
   SQLite). Full plan in [11-startup-cost.md](11-startup-cost.md).
 - **R16. Request-scoped caching.** ✅ Done — short-TTL in-process
   `SessionUserCache` (default 5 s, `admin.auth.session_cache_ttl`, 0

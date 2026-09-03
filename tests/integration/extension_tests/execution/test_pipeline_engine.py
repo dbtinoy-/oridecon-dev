@@ -6,8 +6,8 @@ import asyncio
 
 import pytest
 
-from lexigram.contracts.exceptions import PipelineExecutionError
-from lexigram.workflow.pipeline import (
+from oridecon.contracts.exceptions import PipelineExecutionError
+from oridecon.workflow.pipeline import (
     ConditionalStep,
     FunctionStep,
     ParallelStep,
@@ -21,7 +21,7 @@ from lexigram.workflow.pipeline import (
     pipeline_step,
     step,
 )
-from lexigram.result import Err, Ok
+from oridecon.result import Err, Ok
 
 
 

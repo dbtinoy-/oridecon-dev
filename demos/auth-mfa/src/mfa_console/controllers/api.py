@@ -11,21 +11,21 @@ from typing import Any
 
 from starlette.requests import Request
 
-from lexigram.auth.authn.services import AuthenticationService
-from lexigram.auth.authn.user_service import UserService
-from lexigram.auth.config import AuthConfig
-from lexigram.auth.exceptions import AccountLockedError, InvalidCredentialsError
-from lexigram.auth.mfa.manager import MFAManager
-from lexigram.auth.session.cookie_backend import SessionCookieBackend
-from lexigram.contracts.exceptions.domain import (
+from oridecon.auth.authn.services import AuthenticationService
+from oridecon.auth.authn.user_service import UserService
+from oridecon.auth.config import AuthConfig
+from oridecon.auth.exceptions import AccountLockedError, InvalidCredentialsError
+from oridecon.auth.mfa.manager import MFAManager
+from oridecon.auth.session.cookie_backend import SessionCookieBackend
+from oridecon.contracts.exceptions.domain import (
     AuthenticationError,
     ConflictError,
 )
-from lexigram.logging import get_logger
-from lexigram.primitives import clock
-from lexigram.result import Err, Ok, Result
-from lexigram.serialization import loads as json_loads
-from lexigram.web import Controller, JSONResponse, get, post
+from oridecon.logging import get_logger
+from oridecon.primitives import clock
+from oridecon.result import Err, Ok, Result
+from oridecon.serialization import loads as json_loads
+from oridecon.web import Controller, JSONResponse, get, post
 from mfa_console.repository.session_repository import InMemorySessionRepository
 
 logger = get_logger(__name__)

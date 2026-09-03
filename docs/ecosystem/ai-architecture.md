@@ -3,18 +3,18 @@ title: "AI Architecture"
 description: "How the AI packages compose — LLM client, RAG, agents, memory, sessions, skills, and MCP."
 ---
 
-The Lexigram AI subsystem is organized into six layers. Each layer builds on the one below it, and all AI packages follow a strict dependency rule: they import only from `lexigram` and `lexigram-contracts`, never from each other.
+The Oridecon AI subsystem is organized into six layers. Each layer builds on the one below it, and all AI packages follow a strict dependency rule: they import only from `oridecon` and `oridecon-contracts`, never from each other.
 
 ```mermaid
 graph TD
-    A["Integration Layer<br/>lexigram-ai-mcp"] --> B["Infrastructure Layer<br/>lexigram-ai-workers, -observability, -feedback"]
-    B --> C["Memory Layer<br/>lexigram-ai-memory, -session"]
-    C --> D["Reasoning Layer<br/>lexigram-ai-agents, -skills"]
-    D --> E["Knowledge Layer<br/>lexigram-ai-rag, lexigram-vector"]
-    E --> F["Base Layer<br/>lexigram-ai-llm"]
+    A["Integration Layer<br/>oridecon-ai-mcp"] --> B["Infrastructure Layer<br/>oridecon-ai-workers, -observability, -feedback"]
+    B --> C["Memory Layer<br/>oridecon-ai-memory, -session"]
+    C --> D["Reasoning Layer<br/>oridecon-ai-agents, -skills"]
+    D --> E["Knowledge Layer<br/>oridecon-ai-rag, oridecon-vector"]
+    E --> F["Base Layer<br/>oridecon-ai-llm"]
 ```
 
-## 1. Base Layer — `lexigram-ai-llm`
+## 1. Base Layer — `oridecon-ai-llm`
 
 The LLM client protocol. Provides:
 
@@ -24,7 +24,7 @@ The LLM client protocol. Provides:
 
 All higher layers depend on this package for model access.
 
-## 2. Knowledge Layer — `lexigram-ai-rag` + `lexigram-vector`
+## 2. Knowledge Layer — `oridecon-ai-rag` + `oridecon-vector`
 
 Retrieval-Augmented Generation and vector storage.
 
@@ -33,10 +33,10 @@ Retrieval-Augmented Generation and vector storage.
 - **Vector storage**: Abstraction over pgvector, Qdrant, Pinecone, and in-memory
 
 :::note
-`lexigram-vector` is also used outside the AI subsystem — for example, by recommendation engines. It lives as a general-purpose package, not an AI-only one.
+`oridecon-vector` is also used outside the AI subsystem — for example, by recommendation engines. It lives as a general-purpose package, not an AI-only one.
 :::
 
-## 3. Reasoning Layer — `lexigram-ai-agents` + `lexigram-ai-skills`
+## 3. Reasoning Layer — `oridecon-ai-agents` + `oridecon-ai-skills`
 
 Multi-step reasoning and tool use.
 
@@ -44,7 +44,7 @@ Multi-step reasoning and tool use.
 - **Skills**: Reusable tool definitions that agents can discover and invoke at runtime
 - **Orchestration**: Parallel tool execution, conditional branching, sub-agent delegation
 
-## 4. Memory Layer — `lexigram-ai-memory` + `lexigram-ai-session`
+## 4. Memory Layer — `oridecon-ai-memory` + `oridecon-ai-session`
 
 Conversation history and persistent knowledge.
 
@@ -52,7 +52,7 @@ Conversation history and persistent knowledge.
 - **Semantic memory**: Cross-session facts, user preferences, learned knowledge
 - **Session management**: Conversation lifecycle, state persistence, expiry
 
-## 5. Integration Layer — `lexigram-ai-mcp`
+## 5. Integration Layer — `oridecon-ai-mcp`
 
 Expose AI capabilities as Model Context Protocol tools, resources, and prompts.
 
@@ -60,7 +60,7 @@ Expose AI capabilities as Model Context Protocol tools, resources, and prompts.
 - **MCP client**: Connect to external MCP servers from within agents
 - **Discovery**: Dynamic tool registration and capability advertisement
 
-## 6. Infrastructure Layer — `lexigram-ai-workers` + `lexigram-ai-observability` + `lexigram-ai-feedback`
+## 6. Infrastructure Layer — `oridecon-ai-workers` + `oridecon-ai-observability` + `oridecon-ai-feedback`
 
 Production-grade AI infrastructure.
 
@@ -69,12 +69,12 @@ Production-grade AI infrastructure.
 - **Feedback loops**: User feedback collection, preference fine-tuning data pipelines
 
 :::note
-**Architectural rule**: AI packages must never import from each other. `lexigram-ai-agents` does not import `lexigram-ai-rag` — it receives RAG results through its interfaces. This keeps the dependency graph flat and avoids circular coupling.
+**Architectural rule**: AI packages must never import from each other. `oridecon-ai-agents` does not import `oridecon-ai-rag` — it receives RAG results through its interfaces. This keeps the dependency graph flat and avoids circular coupling.
 :::
 
 ## Dependency Direction
 
-Each layer depends only on the layers below it. The base layer depends only on `lexigram` and `lexigram-contracts`. The integration layer can optionally consume any layer below it, but never introduces upward dependencies.
+Each layer depends only on the layers below it. The base layer depends only on `oridecon` and `oridecon-contracts`. The integration layer can optionally consume any layer below it, but never introduces upward dependencies.
 
 See the [Packages](/packages/) reference for individual package APIs and the [Choosing Backends](/ecosystem/choosing-backends/) guide for vector store comparisons.
 

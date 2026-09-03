@@ -8,12 +8,12 @@ from dev._lib.rules_catalog import build_rules_catalog
 
 RULE_RESOLUTION_GUIDE: dict[str, str] = {
     "no-cross-extension-import": (
-        "Move shared contracts to `lexigram-contracts`, register implementations via providers, "
+        "Move shared contracts to `oridecon-contracts`, register implementations via providers, "
         "and resolve dependencies through the container instead of direct extension imports."
     ),
     "import-absolute-only": (
         "Replace relative imports (for example `from .module import ...`) with absolute imports rooted at "
-        "`lexigram...` so module ownership stays explicit."
+        "`oridecon...` so module ownership stays explicit."
     ),
     "init-no-logic": (
         "Keep `__init__.py` export-only. Move functions/classes to dedicated modules and re-export symbols "
@@ -45,10 +45,10 @@ RULE_RESOLUTION_GUIDE: dict[str, str] = {
 
 
 class RulesAuditGenerator(MarkdownAuditGenerator):
-    """Generate a markdown audit for Lexigram architectural rule violations."""
+    """Generate a markdown audit for Oridecon architectural rule violations."""
 
     name = "rules"
-    description = "Generate AUDIT_RULES.md from Lexigram architectural rule checks."
+    description = "Generate AUDIT_RULES.md from Oridecon architectural rule checks."
     output_file = "AUDIT_RULES.md"
 
     def render_markdown(self, *, root: Path) -> str:
@@ -68,7 +68,7 @@ class RulesAuditGenerator(MarkdownAuditGenerator):
         for finding in result.findings:
             findings_by_rule[finding.rule_id] = findings_by_rule.get(finding.rule_id, 0) + 1
 
-        markdown = """# AUDIT_RULES.md — Lexigram Framework Rules Audit
+        markdown = """# AUDIT_RULES.md — Oridecon Framework Rules Audit
 
 > **Source**: Static rule analysis for architectural boundaries, import policy, and package coverage.
 
@@ -127,7 +127,7 @@ class RulesAuditGenerator(MarkdownAuditGenerator):
             for rule_id in sorted(findings_by_rule):
                 resolution = RULE_RESOLUTION_GUIDE.get(
                     rule_id,
-                    "Review the rule finding context and align implementation to Lexigram architecture boundaries.",
+                    "Review the rule finding context and align implementation to Oridecon architecture boundaries.",
                 )
                 markdown += f"- `{rule_id}`: {resolution}\n"
         else:

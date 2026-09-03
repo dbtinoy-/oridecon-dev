@@ -16,7 +16,7 @@ from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.routing import Route
 
-from lexigram.web import JSONResponse, ResultResponseMapper
+from oridecon.web import JSONResponse, ResultResponseMapper
 
 from rates.app import create_app
 from rates.controllers import RatesApiController

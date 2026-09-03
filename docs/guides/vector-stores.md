@@ -12,9 +12,9 @@ uv run python -m rag_docs demo
 :::
 
 
-`lexigram-vector` provides vector store backends behind a single protocol. Application code depends on `VectorStoreProtocol`; the backend (pgvector, Qdrant, Pinecone, Chroma, or in-memory) is chosen in configuration. Swap backends, run several side-by-side, and substitute an in-memory stub in tests without touching services that use them.
+`oridecon-vector` provides vector store backends behind a single protocol. Application code depends on `VectorStoreProtocol`; the backend (pgvector, Qdrant, Pinecone, Chroma, or in-memory) is chosen in configuration. Swap backends, run several side-by-side, and substitute an in-memory stub in tests without touching services that use them.
 
-For the full configuration reference and advanced features (hybrid search, reranking, embedding caching), see the [`lexigram-vector` package docs](/packages/lexigram-vector/).
+For the full configuration reference and advanced features (hybrid search, reranking, embedding caching), see the [`oridecon-vector` package docs](/packages/oridecon-vector/).
 
 ---
 
@@ -24,14 +24,14 @@ All backends implement `VectorStoreProtocol` and per-collection operations via `
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.contracts.core.health import HealthCheckResult
-from lexigram.contracts.data.vector.enums import DistanceMetric
-from lexigram.contracts.data.vector.types import (
+from oridecon.contracts.core.health import HealthCheckResult
+from oridecon.contracts.data.vector.enums import DistanceMetric
+from oridecon.contracts.data.vector.types import (
     CollectionConfig, CollectionInfo, DeleteResult,
     SearchQuery, SearchResult, UpsertResult, VectorRecord,
 )
-from lexigram.contracts.data.vector.filters import MetadataCondition
-from lexigram.result import Result
+from oridecon.contracts.data.vector.filters import MetadataCondition
+from oridecon.result import Result
 
 
 @runtime_checkable
@@ -86,8 +86,8 @@ graph LR
 Add `VectorModule` and configure the backend:
 
 ```python
-from lexigram import Application
-from lexigram.vector import VectorModule, VectorConfig
+from oridecon import Application
+from oridecon.vector import VectorModule, VectorConfig
 
 app = Application(name="my-app")
 app.add_module(VectorModule.configure(
@@ -134,9 +134,9 @@ vector:
 Create a collection with a specific dimension and distance metric, then get a handle for operations:
 
 ```python
-from lexigram.contracts.data.vector.protocols import VectorStoreProtocol
-from lexigram.contracts.data.vector.types import CollectionConfig
-from lexigram.contracts.data.vector.enums import DistanceMetric
+from oridecon.contracts.data.vector.protocols import VectorStoreProtocol
+from oridecon.contracts.data.vector.types import CollectionConfig
+from oridecon.contracts.data.vector.enums import DistanceMetric
 
 
 async def setup_collection(store: VectorStoreProtocol) -> None:
@@ -159,7 +159,7 @@ async def setup_collection(store: VectorStoreProtocol) -> None:
 Insert or update vectors with metadata:
 
 ```python
-from lexigram.contracts.data.vector.types import VectorRecord
+from oridecon.contracts.data.vector.types import VectorRecord
 
 
 async def upsert_vectors(collection: VectorCollectionProtocol) -> None:
@@ -185,7 +185,7 @@ async def upsert_vectors(collection: VectorCollectionProtocol) -> None:
 Query a collection using a vector embedding:
 
 ```python
-from lexigram.contracts.data.vector.types import SearchQuery
+from oridecon.contracts.data.vector.types import SearchQuery
 
 
 async def search(collection: VectorCollectionProtocol, query_vector: list[float]) -> None:
@@ -226,8 +226,8 @@ Named backends are injected with `Named`:
 
 ```python
 from typing import Annotated
-from lexigram.contracts.data.vector.protocols import VectorStoreProtocol
-from lexigram.di.markers import Named
+from oridecon.contracts.data.vector.protocols import VectorStoreProtocol
+from oridecon.di.markers import Named
 
 
 class SearchService:
@@ -247,10 +247,10 @@ class SearchService:
 Use `VectorModule.stub()` for isolated tests with an in-memory backend:
 
 ```python
-from lexigram import Application
-from lexigram.vector import VectorModule
-from lexigram.contracts.data.vector.protocols import VectorStoreProtocol
-from lexigram.contracts.data.vector.types import CollectionConfig
+from oridecon import Application
+from oridecon.vector import VectorModule
+from oridecon.contracts.data.vector.protocols import VectorStoreProtocol
+from oridecon.contracts.data.vector.types import CollectionConfig
 
 
 async def test_vector_search() -> None:
@@ -270,4 +270,4 @@ async def test_vector_search() -> None:
 - [Retrieval-Augmented Generation](/guides/ai-rag/) — using vector stores for RAG
 - [AI Memory](/guides/ai-memory/) — semantic memory backed by vector storage
 - [Dependency Injection](/fundamentals/dependency-injection/) — binding protocols to implementations
-- [`lexigram-vector` package](/packages/lexigram-vector/) — hybrid search, reranking, embedding cache
+- [`oridecon-vector` package](/packages/oridecon-vector/) — hybrid search, reranking, embedding cache

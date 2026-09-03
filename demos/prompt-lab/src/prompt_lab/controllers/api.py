@@ -16,14 +16,14 @@ from __future__ import annotations
 
 from starlette.requests import Request
 
-from lexigram.ai.prompt.exceptions import PromptNotFoundError, PromptRenderError
-from lexigram.contracts.exceptions import (
+from oridecon.ai.prompt.exceptions import PromptNotFoundError, PromptRenderError
+from oridecon.contracts.exceptions import (
     NotFoundError,
     ValidationError,
 )
-from lexigram.result import Err, Ok, Result
-from lexigram.serialization import loads as json_loads
-from lexigram.web import Controller, get, post
+from oridecon.result import Err, Ok, Result
+from oridecon.serialization import loads as json_loads
+from oridecon.web import Controller, get, post
 from prompt_lab.repository.templates import VARIANT_LABELS
 from prompt_lab.services.ab_runner import ABRunner
 from prompt_lab.services.versioning import LabVersions
@@ -46,12 +46,12 @@ async def _body(request: Request) -> dict:
 class LabApiController(Controller):
     """Prompt lab API consumed by the UI's vanilla-JS client.
 
-    Lexigram pattern: controllers are stateless handlers that receive
+    Oridecon pattern: controllers are stateless handlers that receive
     collaborators via constructor injection.  The framework resolves the
     controller when a request matches its routes — you never instantiate
     it manually.
 
-    Route decorators (@get, @post) come from lexigram.web, not Starlette
+    Route decorators (@get, @post) come from oridecon.web, not Starlette
     directly — they integrate with the framework's middleware stack.
     """
 

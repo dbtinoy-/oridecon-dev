@@ -1,7 +1,7 @@
 """Smoke tests for the demo hub page routes.
 
 Verifies the hub console serves HTML with expected structure,
-static assets load correctly, and the Lexigram branding is present.
+static assets load correctly, and the Oridecon branding is present.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ async def test_root_serves_hub(client: httpx.AsyncClient) -> None:
 
     assert response.status_code == 200
     assert "text/html" in response.headers["content-type"]
-    assert "Lexigram Live Demos" in response.text
+    assert "Oridecon Live Demos" in response.text
 
     response = await client.get("/")
 
@@ -31,7 +31,7 @@ async def test_hub_has_footer(client: httpx.AsyncClient) -> None:
 
     assert response.status_code == 200
     assert "footer" in response.text
-    assert "lexigram.dev" in response.text
+    assert "oridecon.dev" in response.text
 
 async def test_hub_has_filter_buttons(client: httpx.AsyncClient) -> None:
     response = await client.get("/")

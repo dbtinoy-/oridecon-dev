@@ -18,15 +18,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from lexigram.contracts.ai.agents import AgentExecutorProtocol
-from lexigram.contracts.ai.llm import LLMClientProtocol
-from lexigram.contracts.core.health import (
+from oridecon.contracts.ai.agents import AgentExecutorProtocol
+from oridecon.contracts.ai.llm import LLMClientProtocol
+from oridecon.contracts.core.health import (
     HealthCheckResult,
 )
-from lexigram.di.provider import Provider
+from oridecon.di.provider import Provider
 
 if TYPE_CHECKING:
-    from lexigram.contracts.core.di import (
+    from oridecon.contracts.core.di import (
         ContainerRegistrarProtocol,
         ContainerResolverProtocol,
     )

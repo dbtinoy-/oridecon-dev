@@ -1,6 +1,6 @@
 # LLM Router Demo
 
-Demonstrates the **Lexigram LLM client pattern** — ScriptedLLMClient for deterministic
+Demonstrates the **Oridecon LLM client pattern** — ScriptedLLMClient for deterministic
 testing, content generation, and structured product extraction.  Demonstrates
 how to build LLM-powered services without making real API calls.
 
@@ -84,7 +84,7 @@ uv run pytest tests/ -v
 Replace `ScriptedLLMClient` in `provider.py` with a real client:
 
 ```python
-from lexigram.ai.llm import OllamaClient, ClientConfig
+from oridecon.ai.llm import OllamaClient, ClientConfig
 
 llm_client = OllamaClient(config=ClientConfig(model="llama3"))
 ```

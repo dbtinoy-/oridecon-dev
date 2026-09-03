@@ -1,10 +1,10 @@
 """Composition root for the auth-rbac console — start reading here.
 
-Every Lexigram application has exactly one place that knows how the pieces
+Every Oridecon application has exactly one place that knows how the pieces
 fit together: the **composition root**.  Everything else (controllers,
 services, templates) is inert until *this file* wires it.
 
-The mental model has three layers.  Once these click, every Lexigram app
+The mental model has three layers.  Once these click, every Oridecon app
 reads the same way:
 
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -12,12 +12,12 @@ reads the same way:
 │    ``application.yaml`` holds your values.  The framework loads it,     │
 │    merges overrides on top (highest → lowest):                          │
 │                                                                         │
-│        LEX_WEB__SERVER__PORT=9000   env vars   ← win over everything    │
+│        ORI_WEB__SERVER__PORT=9000   env vars   ← win over everything    │
 │        application.production.yaml  profile overlay                     │
 │        application.yaml             base file                           │
 │        dataclass field defaults     last resort                         │
 │                                                                         │
-│    Result: ONE typed ``LexigramConfig`` object.                         │
+│    Result: ONE typed ``OrideconConfig`` object.                         │
 │                                                                         │
 │ 2. CAPABILITIES (declarative)                                           │
 │    ``Module.configure(...)`` switches framework packages on and tells   │
@@ -48,16 +48,16 @@ Run with::
 
 from __future__ import annotations
 
-from lexigram.app.base import Application  # Application = the bootable object
-from lexigram.auth.module import AuthModule  # framework module — owns auth providers
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider  # base class for your DI registrations
-from lexigram.web.module import WebModule  # framework module — owns web server
+from oridecon.app.base import Application  # Application = the bootable object
+from oridecon.auth.module import AuthModule  # framework module — owns auth providers
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider  # base class for your DI registrations
+from oridecon.web.module import WebModule  # framework module — owns web server
 from rbac_console.controllers.api import RbacApiController  # your HTTP surface
 from rbac_console.di.provider import RbacProvider  # your service registrations
 from rbac_console.ui.pages import PagesController  # page controller (optional)
 
-# Lexigram follows a strict dependency direction: application code imports
+# Oridecon follows a strict dependency direction: application code imports
 # framework packages, never the reverse.  This file is the only place
 # that references both framework modules AND your controllers/providers.
 
@@ -68,14 +68,14 @@ def build_modules() -> list[object]:
     Each ``Module.configure(...)`` returns a DynamicModule: a recipe the
     framework expands into providers at boot.  Because every provider in
     the bundle declares ``config_key`` / ``config_model``, the orchestrator
-    injects the matching typed section of ``LexigramConfig`` into
+    injects the matching typed section of ``OrideconConfig`` into
     ``provider.config`` right before ``register()`` runs — YAML values and
-    ``LEX_*`` environment overrides already merged.
+    ``ORI_*`` environment overrides already merged.
     """
     return [
         # Each Module.configure() returns a DynamicModule recipe.
         # The orchestrator expands recipes into providers, injects their
-        # typed config sections from LexigramConfig, then calls register().
+        # typed config sections from OrideconConfig, then calls register().
         AuthModule.configure(),  # sessions, tokens, RBAC roles
         # WebModule is the only module that needs your controllers list —
         # this is the explicit wiring style.  Omit PagesController if you
@@ -89,14 +89,14 @@ def build_modules() -> list[object]:
 def build_providers() -> list[Provider]:
     """Imperative services owned by this demo.
 
-    A Provider is Lexigram's unit of lifecycle management: ``register()``
+    A Provider is Oridecon's unit of lifecycle management: ``register()``
     binds services into the DI container, ``boot()`` runs post-registration
     setup (here: seeding personas/articles), ``shutdown()`` cleans up.
     """
     return [RbacProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create the application in ``CREATED`` state (not yet started).
 
     Use this directly in tests (boot it yourself so you control the

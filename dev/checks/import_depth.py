@@ -1,10 +1,10 @@
-"""Enforce a maximum lexigram import depth as a CI gate.
+"""Enforce a maximum oridecon import depth as a CI gate.
 
 Scans all ``*.py`` source files (excluding tests by default) and fails if
-any ``import lexigram.X.Y.Z`` or ``from lexigram.X.Y.Z`` statement exceeds
+any ``import oridecon.X.Y.Z`` or ``from oridecon.X.Y.Z`` statement exceeds
 the configurable depth threshold (default: 6 segments).
 
-Depth 5 imports (``lexigram.pkg.submodule.item``) are normal for
+Depth 5 imports (``oridecon.pkg.submodule.item``) are normal for
 ``__init__.py`` re-exports and package-internal wiring. Depth 6+ imports
 signal either legitimate deep layering (allowlisted) or architectural drift
 that should be flagged.
@@ -28,24 +28,24 @@ import sys
 # Structural exceptions that legitimately require depth 6+ imports
 ALLOWLIST: set[str] = {
     # DI compiler phases — architectural layering
-    "core/lexigram/src/lexigram/di/module/compiler/",
+    "core/oridecon/src/oridecon/di/module/compiler/",
     # contracts __init__.py re-exports from deep submodules
-    "core/lexigram-contracts/src/lexigram/contracts/__init__.py",
+    "core/oridecon-contracts/src/oridecon/contracts/__init__.py",
     # contracts internal re-exports (database, tasks, agents, etc.)
-    "core/lexigram-contracts/src/lexigram/contracts/data/sql/database/",
-    "core/lexigram-contracts/src/lexigram/contracts/infra/tasks/protocols/",
-    "core/lexigram-contracts/src/lexigram/contracts/ai/agents/",
+    "core/oridecon-contracts/src/oridecon/contracts/data/sql/database/",
+    "core/oridecon-contracts/src/oridecon/contracts/infra/tasks/protocols/",
+    "core/oridecon-contracts/src/oridecon/contracts/ai/agents/",
     # contracts relay DTO families — same-package sibling wiring under dto/
     # (gemini/, openai_responses/ re-export their submodules)
-    "core/lexigram-contracts/src/lexigram/contracts/ai/relay/dto/",
+    "core/oridecon-contracts/src/oridecon/contracts/ai/relay/dto/",
     # admin UI component re-exports (table views, data table views)
-    "experimental/apps/lexigram-admin/src/lexigram/admin/ui/organisms/",
+    "experimental/apps/oridecon-admin/src/oridecon/admin/ui/organisms/",
     # UI component re-exports
-    "experimental/apps/lexigram-ui/src/lexigram/ui/atoms/",
-    # AI docs/tools demo scripts (standalone, misplaced in lexigram-ai)
-    "experimental/ai/lexigram-ai/docs/gifs/tools/",
+    "experimental/apps/oridecon-ui/src/oridecon/ui/atoms/",
+    # AI docs/tools demo scripts (standalone, misplaced in oridecon-ai)
+    "experimental/ai/oridecon-ai/docs/gifs/tools/",
     # relay gateway routes — internal cross-imports within depth-6 package
-    "experimental/ai/lexigram-ai-relay-gateway/src/lexigram/ai/relay/gateway/web/routes/",
+    "experimental/ai/oridecon-ai-relay-gateway/src/oridecon/ai/relay/gateway/web/routes/",
 }
 
 DEFAULT_MAX_DEPTH = 6
@@ -74,13 +74,13 @@ def check_file(path: Path, max_depth: int) -> list[tuple[int, str]]:
         if isinstance(node, ast.Import):
             for alias in node.names:
                 if (
-                    alias.name.startswith("lexigram.")
+                    alias.name.startswith("oridecon.")
                     and count_depth(alias.name) > max_depth
                 ):
                     violations.append((node.lineno, alias.name))
         elif isinstance(node, ast.ImportFrom) and node.module:
             if (
-                node.module.startswith("lexigram.")
+                node.module.startswith("oridecon.")
                 and count_depth(node.module) > max_depth
             ):
                 violations.append((node.lineno, node.module))

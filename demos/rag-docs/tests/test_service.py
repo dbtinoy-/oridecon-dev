@@ -6,13 +6,13 @@ import asyncio
 from pathlib import Path
 from typing import Any
 
-from lexigram.ai.rag.retrieval.strategies.mmr import MMRRetrievalStrategy
-from lexigram.ai.rag.retrieval.strategies.vector import VectorRetrievalStrategy
-from lexigram.ai.rag.synthesis.synthesizers.extractive import (
+from oridecon.ai.rag.retrieval.strategies.mmr import MMRRetrievalStrategy
+from oridecon.ai.rag.retrieval.strategies.vector import VectorRetrievalStrategy
+from oridecon.ai.rag.synthesis.synthesizers.extractive import (
     ExtractiveSynthesizer,
 )
-from lexigram.contracts.ai.exceptions import RAGError
-from lexigram.result import Err
+from oridecon.contracts.ai.exceptions import RAGError
+from oridecon.result import Err
 
 from rag_docs.repository.embedder import HashingEmbedder
 from rag_docs.errors import (

@@ -5,7 +5,7 @@ A package under ``core/`` or ``packages/`` must not depend on one under
 name list; the root workspace pyproject is not scanned.
 
 Only ``[project].dependencies`` counts — optional dependencies are opt-in
-(``lexigram[all]`` deliberately fans out to experimental packages), and
+(``oridecon[all]`` deliberately fans out to experimental packages), and
 dependency groups are developer-local.
 
 Usage:

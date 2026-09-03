@@ -22,14 +22,14 @@ description: Currency rates with circuit breakers, caching, and retry policies
 #   3. demo:       Upstream scenario selector
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram Cache:     packages/lexigram-cache/src/lexigram/cache/config/
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon Cache:     packages/oridecon-cache/src/oridecon/cache/config/
 #   - Demo config:        demos/resilient-rates/src/rates/config.py
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -97,7 +97,7 @@ web:
 
 
 # ── Cache ───────────────────────────────────────────────────────────────────
-# Lexigram Cache provides cache-aside reads, TTL writes, single-flight
+# Oridecon Cache provides cache-aside reads, TTL writes, single-flight
 # (stampede protection), and pluggable backends.  The CacheModule reads
 # this section automatically via config_key="cache" /
 # config_model=CacheConfig.

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from lexigram.serialization import loads as json_loads
+from oridecon.serialization import loads as json_loads
 
 
 class ProductExtractor:

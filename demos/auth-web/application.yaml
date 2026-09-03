@@ -20,19 +20,19 @@ description: Session-based auth with registration, login, and password managemen
 #   2. auth:       Users, roles, RBAC, JWT, password rules
 #
 # For full reference see:
-#   - Lexigram Web:       packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram Auth:      packages/lexigram-auth/src/lexigram/auth/config.py
+#   - Oridecon Web:       packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon Auth:      packages/oridecon-auth/src/oridecon/auth/config.py
 #
 # ENVIRONMENT VARIABLE OVERRIDE:
-#   Every key can be overridden via LEX_* env vars with __ as delimiter.
+#   Every key can be overridden via ORI_* env vars with __ as delimiter.
 #   Examples:
-#     LEX_WEB__SERVER__PORT=9000
-#     LEX_AUTH__SECRET_KEY=my-production-key
+#     ORI_WEB__SERVER__PORT=9000
+#     ORI_AUTH__SECRET_KEY=my-production-key
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 #
@@ -69,7 +69,7 @@ web:
       # excluded_paths: []              # paths exempt from CSRF validation
       # exclude_content_types: []       # Content-Types that bypass CSRF
       # exclude_auth_schemes: []        # Auth schemes that bypass CSRF
-      # secret_key: null                # HMAC key (LEX_WEB__SECURITY__CSRF__SECRET_KEY)
+      # secret_key: null                # HMAC key (ORI_WEB__SECURITY__CSRF__SECRET_KEY)
 
     # ── CORS ───────────────────────────────────────────────────────────────
     # cors:
@@ -138,7 +138,7 @@ web:
 
 
 # ── Auth ─────────────────────────────────────────────────────────────────────
-# Lexigram Auth handles users, roles, RBAC, JWT tokens, and password
+# Oridecon Auth handles users, roles, RBAC, JWT tokens, and password
 # hashing.  The AuthModule reads this section automatically via
 # config_key="auth" / config_model=AuthConfig.
 #
@@ -258,8 +258,8 @@ auth:
 # wrapper services, not the framework's core auth layer.
 #
 # ENVIRONMENT VARIABLE OVERRIDE:
-#   LEX_AUTH_WEB__PASSWORD_RESET__TOKEN_EXPIRY_HOURS=48
-#   LEX_AUTH_WEB__REGISTRATION__DEFAULT_ROLE=editor
+#   ORI_AUTH_WEB__PASSWORD_RESET__TOKEN_EXPIRY_HOURS=48
+#   ORI_AUTH_WEB__REGISTRATION__DEFAULT_ROLE=editor
 # ─────────────────────────────────────────────────────────────────────────────
 auth_web:
   # ── Password Reset ───────────────────────────────────────────────────────

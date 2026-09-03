@@ -18,15 +18,15 @@ strategy parser drives in a loop, calling tools between steps.
 
 from __future__ import annotations
 
-from lexigram.ai.agents import AgentBuilder
-from lexigram.contracts.ai.agents import (
+from oridecon.ai.agents import AgentBuilder
+from oridecon.contracts.ai.agents import (
     AgentError,
     AgentExecutorProtocol,
     AgentProtocol,
     AgentResponse,
 )
-from lexigram.logging import get_logger
-from lexigram.result import Result
+from oridecon.logging import get_logger
+from oridecon.result import Result
 from support_agent.tools import SUPPORT_TOOLS
 
 logger = get_logger(__name__)

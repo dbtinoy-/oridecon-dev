@@ -3,7 +3,7 @@ title: "Choosing Backends"
 description: "Comparison matrices and decision guides for cache, search, storage, queue, and database backends."
 ---
 
-Choosing the right backend for each subsystem depends on your scale, latency requirements, operational budget, and feature needs. This guide compares options across every backend category in the Lexigram ecosystem.
+Choosing the right backend for each subsystem depends on your scale, latency requirements, operational budget, and feature needs. This guide compares options across every backend category in the Oridecon ecosystem.
 
 ## Cache Backends
 

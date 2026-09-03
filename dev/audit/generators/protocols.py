@@ -17,7 +17,7 @@ class ProtocolsAuditGenerator(MarkdownAuditGenerator):
         """Render protocol inventory markdown."""
 
         protocol_rows = list(_collect_protocol_rows(root))
-        markdown = """# AUDIT_PROTOCOLS.md — Lexigram Framework Protocol Inventory
+        markdown = """# AUDIT_PROTOCOLS.md — Oridecon Framework Protocol Inventory
 
 > **Source**: `class *Protocol` declarations across framework source trees.
 
@@ -44,8 +44,8 @@ def _collect_protocol_rows(root: Path) -> tuple[dict[str, str | list[str]], ...]
 
     rows: list[dict[str, str | list[str]]] = []
     for source_root in (
-        root / "lexigram-contracts" / "src",
-        root / "lexigram" / "src",
+        root / "oridecon-contracts" / "src",
+        root / "oridecon" / "src",
     ):
         if not source_root.is_dir():
             continue

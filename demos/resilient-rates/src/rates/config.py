@@ -1,13 +1,13 @@
 """Demo configuration — ``demo:`` section of application.yaml.
 
-Convention followed: **Yaml-first config** — ``LexigramConfig`` /
+Convention followed: **Yaml-first config** — ``OrideconConfig`` /
 ``from_yaml`` auto-discovers ``application.yaml`` from the working
-directory.  ``LEX_DEMO__*`` overrides and ``LEX_PROFILE`` overlays apply
+directory.  ``ORI_DEMO__*`` overrides and ``ORI_PROFILE`` overlays apply
 via the loader.
 
 The ``RatesConfig`` dataclass declares the typed ``demo:`` section with
 field-level defaults.  Environment variable overrides use the double-
-underscore convention: ``LEX_DEMO__UPSTREAM_SCENARIO=down`` sets
+underscore convention: ``ORI_DEMO__UPSTREAM_SCENARIO=down`` sets
 ``upstream_scenario = "down"``.
 """
 
@@ -16,9 +16,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import ClassVar
 
-from lexigram.config import BaseConfig
-from lexigram.contracts.core.config import Environment
-from lexigram.validation import Field
+from oridecon.config import BaseConfig
+from oridecon.contracts.core.config import Environment
+from oridecon.validation import Field
 
 
 @dataclass(init=False)

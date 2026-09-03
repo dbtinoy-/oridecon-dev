@@ -3,20 +3,20 @@ title: "AI Agents"
 description: "Multi-step agents with tools, strategies, and executor protocols."
 ---
 
-`lexigram-ai-agents` provides an agent system with pluggable reasoning strategies, tool registration, and an executor protocol. Agents think, act, and observe using strategies like ReAct or Plan-and-Execute, with tool access governed by a registry.
+`oridecon-ai-agents` provides an agent system with pluggable reasoning strategies, tool registration, and an executor protocol. Agents think, act, and observe using strategies like ReAct or Plan-and-Execute, with tool access governed by a registry.
 
-For full configuration details, see the [`lexigram-ai-agents` package docs](/packages/lexigram-ai-agents/).
+For full configuration details, see the [`oridecon-ai-agents` package docs](/packages/oridecon-ai-agents/).
 
 ---
 
 ## 1. The Contracts
 
-All agents, tools, and executors implement protocols from `lexigram.contracts.ai`. The executor drives the reasoning loop, and the tool registry manages tool lifecycle:
+All agents, tools, and executors implement protocols from `oridecon.contracts.ai`. The executor drives the reasoning loop, and the tool registry manages tool lifecycle:
 
 ```python
 from typing import Any, Protocol, runtime_checkable
-from lexigram.result import Result
-from lexigram.contracts.ai import AgentError, ToolError, AgentResponse
+from oridecon.result import Result
+from oridecon.contracts.ai import AgentError, ToolError, AgentResponse
 
 
 class ToolProtocol(Protocol):
@@ -73,9 +73,9 @@ graph LR
 Add the `AgentsModule` via the application:
 
 ```python
-from lexigram import Application
-from lexigram.ai.agents import AgentsModule
-from lexigram.ai.agents import AgentConfig
+from oridecon import Application
+from oridecon.ai.agents import AgentsModule
+from oridecon.ai.agents import AgentConfig
 
 app = Application(name="my-app")
 app.add_module(AgentsModule.configure(AgentConfig(max_iterations=10)))
@@ -93,7 +93,7 @@ ai_agents:
 ```
 
 :::note
-`AgentConfig` fields are also configurable via environment variables with the `LEX_AI_AGENTS__` prefix. You can pass `config=None` to `configure()` to use all defaults.
+`AgentConfig` fields are also configurable via environment variables with the `ORI_AI_AGENTS__` prefix. You can pass `config=None` to `configure()` to use all defaults.
 :::
 
 ---
@@ -103,7 +103,7 @@ ai_agents:
 Use the `@tool` decorator to convert an async function into an agent tool:
 
 ```python
-from lexigram.ai.agents import tool
+from oridecon.ai.agents import tool
 
 
 @tool(name="lookup_order", description="Look up an order by its ID")
@@ -114,7 +114,7 @@ async def lookup_order(order_id: str) -> dict:
 The decorator generates a JSON Schema from the function's type hints and wraps it in a `FunctionTool`. For tools with more complex behavior, subclass `AbstractTool`:
 
 ```python
-from lexigram.ai.agents import AbstractTool
+from oridecon.ai.agents import AbstractTool
 
 
 class WeatherTool(AbstractTool):
@@ -147,7 +147,7 @@ class WeatherTool(AbstractTool):
 Subclass `AgentBase` and set `name`, `system_prompt`, and the `tools` property:
 
 ```python
-from lexigram.ai.agents import AgentBase, tool
+from oridecon.ai.agents import AgentBase, tool
 
 
 @tool(name="search_kb", description="Search the knowledge base")
@@ -176,9 +176,9 @@ class SupportAgent(AgentBase):
 Resolve `AgentExecutorProtocol` from the container and call `run()`:
 
 ```python
-from lexigram import Application
-from lexigram.ai.agents import AgentsModule, AgentConfig
-from lexigram.contracts.ai import AgentExecutorProtocol
+from oridecon import Application
+from oridecon.ai.agents import AgentsModule, AgentConfig
+from oridecon.contracts.ai import AgentExecutorProtocol
 
 
 async def main() -> None:
@@ -221,7 +221,7 @@ Agents use a reasoning strategy to drive execution. The framework ships with sev
 Switch strategies or register custom ones with the `@strategy` decorator:
 
 ```python
-from lexigram.ai.agents import strategy
+from oridecon.ai.agents import strategy
 
 
 @strategy(name="custom")
@@ -245,7 +245,7 @@ class CustomStrategy:
 Enable multi-agent orchestration to let agents delegate tasks to peer agents:
 
 ```python
-from lexigram.ai.agents import AgentsModule
+from oridecon.ai.agents import AgentsModule
 
 app.add_module(AgentsModule.configure(
     AgentConfig(max_iterations=10),
@@ -262,9 +262,9 @@ When enabled, agents can use `AgentAsToolAdapter` to expose other agents as call
 Use `AgentsModule.stub()` for isolated tests without an LLM backend:
 
 ```python
-from lexigram import Application
-from lexigram.ai.agents import AgentsModule
-from lexigram.contracts.ai import AgentExecutorProtocol
+from oridecon import Application
+from oridecon.ai.agents import AgentsModule
+from oridecon.contracts.ai import AgentExecutorProtocol
 
 
 async def test_agent_resolves() -> None:
@@ -288,4 +288,4 @@ Stubs return empty `AgentResponse` objects. For integration tests, provide a rea
 - [AI Skills](/guides/ai-skills/) — composable skills for agents
 - [AI Sessions](/guides/ai-sessions/) — session management
 - [AI RAG](/guides/ai-rag/) — retrieval-augmented generation
-- [`lexigram-ai-agents` package](/packages/lexigram-ai-agents/) — crews, delegation, streaming
+- [`oridecon-ai-agents` package](/packages/oridecon-ai-agents/) — crews, delegation, streaming

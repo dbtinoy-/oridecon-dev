@@ -1,4 +1,4 @@
-# AUDIT_INDEX.md — Lexigram Framework Audit Index
+# AUDIT_INDEX.md — Oridecon Framework Audit Index
 
 > **Source**: Registered audit generators and derived report summaries.
 > **Generated JSON**: `AUDIT_INDEX.json`

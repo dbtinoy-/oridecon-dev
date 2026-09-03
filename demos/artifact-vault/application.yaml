@@ -22,13 +22,13 @@ description: Storage-abstraction demo with blob store backends
 #   3. artifact_vault: Demo-specific seed data and labels
 #
 # For full reference see:
-#   - Lexigram Web:      packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram Storage:  packages/lexigram-storage/src/lexigram/storage/config.py
+#   - Oridecon Web:      packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon Storage:  packages/oridecon-storage/src/oridecon/storage/config.py
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 #
@@ -100,7 +100,7 @@ web:
 
 
 # ── Storage ──────────────────────────────────────────────────────────────────
-# Lexigram Storage provides a pluggable blob-store abstraction via
+# Oridecon Storage provides a pluggable blob-store abstraction via
 # BlobStoreProtocol.  The StorageModule reads this section automatically
 # via config_key="storage" / config_model=StorageConfig.
 #

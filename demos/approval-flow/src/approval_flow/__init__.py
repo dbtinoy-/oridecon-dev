@@ -1,4 +1,4 @@
-"""Approval Flow — a focused Lexigram workflow demo."""
+"""Approval Flow — a focused Oridecon workflow demo."""
 
 from __future__ import annotations
 

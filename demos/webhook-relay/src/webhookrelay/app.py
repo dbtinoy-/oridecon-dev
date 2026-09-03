@@ -1,10 +1,10 @@
 """Composition root for the webhook-relay demo — start reading here.
 
-Every Lexigram application has exactly one place that knows how the pieces
+Every Oridecon application has exactly one place that knows how the pieces
 fit together: the **composition root**.  Everything else (controllers,
 services, templates) is inert until *this file* wires it.
 
-The mental model has three layers.  Once these click, every Lexigram app
+The mental model has three layers.  Once these click, every Oridecon app
 reads the same way:
 
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -12,11 +12,11 @@ reads the same way:
 │    ``application.yaml`` holds your values.  The framework loads it,     │
 │    merges overrides on top (highest → lowest):                          │
 │                                                                         │
-│        LEX_DEMO__KEY=value  env vars  ← win                            │
+│        ORI_DEMO__KEY=value  env vars  ← win                            │
 │        application.yaml             base file                           │
 │        dataclass field defaults     last resort                         │
 │                                                                         │
-│    Result: ONE typed ``LexigramConfig`` object.                         │
+│    Result: ONE typed ``OrideconConfig`` object.                         │
 │                                                                         │
 │ 2. CAPABILITIES (declarative)                                           │
 │    ``Module.configure(...)`` switches framework packages on and tells   │
@@ -35,11 +35,11 @@ Run with::
 
 from __future__ import annotations
 
-from lexigram.app.base import Application
-from lexigram.config.main import LexigramConfig
-from lexigram.di.provider import Provider
-from lexigram.web.module import WebModule
-from lexigram.webhook.module import WebhookModule
+from oridecon.app.base import Application
+from oridecon.config.main import OrideconConfig
+from oridecon.di.provider import Provider
+from oridecon.web.module import WebModule
+from oridecon.webhook.module import WebhookModule
 from webhookrelay.controllers.api import WebhookApiController
 from webhookrelay.di.provider import WebhookRelayProvider
 from webhookrelay.ui.pages import WebhookPageController
@@ -66,17 +66,17 @@ def build_modules() -> list[object]:
 def build_providers() -> list[Provider]:
     """Imperative services owned by this demo.
 
-    A Provider is Lexigram's unit of lifecycle management: ``register()``
+    A Provider is Oridecon's unit of lifecycle management: ``register()``
     binds services into the DI container, ``boot()`` runs post-registration
     setup, ``shutdown()`` cleans up.
     """
     return [WebhookRelayProvider()]
 
 
-def create_app(config: LexigramConfig | None = None) -> Application:
+def create_app(config: OrideconConfig | None = None) -> Application:
     """Create the application in ``CREATED`` state (not yet started).
 
-    Accepts an optional ``LexigramConfig`` for scenarios where the config
+    Accepts an optional ``OrideconConfig`` for scenarios where the config
     is loaded explicitly (e.g. hub mounting).  When called standalone,
     the framework auto-discovers ``application.yaml`` from the working
     directory.

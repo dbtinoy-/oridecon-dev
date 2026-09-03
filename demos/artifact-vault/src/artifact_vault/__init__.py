@@ -1,4 +1,4 @@
-"""Artifact Vault — a focused Lexigram storage demo."""
+"""Artifact Vault — a focused Oridecon storage demo."""
 
 from __future__ import annotations
 

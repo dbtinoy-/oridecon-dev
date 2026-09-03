@@ -1,4 +1,4 @@
-# Lexigram Framework — one-command development environment.
+# Oridecon Framework — one-command development environment.
 #
 # Starts the backing services the framework and its test suite need:
 # PostgreSQL (SQL/vector backends) and Redis (cache/tasks/queue).
@@ -14,28 +14,28 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: lexigram_dev_postgres
+    container_name: oridecon_dev_postgres
     environment:
-      POSTGRES_USER: lexigram
-      POSTGRES_PASSWORD: lexigram
-      POSTGRES_DB: lexigram
+      POSTGRES_USER: oridecon
+      POSTGRES_PASSWORD: oridecon
+      POSTGRES_DB: oridecon
     ports:
       - "5432:5432"
     volumes:
-      - lexigram_pg_data:/var/lib/postgresql/data
+      - oridecon_pg_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U lexigram -d lexigram"]
+      test: ["CMD-SHELL", "pg_isready -U oridecon -d oridecon"]
       interval: 5s
       timeout: 5s
       retries: 10
 
   redis:
     image: redis:7-alpine
-    container_name: lexigram_dev_redis
+    container_name: oridecon_dev_redis
     ports:
       - "6379:6379"
     volumes:
-      - lexigram_redis_data:/data
+      - oridecon_redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -43,7 +43,7 @@ services:
       retries: 10
 
 volumes:
-  lexigram_pg_data:
-    name: lexigram_dev_pg_data
-  lexigram_redis_data:
-    name: lexigram_dev_redis_data
+  oridecon_pg_data:
+    name: oridecon_dev_pg_data
+  oridecon_redis_data:
+    name: oridecon_dev_redis_data

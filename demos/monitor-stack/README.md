@@ -1,6 +1,6 @@
 # Monitor Stack Demo
 
-A focused, browser-first example of **Lexigram MonitorModule**. The console
+A focused, browser-first example of **Oridecon MonitorModule**. The console
 uses the package's real metric instruments, bounded in-memory tracing, and
 categorised health registry. No external telemetry service is required.
 
@@ -16,7 +16,7 @@ categorised health registry. No external telemetry service is required.
 
 | # | File | What you learn |
 |---|------|----------------|
-| 1 | `application.yaml` | Lexigram Monitor tracing and demo settings |
+| 1 | `application.yaml` | Oridecon Monitor tracing and demo settings |
 | 2 | `src/monitorstack/app.py` | `MonitorModule` + `WebModule` composition |
 | 3 | `src/monitorstack/di/provider.py` | Resolve monitor protocols and register one self-check |
 | 4 | `src/monitorstack/controllers/api.py` | JSON adapters for metrics, probes, and spans |
@@ -42,7 +42,7 @@ MonitorModule.configure()
 ```
 
 The demo deliberately does not duplicate metric, tracing, or health classes.
-Lexigram Monitor owns those capabilities; the app provider only registers the
+Oridecon Monitor owns those capabilities; the app provider only registers the
 one check and presents them.
 
 ## Quick start

@@ -1,9 +1,9 @@
 ---
 title: "Service Providers"
-description: "The engine of Lexigram: Wiring modules together via Providers."
+description: "The engine of Oridecon: Wiring modules together via Providers."
 ---
 
-**Service Providers** are the fundamental building blocks of Lexigram applications. They encapsulate the logic for registering services, configuring infrastructure, and managing the initial boot sequence of your application.
+**Service Providers** are the fundamental building blocks of Oridecon applications. They encapsulate the logic for registering services, configuring infrastructure, and managing the initial boot sequence of your application.
 
 ## 1. The 2-Phase Lifecycle
 
@@ -14,7 +14,7 @@ Every provider implements two primary methods that are called sequentially by th
 Used to register bindings in the DI container. At this stage, you should only define **how** services are created, not start them.
 
 ```python
-from lexigram.di.provider import Provider
+from oridecon.di.provider import Provider
 
 class DatabaseProvider(Provider):
     name = "database"
@@ -31,7 +31,7 @@ class DatabaseProvider(Provider):
 Invoked after **all** providers have finished their registration phase. This is the safe place to perform I/O, connect to databases, or resolve dependencies that rely on other providers.
 
 ```python
-from lexigram.contracts.core.di import BootContainerProtocol
+from oridecon.contracts.core.di import BootContainerProtocol
 
 async def boot(self, container: BootContainerProtocol) -> None:
     db = await container.resolve(DatabaseProtocol)
@@ -39,13 +39,13 @@ async def boot(self, container: BootContainerProtocol) -> None:
     container.bind(DatabaseService, DatabaseService(db))
 ```
 
-> **Note:** `boot()` receives `BootContainerProtocol`. The container is frozen during boot, so `singleton()`/`transient()`/`scoped()` raise `ContainerError` (LEX_ERR_DI_001). To replace an already-registered singleton (e.g. swapping in a configured `DatabaseService`), use `container.bind(service_type, instance)`.
+> **Note:** `boot()` receives `BootContainerProtocol`. The container is frozen during boot, so `singleton()`/`transient()`/`scoped()` raise `ContainerError` (ORI_ERR_DI_001). To replace an already-registered singleton (e.g. swapping in a configured `DatabaseService`), use `container.bind(service_type, instance)`.
 
 ---
 
 ## 2. Provider Priorities
 
-Lexigram uses a priority system to ensure that lower-level infrastructure (like Logging or Database) is ready before high-level application code (like Web Controllers) starts.
+Oridecon uses a priority system to ensure that lower-level infrastructure (like Logging or Database) is ready before high-level application code (like Web Controllers) starts.
 
 | Priority | Value | Use Case |
 |----------|-------|----------|
@@ -60,8 +60,8 @@ Lexigram uses a priority system to ensure that lower-level infrastructure (like 
 | `LOW` | 100 | Optional providers that can boot last |
 
 ```python
-from lexigram.di.provider import Provider
-from lexigram.contracts.core.provider import ProviderPriority
+from oridecon.di.provider import Provider
+from oridecon.contracts.core.provider import ProviderPriority
 
 class MyInfraProvider(Provider):
     name = "my-infra"
@@ -80,8 +80,8 @@ Providers boot in **ascending** priority order (lower values boot first). This e
 ## 3. Provider Properties
 
 ```python
-from lexigram.di.provider import Provider
-from lexigram.contracts.core.provider import ProviderPriority
+from oridecon.di.provider import Provider
+from oridecon.contracts.core.provider import ProviderPriority
 
 class BillingProvider(Provider):
     name = "billing"                         # Unique identifier
@@ -135,7 +135,7 @@ async def on_error(self, error: Exception, phase: str) -> None:
 Use `Application.discover_providers()` to scan packages for Provider subclasses:
 
 ```python
-from lexigram import Application
+from oridecon import Application
 
 app = Application(name="my-app")
 
@@ -158,8 +158,8 @@ Providers can automatically receive typed configuration from `application.yaml`:
 
 ```python
 from dataclasses import dataclass
-from lexigram.di.provider import Provider
-from lexigram.contracts.core.di import ContainerRegistrarProtocol
+from oridecon.di.provider import Provider
+from oridecon.contracts.core.di import ContainerRegistrarProtocol
 
 @dataclass
 class BillingConfig:
@@ -176,17 +176,17 @@ class BillingProvider(Provider):
         container.singleton(StripeClient, StripeClient(cfg.stripe_key))
 ```
 
-The `ProviderOrchestrator` calls `LexigramConfig.get_section(config_key, config_model)` before `register()` and assigns the result to `provider.config`.
+The `ProviderOrchestrator` calls `OrideconConfig.get_section(config_key, config_model)` before `register()` and assigns the result to `provider.config`.
 
 ---
 
 ## 7. Complete Example
 
 ```python
-from lexigram.di.provider import Provider
-from lexigram.contracts.core.provider import ProviderPriority
-from lexigram.contracts.core.di import ContainerRegistrarProtocol, BootContainerProtocol
-from lexigram.contracts.core.health import HealthCheckResult, HealthStatus
+from oridecon.di.provider import Provider
+from oridecon.contracts.core.provider import ProviderPriority
+from oridecon.contracts.core.di import ContainerRegistrarProtocol, BootContainerProtocol
+from oridecon.contracts.core.health import HealthCheckResult, HealthStatus
 
 class CacheProvider(Provider):
     name = "cache"

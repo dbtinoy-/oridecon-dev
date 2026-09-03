@@ -26,7 +26,7 @@ from orders.app import create_app
 
 async def serve() -> None:
     """Boot once and serve until interrupted; stop cleanly afterwards."""
-    from lexigram.web.server.runner import run_server
+    from oridecon.web.server.runner import run_server
 
     app = create_app()
     await app.start()

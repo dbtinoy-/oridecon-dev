@@ -2,7 +2,7 @@
 
 > Module name: `rbac_console` — run with `PYTHONPATH=demos/auth-rbac/src uv run python -m rbac_console`
 
-Demonstrates **role-based access control** from lexigram-auth through a
+Demonstrates **role-based access control** from oridecon-auth through a
 browser: pick a seeded persona, watch the live permission matrix flip, try
 `authorize()` verdicts for any action/resource pair, and hit guarded article
 endpoints that deny or allow based on permission patterns and role
@@ -10,7 +10,7 @@ inheritance.
 
 Fully offline against in-memory stores. No build step — vanilla JS + fetch.
 
-## Lexigram concepts used
+## Oridecon concepts used
 
 | Concept | Where in this demo | Your app |
 |---------|-------------------|----------|
@@ -25,7 +25,7 @@ Fully offline against in-memory stores. No build step — vanilla JS + fetch.
 
 ## What it shows
 
-| Piece | Where | Lexigram API used |
+| Piece | Where | Oridecon API used |
 |-------|-------|-------------------|
 | Role definitions (patterns + inheritance) | `application.yaml` | `AuthConfig.roles` → auto-consumed by `AuthorizationProvider` |
 | Live permission matrix | `controllers/api.py` | `authorize(user, action, resource) -> Result[bool]` per persona |
@@ -68,7 +68,7 @@ PYTHONPATH=src uv run python -m rbac_console
 Open http://127.0.0.1:8090, log in as any persona (password
 `Demo-Password-1`). The matrix recomputes live; the try-form runs one
 verdict; the articles card shows the create-guard denying viewers.
-Override the port without touching yaml: `LEX_WEB__SERVER__PORT=9000`.
+Override the port without touching yaml: `ORI_WEB__SERVER__PORT=9000`.
 
 ## API Endpoints
 
@@ -85,7 +85,7 @@ Override the port without touching yaml: `LEX_WEB__SERVER__PORT=9000`.
 ## Layout — read it in this order
 
 Start at the composition root and follow the wiring outward.
-Each file has teaching comments explaining the Lexigram convention it follows.
+Each file has teaching comments explaining the Oridecon convention it follows.
 
 | # | File | Lesson |
 |---|------|--------|
@@ -113,7 +113,7 @@ demos/auth-rbac/
 │   ├── controllers/api.py     # JSON API: login/me/matrix/try/articles
 │   ├── repository/session_repository.py  # SessionRepositoryProtocol impl
 │   └── ui/                    # pages controller + views/ + static/
-├── application.yaml           # web/auth sections (LEX_* overrides win)
+├── application.yaml           # web/auth sections (ORI_* overrides win)
 └── tests/                     # e2e flow via ASGITransport
 ```
 

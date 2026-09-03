@@ -1,6 +1,6 @@
 """Tenancy + SQL + Web multi-tenant data isolation scenario.
 
-Packages under test: lexigram-tenancy, lexigram-sql, lexigram-web
+Packages under test: oridecon-tenancy, oridecon-sql, oridecon-web
 Infrastructure: in-memory SQLite (no live service required)
 
 Scenario:

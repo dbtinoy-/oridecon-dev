@@ -1,11 +1,11 @@
-"""Browser API for the focused Lexigram storage demo."""
+"""Browser API for the focused Oridecon storage demo."""
 
 from __future__ import annotations
 
 from typing import Any
 
 from artifact_vault.services.vault import ArtifactVaultService
-from lexigram.web import Controller, delete, get, post
+from oridecon.web import Controller, delete, get, post
 
 
 class ArtifactVaultApiController(Controller):

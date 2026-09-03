@@ -5,14 +5,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import ClassVar
 
-from lexigram.config import BaseConfig
-from lexigram.contracts.core.config import Environment
-from lexigram.validation import ConfigDict, Field
+from oridecon.config import BaseConfig
+from oridecon.contracts.core.config import Environment
+from oridecon.validation import ConfigDict, Field
 
 
 @dataclass(init=False)
 class ApprovalFlowConfig(BaseConfig):
-    """Demo-owned labels; state and approval behavior come from Lexigram."""
+    """Demo-owned labels; state and approval behavior come from Oridecon."""
 
     model_config: ClassVar[ConfigDict] = ConfigDict(extra="ignore")
     config_section: ClassVar[str] = "approval_flow"

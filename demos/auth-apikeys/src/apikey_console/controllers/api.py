@@ -13,20 +13,20 @@ from typing import Any
 
 from starlette.requests import Request
 
-from lexigram.auth import (
+from oridecon.auth import (
     AuthenticationService,
     SessionCookieBackend,
 )
-from lexigram.auth.authn.apikeys import APIKeyManager
-from lexigram.auth.exceptions import AccountLockedError, InvalidCredentialsError
-from lexigram.contracts.exceptions import (
+from oridecon.auth.authn.apikeys import APIKeyManager
+from oridecon.auth.exceptions import AccountLockedError, InvalidCredentialsError
+from oridecon.contracts.exceptions import (
     AuthenticationError,
     NotFoundError,
 )
-from lexigram.logging import get_logger
-from lexigram.result import Err, Ok, Result
-from lexigram.serialization import loads as json_loads
-from lexigram.web import Controller, JSONResponse, get, post
+from oridecon.logging import get_logger
+from oridecon.result import Err, Ok, Result
+from oridecon.serialization import loads as json_loads
+from oridecon.web import Controller, JSONResponse, get, post
 
 logger = get_logger(__name__)
 

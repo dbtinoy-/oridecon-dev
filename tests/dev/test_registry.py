@@ -32,19 +32,19 @@ EXPECTED_GENERATOR_NAMES = (
 def test_resolve_workspace_root_returns_monorepo_root_from_nested_package(
     tmp_path: Path,
 ) -> None:
-    root = tmp_path / "lexigram"
+    root = tmp_path / "oridecon"
     root.mkdir()
     (root / "pyproject.toml").write_text(
-        '[project]\nname = "lexigram"\n',
+        '[project]\nname = "oridecon"\n',
         encoding="utf-8",
     )
-    package_root = root / "lexigram-admin"
+    package_root = root / "oridecon-admin"
     package_root.mkdir()
     (package_root / "pyproject.toml").write_text(
-        '[project]\nname = "lexigram-admin"\n',
+        '[project]\nname = "oridecon-admin"\n',
         encoding="utf-8",
     )
-    nested_file = package_root / "src" / "lexigram" / "admin" / "module.py"
+    nested_file = package_root / "src" / "oridecon" / "admin" / "module.py"
     nested_file.parent.mkdir(parents=True)
     nested_file.write_text("pass\n", encoding="utf-8")
 

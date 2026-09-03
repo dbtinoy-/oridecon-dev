@@ -1,35 +1,35 @@
-# lexigram
+# oridecon
 
 *the async python backend where the glue is already written.*
 
-[![PyPI version](https://img.shields.io/pypi/v/lexigram?color=%2334D058&label=pypi%20package)](https://pypi.org/project/lexigram/)
-[![Python versions](https://img.shields.io/pypi/pyversions/lexigram?color=%2334D058)](https://pypi.org/project/lexigram/)
-[![License](https://img.shields.io/pypi/l/lexigram?color=%2334D058)](https://github.com/dbtinoy-/lexigram/blob/main/LICENSE)
-[![CI](https://github.com/dbtinoy-/lexigram/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/dbtinoy-/lexigram/actions/workflows/ci.yml)
-[![Dependabot](https://img.shields.io/badge/dependabot-enabled-025e8c?logo=dependabot)](https://github.com/dbtinoy-/lexigram/security/dependabot)
-[![Release](https://img.shields.io/github/v/release/dbtinoy-/lexigram?color=%2334D058)](https://github.com/dbtinoy-/lexigram/releases)
+[![PyPI version](https://img.shields.io/pypi/v/oridecon?color=%2334D058&label=pypi%20package)](https://pypi.org/project/oridecon/)
+[![Python versions](https://img.shields.io/pypi/pyversions/oridecon?color=%2334D058)](https://pypi.org/project/oridecon/)
+[![License](https://img.shields.io/pypi/l/oridecon?color=%2334D058)](https://github.com/dbtinoy-/oridecon/blob/main/LICENSE)
+[![CI](https://github.com/dbtinoy-/oridecon/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/dbtinoy-/oridecon/actions/workflows/ci.yml)
+[![Dependabot](https://img.shields.io/badge/dependabot-enabled-025e8c?logo=dependabot)](https://github.com/dbtinoy-/oridecon/security/dependabot)
+[![Release](https://img.shields.io/github/v/release/dbtinoy-/oridecon?color=%2334D058)](https://github.com/dbtinoy-/oridecon/releases)
 
 Stop assembling. Start building.
 
-![Lexigram demo](core/lexigram/docs/gifs/hero/lexigram-hero.gif)
+![Oridecon demo](core/oridecon/docs/gifs/hero/oridecon-hero.gif)
 
-Every backend starts the same way: you wire up SQL, cache, auth, queues, events, middleware — before you write a single line of real code. Lexigram gives you a ready-to-use foundation: the core services are already connected and bootable. You define providers, modules, and controllers. One container boots them all — web, SQL, cache, auth, queues, events, plus the full AI and multimedia families — in one call. Swap Redis for in-memory, Postgres for SQLite, or OpenAI for Ollama with a single config line. No init scripts or config plumbing — just IoC, DI, and contracts, resolved automatically at boot. Just a working base for your logic to run on — and room to implement whatever comes next.
+Every backend starts the same way: you wire up SQL, cache, auth, queues, events, middleware — before you write a single line of real code. Oridecon gives you a ready-to-use foundation: the core services are already connected and bootable. You define providers, modules, and controllers. One container boots them all — web, SQL, cache, auth, queues, events, plus the full AI and multimedia families — in one call. Swap Redis for in-memory, Postgres for SQLite, or OpenAI for Ollama with a single config line. No init scripts or config plumbing — just IoC, DI, and contracts, resolved automatically at boot. Just a working base for your logic to run on — and room to implement whatever comes next.
 
 - **One-call startup.** Providers, modules, controllers — assembled and booted in the right order, automatically.
 - **Swappable everything.** Redis ↔ in-memory, Postgres ↔ SQLite, OpenAI ↔ Ollama — same contract, one config line.
 - **Async end to end.** Container, modules, controllers — concurrency-safe by design.
 - **Contracts, not dependencies.** Every package talks through protocols, so implementations change without breaking anything.
 
-→ full docs at [docs.lexigram.dev](https://docs.lexigram.dev)
+→ full docs at [docs.oridecon.dev](https://docs.oridecon.dev)
 
 ## install
 
 ```bash
-uv add "lexigram[web]"   # core + web + server (what the example below uses)
-pip install "lexigram[web]"
+uv add "oridecon[web]"   # core + web + server (what the example below uses)
+pip install "oridecon[web]"
 
-# want the AI layer too?   `uv add "lexigram[ai,web]"`   # agents, llms, rag, memory, ...
-# want the Data layer too? `uv add "lexigram[db]"`   # nosql + storage + search, same container
+# want the AI layer too?   `uv add "oridecon[ai,web]"`   # agents, llms, rag, memory, ...
+# want the Data layer too? `uv add "oridecon[db]"`   # nosql + storage + search, same container
 #   nosql:    `DocumentQueryBuilder` — typed document queries, multiple backends
 #   storage:  `BlobStoreProtocol` — local, memory, s3, azure, gcs (one contract)
 #   search:   `SearchEngine` — federated and hybrid search across backends
@@ -40,8 +40,8 @@ pip install "lexigram[web]"
 ### from this repository (fresh clone)
 
 ```bash
-git clone https://github.com/dbtinoy-/lexigram.git
-cd lexigram
+git clone https://github.com/dbtinoy-/oridecon.git
+cd oridecon
 
 # reproducible install (lockfile is committed — uv sync --locked fails
 # on drift between uv.lock and pyproject.toml)
@@ -69,9 +69,9 @@ uv run pytest -m integration
 ## 60 seconds, end to end
 
 ```python
-from lexigram import Application
-from lexigram.web import Controller, get, WebModule
-from lexigram.web.server import run_server
+from oridecon import Application
+from oridecon.web import Controller, get, WebModule
+from oridecon.web.server import run_server
 
 
 class HelloController(Controller):
@@ -86,7 +86,7 @@ app.add_modules([WebModule.configure(controllers=[HelloController])])
 run_server(app, port=8000)
 ```
 
-→ http://localhost:8000/hello?name=lexigram
+→ http://localhost:8000/hello?name=oridecon
 
 #### also available by default
 - → http://localhost:8000/health
@@ -109,11 +109,11 @@ run_server(app, port=8000)
 
 this repo ships the main ecosystem — the core, the backend, the contracts:
 
-- **`lexigram`** — the core, the container, the boot lifecycle
-- **`lexigram-web`** — async routing and controllers
-- **`lexigram-sql`** — sqlalchemy, already wired
-- **`lexigram-cache`** — redis and in-memory, one contract
-- **`lexigram-vector`** / **`lexigram-graph`** — storage for the ai layer
+- **`oridecon`** — the core, the container, the boot lifecycle
+- **`oridecon-web`** — async routing and controllers
+- **`oridecon-sql`** — sqlalchemy, already wired
+- **`oridecon-cache`** — redis and in-memory, one contract
+- **`oridecon-vector`** / **`oridecon-graph`** — storage for the ai layer
 - plus auth, events, queue, tasks, http, resilience, storage, search, notification, monitor, webhook, tenancy, features, audit, graphql, nosql, workflow, and testing
 
 the AI family — agents, llms, rag, memory, skills, mcp, session, workers, observability, feedback, and the guard / governance / evaluation / prompt / relay suite — lives in [experimental/ai](./experimental/ai/). multimedia (tts, music, image, video, beat, interpolate, upscale) lives in [experimental/multimedia](./experimental/multimedia/). same modules, same container, same rules.
@@ -129,13 +129,13 @@ MEDIA   tts · music · video · image
 TRUST   di · contracts · modules · async
 ```
 
-the full list — including notification, queue, events, auth, observability, and more — lives in the [docs ecosystem](https://docs.lexigram.dev/ecosystem/).
+the full list — including notification, queue, events, auth, observability, and more — lives in the [docs ecosystem](https://docs.oridecon.dev/ecosystem/).
 
 ## early on purpose
 
-Lexigram is in 0.1 — which means you can still change it. APIs may shift before 1.0, so pin your versions, and tell us what feels wrong. Shaping a framework is more fun when it's still soft.
+Oridecon is in 0.1 — which means you can still change it. APIs may shift before 1.0, so pin your versions, and tell us what feels wrong. Shaping a framework is more fun when it's still soft.
 
-→ [github.com/dbtinoy-/lexigram/issues](https://github.com/dbtinoy-/lexigram/issues)
+→ [github.com/dbtinoy-/oridecon/issues](https://github.com/dbtinoy-/oridecon/issues)
 
 ## why it grows with you
 
@@ -174,7 +174,7 @@ latest `main` run); each job has a local one-liner:
 
 ## reference
 
-- [Env vars](docs/reference/REF_ENV_VARS.md) — every `LEX_*` environment variable
+- [Env vars](docs/reference/REF_ENV_VARS.md) — every `ORI_*` environment variable
 - [Error codes](docs/reference/REF_ERROR_CODES.md) — error codes and their meanings
 - [Dependency tree](docs/reference/DEPENDENCY_TREE.md) — full locked workspace
   dependency graph; regenerate with `make dep-tree`
@@ -219,16 +219,16 @@ latest `main` run); each job has a local one-liner:
 
 ## interesting subsystems and packages
 
-- CLI → [experimental/apps/lexigram-cli](./experimental/apps/lexigram-cli/)
-- Admin → [experimental/apps/lexigram-admin](./experimental/apps/lexigram-admin/)
-- UI → [experimental/apps/lexigram-ui](./experimental/apps/lexigram-ui/)
+- CLI → [experimental/apps/oridecon-cli](./experimental/apps/oridecon-cli/)
+- Admin → [experimental/apps/oridecon-admin](./experimental/apps/oridecon-admin/)
+- UI → [experimental/apps/oridecon-ui](./experimental/apps/oridecon-ui/)
 - AI subsystems → [experimental/ai](./experimental/ai/)
 - Multimedia subsystems → [experimental/multimedia](./experimental/multimedia/)
 
 ## pointers
 
-- full docs → [docs.lexigram.dev](https://docs.lexigram.dev)
-- skills for AI coding agents → [lexigram-skills](https://github.com/dbtinoy-/lexigram-framework-skills)
+- full docs → [docs.oridecon.dev](https://docs.oridecon.dev)
+- skills for AI coding agents → [oridecon-skills](https://github.com/dbtinoy-/oridecon-framework-skills)
 - contributing → [CONTRIBUTING.md](./CONTRIBUTING.md)
 - security → [SECURITY.md](./SECURITY.md)
 - license → [LICENSE](./LICENSE)

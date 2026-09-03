@@ -1,11 +1,11 @@
 """Provider wiring for the resilient rates demo.
 
 Convention followed: **Provider pattern** — ``RatesProvider`` is the
-canonical shape (mirrors ``lexigram-auth`` + the boot-phase ``bind()``
-contract in ``lexigram.contracts.core.di``):
+canonical shape (mirrors ``oridecon-auth`` + the boot-phase ``bind()``
+contract in ``oridecon.contracts.core.di``):
 
 - ``config_key``/``config_model`` declare the ``demo:`` section; the
-  orchestrator injects the matching typed section of ``LexigramConfig``
+  orchestrator injects the matching typed section of ``OrideconConfig``
   into ``provider.config`` right before ``register()`` runs.
 - ``register()`` only *declares* bindings.  Zero-arg factories cover
   purely config-derived services; dependency-full services are declared
@@ -21,23 +21,23 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from lexigram.cache import CacheConfig
-from lexigram.cache.service.stampede import StampedeProtectedCache
-from lexigram.contracts.core.health import (
+from oridecon.cache import CacheConfig
+from oridecon.cache.service.stampede import StampedeProtectedCache
+from oridecon.contracts.core.health import (
     HealthCheckCategory,
     HealthCheckResult,
     HealthStatus,
 )
-from lexigram.contracts.infra.cache import CacheBackendProtocol
-from lexigram.contracts.infra.resilience import ResiliencePipelineFactoryProtocol
-from lexigram.di.provider import Provider
+from oridecon.contracts.infra.cache import CacheBackendProtocol
+from oridecon.contracts.infra.resilience import ResiliencePipelineFactoryProtocol
+from oridecon.di.provider import Provider
 from rates.config import RatesConfig
 from rates.controllers import RatesApiController
 from rates.repository import FaultController, Scenario, SimulatedRatesProvider
 from rates.services import RatesService
 
 if TYPE_CHECKING:
-    from lexigram.contracts.core.di import (
+    from oridecon.contracts.core.di import (
         ContainerRegistrarProtocol,
         ContainerResolverProtocol,
     )

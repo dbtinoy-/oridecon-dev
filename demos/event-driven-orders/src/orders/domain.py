@@ -18,8 +18,8 @@ Three layers of domain types:
    Result bridge maps to HTTP status codes (404, 409, 400).
 
 Convention: ``str, Enum`` for string enums (OrderStatus); ``DomainEvent``
-from lexigram.contracts for event base; ``DomainError`` from
-lexigram.contracts.exceptions for error base.
+from oridecon.contracts for event base; ``DomainError`` from
+oridecon.contracts.exceptions for error base.
 """
 
 from __future__ import annotations
@@ -30,8 +30,8 @@ from enum import Enum
 from typing import Any
 from uuid import UUID
 
-from lexigram.contracts.domain import DomainEvent
-from lexigram.contracts.exceptions.domain import DomainError
+from oridecon.contracts.domain import DomainEvent
+from oridecon.contracts.exceptions.domain import DomainError
 
 
 class OrderStatus(str, Enum):

@@ -28,7 +28,7 @@ uv run python -m dev.cli audit validate
 
 - `quality` uses live `ruff check` and `mypy` results as report evidence.
 - `tests` uses live `pytest` runs plus parsed failing-example snippets as report evidence.
-- `rules` captures Lexigram-specific architectural misalignments, including import-boundary violations and package-coverage gaps.
+- `rules` captures Oridecon-specific architectural misalignments, including import-boundary violations and package-coverage gaps.
 
 ## Validation Note
 

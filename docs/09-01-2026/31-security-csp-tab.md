@@ -1,7 +1,7 @@
 # 31 — Security Center CSP Tab (R35)
 
 **Date:** 2026-09-02 (docs series 09-01-2026)
-**Branch:** `arena/01a05b98-lexigram` · builds directly on R34 (doc 30)
+**Branch:** `arena/01a05b98-oridecon` · builds directly on R34 (doc 30)
 
 ## 1. Problem
 

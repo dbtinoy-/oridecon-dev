@@ -1,6 +1,6 @@
 ---
 title: "Authentication"
-description: "Identity and access control with lexigram-auth guards, JWT, and RBAC."
+description: "Identity and access control with oridecon-auth guards, JWT, and RBAC."
 ---
 
 :::tip[Living demo]
@@ -12,7 +12,7 @@ uv run python -m auth_web
 :::
 
 
-`lexigram-auth` provides authentication and authorization — JWT, OAuth2, password hashing, and role-based access control (RBAC). In a web application, most checks happen in the request pipeline using **guards**.
+`oridecon-auth` provides authentication and authorization — JWT, OAuth2, password hashing, and role-based access control (RBAC). In a web application, most checks happen in the request pipeline using **guards**.
 
 ---
 
@@ -38,8 +38,8 @@ graph TD
 Apply guards to a controller or a single handler with `@use_guards`. The built-in `AuthGuard` requires a valid session or token; `RoleGuard` restricts by role.
 
 ```python
-from lexigram.web import Controller, get
-from lexigram.web.security import use_guards, AuthGuard, RoleGuard
+from oridecon.web import Controller, get
+from oridecon.web.security import use_guards, AuthGuard, RoleGuard
 
 
 class ProfileController(Controller):
@@ -58,10 +58,10 @@ class AdminController(Controller):
 
 `RoleGuard` needs an `AuthorizerProtocol` instance — resolve it from the container (or constructor-inject it into the controller) and pass it at guard instantiation.
 
-`lexigram.web` also re-exports concise shortcuts:
+`oridecon.web` also re-exports concise shortcuts:
 
 ```python
-from lexigram.web import roles, guard
+from oridecon.web import roles, guard
 
 @roles("admin", "editor")     # require any of these roles
 @guard(MyCustomGuard)         # apply a custom guard
@@ -74,8 +74,8 @@ from lexigram.web import roles, guard
 `AuthGuard` and `RoleGuard` are abstract base classes — implement your own by subclassing and returning either success or a `GuardRejection`. Request data is available through the typed `Request` (e.g. `request.ip`, `request.user`):
 
 ```python
-from lexigram.web.security import AuthGuard
-from lexigram.web import Request
+from oridecon.web.security import AuthGuard
+from oridecon.web import Request
 
 
 class IPAllowlistGuard(AuthGuard):
@@ -85,13 +85,13 @@ class IPAllowlistGuard(AuthGuard):
         return request.ip in self.allowed
 ```
 
-See the [`lexigram-auth` package docs](/packages/lexigram-auth/) for the exact guard interface and built-in guards.
+See the [`oridecon-auth` package docs](/packages/oridecon-auth/) for the exact guard interface and built-in guards.
 
 ---
 
 ## 4. Error Mapping
 
-When a guard rejects a request, Lexigram returns a standardized HTTP error (as [RFC 7807 Problem Details](https://www.rfc-editor.org/rfc/rfc7807)):
+When a guard rejects a request, Oridecon returns a standardized HTTP error (as [RFC 7807 Problem Details](https://www.rfc-editor.org/rfc/rfc7807)):
 
 | Failure | HTTP status |
 |---------|-------------|
@@ -107,7 +107,7 @@ Because the framework uses the [Result pattern](/fundamentals/result-pattern/), 
 Add the auth provider and configure the `auth` section — JWT signing, password policy, and RBAC:
 
 ```python
-from lexigram.auth import AuthBundleProvider
+from oridecon.auth import AuthBundleProvider
 
 app.add_provider(AuthBundleProvider())
 ```
@@ -116,7 +116,7 @@ app.add_provider(AuthBundleProvider())
 auth:
   enabled: true
   token:
-    secret_key: "${LEX_AUTH__TOKEN__SECRET_KEY}"
+    secret_key: "${ORI_AUTH__TOKEN__SECRET_KEY}"
     algorithm: HS256
     access_token_expire: 30m
   password:
@@ -134,4 +134,4 @@ auth:
 
 - [Multi-Tenancy](/guides/multi-tenancy/) — tenant-scoped access control
 - [Result Pattern](/fundamentals/result-pattern/) — returning auth errors from services
-- [`lexigram-auth` package](/packages/lexigram-auth/) — JWT, OAuth2, and RBAC in depth
+- [`oridecon-auth` package](/packages/oridecon-auth/) — JWT, OAuth2, and RBAC in depth

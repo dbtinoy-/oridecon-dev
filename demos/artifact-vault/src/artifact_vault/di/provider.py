@@ -7,16 +7,16 @@ from typing import TYPE_CHECKING
 from artifact_vault.config import ArtifactVaultConfig
 from artifact_vault.controllers.api import ArtifactVaultApiController
 from artifact_vault.services.vault import ArtifactVaultService
-from lexigram.contracts import BlobStoreProtocol
-from lexigram.contracts.core.health import (
+from oridecon.contracts import BlobStoreProtocol
+from oridecon.contracts.core.health import (
     HealthCheckCategory,
     HealthCheckResult,
     HealthStatus,
 )
-from lexigram.di.provider import Provider
+from oridecon.di.provider import Provider
 
 if TYPE_CHECKING:
-    from lexigram.contracts.core.di import (
+    from oridecon.contracts.core.di import (
         ContainerRegistrarProtocol,
         ContainerResolverProtocol,
     )

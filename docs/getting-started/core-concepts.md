@@ -18,10 +18,10 @@ sidebar:
 The `Application` class is the composition root. It manages providers, modules, configuration, and lifecycle.
 
 ```python
-from lexigram import Application, LexigramConfig
+from oridecon import Application, OrideconConfig
 
 def create_app() -> Application:
-    config = LexigramConfig.from_yaml()
+    config = OrideconConfig.from_yaml()
     app = Application(name="my-app", config=config)
     # Wire services here...
     return app
@@ -56,9 +56,9 @@ async with Application.boot(
 Providers register services in the DI container and manage their lifecycle. Every provider follows a **two-phase** pattern:
 
 ```python
-from lexigram.di.provider import Provider
-from lexigram.contracts.core import ProviderPriority
-from lexigram.contracts.core.di import (
+from oridecon.di.provider import Provider
+from oridecon.contracts.core import ProviderPriority
+from oridecon.contracts.core.di import (
     ContainerRegistrarProtocol,
     ContainerResolverProtocol,
 )
@@ -112,7 +112,7 @@ class CacheProvider(Provider):
         container.singleton(CacheBackend, RedisCacheBackend(cfg))
 ```
 
-The `ProviderOrchestrator` calls `LexigramConfig.get_section(config_key, config_model)` before `register()` and assigns the result to `provider.config`.
+The `ProviderOrchestrator` calls `OrideconConfig.get_section(config_key, config_model)` before `register()` and assigns the result to `provider.config`.
 
 ### Provider Lifecycle Hooks
 
@@ -128,7 +128,7 @@ The `ProviderOrchestrator` calls `LexigramConfig.get_section(config_key, config_
 
 ## Dependency Injection
 
-Lexigram uses **constructor injection** — declare dependencies as type hints, the container resolves them automatically:
+Oridecon uses **constructor injection** — declare dependencies as type hints, the container resolves them automatically:
 
 ```python
 class OrderService:
@@ -146,7 +146,7 @@ class OrderService:
 The container uses a **key → value** binding pattern. The first argument is the type you resolve by, the second is what you get back:
 
 ```python
-from lexigram import Container
+from oridecon import Container
 
 container = Container()
 
@@ -177,14 +177,14 @@ await container.dispose()               # cleanup all singletons
 
 | Decorator | Scope | Import From |
 |-----------|-------|-------------|
-| `@singleton` | One instance for the app | `lexigram` |
-| `@injectable` | Transient by default | `lexigram` |
-| `@scoped` | One instance per request/scope | `lexigram` |
-| `@transient` | New instance each time | `lexigram` |
-| `@inject` | Enable DI on async functions | `lexigram` |
+| `@singleton` | One instance for the app | `oridecon` |
+| `@injectable` | Transient by default | `oridecon` |
+| `@scoped` | One instance per request/scope | `oridecon` |
+| `@transient` | New instance each time | `oridecon` |
+| `@inject` | Enable DI on async functions | `oridecon` |
 
 ```python
-from lexigram import singleton, injectable, inject
+from oridecon import singleton, injectable, inject
 
 @singleton
 class ConfigService:
@@ -206,10 +206,10 @@ async def handle_request(user_svc: UserService) -> None:
 
 ## Result Type
 
-Lexigram uses `Result[T, E]` for operations that can fail — no exceptions for expected errors.
+Oridecon uses `Result[T, E]` for operations that can fail — no exceptions for expected errors.
 
 ```python
-from lexigram.result import Result, Ok, Err
+from oridecon.result import Result, Ok, Err
 
 async def find_user(self, user_id: str) -> Result[User, DomainError]:
     user = await self.repo.get(user_id)
@@ -266,7 +266,7 @@ except ValueError as e:
 ### Utilities
 
 ```python
-from lexigram.result import (
+from oridecon.result import (
     as_result,           # decorator: wraps async fn exceptions into Err
     as_result_sync,      # decorator: wraps sync fn exceptions into Err
     collect,             # list[Result[T, E]] → Result[list[T], E]
@@ -284,7 +284,7 @@ from lexigram.result import (
 For larger projects (Pattern 3), **modules** add encapsulation boundaries over providers. Services inside a module are **private by default** — only explicitly exported types are visible to importers.
 
 ```python
-from lexigram.di.module import module
+from oridecon.di.module import module
 
 @module(
     imports=[AuthModule],                  # can use AuthServiceProtocol
@@ -300,7 +300,7 @@ class BillingModule:
 For infrastructure that needs runtime configuration, override `configure()` on the `Module` base class:
 
 ```python
-from lexigram.di.module import module, Module, DynamicModule
+from oridecon.di.module import module, Module, DynamicModule
 
 @module()
 class DatabaseModule(Module):
@@ -334,7 +334,7 @@ The `Module` base class provides three factory methods:
 A `@global_module`'s exports are visible to all modules without explicit import:
 
 ```python
-from lexigram.di.module import global_module, Module
+from oridecon.di.module import global_module, Module
 
 @global_module
 class LoggingModule(Module):

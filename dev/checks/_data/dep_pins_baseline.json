@@ -1,5 +1,5 @@
 {
-  "lexigram": [
+  "oridecon": [
     [
       "jinja2",
       ">=3.1.0"
@@ -61,7 +61,7 @@
       ">=0.3.4"
     ]
   ],
-  "lexigram-admin": [
+  "oridecon-admin": [
     [
       "aiofiles",
       ">=23.0.0"
@@ -207,7 +207,7 @@
       ">=0.3.4"
     ]
   ],
-  "lexigram-ai": [
+  "oridecon-ai": [
     [
       "numpy",
       ">=1.25.0"
@@ -529,7 +529,7 @@
       ">=2.0.0"
     ]
   ],
-  "lexigram-ai-agents": [
+  "oridecon-ai-agents": [
     [
       "typing-extensions",
       ">=4.0.0"
@@ -563,7 +563,7 @@
       ">=0.1.0"
     ]
   ],
-  "lexigram-ai-feedback": [
+  "oridecon-ai-feedback": [
     [
       "typing-extensions",
       ">=4.0.0"
@@ -593,7 +593,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-ai-governance": [
+  "oridecon-ai-governance": [
     [
       "starlette",
       ">=0.28.0"
@@ -627,7 +627,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-ai-guard": [
+  "oridecon-ai-guard": [
     [
       "starlette",
       ">=0.28.0"
@@ -661,7 +661,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-ai-llm": [
+  "oridecon-ai-llm": [
     [
       "aiohttp",
       ">=3.9"
@@ -795,7 +795,7 @@
       ">=4.30.0"
     ]
   ],
-  "lexigram-ai-mcp": [
+  "oridecon-ai-mcp": [
     [
       "typer",
       ">=0.9.0"
@@ -829,7 +829,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-ai-memory": [
+  "oridecon-ai-memory": [
     [
       "typing-extensions",
       ">=4.0.0"
@@ -863,7 +863,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-ai-observability": [
+  "oridecon-ai-observability": [
     [
       "typing-extensions",
       ">=4.0.0"
@@ -893,7 +893,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-ai-prompt": [
+  "oridecon-ai-prompt": [
     [
       "jinja2",
       ">=3.0"
@@ -927,7 +927,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-ai-rag": [
+  "oridecon-ai-rag": [
     [
       "aiofiles",
       ">=23.0.0"
@@ -1013,7 +1013,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-ai-relay": [
+  "oridecon-ai-relay": [
     [
       "typing-extensions",
       ">=4.0.0"
@@ -1043,7 +1043,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-ai-relay-gateway": [
+  "oridecon-ai-relay-gateway": [
     [
       "orjson",
       ">=3.9.0"
@@ -1081,7 +1081,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-ai-session": [
+  "oridecon-ai-session": [
     [
       "typing-extensions",
       ">=4.0.0"
@@ -1111,7 +1111,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-ai-skills": [
+  "oridecon-ai-skills": [
     [
       "pyyaml",
       ">=6.0"
@@ -1145,7 +1145,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-ai-workers": [
+  "oridecon-ai-workers": [
     [
       "typing-extensions",
       ">=4.0.0"
@@ -1175,7 +1175,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-audit": [
+  "oridecon-audit": [
     [
       "starlette",
       ">=0.28.0"
@@ -1209,7 +1209,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-auth": [
+  "oridecon-auth": [
     [
       "argon2-cffi",
       ">=21.1.0"
@@ -1327,7 +1327,7 @@
       ">=1.3.0"
     ]
   ],
-  "lexigram-cache": [
+  "oridecon-cache": [
     [
       "jinja2",
       ">=3.1.0"
@@ -1425,7 +1425,7 @@
       ">=5.0.0"
     ]
   ],
-  "lexigram-cli": [
+  "oridecon-cli": [
     [
       "aiofiles",
       ">=23.0.0"
@@ -1503,7 +1503,7 @@
       ">=4.0.0"
     ]
   ],
-  "lexigram-contracts": [
+  "oridecon-contracts": [
     [
       "typing-extensions",
       ">=4.0.0"
@@ -1533,7 +1533,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-events": [
+  "oridecon-events": [
     [
       "jinja2",
       ">=3.1.0"
@@ -1651,7 +1651,7 @@
       ">=3.10.0"
     ]
   ],
-  "lexigram-features": [
+  "oridecon-features": [
     [
       "typer",
       ">=0.9.0"
@@ -1685,7 +1685,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-graph": [
+  "oridecon-graph": [
     [
       "neo4j",
       ">=5.20.0"
@@ -1715,7 +1715,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-graphql": [
+  "oridecon-graphql": [
     [
       "graphql-core",
       ">=3.2.0"
@@ -1797,7 +1797,7 @@
       ">=12.0.0"
     ]
   ],
-  "lexigram-http": [
+  "oridecon-http": [
     [
       "aiohttp",
       ">=3.9.0"
@@ -1835,7 +1835,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-monitor": [
+  "oridecon-monitor": [
     [
       "starlette",
       ">=0.28.0"
@@ -1933,7 +1933,7 @@
       ">=3.10.0"
     ]
   ],
-  "lexigram-multimedia": [
+  "oridecon-multimedia": [
     [
       "pytest",
       ">=8.0.0"
@@ -1959,7 +1959,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-multimedia-beat": [
+  "oridecon-multimedia-beat": [
     [
       "aiohttp",
       ">=3.9.0"
@@ -2013,7 +2013,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-multimedia-image": [
+  "oridecon-multimedia-image": [
     [
       "aiohttp",
       ">=3.9.0"
@@ -2047,7 +2047,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-multimedia-interpolate": [
+  "oridecon-multimedia-interpolate": [
     [
       "aiohttp",
       ">=3.9.0"
@@ -2081,7 +2081,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-multimedia-music": [
+  "oridecon-multimedia-music": [
     [
       "aiohttp",
       ">=3.9.0"
@@ -2115,7 +2115,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-multimedia-tts": [
+  "oridecon-multimedia-tts": [
     [
       "aiohttp",
       ">=3.9.0"
@@ -2149,7 +2149,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-multimedia-upscale": [
+  "oridecon-multimedia-upscale": [
     [
       "aiohttp",
       ">=3.9.0"
@@ -2183,7 +2183,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-multimedia-video": [
+  "oridecon-multimedia-video": [
     [
       "aiohttp",
       ">=3.9.0"
@@ -2217,7 +2217,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-nosql": [
+  "oridecon-nosql": [
     [
       "jinja2",
       ">=3.1.0"
@@ -2263,7 +2263,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-notification": [
+  "oridecon-notification": [
     [
       "aiofiles",
       ">=23.0"
@@ -2345,7 +2345,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-queue": [
+  "oridecon-queue": [
     [
       "jinja2",
       ">=3.1.0"
@@ -2359,7 +2359,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-resilience": [
+  "oridecon-resilience": [
     [
       "pytest",
       ">=8.0.0"
@@ -2385,7 +2385,7 @@
       ">=0.11.0"
     ]
   ],
-  "lexigram-search": [
+  "oridecon-search": [
     [
       "jinja2",
       ">=3.1.0"
@@ -2519,7 +2519,7 @@
       ">=3.10.0"
     ]
   ],
-  "lexigram-secrets": [
+  "oridecon-secrets": [
     [
       "botocore",
       ">=1.40.61"
@@ -2573,7 +2573,7 @@
       ">=0.1.0"
     ]
   ],
-  "lexigram-sql": [
+  "oridecon-sql": [
     [
       "aiosqlite",
       ">=0.22.1"
@@ -2671,7 +2671,7 @@
       ">=3.10.0"
     ]
   ],
-  "lexigram-storage": [
+  "oridecon-storage": [
     [
       "aiofiles",
       ">=23.0.0"
@@ -2761,7 +2761,7 @@
       ">=2.0.0"
     ]
   ],
-  "lexigram-tasks": [
+  "oridecon-tasks": [
     [
       "croniter",
       ">=1.4.0"
@@ -2863,7 +2863,7 @@
       ">=1.15.0"
     ]
   ],
-  "lexigram-tenancy": [
+  "oridecon-tenancy": [
     [
       "typer",
       ">=0.9.0"
@@ -2897,7 +2897,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-testing": [
+  "oridecon-testing": [
     [
       "pytest",
       ">=8.0.0"
@@ -2999,7 +2999,7 @@
       ">=5.0.0"
     ]
   ],
-  "lexigram-ui": [
+  "oridecon-ui": [
     [
       "htpy",
       ">=0.9"
@@ -3061,7 +3061,7 @@
       ">=0.1.0"
     ]
   ],
-  "lexigram-vector": [
+  "oridecon-vector": [
     [
       "aiohttp",
       ">=3.9.0"
@@ -3123,7 +3123,7 @@
       ">=0.8.0"
     ]
   ],
-  "lexigram-web": [
+  "oridecon-web": [
     [
       "aiofiles",
       ">=23.0.0"
@@ -3273,7 +3273,7 @@
       ">=12.0.0"
     ]
   ],
-  "lexigram-webhook": [
+  "oridecon-webhook": [
     [
       "httpx",
       ">=0.27.0"
@@ -3283,7 +3283,7 @@
       ">=0.28.0"
     ]
   ],
-  "lexigram-workflow": [
+  "oridecon-workflow": [
     [
       "typer",
       ">=0.9.0"

@@ -17,9 +17,9 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
-from lexigram.contracts.core.result import Err, Ok, Result
-from lexigram.contracts.events import CommandBusProtocol, EventBusProtocol
-from lexigram.logging import get_logger
+from oridecon.contracts.core.result import Err, Ok, Result
+from oridecon.contracts.events import CommandBusProtocol, EventBusProtocol
+from oridecon.logging import get_logger
 from orders.commands import PayOrder, PlaceOrder, ShipOrder
 from orders.domain import OrderError, OrderItem
 from orders.events import OrdersView

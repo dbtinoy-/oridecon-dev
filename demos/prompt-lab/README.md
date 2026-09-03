@@ -6,7 +6,7 @@ Iterate on a support-reply prompt like a scientist: render any revision,
 inspect history, roll back, and score variants through the real
 evaluation harness — zero LLM, byte-stable every run.
 
-## Lexigram concepts used
+## Oridecon concepts used
 
 | Concept | Where in this demo | Your app |
 |---------|-------------------|----------|
@@ -20,12 +20,12 @@ evaluation harness — zero LLM, byte-stable every run.
 
 ## What it shows
 
-| Piece | Where | Lexigram API used |
+| Piece | Where | Oridecon API used |
 |-------|-------|-------------------|
 | Declared-variable templates | `repository/templates.py` | `ChatPromptTemplate` with `PromptVariable` |
 | Version control for prompts | `services/versioning.py` | `VersionedPromptStore` push/history/rollback |
 | Deterministic A/B scoring | `services/ab_runner.py` | `EvaluationHarness` + `CriteriaEvaluator` |
-| Registry dispatch | `repository/responders.py` | `lexigram.primitives.Registry` |
+| Registry dispatch | `repository/responders.py` | `oridecon.primitives.Registry` |
 | Result-returning handlers | `controllers/api.py` | `Result[T, E]` → auto HTTP status mapping |
 
 ## Run it
@@ -38,7 +38,7 @@ PYTHONPATH=src uv run python -m prompt_lab
 Open http://127.0.0.1:8085. Render previews at any revision, run **A/B**,
 then **Rollback** v2 and see its score drop back to v1's baseline.
 
-Override the port without touching yaml: `LEX_WEB__SERVER__PORT=9000`.
+Override the port without touching yaml: `ORI_WEB__SERVER__PORT=9000`.
 
 ## API Endpoints
 
@@ -53,7 +53,7 @@ Override the port without touching yaml: `LEX_WEB__SERVER__PORT=9000`.
 ## Layout — read it in this order
 
 Start at the composition root and follow the wiring outward.
-Each file has teaching comments explaining the Lexigram convention it follows.
+Each file has teaching comments explaining the Oridecon convention it follows.
 
 | # | File | Lesson |
 |---|------|--------|
@@ -80,7 +80,7 @@ demos/prompt-lab/
 │   │   ├── versioning.py      # VersionedPromptStore façade
 │   │   └── ab_runner.py       # deterministic A/B scorer
 │   └── ui/                    # pages controller + views/ + static/
-├── application.yaml           # web section (LEX_* overrides win)
+├── application.yaml           # web section (ORI_* overrides win)
 └── tests/                     # e2e API flow + service tests
 ```
 

@@ -1,6 +1,6 @@
 """Events + SQL event-driven state change scenario.
 
-Packages under test: lexigram-events, lexigram-sql
+Packages under test: oridecon-events, oridecon-sql
 Infrastructure: in-memory SQLite + in-process event bus (no live service)
 
 Scenario:

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from lexigram.monitor.health import (
+from oridecon.monitor.health import (
     HealthCheckCategory,
     HealthChecker,
     HealthStatus,

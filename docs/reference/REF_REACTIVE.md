@@ -1,8 +1,8 @@
 # REF_REACTIVE.md — Reactive Streams Reference
 
 **Date:** 2026-08-21
-**Source:** `core/lexigram/src/lexigram/reactive/`
-**Tests:** `core/lexigram/tests/unit/reactive/`
+**Source:** `core/oridecon/src/oridecon/reactive/`
+**Tests:** `core/oridecon/tests/unit/reactive/`
 
 > Native stream composition for async apps: cold streams, hot multicast
 > subjects, composable operators, and retry with backoff. Everything is a
@@ -19,16 +19,16 @@ The reactive layer models work as **streams of items over time**:
 - **Composable** — operators transform `EventStream → EventStream` and are
   applied left-to-right with `.pipe()` or the functional `pipe()`.
 
-Facade access (lazy exports from the `lexigram` root):
+Facade access (lazy exports from the `oridecon` root):
 
 ```python
-from lexigram import Stream, Subject, share, ops, retry, RetryOptions
+from oridecon import Stream, Subject, share, ops, retry, RetryOptions
 ```
 
 ## Quick start
 
 ```python
-from lexigram.reactive import Stream, ops
+from oridecon.reactive import Stream, ops
 
 
 async def gen():
@@ -45,7 +45,7 @@ Hot multicast with a `Subject`:
 
 ```python
 import asyncio
-from lexigram.reactive import Subject
+from oridecon.reactive import Subject
 
 subject = Subject[int]()
 
@@ -91,7 +91,7 @@ background task:
 
 ## Operators reference
 
-All operators live in `lexigram.reactive.ops` and compose via `.pipe()`.
+All operators live in `oridecon.reactive.ops` and compose via `.pipe()`.
 
 | Operator | Signature sketch | Semantics / gotchas |
 |----------|------------------|---------------------|
@@ -113,7 +113,7 @@ All operators live in `lexigram.reactive.ops` and compose via `.pipe()`.
 ### End-event example
 
 ```python
-from lexigram.reactive import Stream, ops
+from oridecon.reactive import Stream, ops
 
 stream = Stream(gen()).pipe(
     ops.on_end(
@@ -139,22 +139,22 @@ default value); choose `retry` when re-running the source may succeed
 
 | Bridge | Package | What it provides |
 |--------|---------|------------------|
-| `sse_from_stream(stream, ...)` | `lexigram.web.transport` | Expose any `EventStream` as an SSE response (keepalives included). |
-| `events.reactive.from_store(store, ...)` | `lexigram.events` | Cold replay stream over an event store. |
-| `events.reactive.from_bus(dispatcher, store, ...)` | `lexigram.events` | Catch-up + live event stream (cancelling unsubscribes). |
-| `events.reactive.retry_with_resilience(policy)` | `lexigram.events` | Adapt a resilience policy into the core `retry` operator. |
+| `sse_from_stream(stream, ...)` | `oridecon.web.transport` | Expose any `EventStream` as an SSE response (keepalives included). |
+| `events.reactive.from_store(store, ...)` | `oridecon.events` | Cold replay stream over an event store. |
+| `events.reactive.from_bus(dispatcher, store, ...)` | `oridecon.events` | Catch-up + live event stream (cancelling unsubscribes). |
+| `events.reactive.retry_with_resilience(policy)` | `oridecon.events` | Adapt a resilience policy into the core `retry` operator. |
 
 ## Testing notes
 
 Run the reactive suite scoped:
 
 ```bash
-uv run pytest core/lexigram/tests/unit/reactive -q --no-cov
+uv run pytest core/oridecon/tests/unit/reactive -q --no-cov
 ```
 
 Consumer suites worth keeping green when changing this layer:
 
 ```bash
-uv run pytest packages/lexigram-web/tests/unit/transport/test_reactive_sse.py -q --no-cov
-uv run pytest packages/lexigram-events/tests/unit/test_reactive_bridges.py -q --no-cov
+uv run pytest packages/oridecon-web/tests/unit/transport/test_reactive_sse.py -q --no-cov
+uv run pytest packages/oridecon-events/tests/unit/test_reactive_bridges.py -q --no-cov
 ```

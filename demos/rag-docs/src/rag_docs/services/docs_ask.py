@@ -25,23 +25,23 @@ from dataclasses import dataclass
 import re
 from typing import cast
 
-from lexigram.ai.rag.retrieval.strategies.mmr import MMRRetrievalStrategy
-from lexigram.ai.rag.retrieval.strategies.vector import VectorRetrievalStrategy
-from lexigram.contracts.ai.llm import EmbeddingClientProtocol
-from lexigram.contracts.ai.rag import (
+from oridecon.ai.rag.retrieval.strategies.mmr import MMRRetrievalStrategy
+from oridecon.ai.rag.retrieval.strategies.vector import VectorRetrievalStrategy
+from oridecon.contracts.ai.llm import EmbeddingClientProtocol
+from oridecon.contracts.ai.rag import (
     RetrievalStrategyProtocol,
     SynthesizerProtocol,
 )
-from lexigram.contracts.ai.vector import (
+from oridecon.contracts.ai.vector import (
     Document,
     RAGSearchResult,
     SearchResultProtocol,
 )
-from lexigram.contracts.data.vector.protocols import VectorCollectionProtocol
-from lexigram.contracts.data.vector.types import SearchQuery, SearchResult
-from lexigram.logging import get_logger
-from lexigram.primitives import Registry
-from lexigram.result import Err, Ok, Result
+from oridecon.contracts.data.vector.protocols import VectorCollectionProtocol
+from oridecon.contracts.data.vector.types import SearchQuery, SearchResult
+from oridecon.logging import get_logger
+from oridecon.primitives import Registry
+from oridecon.result import Err, Ok, Result
 from rag_docs.errors import (
     DocsAskError,
     NoResultsError,
@@ -90,7 +90,7 @@ def _to_rag_result(result: SearchResult) -> RAGSearchResult:
 def _build_strategies() -> Registry[str, RetrievalStrategyProtocol]:
     """Framework Registry keyed by strategy id — no if/elif dispatch.
 
-    ``Registry`` is Lexigram's extensible dispatch map.  Adding a new
+    ``Registry`` is Oridecon's extensible dispatch map.  Adding a new
     strategy means one ``register()`` call — no conditionals to update.
     """
     registry: Registry[str, RetrievalStrategyProtocol] = Registry()

@@ -22,13 +22,13 @@ description: Feature flag management with runtime evaluation
 #   3. release_control: Demo-specific defaults and labels
 #
 # For full reference see:
-#   - Lexigram Web:      packages/lexigram-web/src/lexigram/web/config/
-#   - Lexigram Features: packages/lexigram-features/src/lexigram/features/config.py
+#   - Oridecon Web:      packages/oridecon-web/src/oridecon/web/config/
+#   - Oridecon Features: packages/oridecon-features/src/oridecon/features/config.py
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Web ──────────────────────────────────────────────────────────────────────
-# Lexigram Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
+# Oridecon Web auto-configures Starlette, OpenAPI, CORS, CSRF, and
 # rate limiting from this single section.  The WebModule reads it
 # automatically via config_key="web" / config_model=WebConfig.
 #
@@ -100,7 +100,7 @@ web:
 
 
 # ── Features ─────────────────────────────────────────────────────────────────
-# Lexigram Features provides a feature flag system with runtime
+# Oridecon Features provides a feature flag system with runtime
 # evaluation via FlagManager.  The FeatureFlagsModule reads this
 # section automatically via config_key="features" /
 # config_model=FeatureFlagsConfig.
@@ -113,7 +113,7 @@ features:
   enabled: true                     # toggle the features provider
   cache_ttl: 15                    # flag cache TTL in seconds
   default_enabled: false           # default for undefined flags
-  # flag_env_prefix: LEX_FLAG_     # env var prefix for flag overrides
+  # flag_env_prefix: ORI_FLAG_     # env var prefix for flag overrides
   #
   # Flag definitions — each key is a flag name.
   # Supports: true (on), false (off), or { enabled, percentage } for rollouts.

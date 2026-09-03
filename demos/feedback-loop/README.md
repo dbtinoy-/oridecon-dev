@@ -28,7 +28,7 @@ all outputs are deterministic.
 ## Layout — read it in this order
 
 Start at the composition root and follow the wiring outward.
-Each file has teaching comments explaining the Lexigram convention it follows.
+Each file has teaching comments explaining the Oridecon convention it follows.
 
 | # | File | Lesson |
 |---|------|--------|
@@ -86,7 +86,7 @@ PYTHONPATH=demos/feedback-loop/src uv run python -m feedback_loop
 | POST | `/api/regress` | Promote low-rated exchanges into a tracked regression run |
 | GET | `/api/report/{run_id}` | Post-hoc error analysis for a tracked run |
 
-## Lexigram Concepts
+## Oridecon Concepts
 
 | Concept | Where in this demo | Your app |
 |---------|-------------------|----------|

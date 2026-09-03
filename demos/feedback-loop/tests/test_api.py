@@ -38,7 +38,7 @@ async def test_ask_missing_body_field_is_framework_422(
 
     assert response.status_code == 422
     problem = response.json()
-    assert problem["type"] == "urn:lexigram:validation-error"
+    assert problem["type"] == "urn:oridecon:validation-error"
     assert problem["errors"][0]["field"] == "payload.key"
 
 

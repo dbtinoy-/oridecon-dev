@@ -1,12 +1,12 @@
 ---
 title: Your First App
-description: Build a working Lexigram web API from scratch
+description: Build a working Oridecon web API from scratch
 sidebar:
   order: 2
 ---
 
 :::note[What you'll learn]
-- Create a Lexigram web API with `Application` + `WebProvider`
+- Create a Oridecon web API with `Application` + `WebProvider`
 - Add dependency injection with `@singleton`
 - Use controllers for route organization
 - Return `Result` types from handlers
@@ -15,7 +15,7 @@ sidebar:
 ## Prerequisites
 
 ```bash
-uv add lexigram-web
+uv add oridecon-web
 ```
 
 ---
@@ -29,8 +29,8 @@ Three files — a factory, a controller, and an entry point.
 The `create_app()` function is your **composition root** — it wires providers and returns a ready-to-boot application:
 
 ```python title="src/my_app/app.py"
-from lexigram import Application, LexigramConfig
-from lexigram.web import WebProvider
+from oridecon import Application, OrideconConfig
+from oridecon.web import WebProvider
 
 
 def create_app() -> Application:
@@ -47,7 +47,7 @@ def create_app() -> Application:
 Controllers group related routes under a common prefix. Dependencies are injected via the constructor:
 
 ```python title="src/my_app/controllers/hello_controller.py"
-from lexigram.web import Controller, get
+from oridecon.web import Controller, get
 
 
 class HelloController(Controller):
@@ -55,7 +55,7 @@ class HelloController(Controller):
 
     @get("/hello")
     async def hello(self) -> dict:
-        return {"message": "Hello, Lexigram!"}
+        return {"message": "Hello, Oridecon!"}
 
     @get("/hello/{name}")
     async def hello_name(self, name: str) -> dict:
@@ -72,7 +72,7 @@ uvicorn my_app.app:create_app --factory
 ```
 
 ```json
-{"message": "Hello, Lexigram!"}
+{"message": "Hello, Oridecon!"}
 ```
 
 :::tip
@@ -83,20 +83,20 @@ OpenAPI docs are auto-generated at `/docs` (Swagger UI) and `/redoc`.
 
 ## Adding a Service with DI
 
-Use `@singleton` to mark a class for the DI container. Type-hint it in your controller — Lexigram injects it automatically:
+Use `@singleton` to mark a class for the DI container. Type-hint it in your controller — Oridecon injects it automatically:
 
 ```python title="src/my_app/services.py"
-from lexigram import singleton
+from oridecon import singleton
 
 
 @singleton
 class GreetingService:
     def greet(self, name: str) -> str:
-        return f"Hello, {name}! Welcome to Lexigram."
+        return f"Hello, {name}! Welcome to Oridecon."
 ```
 
 ```python title="src/my_app/controllers/hello_controller.py"
-from lexigram.web import Controller, get
+from oridecon.web import Controller, get
 from my_app.services import GreetingService
 
 
@@ -113,7 +113,7 @@ class HelloController(Controller):
 
 ### How DI Works Here
 
-1. `@singleton` marks `GreetingService` with `__lexigram_injectable__` metadata
+1. `@singleton` marks `GreetingService` with `__oridecon_injectable__` metadata
 2. `WebProvider.auto_discover()` scans the package and finds the marked class
 3. At boot, the container registers `GreetingService` as a singleton
 4. When `HelloController` is instantiated, the container resolves `GreetingService` from the constructor type hints
@@ -125,9 +125,9 @@ class HelloController(Controller):
 For more control, create a **Provider** instead of using decorators:
 
 ```python title="src/my_app/providers/app_provider.py"
-from lexigram.di.provider import Provider
-from lexigram.contracts.core import ProviderPriority
-from lexigram.contracts.core.di import ContainerRegistrarProtocol
+from oridecon.di.provider import Provider
+from oridecon.contracts.core import ProviderPriority
+from oridecon.contracts.core.di import ContainerRegistrarProtocol
 
 
 class AppProvider(Provider):
@@ -141,8 +141,8 @@ class AppProvider(Provider):
 ```
 
 ```python title="src/my_app/app.py"
-from lexigram import Application
-from lexigram.web import WebProvider
+from oridecon import Application
+from oridecon.web import WebProvider
 from my_app.providers.app_provider import AppProvider
 
 
@@ -167,8 +167,8 @@ def create_app() -> Application:
 Return `Result[T, E]` from your service layer to make errors explicit:
 
 ```python title="src/my_app/services.py"
-from lexigram import singleton
-from lexigram.result import Result, Ok, Err
+from oridecon import singleton
+from oridecon.result import Result, Ok, Err
 
 
 @singleton
@@ -180,8 +180,8 @@ class UserService:
 ```
 
 ```python title="src/my_app/controllers/user_controller.py"
-from lexigram.web import Controller, get
-from lexigram.result import Result
+from oridecon.web import Controller, get
+from oridecon.result import Result
 from my_app.services import UserService
 
 
@@ -213,8 +213,8 @@ For scripts or tests, use the context manager form:
 
 ```python title="main.py"
 import asyncio
-from lexigram import Application
-from lexigram.web import WebProvider
+from oridecon import Application
+from oridecon.web import WebProvider
 from my_app.providers.app_provider import AppProvider
 
 

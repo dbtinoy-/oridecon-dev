@@ -7,7 +7,7 @@ service through the container.
 
 from __future__ import annotations
 
-from lexigram.result import Err, Ok
+from oridecon.result import Err, Ok
 
 from feedback_loop.repository.bot import BOT, POOR_KEYS, TRACE_IDS
 from feedback_loop.errors import (
@@ -121,7 +121,7 @@ async def test_regress_without_low_ratings_is_err(service) -> None:
 async def test_degraded_mode_no_database_wiring(service) -> None:
     # the fixture boots without any DatabaseProviderProtocol: collector must
     # stay in memory-buffer mode (that is the demo's intended configuration)
-    from lexigram.ai.feedback.services.collector import FeedbackCollector
+    from oridecon.ai.feedback.services.collector import FeedbackCollector
 
     collector = service._collector
     assert isinstance(collector, FeedbackCollector)

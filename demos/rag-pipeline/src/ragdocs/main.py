@@ -23,7 +23,7 @@ from __future__ import annotations
 import asyncio
 import sys
 
-from lexigram.logging import get_logger
+from oridecon.logging import get_logger
 from ragdocs.app import create_app
 
 logger = get_logger(__name__)
@@ -36,7 +36,7 @@ async def serve() -> None:
     register → freeze → boot (seeding happens here) → server start.
     The ``finally`` block ensures ``stop()`` runs even on errors.
     """
-    from lexigram.web.server.runner import run_server
+    from oridecon.web.server.runner import run_server
 
     app = create_app()
     await app.start()

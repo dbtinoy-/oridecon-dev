@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from lexigram.primitives import Registry
+from oridecon.primitives import Registry
 
 # --- Scenario scripts ------------------------------------------------
 

@@ -1,9 +1,9 @@
 ---
 title: Application Boot Lifecycle
-description: How a Lexigram application boots — from module registration to provider shutdown
+description: How a Oridecon application boots — from module registration to provider shutdown
 ---
 
-Every Lexigram application goes through a deterministic six-phase boot sequence before it begins serving requests. Understanding this lifecycle helps you wire up providers correctly, avoid common pitfalls, and diagnose startup failures.
+Every Oridecon application goes through a deterministic six-phase boot sequence before it begins serving requests. Understanding this lifecycle helps you wire up providers correctly, avoid common pitfalls, and diagnose startup failures.
 
 ## Overview
 
@@ -53,7 +53,7 @@ await app.start()
 **Via auto-discovery:**
 ```python
 app = Application()
-app.discover_modules(entry_point_group="lexigram.modules", directories=["./plugins"])
+app.discover_modules(entry_point_group="oridecon.modules", directories=["./plugins"])
 await app.start()
 ```
 
@@ -166,7 +166,7 @@ When all providers have booted, the application transitions to `RUNNING` state. 
 
 ```
 ╔════════════════════════════════════════════════════╗
-║  Lexigram 0.1.0                                    ║
+║  Oridecon 0.1.0                                    ║
 ║  Python 3.12                                        ║
 ║                                                     ║
 ║  Providers : 12                                     ║
@@ -208,9 +208,9 @@ class DatabaseProvider(Provider):
 ## Complete Provider Example
 
 ```python
-from lexigram.di.provider import Provider
-from lexigram.contracts.core.provider import ProviderPriority
-from lexigram.contracts.core.di import (
+from oridecon.di.provider import Provider
+from oridecon.contracts.core.provider import ProviderPriority
+from oridecon.contracts.core.di import (
     ContainerRegistrarProtocol,
     BootContainerProtocol,
 )
@@ -245,7 +245,7 @@ The container exists from `Application.__init__()`, but it's empty until provide
 
 ```python
 app = Application()
-await app.container.resolve(DatabaseProtocol)  # UnresolvableDependencyError (LEX_ERR_DI_004) — nothing registered yet
+await app.container.resolve(DatabaseProtocol)  # UnresolvableDependencyError (ORI_ERR_DI_004) — nothing registered yet
 ```
 
 Always resolve inside `boot()` or after the application is fully started.

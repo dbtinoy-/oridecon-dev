@@ -1,6 +1,6 @@
 """Web + Cache + SQL cache-aside pattern scenario.
 
-Packages under test: lexigram-web, lexigram-cache, lexigram-sql
+Packages under test: oridecon-web, oridecon-cache, oridecon-sql
 Infrastructure: in-memory SQLite + in-memory cache (no live service required)
 
 Scenario:

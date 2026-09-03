@@ -5,12 +5,12 @@ from __future__ import annotations
 import httpx
 from starlette.applications import Starlette
 
-from lexigram.config.main import LexigramConfig
-from lexigram.web.config import WebConfig
+from oridecon.config.main import OrideconConfig
+from oridecon.web.config import WebConfig
 
 async def test_server_backend_config(app: Starlette) -> None:
     """Verify web.server.backend is loaded from application.yaml."""
-    config = LexigramConfig.from_yaml()
+    config = OrideconConfig.from_yaml()
     web = config.get_section("web", WebConfig)
     assert web.server.backend == "granian"
 
@@ -40,7 +40,7 @@ async def test_login_has_light_theme(client: httpx.AsyncClient) -> None:
 async def test_login_has_footer(client: httpx.AsyncClient) -> None:
     r = await client.get("/login", follow_redirects=False)
     assert "demo-footer" in r.text
-    assert "lexigram.dev" in r.text
+    assert "oridecon.dev" in r.text
 
 async def test_matrix_has_footer(client: httpx.AsyncClient) -> None:
     r = await client.get("/matrix", follow_redirects=False)

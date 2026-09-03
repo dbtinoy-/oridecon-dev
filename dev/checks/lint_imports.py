@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Namespace-aware import-linter wrapper for the Lexigram monorepo.
+"""Namespace-aware import-linter wrapper for the Oridecon monorepo.
 
 Background
 ----------
@@ -7,31 +7,31 @@ Standard import-linter / grimp cannot traverse ``pkgutil.extend_path``
 namespace packages.  grimp's ``ImportLibPackageFinder`` resolves a
 package through ``importlib.util.find_spec`` and treats any package
 with a non-namespace parent as a plain top-level module, so extension
-packages (``lexigram.contracts``, ``lexigram.cache``, ``lexigram.web``,
-etc.) that live in their own ``lexigram-*/src/lexigram`` directories
+packages (``oridecon.contracts``, ``oridecon.cache``, ``oridecon.web``,
+etc.) that live in their own ``oridecon-*/src/oridecon`` directories
 are either missed or rejected as ``NotATopLevelModule``.
 
 Fix
 ----
 Before grimp's finder runs, this script:
 
-1. Imports the root ``lexigram`` package so that ``pkgutil.extend_path``
-   populates ``lexigram.__path__`` with **all** installed namespace
+1. Imports the root ``oridecon`` package so that ``pkgutil.extend_path``
+   populates ``oridecon.__path__`` with **all** installed namespace
    directories (one per editable-installed sub-package).
 
 2. Builds a temporary merged view of the entire namespace as a single
    directory tree (symlinks from every namespace directory, merged by
    name).  The view mirrors the runtime layout:
-   ``lexigram/contracts/...``, ``lexigram/ai/governance/...``, etc.
+   ``oridecon/contracts/...``, ``oridecon/ai/governance/...``, etc.
 
 3. Patches ``ImportLibPackageFinder.determine_package_directory``
    (grimp 3.13 returns a single physical directory, patched to return the
-   merged view for ``lexigram`` and ``lexigram.*``).  Other packages use
+   merged view for ``oridecon`` and ``oridecon.*``).  Other packages use
    the original finder logic unchanged.
 
 grimp walks the view with ``os.walk(followlinks=True)``, so the
 symlinked tree is fully visible to it. This gives grimp a complete
-module view of the ``lexigram.*`` namespace so every contract in
+module view of the ``oridecon.*`` namespace so every contract in
 ``.importlinter`` can be evaluated correctly.
 
 Usage
@@ -51,12 +51,12 @@ import tempfile
 
 # ── 1. Bootstrap: import root namespace to trigger pkgutil.extend_path ─────────
 # Importing the root package runs pkgutil.extend_path and expands
-# lexigram.__path__ with every editable-installed sub-package src dir.
-import lexigram  # noqa: F401
+# oridecon.__path__ with every editable-installed sub-package src dir.
+import oridecon  # noqa: F401
 
 
 def _build_view() -> str:
-    """Merge every lexigram namespace directory into one temp tree.
+    """Merge every oridecon namespace directory into one temp tree.
 
     The view mirrors the runtime layout: real directories for every
     package level, one symlink per module file.  Real directories mean
@@ -67,12 +67,12 @@ def _build_view() -> str:
     Returns:
         The path of the merged view directory.
     """
-    view = tempfile.mkdtemp(prefix="lexigram-lint-view-")
+    view = tempfile.mkdtemp(prefix="oridecon-lint-view-")
     atexit.register(shutil.rmtree, view, ignore_errors=True)
 
     # Skip the workspace root (detected by its pyproject.toml): it only
     # holds repo tooling, benchmarks, and docs, not namespace modules.
-    for path in lexigram.__path__:
+    for path in oridecon.__path__:
         if os.path.exists(os.path.join(path, "pyproject.toml")):
             continue
         for dirpath, dirnames, filenames in os.walk(path):
@@ -104,13 +104,13 @@ _original_determine = _Finder.determine_package_directory
 def _namespace_aware_determine(
     self: _Finder, package_name: str, file_system: object
 ) -> str:
-    """Return the merged view directory for any ``lexigram.*`` package.
+    """Return the merged view directory for any ``oridecon.*`` package.
 
     grimp 3.13 (the pinned version) resolves packages through
     ``determine_package_directory`` (singular), which returns one physical
-    directory.  For the ``lexigram`` namespace we return the single merged
+    directory.  For the ``oridecon`` namespace we return the single merged
     view directory so sub-packages spread across many physical
-    ``lexigram-*/src`` trees resolve as one tree; any other name uses the
+    ``oridecon-*/src`` trees resolve as one tree; any other name uses the
     original finder's resolution.
 
     Args:
@@ -118,10 +118,10 @@ def _namespace_aware_determine(
         file_system: The grimp filesystem adaptor (unused here).
 
     Returns:
-        For any ``lexigram.*`` module the matching directory inside the
+        For any ``oridecon.*`` module the matching directory inside the
         merged view; for other names the original finder's result.
     """
-    if package_name == "lexigram" or package_name.startswith("lexigram."):
+    if package_name == "oridecon" or package_name.startswith("oridecon."):
         parts = package_name.split(".")
         view_dir = _VIEW_ROOT
         for part in parts[1:]:

@@ -1,22 +1,22 @@
-"""Lifecycle wiring for the focused Lexigram queue-worker demo."""
+"""Lifecycle wiring for the focused Oridecon queue-worker demo."""
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from lexigram.contracts.core.health import (
+from oridecon.contracts.core.health import (
     HealthCheckCategory,
     HealthCheckResult,
     HealthStatus,
 )
-from lexigram.contracts.queue.protocols import QueueProtocol
-from lexigram.di.provider import Provider
+from oridecon.contracts.queue.protocols import QueueProtocol
+from oridecon.di.provider import Provider
 from queueworker.config import QueueWorkerConfig
 from queueworker.controllers.api import QueueApiController
 from queueworker.services.processor import MessageProcessor
 
 if TYPE_CHECKING:
-    from lexigram.contracts.core.di import (
+    from oridecon.contracts.core.di import (
         ContainerRegistrarProtocol,
         ContainerResolverProtocol,
     )
@@ -25,7 +25,7 @@ __all__ = ["QueueWorkerProvider"]
 
 
 class QueueWorkerProvider(Provider):
-    """Bind one Lexigram MessageConsumer to the configured task topic."""
+    """Bind one Oridecon MessageConsumer to the configured task topic."""
 
     name = "queueworker"
     config_key: str | None = "queueworker"
@@ -61,7 +61,7 @@ class QueueWorkerProvider(Provider):
         )
 
     async def shutdown(self) -> None:
-        """Stop the consumer before closing the Lexigram queue backend."""
+        """Stop the consumer before closing the Oridecon queue backend."""
         if self._processor is not None:
             await self._processor.stop()
         if self._queue is not None and hasattr(self._queue, "close"):

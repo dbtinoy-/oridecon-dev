@@ -1,6 +1,6 @@
 """Web + SQL full CRUD lifecycle scenario.
 
-Packages under test: lexigram-web, lexigram-sql
+Packages under test: oridecon-web, oridecon-sql
 Infrastructure: in-memory SQLite (no live service required)
 
 Scenario:
