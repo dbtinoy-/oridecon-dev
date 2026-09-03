@@ -60,6 +60,7 @@ my-platform/
 │       ├── py.typed
 │       ├── controllers/               # unscoped feature code: app-root components
 │       ├── models/                    #   appear as they are generated
+│       ├── di/
 │       ├── services/
 │       ├── infrastructure/            # framework wiring: db, cache, events, monitoring
 │       │   └── __init__.py            # infrastructure_modules()

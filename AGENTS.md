@@ -1226,6 +1226,7 @@ Rules:
 - Scope (`<scope>`) is optional and names the affected package, e.g. `feat(monitor)`.
 - The public-mirror `make publish-* m="<message>"` commands accept the same
   emoji-prefixed message; plain descriptions are still allowed there.
+- No Co-author in commit message
 
 ## Note to always remember
 

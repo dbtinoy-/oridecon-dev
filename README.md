@@ -236,3 +236,7 @@ latest `main` run); each job has a local one-liner:
 ---
 
 *made for people who like building things and keeping them buildable.*
+
+---
+
+> Previously known as [lexigram.dev](https://lexigram.dev).
