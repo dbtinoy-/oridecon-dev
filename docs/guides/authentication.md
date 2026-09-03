@@ -4,7 +4,7 @@ description: "Identity and access control with oridecon-auth guards, JWT, and RB
 ---
 
 :::tip[Living demo]
-A runnable, CI-gated companion lives at `demos/auth-web/`. Try it locally:
+A runnable, CI-gated companion lives at `examples/auth-web/`. Try it locally:
 
 ```bash
 uv run python -m auth_web

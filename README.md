@@ -103,7 +103,7 @@ run_server(app, port=8000)
 
 → [Your First App](docs/getting-started/first-app.md) — the full walkthrough with DI, controllers, and `Result` types
 
-→ [Demos](demos/README.md) — 🤖 tool-calling agents, 🧠 conversational memory, 🛡️ guardrails & budgets, ✍️ prompt A/B labs, 🔁 feedback-to-regression loops, plus 🛡️ resilience, 📦 CQRS, 📡 realtime SSE, 🧪 reproducible LLM experiments and 🔐 auth consoles — runnable apps gated like the framework
+→ [Demos](examples/README.md) — 🤖 tool-calling agents, 🧠 conversational memory, 🛡️ guardrails & budgets, ✍️ prompt A/B labs, 🔁 feedback-to-regression loops, plus 🛡️ resilience, 📦 CQRS, 📡 realtime SSE, 🧪 reproducible LLM experiments and 🔐 auth consoles — runnable apps gated like the framework
 
 ## what's in the box
 
@@ -152,7 +152,7 @@ latest `main` run); each job has a local one-liner:
 | --- | --- | --- |
 | `quality` | format, lint, tier boundary, mypy (core + web + typed pkgs), per-package tests | `make lint && make type && uv run pytest -m "not integration" --no-cov` |
 | `coverage` | aggregate tests with a 70% floor | `uv run pytest -m "not integration and not slow" --cov --cov-fail-under=70` |
-| `example` | demos gate (pytest-bearing demo suites + compile checks) | `make check-demos` |
+| `example` | examples gate (pytest-bearing demo suites + compile checks) | `make check-examples` |
 | `audit` | `pip-audit` known-vulnerability check | `uv run pip-audit` |
 
 > Every `-m "not integration"` run — per-package or aggregate — executes

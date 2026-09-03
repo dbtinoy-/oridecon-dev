@@ -4,7 +4,7 @@ description: "Orchestrate multi-step processes with compensation, state machines
 ---
 
 :::tip[Living demo]
-A runnable, CI-gated companion lives at `demos/event-driven-orders/`. Try it locally:
+A runnable, CI-gated companion lives at `examples/event-driven-orders/`. Try it locally:
 
 ```bash
 uv run python -m orders demo

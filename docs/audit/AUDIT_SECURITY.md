@@ -44,7 +44,7 @@ No known vulnerabilities found
 
 | File | Line | Rule | Message |
 |------|------|------|---------|
-| `demos/llm-experiment/harness.py` | 272 | `S311` | Standard pseudo-random generators are not suitable for cryptographic purposes |
+| `examples/llm-experiment/harness.py` | 272 | `S311` | Standard pseudo-random generators are not suitable for cryptographic purposes |
 
 ### Low-Signal Rules (S101 asserts, S105/S106 hardcoded strings)
 

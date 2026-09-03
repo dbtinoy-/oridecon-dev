@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Ensure every environment variable referenced in source is documented in .env.example.
 
-Scans all Python source trees (packages, scripts, and demos, excluding
+Scans all Python source trees (packages, scripts, and examples, excluding
 tests and virtualenvs) for direct `os.getenv` / `os.environ` reads of
 environment variables, then diffs the referenced names against the keys
 present in ``.env.full.example`` (the generated superset; ``.env.example``
@@ -52,7 +52,7 @@ SKIP_DIRS = {
 # Path parts that mark a file as test/demo-scaffolding rather than source.
 # Demos are excluded: they are not part of framework usage, and their
 # os.environ reads carry code defaults that need no documented override.
-SKIP_PARTS = {"tests", "test", "examples", "demos"}
+SKIP_PARTS = {"tests", "test", "examples", "examples"}
 
 
 def _extract_names(text: str) -> set[str]:

@@ -4,7 +4,7 @@ description: "Async publish/subscribe messaging with Redis, RabbitMQ, Kafka, SQS
 ---
 
 :::tip[Living demo]
-A runnable, CI-gated companion lives at `demos/event-driven-orders/`. Try it locally:
+A runnable, CI-gated companion lives at `examples/event-driven-orders/`. Try it locally:
 
 ```bash
 uv run python -m orders demo

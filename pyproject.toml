@@ -158,7 +158,7 @@ filterwarnings = [
 ]
 addopts = ["--strict-markers", "--strict-config", "--tb=short", "--import-mode=importlib", "-p", "no:cacheprovider", "--ignore=oridecon-testing/src"]
 consider_namespace_packages = true
-norecursedirs = [".worktrees", ".venv", "build", "dist", "demos", "experimental/apps/oridecon-cli/src/oridecon/cli/templates", "packages/oridecon-testing"]
+norecursedirs = [".worktrees", ".venv", "build", "dist", "examples", "experimental/apps/oridecon-cli/src/oridecon/cli/templates", "packages/oridecon-testing"]
 testpaths = [
     "core/oridecon/tests",
     "experimental/apps/oridecon-admin/tests",
@@ -553,7 +553,7 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "**/__init__.py" = ["F401", "TID252"]  # relative imports allowed in __init__.py re-exports
 # Demo scripts and notebooks are user-facing examples, not production source
-"demos/**" = ["T201", "INP001", "ANN"]
+"examples/**" = ["T201", "INP001", "ANN"]
 "*.ipynb" = ["T201", "ANN", "INP001", "E402", "F401", "S101", "BLE001"]
 # oridecon-contracts has zero external deps — cannot use oridecon.serialization
 "core/oridecon-contracts/**" = ["TID251"]

@@ -4,7 +4,7 @@ description: "Protect calls to flaky dependencies with retry, circuit breaker, b
 ---
 
 :::tip[Living demo]
-A runnable, CI-gated companion lives at `demos/resilient-rates/`. Try it locally:
+A runnable, CI-gated companion lives at `examples/resilient-rates/`. Try it locally:
 
 ```bash
 uv run python -m rates demo

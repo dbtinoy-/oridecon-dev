@@ -2,7 +2,7 @@
 
 Same seed + same inputs must produce identical evaluation totals,
 seed-stable run ids, and digest-verified checkpoint round-trips — the
-same contract the ``demos/llm-experiment`` harness relies on (see
+same contract the ``examples/llm-experiment`` harness relies on (see
 ``docs/ai/EXPERIMENT_REPRODUCIBILITY.md``).
 """
 

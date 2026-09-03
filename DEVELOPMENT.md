@@ -232,7 +232,7 @@ resort for a single-owner tree, not a routine move:
 The shared index is shared state too. Two incidents on 2026-08-21:
 
 - A lane's `git commit` swept **another lane's pre-staged files** into its
-  commit (2 unrelated admin files landed under a demos test message).
+  commit (2 unrelated admin files landed under a examples test message).
 - A lane's uncommitted edits were **wiped from the working tree** by a
   concurrent lane running a forbidden command above.
 

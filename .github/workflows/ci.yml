@@ -221,7 +221,7 @@ jobs:
           uv run pytest -m "not integration and not slow" --cov --cov-fail-under=70
 
   example:
-    name: Demos gate
+    name: Examples gate
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -235,13 +235,13 @@ jobs:
         run: uv python install 3.11
 
       - name: test (demo suites, workspace env)
-        run: uv run --group tooling pytest -q -m "not integration" --no-cov demos/event-driven-orders/tests demos/realtime-monitor/tests demos/resilient-rates/tests demos/rag-docs/tests demos/auth-web/tests demos/auth-rbac/tests demos/auth-mfa/tests demos/auth-apikeys/tests
+        run: uv run --group tooling pytest -q -m "not integration" --no-cov examples/event-driven-orders/tests examples/realtime-monitor/tests examples/resilient-rates/tests examples/rag-docs/tests examples/auth-web/tests examples/auth-rbac/tests examples/auth-mfa/tests examples/auth-apikeys/tests
 
       - name: compile (demo scripts)
-        run: uv run python -m compileall -q demos/event-driven-orders demos/realtime-monitor demos/resilient-rates
+        run: uv run python -m compileall -q examples/event-driven-orders examples/realtime-monitor examples/resilient-rates
 
       - name: smoke (execute demo entry points)
-        run: make smoke-demos
+        run: make smoke-examples
 
   audit:
     name: Dependency audit

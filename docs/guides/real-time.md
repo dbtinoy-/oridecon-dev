@@ -4,7 +4,7 @@ description: "Server-sent events, WebSocket connections, and streaming responses
 ---
 
 :::tip[Living demo]
-A runnable, CI-gated companion lives at `demos/realtime-monitor/`. Try it locally:
+A runnable, CI-gated companion lives at `examples/realtime-monitor/`. Try it locally:
 
 ```bash
 uv run python -m ops_console

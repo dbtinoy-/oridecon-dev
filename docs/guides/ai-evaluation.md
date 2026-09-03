@@ -224,4 +224,4 @@ tracker = await container.resolve(ExperimentTrackerProtocol)
 
 ## 9. Reproducible Demo
 
-`demos/llm-experiment` is a runnable, seeded end-to-end experiment: it generates prompts with a seeded RNG, pins prompt digests (SHA-256), runs LLM completion probes, records metrics and errors through `LocalTracker`, checkpoints intermediate state, and produces an `AblationResult` comparing a control run against an ablated one. It is CI-gated, so the reproducibility story is continuously verified rather than aspirational.
+`examples/llm-experiment` is a runnable, seeded end-to-end experiment: it generates prompts with a seeded RNG, pins prompt digests (SHA-256), runs LLM completion probes, records metrics and errors through `LocalTracker`, checkpoints intermediate state, and produces an `AblationResult` comparing a control run against an ablated one. It is CI-gated, so the reproducibility story is continuously verified rather than aspirational.

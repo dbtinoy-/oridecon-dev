@@ -4,7 +4,7 @@ description: "Store and search embeddings with pgvector, Qdrant, Pinecone, or in
 ---
 
 :::tip[Living demo]
-A runnable, CI-gated companion lives at `demos/rag-docs/`. Try it locally:
+A runnable, CI-gated companion lives at `examples/rag-docs/`. Try it locally:
 
 ```bash
 uv run python -m rag_docs demo

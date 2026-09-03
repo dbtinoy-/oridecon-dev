@@ -4,7 +4,7 @@ Concurrent lanes share this checkout; a bare ``git commit -a`` or an
 uncommitted edit can collide with another lane's in-flight work. Declare the
 paths you own and this gate verifies every dirty path is yours:
 
-    make guard ALLOWED="demos/llm-experiment experimental/apps/oridecon-admin"
+    make guard ALLOWED="examples/llm-experiment experimental/apps/oridecon-admin"
 
 Usage:
     python check_tree_guard.py --allow PATH [--allow PATH ...]

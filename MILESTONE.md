@@ -74,7 +74,7 @@ Focus: push aggregate test coverage from 75.6% toward 80% target; resolve docume
 | Test coverage | **75.6%** | Target 80%; gap in core packages |
 | AI subsystem | **Done** | 17 packages, all passing, 51–97% coverage |
 | CLI | **Done** | 22 commands, 26 generators, 80% coverage |
-| Demos | **Done** | 14 demos, all with tests |
+| Demos | **Done** | 14 examples, all with tests |
 | Security audit | **Done** | 11 rounds, clean, 0 open items |
 | Admin dashboard | **In progress** | Polish ongoing (SSE widgets, RBAC) |
 | Documentation | **Done** | 3 minor unresolved claims (in progress) |

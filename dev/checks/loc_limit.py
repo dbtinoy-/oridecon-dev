@@ -21,7 +21,7 @@ Regenerate the baseline deliberately after review:
 Note:
     Only physical line counts are compared (``len(text.splitlines())``).
     Cache, virtualenv, build-artifact directories and generated CLI scaffold
-    templates are not scanned; everything else — including tests, demos,
+    templates are not scanned; everything else — including tests, examples,
     migrations and benchmarks — counts.
 """
 
