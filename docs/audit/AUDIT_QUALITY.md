@@ -10,21 +10,21 @@
 - Passing tools: 0
 - Failing tools: 2
 - Packages counted: 55
-- Total mypy errors: 4533
-- Packages with errors: 44
+- Total mypy errors: 48
+- Packages with errors: 3
 
 ## Tool Results
 
 | Tool | Status | Exit Code | Duration | Command |
 |------|--------|-----------|----------|---------|
-| `Ruff` | **FAIL** | 1 | 255 ms | `uv run ruff check .` |
-| `Mypy` | **FAIL** | timeout | 632707 ms | `uv run mypy src/ (per-package across 55 packages)` |
+| `Ruff` | **FAIL** | 1 | 254 ms | `uv run ruff check .` |
+| `Mypy` | **FAIL** | 1 | 408555 ms | `uv run mypy src/ (per-package across 55 packages)` |
 
 ### Ruff
 
 - Status: **FAIL**
 - Exit code: `1`
-- Duration: `255 ms`
+- Duration: `254 ms`
 - Command: `uv run ruff check .`
 - Output snippet:
 
@@ -43,57 +43,15 @@ RUF022 [*] `__all__` is not sorted
 ### Mypy
 
 - Status: **FAIL**
-- Exit code: `timeout`
-- Duration: `632707 ms`
+- Exit code: `1`
+- Duration: `408555 ms`
 - Command: `uv run mypy src/ (per-package across 55 packages)`
 - Output snippet:
 
 ```text
-[oridecon] 264 errors
-[oridecon-admin] 958 errors
-[oridecon-ai] 66 errors
-[oridecon-ai-agents] 8 errors
-[oridecon-ai-llm] 20 errors
-[oridecon-ai-prompt] 1 errors
-[oridecon-ai-rag] 12 errors
-[oridecon-ai-relay] 1 errors
-[oridecon-ai-skills] 1 errors
-[oridecon-audit] 93 errors
-[oridecon-auth] 71 errors
-[oridecon-builder] 56 errors
-[oridecon-cache] 198 errors
-[oridecon-cli] 103 errors
-[oridecon-contracts] 3 errors
-[oridecon-events] 95 errors
-[oridecon-features] 43 errors
-[oridecon-graph] 78 errors
-[oridecon-graphql] 129 errors
-[oridecon-http] 48 errors
-[oridecon-monitor] 138 errors
-[oridecon-multimedia] 17 errors
-[oridecon-multimedia-beat] 2 errors
-[oridecon-multimedia-image] 6 errors
-[oridecon-multimedia-interpolate] 4 errors
-[oridecon-multimedia-music] 6 errors
-[oridecon-multimedia-tts] 8 errors
-[oridecon-multimedia-upscale] 4 errors
-[oridecon-multimedia-video] Command timed out.
-[oridecon-nosql] 30 errors
-[oridecon-notification] 195 errors
-[oridecon-queue] 31 errors
-[oridecon-resilience] 117 errors
-[oridecon-search] 131 errors
-[oridecon-secrets] 2 errors
-[oridecon-sql] 387 errors
-[oridecon-storage] 28 errors
-[oridecon-tasks] 180 errors
-[oridecon-tenancy] 144 errors
-[oridecon-testing] 216 errors
-[oridecon-ui] 38 errors
-[oridecon-vector] 177 errors
-[oridecon-web] 302 errors
-[oridecon-webhook] 20 errors
-[oridecon-workflow] 102 errors
+[oridecon-admin] 5 errors
+[oridecon-builder] 36 errors
+[oridecon-ui] 7 errors
 ```
 
 ### Mypy Error Breakdown
@@ -102,36 +60,22 @@ RUF022 [*] `__all__` is not sorted
 
 | Code | Count | Description |
 |------|-------|-------------|
-| `import-not-found` | 3265 | Type checking error |
-| `unused-ignore` | 487 | Unused type: ignore comment |
-| `misc` | 244 | Miscellaneous type checking error |
-| `no-any-return` | 226 | Function returns Any when specific type declared |
-| `union-attr` | 57 | Type checking error |
-| `attr-defined` | 48 | Attribute not defined on type |
-| `valid-type` | 40 | Type checking error |
-| `import-untyped` | 31 | Type checking error |
-| `arg-type` | 25 | Argument type mismatch |
-| `dict-item` | 25 | Type checking error |
-| `assignment` | 14 | Type checking error |
-| `var-annotated` | 12 | Variable missing type annotation |
-| `str-format` | 12 | Type checking error |
-| `redundant-cast` | 10 | Type checking error |
-| `str` | 9 | Type checking error |
+| `dict-item` | 24 | Type checking error |
+| `arg-type` | 14 | Argument type mismatch |
+| `no-redef` | 3 | Name already defined |
+| `misc` | 3 | Miscellaneous type checking error |
+| `str` | 2 | Type checking error |
+| `assignment` | 2 | Type checking error |
+| `attr-defined` | 1 | Attribute not defined on type |
+| `var-annotated` | 1 | Variable missing type annotation |
 
 #### By Package (Top 10)
 
 | Package | Errors |
 |---------|--------|
-| `oridecon-admin` | 958 |
-| `oridecon-sql` | 387 |
-| `oridecon-web` | 302 |
-| `oridecon` | 264 |
-| `oridecon-testing` | 216 |
-| `oridecon-cache` | 198 |
-| `oridecon-notification` | 195 |
-| `oridecon-tasks` | 180 |
-| `oridecon-vector` | 177 |
-| `oridecon-tenancy` | 144 |
+| `oridecon-builder` | 36 |
+| `oridecon-ui` | 7 |
+| `oridecon-admin` | 5 |
 
 ## Package Metrics
 

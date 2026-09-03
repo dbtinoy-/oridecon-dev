@@ -1193,10 +1193,43 @@ Before writing or modifying code, verify:
 - [ ] Is the module `__init__.py` being used in imports?
 - [ ] Does this pass `ruff check`, `ruff format --check`, and `mypy`?
 
+---
+
+### Commit Message Convention (MANDATORY)
+
+Every commit message must carry the emoji matching its task type, placed **before**
+the conventional-commit prefix: `git commit -m "<emoji> <type>(<scope>): <summary>"`.
+
+| Type       | Emoji | Meaning                          | Example                                          |
+|------------|-------|----------------------------------|--------------------------------------------------|
+| `feat`     | ✨    | New user-visible feature         | `✨ feat(monitor): capture unhandled exceptions` |
+| `fix`      | 🐛    | Bug fix                          | `🐛 fix(auth): refresh token expiry race`        |
+| `perf`     | ⚡    | Performance improvement          | `⚡ perf(cache): single-flight stampede guards`  |
+| `refactor` | ♻️    | Code restructure, no behavior change | `♻️ refactor(scripts): delegate discovery`    |
+| `test`     | ✅    | Tests added or updated           | `✅ test(sql): assert tier boundary violations`  |
+| `docs`     | 📝    | Documentation only               | `📝 docs(monitor): Sentry fallback behavior`     |
+| `style`    | 🎨    | Format/whitespace, no logic change | `🎨 style(web): normalize quotes`              |
+| `chore`    | 🔧    | Maintenance/tooling              | `🔧 chore(git): allowlist tiered paths`          |
+| `ci`       | 👷    | CI workflows and config          | `👷 ci: derive members from shared inventory`    |
+| `build`    | 📦    | Build system / packaging         | `📦 build: publish oridecon 0.1.3008`            |
+| `deps`     | ⬆️    | Dependency upgrade               | `⬆️ deps: uv sync to 0.8.14`                     |
+| `security` | 🔒    | Security hardening fix           | `🔒 security(auth): pin JWT algorithm`           |
+| `revert`   | ⏪    | Reverts a previous commit        | `⏪ revert: undo glob members experiment`        |
+| `wip`      | 🚧    | Checkpoint / in-progress         | `🚧 wip(auth-lane): checkpoint 2026-08-20`       |
+
+Rules:
+
+- One emoji only; the type always matches the emoji. No bare `chore:` or `feat:` without
+  the prefix emoji.
+- `wip` is reserved for shared-tree checkpoint commits (Safe Sync below) and must be in
+  the format `🚧 wip(<lane>): checkpoint <date>`.
+- Scope (`<scope>`) is optional and names the affected package, e.g. `feat(monitor)`.
+- The public-mirror `make publish-* m="<message>"` commands accept the same
+  emoji-prefixed message; plain descriptions are still allowed there.
+
 ## Note to always remember
 
 - Make things work, make things right, and make them fast
-
 
 
 ---
