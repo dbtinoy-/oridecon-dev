@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from oridecon.admin.actions.standard import DeleteBulkAction
 from oridecon.admin.config import TableConfiguration
 from oridecon.admin.ui.filters.types import SelectFilter
 from oridecon.admin.ui.organisms.data_table import DataTable
@@ -73,6 +74,35 @@ def test_search_filter_and_data_regions_expose_instance_markers() -> None:
     assert " data-oridecon-table-data" in html
     assert " data-oridecon-table-search" in html
     assert " data-oridecon-table-filters" in html
+
+
+def test_keyboard_capabilities_follow_rendered_table_controls() -> None:
+    plain_html = render_to_string(
+        DataTable(columns=[TextColumn("name")], data=[{"id": "one"}])
+    )
+    interactive_html = render_to_string(
+        DataTable(
+            config=TableConfiguration(
+                columns=[TextColumn("name")],
+                resource_prefix="/admin/orders",
+                bulk_actions=[DeleteBulkAction()],
+                expandable_relationship="items",
+            ),
+            data=[{"id": "one", "name": "Order"}],
+        )
+    )
+    source = _source()
+
+    assert "selectionEnabled: false" in plain_html
+    assert "expansionEnabled: false" in plain_html
+    assert "focus-visible:ring-2" in plain_html
+    assert "selectionEnabled: true" in interactive_html
+    assert "expansionEnabled: true" in interactive_html
+    assert "this.selectionEnabled && (e.metaKey || e.ctrlKey)" in source
+    assert "this.expansionEnabled && this.focusedId" in source
+    assert 'button, a[href], [role="button"]' in source
+    assert "if (interactiveControl) return" in source
+    assert "if (searchInput)" in source
 
 
 def test_selection_reorder_group_and_search_queries_are_root_scoped() -> None:

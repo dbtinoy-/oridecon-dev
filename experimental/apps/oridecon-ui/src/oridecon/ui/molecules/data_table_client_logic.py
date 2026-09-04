@@ -610,6 +610,9 @@ class DataTableScriptRenderer:
                          }}
                          return;
                      }}
+                     const interactiveControl = e.target.closest &&
+                         e.target.closest('button, a[href], [role="button"]');
+                     if (interactiveControl) return;
 
                      switch(e.key) {{
                           case 'ArrowDown':
@@ -621,23 +624,34 @@ class DataTableScriptRenderer:
                               this.prevRow();
                               break;
                           case 'a':
-                              if (e.metaKey || e.ctrlKey) {{
+                              if (this.selectionEnabled && (e.metaKey || e.ctrlKey)) {{
                                   e.preventDefault();
                                   this.selectAll();
                               }}
                               break;
                           case ' ':
-                              if (e.target.tagName !== 'BUTTON') {{
+                              if (this.selectionEnabled && this.focusedId &&
+                                  e.target.tagName !== 'BUTTON') {{
                                   e.preventDefault();
-                                  if (this.focusedId) this.toggleSelect(this.focusedId);
+                                  this.toggleSelect(this.focusedId);
                               }}
                               break;
-                          case '/':
-                              e.preventDefault();
-                              this.$root?.querySelector(
-                                  '[data-oridecon-table-search] input'
-                              )?.focus();
+                          case 'Enter':
+                              if (this.expansionEnabled && this.focusedId) {{
+                                  e.preventDefault();
+                                  this.toggleExpand(this.focusedId);
+                              }}
                               break;
+                          case '/': {{
+                              const searchInput = this.$root?.querySelector(
+                                  '[data-oridecon-table-search] input'
+                              );
+                              if (searchInput) {{
+                                  e.preventDefault();
+                                  searchInput.focus();
+                              }}
+                              break;
+                          }}
                      }}
                 }}
             }};

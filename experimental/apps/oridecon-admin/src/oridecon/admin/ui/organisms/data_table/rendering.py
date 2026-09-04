@@ -191,6 +191,10 @@ class DataTableRenderer:
                     id=Zones.TABLE.id,
                     tabindex="0",
                     role="region",
+                    class_=(
+                        "rounded-lg focus:outline-none focus-visible:ring-2 "
+                        "focus-visible:ring-ring focus-visible:ring-offset-2"
+                    ),
                     aria_label=table_accessible_name,
                     data_oridecon_table_root=True,
                     data_oridecon_table_refresh_event=(
@@ -201,6 +205,8 @@ class DataTableRenderer:
                         "{ ...window.LexigramTableLogic, selectedIds: [], "
                         "expandedIds: [], collapsedGroups: [], lastSelected: null, "
                         "focusedId: null, hasActiveFiltersState: false, "
+                        f"selectionEnabled: {dumps_str(bool(self.config.bulk_actions))}, "
+                        f"expansionEnabled: {dumps_str(bool(self.config.expandable_relationship))}, "
                         f"allIds: {self.all_ids_json} }}"
                     ),
                     **{
