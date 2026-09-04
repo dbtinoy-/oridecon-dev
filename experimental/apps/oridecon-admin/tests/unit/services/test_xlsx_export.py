@@ -11,6 +11,9 @@ Covers:
   override produce an xlsx attachment; unsupported formats still 400.
 * Handler stack — ``action=export_xlsx`` returns xlsx bytes with the
   download headers; missing openpyxl maps to 501 in both stacks.
+
+Workbook-building cases skip when the optional ``openpyxl`` dependency is
+absent; graceful-degradation cases always run.
 """
 
 from __future__ import annotations
@@ -26,6 +29,11 @@ from oridecon.admin.services.export.xlsx import (
     XLSX_CONTENT_TYPE,
     coerce_cell_value,
     encode_rows_as_xlsx,
+)
+
+requires_openpyxl = pytest.mark.skipif(
+    not xlsx_module.HAS_OPENPYXL,
+    reason="openpyxl is required for workbook integration cases",
 )
 
 
@@ -44,6 +52,7 @@ def read_sheet(payload: bytes) -> list[list[Any]]:
 
 
 class TestEncodeRowsAsXlsx:
+    @requires_openpyxl
     def test_roundtrip_headers_and_values(self):
         rows = [
             {"id": 1, "name": "Widget", "price": 9.5},
@@ -54,6 +63,7 @@ class TestEncodeRowsAsXlsx:
         assert sheet[1] == [1, "Widget", 9.5]
         assert sheet[2] == [2, "Gadget", 19.0]
 
+    @requires_openpyxl
     def test_column_union_across_ragged_rows(self):
         rows = [{"a": 1}, {"a": 2, "b": "late"}]
         sheet = read_sheet(encode_rows_as_xlsx(rows))
@@ -61,18 +71,21 @@ class TestEncodeRowsAsXlsx:
         assert sheet[1] == [1, None]
         assert sheet[2] == [2, "late"]
 
+    @requires_openpyxl
     def test_explicit_fieldnames_control_order_and_subset(self):
         rows = [{"a": 1, "b": 2, "c": 3}]
         sheet = read_sheet(encode_rows_as_xlsx(rows, fieldnames=["c", "a"]))
         assert sheet[0] == ["c", "a"]
         assert sheet[1] == [3, 1]
 
+    @requires_openpyxl
     def test_formula_injection_sanitized(self):
         rows = [{"name": '=HYPERLINK("http://evil")', "note": "+SUM(A1)"}]
         sheet = read_sheet(encode_rows_as_xlsx(rows))
         assert sheet[1][0].startswith("'=")
         assert sheet[1][1].startswith("'+")
 
+    @requires_openpyxl
     def test_unstorable_types_coerced_not_crash(self):
         # Previously: openpyxl raised "Cannot convert ... to Excel".
         rows = [{"meta": {"k": "v"}, "tags": ["a", "b"], "blob": b"\xffraw"}]
@@ -81,6 +94,7 @@ class TestEncodeRowsAsXlsx:
         assert sheet[1][1] == str(["a", "b"])
         assert isinstance(sheet[1][2], str)
 
+    @requires_openpyxl
     def test_empty_rows_produce_valid_workbook(self):
         sheet = read_sheet(encode_rows_as_xlsx([]))
         assert sheet in ([], [[None]])  # empty sheet, no crash
@@ -121,6 +135,7 @@ class _MemoryStorage:
 
 
 class TestExcelBackend:
+    @requires_openpyxl
     @pytest.mark.asyncio
     async def test_generate_file_uploads_valid_workbook(self):
         from oridecon.admin.services.export.adapters.excel import ExcelExportBackend
@@ -173,6 +188,7 @@ def make_controller(items: list[dict[str, Any]]):
 
 
 class TestControllerXlsxExport:
+    @requires_openpyxl
     @pytest.mark.asyncio
     async def test_bulk_export_xlsx(self):
         controller = make_controller(
@@ -250,6 +266,7 @@ def make_bulk_request(form: dict[str, Any]) -> Any:
 
 
 class TestHandlerXlsxExport:
+    @requires_openpyxl
     @pytest.mark.asyncio
     async def test_export_xlsx_returns_workbook_attachment(self):
         resource, handler = make_resource_and_handler(

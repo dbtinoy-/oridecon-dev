@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import csv
 import io
+from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock
 
@@ -15,6 +16,8 @@ from starlette.requests import Request
 
 from oridecon.admin.resources.base import Resource
 from oridecon.admin.resources.handler import BulkActionHandler
+
+_PKG_ROOT = Path(__file__).resolve().parents[3]
 
 
 class _FakeDataSource:
@@ -219,9 +222,7 @@ class TestHandlerFilteredExport:
 
 class TestClientScriptsCarryFilteredExport:
     def test_admin_js_forwards_scope_and_list_query(self) -> None:
-        from pathlib import Path
-
-        js = Path("src/oridecon/admin/static/js/admin.js").read_text("utf-8")
+        js = (_PKG_ROOT / "src/oridecon/admin/static/js/admin.js").read_text("utf-8")
         assert "scope', 'filtered'" in js.replace('"', "'")
         assert "list_query" in js
         assert "Select at least one row to export" not in js
