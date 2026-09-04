@@ -1,14 +1,18 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
+from types import MappingProxyType
 from typing import Any, TypeAlias
 
-from oridecon.ui.core.base import el, raw
+from oridecon.ui.core.base import el
+from oridecon.ui.core.trusted_html import trusted_html
 
 IconDefinition: TypeAlias = str
-IconLibrary: TypeAlias = dict[str, str]
+IconLibrary: TypeAlias = Mapping[str, str]
 
-# Lucide Icons (Inner SVG content)
-ICONS = {
+# Framework-owned Lucide SVG fragments. The public registry is frozen below so
+# runtime input cannot acquire trust by mutating this authored source table.
+_ICON_DEFINITIONS: dict[str, str] = {
     # Navigation
     "home": '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
     "layout-dashboard": '<rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>',
@@ -147,6 +151,8 @@ ICONS = {
     "send": '<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/>',
 }
 
+ICONS: IconLibrary = MappingProxyType(_ICON_DEFINITIONS)
+
 
 def get_icon(
     name: str | Any,
@@ -163,9 +169,10 @@ def get_icon(
     # A11y default: icons are decorative unless the caller gives them an
     # accessible identity. Hide them from the accessibility tree and keep
     # them out of the (IE/legacy SVG) tab order.
-    if not any(
-        k in attrs for k in ("aria_label", "aria-label", "role", "aria_hidden")
-    ) and "aria-hidden" not in attrs:
+    if (
+        not any(k in attrs for k in ("aria_label", "aria-label", "role", "aria_hidden"))
+        and "aria-hidden" not in attrs
+    ):
         attrs["aria-hidden"] = "true"
         attrs["focusable"] = "false"
 
@@ -191,7 +198,7 @@ def get_icon(
 
         return el(
             "svg",
-            raw(content),
+            trusted_html(content, source=f"built-in icon registry: {name}"),
             viewBox="0 0 24 24",
             fill="none",
             stroke="currentColor",

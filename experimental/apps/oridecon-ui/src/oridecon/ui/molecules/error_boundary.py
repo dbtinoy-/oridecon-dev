@@ -5,7 +5,8 @@ from __future__ import annotations
 from typing import Any
 
 from oridecon.logging import get_logger
-from oridecon.ui.core.base import Component, el, raw, render_to_string
+from oridecon.ui.core.base import Component, el, render_child_to_string
+from oridecon.ui.core.trusted_html import trusted_html
 from oridecon.ui.molecules.error_state import ErrorState
 
 logger = get_logger(__name__)
@@ -24,9 +25,17 @@ class ErrorBoundary(Component):
 
     def render(self) -> Any:
         try:
-            # Force rendering of children to catch exceptions early
-            content = render_to_string(self.children)
-            return el("div", raw(content), **self.props)
+            # Force child-context rendering to catch exceptions while preserving
+            # the strings-are-data escaping policy.
+            content = render_child_to_string(self.children)
+            return el(
+                "div",
+                trusted_html(
+                    content,
+                    source="ErrorBoundary concrete child renderer",
+                ),
+                **self.props,
+            )
         except Exception as e:  # error boundary must catch all rendering errors
             logger.exception("Error rendering component inside ErrorBoundary")
             if self.fallback:
