@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from oridecon.ui.atoms.tooltip import Tooltip
+from oridecon.ui.core.base import el
 from oridecon.ui.molecules.tabs import Tabs
 
 
@@ -15,7 +16,7 @@ class TestTabsContainer:
 
 class TestTooltipAria:
     def test_tooltip_aria(self) -> None:
-        html = str(Tooltip("More info"))
+        html = str(Tooltip("More info", el("button", "Help", id="help")))
         assert 'role="tooltip"' in html
 
 
