@@ -169,7 +169,11 @@ class AdminController(ControllerProtocol):
                 "favicon_url",
                 "dark_mode",
             ):
-                value = overrides.get(field) or overrides.get(f"admin.branding.{field}")
+                # Prefer the namespaced key ("admin.branding.X") over the
+                # flat legacy key ("X") — get_all() always includes
+                # DEFAULT_SETTINGS under the flat keys so the flat lookup
+                # would otherwise shadow any explicitly saved value.
+                value = overrides.get(f"admin.branding.{field}") or overrides.get(field)
                 if value:
                     extra_context.setdefault(field, value)
         except Exception:  # noqa: BLE001, S110 — non-fatal

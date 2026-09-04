@@ -3,10 +3,31 @@
 from __future__ import annotations
 
 from oridecon.admin.settings.panel.models import BrandingSettings
-from oridecon.admin.settings.panel.nodes import ColorNode, PydanticConfigSpec
+from oridecon.admin.settings.panel.nodes import (
+    ColorNode,
+    EnumNode,
+    PydanticConfigSpec,
+)
 from oridecon.admin.settings.panel.registry import ConfigRegistry
 
 __all__ = ["BrandingSpec", "register_spec"]
+
+# Human-readable labels for the dark-mode selector.
+_DARK_MODE_OPTIONS: dict[str, str] = {
+    "system": "System (follow OS)",
+    "light": "Light",
+    "dark": "Dark",
+}
+
+_dark_mode_node = EnumNode(
+    label="Dark Mode",
+    default="system",
+    help_text=(
+        "Theme preference: follow the system, force light, or force dark. "
+        "Takes effect on the next full page load."
+    ),
+    options=_DARK_MODE_OPTIONS,
+)
 
 
 class BrandingSpec(PydanticConfigSpec):
@@ -17,7 +38,10 @@ class BrandingSpec(PydanticConfigSpec):
     icon = "palette"
     description = "Site name, colors, logo, and theme preference."
     model = BrandingSettings
-    node_overrides = {"primary_color": ColorNode}
+    node_overrides = {
+        "primary_color": ColorNode,
+        "dark_mode": _dark_mode_node,
+    }
     required_permissions = frozenset({"admin.settings.edit"})
     scope = "tenant"
 

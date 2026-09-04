@@ -37,6 +37,31 @@ class TenantConfigStore(StoreBase):
         value = await self._service.get(tenant_id or self._tenant, key)
         return value if value is not None else default
 
+    async def contains(self, key: str, tenant_id: str | None = None) -> bool:
+        """Return whether an explicit value has been saved for *key*.
+
+        Checks the underlying provider's raw stored rows for the DB key
+        (``admin_ui.<key>``).  Returns ``False`` when no row has been
+        written — meaning the value the form renders is the node default —
+        and ``True`` when an explicit override exists.  This lets the
+        settings UI badge correctly distinguish defaults from saved values.
+        """
+        try:
+            from oridecon.admin.services.settings_service import KEY_PREFIX
+
+            tenant = tenant_id or self._tenant
+            provider = getattr(self._service, "_provider", None)
+            if provider is not None:
+                # DB-backed: check whether the namespaced row exists.
+                raw = await provider.get_all_config(tenant)
+                stored_key = f"{KEY_PREFIX}{key}"
+                return stored_key in raw
+            # In-memory fallback: check the memory dict directly.
+            mem: dict = getattr(self._service, "_memory", {})
+            return key in mem.get(tenant, {})
+        except Exception:  # noqa: BLE001 — non-fatal capability probe
+            return False
+
     async def set(self, key: str, value: Any, tenant_id: str | None = None) -> None:
         """Persist a value by key."""
         await self._service.set(tenant_id or self._tenant, key, value)
