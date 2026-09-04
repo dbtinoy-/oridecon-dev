@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from oridecon.admin.ui.organisms.table.views.tabular_rows import extract_row_id
-from oridecon.ui import Checkbox, Zones, el
+from oridecon.ui import Checkbox, Zones, el, get_icon, js_string
 
 
 def render_table_header(
@@ -114,18 +114,30 @@ def render_table_header(
             # Add Reordering support
             if getattr(config, "reorderable_columns", False):
                 # Add drag handle before the header content
+                column_name = str(col.name)
                 drag_handle = el(
                     "span",
-                    el(
-                        "i",
-                        class_="fas fa-grip-vertical text-muted-foreground opacity-0 group-hover:opacity-100 cursor-move mr-1",
+                    get_icon(
+                        "grip-vertical",
+                        class_name=(
+                            "mr-1 h-4 w-4 text-muted-foreground opacity-0 "
+                            "group-hover:opacity-100"
+                        ),
                     ),
-                    class_="drag-handle inline-flex items-center",
+                    title=f"Drag to reorder {column_name} column",
+                    aria_hidden="true",
+                    class_="drag-handle inline-flex cursor-move items-center",
                     **{
                         "draggable": "true",
-                        "@dragstart": f"event.dataTransfer.setData('text/plain', '{col.name}')",
+                        "@dragstart": (
+                            "event.dataTransfer.setData('text/plain', "
+                            f"{js_string(column_name)})"
+                        ),
                         "@dragover.prevent": "",
-                        "@drop": f"reorderColumn(event.dataTransfer.getData('text/plain'), '{col.name}')",
+                        "@drop": (
+                            "reorderColumn(event.dataTransfer.getData('text/plain'), "
+                            f"{js_string(column_name)})"
+                        ),
                     },
                 )
                 header_th.children.insert(0, drag_handle)

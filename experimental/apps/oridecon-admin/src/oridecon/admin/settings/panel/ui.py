@@ -21,7 +21,9 @@ from oridecon.ui import (
     TextInput,
     Toggle,
     el,
+    get_icon,
 )
+from oridecon.ui.atoms.icons import ICONS
 
 __all__ = ["ConfigDashboardUI"]
 
@@ -173,7 +175,10 @@ class ConfigDashboardUI:
                 el(
                     "a",
                     [
-                        el("i", class_=f"fas fa-{spec.icon} w-5 mr-3 opacity-70")
+                        get_icon(
+                            spec.icon if spec.icon in ICONS else "cog",
+                            class_name="mr-3 h-5 w-5 opacity-70",
+                        )
                         if spec.icon
                         else "",
                         el("span", spec.label or spec.namespace.title()),
