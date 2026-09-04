@@ -1,21 +1,33 @@
-"""The browser harness itself must work, independent of any browser.
+"""Verify the browser server harness independently of a browser binary.
 
-The server fixture is the part most likely to rot silently: if it stopped
-binding or stopped tearing down, every browser test would skip or hang and
-look like an environment problem. These tests exercise it over plain HTTP
-so a machine without browser binaries still verifies the harness.
+The server fixture is the part most likely to rot silently. These tests drive
+it over HTTP and verify that it binds unique ephemeral ports and tears down.
 """
 
 from __future__ import annotations
 
 import socket
+import threading
+import time
 from typing import Any
-import pytest
-from urllib.request import urlopen
 
+import httpx
+import pytest
 from starlette.applications import Starlette
 from starlette.responses import PlainTextResponse
 from starlette.routing import Route
+
+from tests.browser.conftest import _browser_unavailable
+
+
+class _BrowserConfig:
+    def __init__(self, *, gate: bool) -> None:
+        self.gate = gate
+
+    def getoption(self, name: str, *, default: bool = False) -> bool:
+        if name == "--browser-gate":
+            return self.gate
+        return default
 
 
 def _echo_app(message: str) -> Starlette:
@@ -25,16 +37,26 @@ def _echo_app(message: str) -> Starlette:
     return Starlette(routes=[Route("/", index)])
 
 
+class TestBrowserAvailabilityPolicy:
+    def test_local_mode_skips_missing_browser(self) -> None:
+        with pytest.raises(pytest.skip.Exception, match="missing browser"):
+            _browser_unavailable(_BrowserConfig(gate=False), "missing browser")  # type: ignore[arg-type]
+
+    def test_gate_mode_fails_for_missing_browser(self) -> None:
+        with pytest.raises(pytest.fail.Exception, match="missing browser"):
+            _browser_unavailable(_BrowserConfig(gate=True), "missing browser")  # type: ignore[arg-type]
+
+
 class TestLiveServer:
     """The fixture owns the full server lifecycle."""
 
     def test_serves_the_supplied_app(self, live_server: Any) -> None:
         base = live_server(_echo_app("hello from the harness"))
 
-        with urlopen(f"{base}/", timeout=10) as response:
-            body = response.read().decode()
+        with httpx.Client(base_url=base, timeout=10) as client:
+            response = client.get("/")
 
-        assert body == "hello from the harness"
+        assert response.text == "hello from the harness"
 
     def test_binds_an_ephemeral_port(self, live_server: Any) -> None:
         """Hardcoded ports collide under parallel runs; port 0 does not."""
@@ -49,19 +71,12 @@ class TestLiveServer:
         second = live_server(_echo_app("second"))
 
         assert first != second
-        with urlopen(f"{second}/", timeout=10) as response:
-            assert response.read().decode() == "second"
+        with httpx.Client(base_url=second, timeout=10) as client:
+            assert client.get("/").text == "second"
 
 
 def test_server_is_torn_down() -> None:
-    """A leaked server would hold its port after the test that started it.
-
-    Verified by running the fixture in-process and asserting the port stops
-    accepting connections once the fixture's teardown has run.
-    """
-    import threading
-    import time
-
+    """A stopped server must release its listener and thread."""
     uvicorn = pytest.importorskip(
         "uvicorn", reason="uvicorn is required to serve browser tests"
     )
