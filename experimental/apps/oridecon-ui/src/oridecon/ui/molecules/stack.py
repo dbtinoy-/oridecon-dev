@@ -1,37 +1,19 @@
-"""Stack layout component.
-
-Renders a vertical flex-column container with configurable gap between
-children.  Built on top of the ``htpy`` element builder.
-"""
+"""Structured vertical stack layout."""
 
 from __future__ import annotations
 
-from typing import Any
+from collections.abc import Iterator
+from typing import Any, cast
 
-from htpy import el as _el
-
-el: Any = _el
+from oridecon.ui.core.base import Element, el, render_to_string
 
 
 class Stack:
-    """A vertical flex-column layout container.
+    """Render children in a vertical flex-column container.
 
-    Stacks its *children* elements vertically with a Tailwind CSS gap.
-
-    Args:
-        children: Sequence of child elements to render inside the stack.
-        gap: Tailwind spacing unit for ``gap-*`` (e.g. ``6`` → ``gap-6``).
-        class_: Additional CSS classes appended to the container element.
-
-    Example::
-
-        content = Stack(
-            gap=4,
-            children=[
-                el("h2", "Title"),
-                el("p", "Body text"),
-            ],
-        )
+    Plain string children remain text and are escaped by ``Element``. Markup
+    may cross the boundary only through a framework element or an explicit
+    trusted HTML capability.
     """
 
     def __init__(
@@ -40,40 +22,24 @@ class Stack:
         gap: int = 4,
         class_: str = "",
     ) -> None:
-        self.children: list[Any] = children or []
+        self.children = list(children or [])
         self.gap = gap
         self.class_ = class_
 
-    def __iter__(self) -> Any:
-        """Render as an htpy-compatible element iterator."""
-        base_classes = f"flex flex-col gap-{self.gap}"
+    def render(self) -> Element:
+        """Build the structured stack element without pre-rendering children."""
+        classes = f"flex flex-col gap-{self.gap}"
         if self.class_:
-            base_classes = f"{base_classes} {self.class_}"
-        yield from el(
-            "div",
-            self.children,
-            class_=base_classes,
-        )
+            classes = f"{classes} {self.class_}"
+        return cast("Element", el("div", *self.children, class_=classes))
+
+    def __iter__(self) -> Iterator[Element]:
+        """Retain compatibility with callers that consume Stack as a fragment."""
+        yield self.render()
 
     def __html__(self) -> str:
-        """Return the rendered HTML string."""
-        parts: list[str] = []
-        base_classes = f"flex flex-col gap-{self.gap}"
-        if self.class_:
-            base_classes = f"{base_classes} {self.class_}"
-        parts.append(f'<div class="{base_classes}">')
-        for child in self.children:
-            if hasattr(child, "__html__"):
-                parts.append(child.__html__())
-            elif hasattr(child, "__iter__"):
-                try:
-                    parts.extend(str(c) for c in child)
-                except TypeError:
-                    parts.append(str(child))
-            else:
-                parts.append(str(child))
-        parts.append("</div>")
-        return "".join(parts)
+        """Render through the framework element boundary."""
+        return render_to_string(self.render())
 
     def __str__(self) -> str:
         return self.__html__()

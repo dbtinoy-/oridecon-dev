@@ -12,6 +12,7 @@ from typing import Any, Self, cast
 from markupsafe import Markup
 
 from oridecon.logging import get_logger
+from oridecon.ui.core.trusted_html import TrustedHTML
 
 logger = get_logger(__name__)
 
@@ -65,11 +66,31 @@ except ImportError:  # pragma: no cover - networks / minimal envs
     _htpy = None  # type: ignore[assignment]
 
 
-def _is_htpy_element(el: Any) -> bool:
-    # Only consider objects that provide an explicit HTML conversion
-    # method (``__html__``). Components also implement ``render`` so
-    # checking for ``render`` would misclassify them as htpy elements.
-    return hasattr(el, "__html__")
+def _load_htpy_structure_types() -> tuple[type[Any], ...]:
+    """Load the concrete public htpy node types supported by this adapter.
+
+    Trust is based on library types, never on an object's module name or the
+    mere presence of ``__html__``. Dynamic lookup keeps htpy optional and lets
+    older supported releases omit node categories they do not expose.
+    """
+    if _htpy is None:
+        return ()
+    candidates = (
+        getattr(_htpy, name, None)
+        for name in ("BaseElement", "Fragment", "ContextConsumer", "ContextProvider")
+    )
+    return tuple(candidate for candidate in candidates if isinstance(candidate, type))
+
+
+_HTPY_STRUCTURE_TYPES = _load_htpy_structure_types()
+
+
+def _is_html_structure(value: Any) -> bool:
+    """Return whether ``value`` has an explicitly supported HTML provenance."""
+    return isinstance(
+        value,
+        (Element, RawHTML, TrustedHTML, *_HTPY_STRUCTURE_TYPES),
+    )
 
 
 class Element:
@@ -158,18 +179,13 @@ class Element:
         return self.__html__()
 
 
-class RawHTML:
-    """Wrapper for raw HTML strings that should be included verbatim.
+class RawHTML(TrustedHTML):
+    """Compatibility wrapper for the legacy unattributed ``raw()`` API."""
 
-    Instances implement ``__html__`` so they are detected as htpy-like
-    elements and their contents are not escaped when inserted as children.
-    """
+    __slots__ = ()
 
     def __init__(self, value: str) -> None:
-        self.value = value
-
-    def __html__(self) -> str:
-        return str(self.value)
+        super().__init__(value=value, source="legacy raw() compatibility adapter")
 
 
 def raw(value: str) -> RawHTML:
@@ -200,9 +216,9 @@ def _render_child(child: Any) -> str:
     - Plain strings are escaped (they are text content). This includes
       plain strings returned by ``Component.render()``: a component is
       resolved first and its string result is treated as data.
-    - ``Markup`` (markupsafe), ``RawHTML`` (via ``raw()``), ``Element``
-      and any other ``__html__``-bearing object pass through verbatim —
-      those are explicit opt-outs signalling pre-rendered HTML.
+    - ``Markup`` (markupsafe), ``TrustedHTML``, legacy ``RawHTML``, framework
+      ``Element``, and concrete supported htpy nodes pass through verbatim.
+      An arbitrary ``__html__`` method does not grant markup trust.
     - Iterables are rendered element-wise under the same policy.
 
     This closes the previous inconsistency where a ``Component`` child
@@ -221,12 +237,13 @@ def _render_child(child: Any) -> str:
         if as_child_result is not None:
             return _render_child(as_child_result)
         return _render_child(child.render())
-    # Elements / RawHTML / htpy elements and any other __html__-bearing
-    # object are structure: render verbatim (escaping already happened at
-    # their own boundaries). Must be checked before Iterable because htpy
-    # elements are iterable (for `with` support).
-    if _is_htpy_element(child):
+    # Explicit framework/trusted/htpy values are structure. This must be
+    # checked before Iterable because htpy elements support iteration.
+    if _is_html_structure(child):
         return render_to_string(child)
+    renderer = getattr(child, "render", None)
+    if callable(renderer):
+        return _render_child(renderer())
     if isinstance(child, Iterable) and not isinstance(child, (bytes, dict)):
         return "".join(_render_child(item) for item in child)
     return render_to_string(child)
@@ -465,7 +482,7 @@ def render_to_string(value: str | Any) -> str:
     if isinstance(value, Component):
         return render_to_string(value.render())
 
-    if _is_htpy_element(value):
+    if _is_html_structure(value):
         # Rendering errors are correctness failures. Falling back to ``str``
         # or ``repr`` can hide a broken form/component behind object text and
         # can invoke the same failing renderer more than once.

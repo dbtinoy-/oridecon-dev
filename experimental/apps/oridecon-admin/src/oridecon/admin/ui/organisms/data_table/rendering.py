@@ -175,7 +175,7 @@ class DataTableRenderer:
                 script,
                 el(
                     "div",
-                    raw(header_section),
+                    header_section,
                     raw(tabs_html),
                     container,
                     id=Zones.TABLE.id,

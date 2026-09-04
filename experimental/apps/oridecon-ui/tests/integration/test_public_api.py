@@ -5,10 +5,11 @@ This test prevents silent drift: if a downstream package (like oridecon-admin)
 depends on a name, that name must live on the package surface — never via
 a deep-path import.
 """
+
 from __future__ import annotations
 
 import importlib
-import os
+from pathlib import Path
 import re
 
 import pytest
@@ -17,72 +18,181 @@ import pytest
 # Order does not matter; the test resolves each name through `oridecon.ui`.
 CANONICAL_API_SYMBOLS: list[str] = [
     # Core primitives
-    "Component", "Element", "RawHTML", "el", "raw", "render_to_string",
+    "Component",
+    "Element",
+    "RawHTML",
+    "TrustedHTML",
+    "trusted_html",
+    "el",
+    "raw",
+    "render_to_string",
     # Context
-    "UIContext", "get_ui_context", "reset_ui_context", "set_ui_context",
+    "UIContext",
+    "get_ui_context",
+    "reset_ui_context",
+    "set_ui_context",
     # Zones
-    "Zone", "Zones", "SwapMode",
+    "Zone",
+    "Zones",
+    "SwapMode",
     # Icons
-    "get_icon", "IconDefinition", "IconLibrary",
+    "get_icon",
+    "IconDefinition",
+    "IconLibrary",
     # HTMX namespaces
-    "htmx", "helpers", "sse",
+    "htmx",
+    "helpers",
+    "sse",
     "HtmxActionResponse",
     # Exceptions & errors
-    "UIError", "ErrorCategory", "FieldError", "ErrorResponse",
-    "validation_error", "not_found_error", "permission_error",
-    "server_error", "timeout_error", "render_validation_errors",
+    "UIError",
+    "ErrorCategory",
+    "FieldError",
+    "ErrorResponse",
+    "validation_error",
+    "not_found_error",
+    "permission_error",
+    "server_error",
+    "timeout_error",
+    "render_validation_errors",
     "htmx_error_response",
     # DI
-    "UIModule", "UIProvider",
+    "UIModule",
+    "UIProvider",
     # Protocols
     "RenderableProtocol",
     # Decorators
     "component",
     # Hooks
-    "UIComponentRenderedHook", "UITemplateRenderedHook",
+    "UIComponentRenderedHook",
+    "UITemplateRenderedHook",
     # Accessibility
-    "AriaAttrs", "AriaLive", "AriaRole", "SkipLink", "announce",
-    "announce_table_update", "button_aria", "dialog_aria", "header_aria",
-    "keyboard_navigation_script", "row_aria", "search_aria", "table_aria",
+    "AriaAttrs",
+    "AriaLive",
+    "AriaRole",
+    "SkipLink",
+    "announce",
+    "announce_table_update",
+    "button_aria",
+    "dialog_aria",
+    "header_aria",
+    "keyboard_navigation_script",
+    "row_aria",
+    "search_aria",
+    "table_aria",
     # Config
-    "UIConfig", "DebounceConfig", "HTMLDocumentConfig", "BaseLayoutConfig",
-    "HeadConfig", "FooterConfig", "ToastConfig",
+    "UIConfig",
+    "DebounceConfig",
+    "HTMLDocumentConfig",
+    "BaseLayoutConfig",
+    "HeadConfig",
+    "FooterConfig",
+    "ToastConfig",
     # Atoms — primitives
-    "Button", "SubmitButton", "Badge", "Spinner", "Icon",
-    "Divider", "Link", "Label", "Fieldset", "FileUpload",
-    "ProgressBar", "Skeleton", "Switch", "Tooltip",
-    "MarkdownEditor", "RichEditor",
+    "Button",
+    "SubmitButton",
+    "Badge",
+    "Spinner",
+    "Icon",
+    "Divider",
+    "Link",
+    "Label",
+    "Fieldset",
+    "FileUpload",
+    "ProgressBar",
+    "Skeleton",
+    "Switch",
+    "Tooltip",
+    "MarkdownEditor",
+    "RichEditor",
     # Atoms — layout primitives
-    "Aside", "Col", "Container", "Grid", "Row", "Stack",
+    "Aside",
+    "Col",
+    "Container",
+    "Grid",
+    "Row",
+    "Stack",
     # Atoms — inputs
-    "AbstractInput", "Input", "TextInput", "PasswordInput", "EmailInput",
-    "TextArea", "NumberInput", "Slider", "DateInput", "TimePicker",
-    "Select", "MultiSelect", "NativeMultiSelect", "LazySelect",
-    "CheckboxList", "Radio", "BelongsTo", "MorphTo",
-    "Checkbox", "Toggle",
-    "ColorPicker", "Hidden", "KeyValueField", "Rating", "TagsInput",
-    "AvatarUpload", "MultiFileUpload",
+    "AbstractInput",
+    "Input",
+    "TextInput",
+    "PasswordInput",
+    "EmailInput",
+    "TextArea",
+    "NumberInput",
+    "Slider",
+    "DateInput",
+    "TimePicker",
+    "Select",
+    "MultiSelect",
+    "NativeMultiSelect",
+    "LazySelect",
+    "CheckboxList",
+    "Radio",
+    "BelongsTo",
+    "MorphTo",
+    "Checkbox",
+    "Toggle",
+    "ColorPicker",
+    "Hidden",
+    "KeyValueField",
+    "Rating",
+    "TagsInput",
+    "AvatarUpload",
+    "MultiFileUpload",
     # Molecules
-    "Alert", "SimpleAlert", "Breadcrumbs", "Card", "Dropdown",
-    "EmptyState", "ErrorState", "FormActions", "FormField", "FieldSchema",
-    "InputGroup", "LoadingOverlay", "MetricCard", "Modal", "Popover",
-    "RichSelect", "Section", "StatCard", "Tabs", "TabPanel",
+    "Alert",
+    "SimpleAlert",
+    "Breadcrumbs",
+    "Card",
+    "Dropdown",
+    "EmptyState",
+    "ErrorState",
+    "FormActions",
+    "FormField",
+    "FieldSchema",
+    "InputGroup",
+    "LoadingOverlay",
+    "MetricCard",
+    "Modal",
+    "Popover",
+    "RichSelect",
+    "Section",
+    "StatCard",
+    "Tabs",
+    "TabPanel",
     # Molecules — toasts
-    "InlineToast", "ServerToastChannel",
-    "ToastData", "ToastType", "flash_to_toast",
+    "InlineToast",
+    "ServerToastChannel",
+    "ToastData",
+    "ToastType",
+    "flash_to_toast",
     # Molecules — realtime / scroll
-    "InfiniteScrollTrigger", "VirtualScroll", "RealTimeFeed", "LiveCounter",
+    "InfiniteScrollTrigger",
+    "VirtualScroll",
+    "RealTimeFeed",
+    "LiveCounter",
     # Molecules — Builder
     "Builder",
     # Organisms
-    "Form", "Repeater", "ActivityFeed", "SlideOver",
-    "AdminCard", "PageLayout",
+    "Form",
+    "Repeater",
+    "ActivityFeed",
+    "SlideOver",
+    "AdminCard",
+    "PageLayout",
     # Performance
-    "RenderCache", "ResponseOptimizer", "add_htmx_timing_header",
-    "debounced_search_attrs", "infinite_scroll_trigger",
-    "lazy_load_placeholder", "measure_render_time",
+    "RenderCache",
+    "ResponseOptimizer",
+    "add_htmx_timing_header",
+    "debounced_search_attrs",
+    "infinite_scroll_trigger",
+    "lazy_load_placeholder",
+    "measure_render_time",
     # Observability
-    "MetricsCollector", "MetricProtocol", "MetricType",
+    "MetricsCollector",
+    "MetricProtocol",
+    "MetricType",
 ]
 
 
@@ -116,37 +226,10 @@ def test_dir_includes_all_canonical_names() -> None:
 
 
 def _load_lazy_imports() -> set[str]:
-    """Load the set of public symbols from the lazy import map."""
-    repo_root = os.path.join(os.path.dirname(__file__), "..", "..", "..")
-    ui_init = os.path.join(
-        repo_root, "oridecon-ui", "src", "oridecon", "ui", "exports", "lazy.py"
-    )
-    with open(ui_init) as f:
-        content = f.read()
-    match = re.search(r"LAZY_IMPORTS.*?=\s*\{", content)
-    assert match, "_LAZY_IMPORTS dict not found"
-    start = match.end()
-    depth = 1
-    i = start
-    while i < len(content) and depth > 0:
-        if content[i] == "{":
-            depth += 1
-        elif content[i] == "}":
-            depth -= 1
-        elif content[i] in "\"'":
-            q = content[i]; i += 1
-            while i < len(content) and content[i] != q:
-                if content[i] == "\\":
-                    i += 1
-                i += 1
-        i += 1
-    dict_text = content[start : i - 1]
-    keys: set[str] = set()
-    for m in re.finditer(r'"([^"]+)"\s*:', dict_text):
-        keys.add(m.group(1))
-    for m in re.finditer(r"'([^']+)'\s*:", dict_text):
-        keys.add(m.group(1))
-    return keys
+    """Load public symbols from the executable lazy-import authority."""
+    from oridecon.ui.exports.lazy import LAZY_IMPORTS
+
+    return set(LAZY_IMPORTS)
 
 
 DEEP_IMPORT_RE = re.compile(
@@ -162,35 +245,34 @@ def test_no_phantom_deep_imports() -> None:
     a oridecon.ui internal without the author of oridecon.ui knowing.
     """
     public = _load_lazy_imports()
-    repo_root = os.path.join(os.path.dirname(__file__), "..", "..", "..")
-    packages = ["oridecon-admin", "oridecon-web"]
+    apps_root = Path(__file__).resolve().parents[3]
+    packages = ("oridecon-admin", "oridecon-web")
     violations: list[str] = []
 
-    for pkg in packages:
-        src_dir = os.path.join(repo_root, pkg, "src")
-        if not os.path.isdir(src_dir):
+    for package in packages:
+        src_dir = apps_root / package / "src"
+        if not src_dir.is_dir():
             continue
-        for root, dirs, files in os.walk(src_dir):
-            for fname in files:
-                if not fname.endswith(".py") or fname == "__init__.py":
+        for path in src_dir.rglob("*.py"):
+            if path.name == "__init__.py":
+                continue
+            for lineno, line in enumerate(path.read_text().splitlines(), 1):
+                if not line or line[0] in (" ", "\t"):
                     continue
-                fpath = os.path.join(root, fname)
-                with open(fpath) as f:
-                    for lineno, line in enumerate(f, 1):
-                        if line[0] in (" ", "\t"):
-                            continue
-                        m = DEEP_IMPORT_RE.match(line.strip())
-                        if not m:
-                            continue
-                        parts = [p.strip() for p in m.group(1).split(",") if p.strip()]
-                        for p in parts:
-                            raw = p.split(" as ")[0].strip()
-                            if raw in public:
-                                violations.append(
-                                    f"{fpath}:{lineno}: "
-                                    f"`{raw}` should come from `from oridecon.ui import ...` "
-                                    f"(in LAZY_IMPORTS)"
-                                )
+                match = DEEP_IMPORT_RE.match(line.strip())
+                if not match:
+                    continue
+                parts = [
+                    part.strip() for part in match.group(1).split(",") if part.strip()
+                ]
+                for part in parts:
+                    symbol = part.split(" as ")[0].strip()
+                    if symbol in public:
+                        violations.append(
+                            f"{path}:{lineno}: "
+                            f"`{symbol}` should come from `from oridecon.ui import ...` "
+                            f"(in LAZY_IMPORTS)"
+                        )
 
     assert not violations, (
         f"Found {len(violations)} module-level deep imports of public symbols:\n"

@@ -11,6 +11,8 @@ __all__ = (
     "Component",
     "Element",
     "RawHTML",
+    "TrustedHTML",
+    "trusted_html",
     "el",
     "raw",
     "render_to_string",

@@ -12,6 +12,8 @@ LAZY_IMPORTS: dict[str, str] = {
     "Component": "oridecon.ui.core.base",
     "Element": "oridecon.ui.core.base",
     "RawHTML": "oridecon.ui.core.base",
+    "TrustedHTML": "oridecon.ui.core.trusted_html",
+    "trusted_html": "oridecon.ui.core.trusted_html",
     "el": "oridecon.ui.core.base",
     "raw": "oridecon.ui.core.base",
     "render_to_string": "oridecon.ui.core.base",

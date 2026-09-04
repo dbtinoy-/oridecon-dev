@@ -4,8 +4,9 @@ Policy: *strings are data, elements are structure.*
 
 - Plain strings (including plain-string results of ``Component.render()``)
   are escaped when inserted as Element children.
-- ``Markup``, ``raw()`` and any ``__html__``-bearing object pass through
-  verbatim — explicit opt-outs for pre-rendered HTML.
+- ``TrustedHTML``, compatibility ``Markup``/``raw()``, framework elements,
+  and concrete supported htpy nodes pass through verbatim.
+- An arbitrary ``__html__`` method does not grant markup trust.
 """
 
 from __future__ import annotations
@@ -20,6 +21,7 @@ from oridecon.ui.core.base import (
     render_to_string,
     warn_html_string_render,
 )
+
 
 class _FakeWarningLogger:
     """Stand-in for the structlog logger: read-only proxy otherwise."""

@@ -93,6 +93,7 @@ if TYPE_CHECKING:
         set_ui_context,
     )
     from oridecon.ui.core.js import js_json, js_string
+    from oridecon.ui.core.trusted_html import TrustedHTML, trusted_html
     from oridecon.ui.core.url import is_safe_navigation_url
     from oridecon.ui.core.zones import SwapMode, Zone, Zones
     from oridecon.ui.decorators import component
