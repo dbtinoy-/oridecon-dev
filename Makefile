@@ -1,4 +1,4 @@
-# Lexigram Framework — Makefile
+# Oridecon Framework — Makefile
 # Wraps the most common uv/pytest/ruff/mypy commands.
 
 .DEFAULT_GOAL := help
@@ -10,23 +10,23 @@ UV         := uv
 PYTEST     := $(UV) run pytest
 RUFF       := $(UV) run ruff
 MYPY       := $(UV) run mypy
-CORE_SRC   := core/lexigram/src
-TYPED_PKGS := packages/lexigram-audit packages/lexigram-auth packages/lexigram-cache packages/lexigram-events packages/lexigram-monitor packages/lexigram-notification packages/lexigram-queue packages/lexigram-search packages/lexigram-sql packages/lexigram-testing packages/lexigram-vector packages/lexigram-webhook packages/lexigram-workflow
-WEB_DIR    := packages/lexigram-web
+CORE_SRC   := core/oridecon/src
+TYPED_PKGS := packages/oridecon-audit packages/oridecon-auth packages/oridecon-cache packages/oridecon-events packages/oridecon-monitor packages/oridecon-notification packages/oridecon-queue packages/oridecon-search packages/oridecon-sql packages/oridecon-testing packages/oridecon-vector packages/oridecon-webhook packages/oridecon-workflow
+WEB_DIR    := packages/oridecon-web
 
 # Extension packages that pass mypy with their own per-package config.
 # Add packages here one by one as they are cleaned up (see `make type-pkg`).
-TYPED_PKGS := experimental/ai/lexigram-ai-agents experimental/ai/lexigram-ai-evaluation experimental/ai/lexigram-ai-feedback \
-              experimental/ai/lexigram-ai-guard experimental/ai/lexigram-ai-llm experimental/ai/lexigram-ai-mcp \
-              experimental/ai/lexigram-ai-memory \
-              experimental/ai/lexigram-ai-observability experimental/ai/lexigram-ai-prompt \
-              experimental/ai/lexigram-ai-relay-gateway experimental/ai/lexigram-ai-session \
-              experimental/ai/lexigram-ai-skills experimental/ai/lexigram-ai-workers \
-              packages/lexigram-audit packages/lexigram-events packages/lexigram-monitor \
-              packages/lexigram-notification packages/lexigram-nosql packages/lexigram-queue \
-              experimental/apps/lexigram-ui packages/lexigram-vector packages/lexigram-workflow \
-              packages/lexigram-cache packages/lexigram-auth packages/lexigram-search \
-              packages/lexigram-sql packages/lexigram-testing packages/lexigram-webhook
+TYPED_PKGS := experimental/ai/oridecon-ai-agents experimental/ai/oridecon-ai-evaluation experimental/ai/oridecon-ai-feedback \
+              experimental/ai/oridecon-ai-guard experimental/ai/oridecon-ai-llm experimental/ai/oridecon-ai-mcp \
+              experimental/ai/oridecon-ai-memory \
+              experimental/ai/oridecon-ai-observability experimental/ai/oridecon-ai-prompt \
+              experimental/ai/oridecon-ai-relay-gateway experimental/ai/oridecon-ai-session \
+              experimental/ai/oridecon-ai-skills experimental/ai/oridecon-ai-workers \
+              packages/oridecon-audit packages/oridecon-events packages/oridecon-monitor \
+              packages/oridecon-notification packages/oridecon-nosql packages/oridecon-queue \
+              experimental/apps/oridecon-ui packages/oridecon-vector packages/oridecon-workflow \
+              packages/oridecon-cache packages/oridecon-auth packages/oridecon-search \
+              packages/oridecon-sql packages/oridecon-testing packages/oridecon-webhook
 
 # ---------------------------------------------------------------------------
 # Targets
@@ -76,13 +76,13 @@ lint-fix:  ## Run ruff check + format (auto-fix)
 	$(RUFF) format .
 
 .PHONY: type
-type:  ## Run mypy on core, lexigram-web and all TYPED_PKGS (each with its own pyproject config)
+type:  ## Run mypy on core, oridecon-web and all TYPED_PKGS (each with its own pyproject config)
 	$(MYPY) $(CORE_SRC)
-	cd $(WEB_DIR) && $(MYPY) src/lexigram/web
+	cd $(WEB_DIR) && $(MYPY) src/oridecon/web
 	for p in $(TYPED_PKGS); do (cd $$p && $(MYPY) src) || exit 1; done
 
 .PHONY: type-pkg
-type-pkg:  ## Run mypy on one package with its own config: make type-pkg PKG=lexigram-web
+type-pkg:  ## Run mypy on one package with its own config: make type-pkg PKG=oridecon-web
 	cd $(PKG) && $(MYPY) src
 
 .PHONY: test
@@ -106,7 +106,7 @@ ci:  ## Full CI pipeline: lint + type-check + tests with coverage gate
 	$(RUFF) check . \
 	  && $(RUFF) format --check . \
 	  && $(MYPY) $(CORE_SRC) \
-	  && cd $(WEB_DIR) && $(MYPY) src/lexigram/web
+	  && cd $(WEB_DIR) && $(MYPY) src/oridecon/web
 	for p in $(TYPED_PKGS); do (cd $$p && $(MYPY) src) || exit 1; done
 	$(PYTEST) --tb=short --cov-fail-under=70
 	$(MAKE) check-demos
@@ -301,12 +301,12 @@ fmt:  ## Format code (no lint check)
 
 .PHONY: check
 check:  ## Quick pre-commit check: lint + format + type (core + web + TYPED_PKGS, no tests)
-	$(RUFF) check . && $(RUFF) format --check . && $(MYPY) $(CORE_SRC) && cd $(WEB_DIR) && $(MYPY) src/lexigram/web
+	$(RUFF) check . && $(RUFF) format --check . && $(MYPY) $(CORE_SRC) && cd $(WEB_DIR) && $(MYPY) src/oridecon/web
 	for p in $(TYPED_PKGS); do (cd $$p && $(MYPY) src) || exit 1; done
 
-PKG ?= lexigram
+PKG ?= oridecon
 .PHONY: test-pkg
-test-pkg:  ## Run tests for a single package: make test-pkg PKG=lexigram-web
+test-pkg:  ## Run tests for a single package: make test-pkg PKG=oridecon-web
 	$(PYTEST) $(PKG)/tests/ --tb=short -v
 
 .PHONY: audit

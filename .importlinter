@@ -1,11 +1,11 @@
 # =============================================================================
-# Lexigram Monorepo — Import-Linter Boundary Contracts
+# Oridecon Monorepo — Import-Linter Boundary Contracts
 # =============================================================================
 #
 # IMPORTANT: Run via the namespace-aware wrapper, NOT the bare lint-imports
 # binary.  The standard lint-imports/grimp binary cannot traverse
 # pkgutil.extend_path namespace packages and will fail to discover extension
-# packages (lexigram.contracts, lexigram.cache, etc.).
+# packages (oridecon.contracts, oridecon.cache, etc.).
 #
 #   ✅  uv run lint-boundaries        (Makefile target / uv script)
 #   ✅  uv run python tools/lint_imports.py
@@ -14,168 +14,168 @@
 # Package boundary rules (from AGENTS.md)
 # ----------------------------------------
 #
-#   lexigram-contracts  → zero dependencies; Protocols, types, exceptions only
+#   oridecon-contracts  → zero dependencies; Protocols, types, exceptions only
 #            ↑   ↑
-#            ↑  lexigram (core)  → depends ONLY on lexigram.contracts
+#            ↑  oridecon (core)  → depends ONLY on oridecon.contracts
 #            ↑   ↑
-#            lexigram-*  → extension packages; depend on lexigram +
-#                          lexigram.contracts and the four Phase-8
+#            oridecon-*  → extension packages; depend on oridecon +
+#                          oridecon.contracts and the four Phase-8
 #                          foundational packages; NEVER on each other
 #
 # Foundational packages (Phase 8)
 # --------------------------------
-# lexigram.domain, lexigram.serialization, lexigram.validation,
-# lexigram.concurrency are mid-tier foundations that ALL extensions
+# oridecon.domain, oridecon.serialization, oridecon.validation,
+# oridecon.concurrency are mid-tier foundations that ALL extensions
 # are permitted to import.  They must NOT import from non-foundational
 # extension packages (verified by contract: foundational-no-high-level).
 #
 # Composite packages (by design, broad access)
 # ----------------------------------------------
-# lexigram.admin, lexigram.cli, lexigram.testing are high-level composite
+# oridecon.admin, oridecon.cli, oridecon.testing are high-level composite
 # packages that intentionally import from many extensions and are therefore
-# excluded from the extension-independence contract.  lexigram.ai is the
+# excluded from the extension-independence contract.  oridecon.ai is the
 # AI orchestrator/facade and is excluded for the same reason.
 #
 # Documented cross-extension allowances
 # ---------------------------------------
-# • lexigram.admin  → lexigram.ui    (same-subsystem UI components)
-# • lexigram.web    → lexigram.ui    (same-subsystem UI rendering)
-# • lexigram.web    → lexigram.security  [TRACKED VIOLATION — web's security
-#   middleware depends on lexigram.security; should be refactored to use
-#   lexigram.contracts for the interface boundary]
-# • lexigram.ai     → lexigram.ai.* + lexigram.vector (orchestrator imports
+# • oridecon.admin  → oridecon.ui    (same-subsystem UI components)
+# • oridecon.web    → oridecon.ui    (same-subsystem UI rendering)
+# • oridecon.web    → oridecon.security  [TRACKED VIOLATION — web's security
+#   middleware depends on oridecon.security; should be refactored to use
+#   oridecon.contracts for the interface boundary]
+# • oridecon.ai     → oridecon.ai.* + oridecon.vector (orchestrator imports
 #   sub-packages and vector store for composition)
-# • lexigram.vector → * (unrestricted; foundational data structure)
+# • oridecon.vector → * (unrestricted; foundational data structure)
 #
 # =============================================================================
 
 [importlinter]
 root_packages =
-    lexigram
+    oridecon
 include_typechecking_imports = True
 
 # =============================================================================
-# Contract 1 — lexigram.contracts has zero ecosystem dependencies
+# Contract 1 — oridecon.contracts has zero ecosystem dependencies
 # =============================================================================
 # The contracts layer is a pure-protocol layer.  It must never import from
 # the core framework, any extension package, or any AI sub-package.
 
 [importlinter:contract:contracts-zero-deps]
-name = lexigram.contracts has no ecosystem imports
+name = oridecon.contracts has no ecosystem imports
 type = forbidden
 source_modules =
-    lexigram.contracts
+    oridecon.contracts
 forbidden_modules =
     # Core package sub-modules
-    lexigram.app
-    lexigram.config
-    lexigram.primitives
-    lexigram.di
-    lexigram.logging
-    lexigram.result
+    oridecon.app
+    oridecon.config
+    oridecon.primitives
+    oridecon.di
+    oridecon.logging
+    oridecon.result
     # Non-AI extension packages
-    lexigram.admin
-    lexigram.auth
-    lexigram.cache
-    lexigram.cli
-    lexigram.concurrency
-    lexigram.domain
-    lexigram.events
-    lexigram.features
-    lexigram.graph
-    lexigram.graphql
-    lexigram.http
-    lexigram.mapping
-    lexigram.middleware
-    lexigram.monitor
-    lexigram.nosql
-    lexigram.notification
-    lexigram.plugins
-    lexigram.queue
-    lexigram.resilience
-    lexigram.search
-    lexigram.security
-    lexigram.serialization
-    lexigram.sql
-    lexigram.storage
-    lexigram.tasks
-    lexigram.testing
-    lexigram.ui
-    lexigram.validation
-    lexigram.vector
-    lexigram.web
-    lexigram.workflow
+    oridecon.admin
+    oridecon.auth
+    oridecon.cache
+    oridecon.cli
+    oridecon.concurrency
+    oridecon.domain
+    oridecon.events
+    oridecon.features
+    oridecon.graph
+    oridecon.graphql
+    oridecon.http
+    oridecon.mapping
+    oridecon.middleware
+    oridecon.monitor
+    oridecon.nosql
+    oridecon.notification
+    oridecon.plugins
+    oridecon.queue
+    oridecon.resilience
+    oridecon.search
+    oridecon.security
+    oridecon.serialization
+    oridecon.sql
+    oridecon.storage
+    oridecon.tasks
+    oridecon.testing
+    oridecon.ui
+    oridecon.validation
+    oridecon.vector
+    oridecon.web
+    oridecon.workflow
     # AI family
-    lexigram.ai
+    oridecon.ai
 
 # =============================================================================
 # Contract 2 — Core framework does not import from extension packages
 # =============================================================================
-# The core lexigram package (app, config, core, di, logging, result) may
-# ONLY import from lexigram.contracts and the Python standard library.
+# The core oridecon package (app, config, core, di, logging, result) may
+# ONLY import from oridecon.contracts and the Python standard library.
 
 [importlinter:contract:core-no-extensions]
-name = Core (lexigram) does not import from extension packages
+name = Core (oridecon) does not import from extension packages
 type = forbidden
 source_modules =
-    lexigram.app
-    lexigram.config
-    lexigram.primitives
-    lexigram.di
-    lexigram.logging
-    lexigram.result
+    oridecon.app
+    oridecon.config
+    oridecon.primitives
+    oridecon.di
+    oridecon.logging
+    oridecon.result
 forbidden_modules =
     # Non-AI extension packages
-    lexigram.admin
-    lexigram.auth
-    lexigram.cache
-    lexigram.cli
-    lexigram.concurrency
-    lexigram.domain
-    lexigram.events
-    lexigram.features
-    lexigram.graph
-    lexigram.graphql
-    lexigram.http
-    lexigram.mapping
-    lexigram.middleware
-    lexigram.monitor
-    lexigram.nosql
-    lexigram.notification
-    lexigram.plugins
-    lexigram.queue
-    lexigram.resilience
-    lexigram.search
-    lexigram.security
-    lexigram.serialization
-    lexigram.sql
-    lexigram.storage
-    lexigram.tasks
-    lexigram.testing
-    lexigram.ui
-    lexigram.validation
-    lexigram.vector
-    lexigram.web
-    lexigram.workflow
+    oridecon.admin
+    oridecon.auth
+    oridecon.cache
+    oridecon.cli
+    oridecon.concurrency
+    oridecon.domain
+    oridecon.events
+    oridecon.features
+    oridecon.graph
+    oridecon.graphql
+    oridecon.http
+    oridecon.mapping
+    oridecon.middleware
+    oridecon.monitor
+    oridecon.nosql
+    oridecon.notification
+    oridecon.plugins
+    oridecon.queue
+    oridecon.resilience
+    oridecon.search
+    oridecon.security
+    oridecon.serialization
+    oridecon.sql
+    oridecon.storage
+    oridecon.tasks
+    oridecon.testing
+    oridecon.ui
+    oridecon.validation
+    oridecon.vector
+    oridecon.web
+    oridecon.workflow
     # AI family
-    lexigram.ai
+    oridecon.ai
     # Multimedia family
-    lexigram.multimedia
+    oridecon.multimedia
 # ---------------------------------------------------------------------------
 # TRACKED VIOLATIONS — to be fixed in feat/core-cleanup
 # ---------------------------------------------------------------------------
 # These imports violate the core/extension boundary but exist because
 # core-draft-refactor.md explicitly identified them as coupling to resolve:
 #
-#   1. lexigram.config.base / lexigram.config.main / lexigram.logging.*
-#      → lexigram.domain / lexigram.validation
+#   1. oridecon.config.base / oridecon.config.main / oridecon.logging.*
+#      → oridecon.domain / oridecon.validation
 #      Root cause: BaseConfig extends DomainModel; config.main + logging
 #      config models use Field/ConfigDict/model_validator from validation.
 #      Fix: Detangle BaseConfig from DomainModel; use pydantic directly
 #      in logging/config models.
 #      Tracked: cc-p3-transport-coupling
 #
-#   2. lexigram.app.standard → lexigram.serialization / lexigram.concurrency
+#   2. oridecon.app.standard → oridecon.serialization / oridecon.concurrency
 #      Root cause: StandardApplication is the batteries-included module
 #      that intentionally bundles SerializationProvider + ConcurrencyProvider.
 #      Fix: Move StandardApplication to a wrapper package, or document as
@@ -183,18 +183,18 @@ forbidden_modules =
 #      Tracked: cc-p5-core-module
 ignore_imports =
     # config coupling (tracked: cc-p3-transport-coupling)
-    lexigram.config.base -> lexigram.domain
-    lexigram.config.base -> lexigram.validation
-    lexigram.config.main -> lexigram.validation
+    oridecon.config.base -> oridecon.domain
+    oridecon.config.base -> oridecon.validation
+    oridecon.config.main -> oridecon.validation
     # logging coupling (tracked: cc-p3-transport-coupling)
-    lexigram.logging.config.sampling -> lexigram.domain
-    lexigram.logging.config.sampling -> lexigram.validation
-    lexigram.logging.config.models -> lexigram.validation
-    lexigram.logging.config.redaction -> lexigram.domain
-    lexigram.logging.config.redaction -> lexigram.validation
+    oridecon.logging.config.sampling -> oridecon.domain
+    oridecon.logging.config.sampling -> oridecon.validation
+    oridecon.logging.config.models -> oridecon.validation
+    oridecon.logging.config.redaction -> oridecon.domain
+    oridecon.logging.config.redaction -> oridecon.validation
     # StandardApplication batteries-included bundle (tracked: cc-p5-core-module)
-    lexigram.app.standard -> lexigram.serialization.di.provider
-    lexigram.app.standard -> lexigram.concurrency.di.provider
+    oridecon.app.standard -> oridecon.serialization.di.provider
+    oridecon.app.standard -> oridecon.concurrency.di.provider
 unmatched_ignore_imports_alerting = warn
 
 # =============================================================================
@@ -208,42 +208,42 @@ unmatched_ignore_imports_alerting = warn
 name = Foundational packages (domain/serialization/validation/concurrency) do not import from non-foundational extensions
 type = forbidden
 source_modules =
-    lexigram.domain
-    lexigram.serialization
-    lexigram.validation
-    lexigram.concurrency
+    oridecon.domain
+    oridecon.serialization
+    oridecon.validation
+    oridecon.concurrency
 forbidden_modules =
-    lexigram.admin
-    lexigram.auth
-    lexigram.cache
-    lexigram.cli
-    lexigram.events
-    lexigram.features
-    lexigram.graph
-    lexigram.graphql
-    lexigram.http
-    lexigram.mapping
-    lexigram.middleware
-    lexigram.monitor
-    lexigram.nosql
-    lexigram.notification
-    lexigram.plugins
-    lexigram.queue
-    lexigram.resilience
-    lexigram.search
-    lexigram.security
-    lexigram.sql
-    lexigram.storage
-    lexigram.tasks
-    lexigram.testing
-    lexigram.ui
-    lexigram.vector
-    lexigram.web
-    lexigram.workflow
+    oridecon.admin
+    oridecon.auth
+    oridecon.cache
+    oridecon.cli
+    oridecon.events
+    oridecon.features
+    oridecon.graph
+    oridecon.graphql
+    oridecon.http
+    oridecon.mapping
+    oridecon.middleware
+    oridecon.monitor
+    oridecon.nosql
+    oridecon.notification
+    oridecon.plugins
+    oridecon.queue
+    oridecon.resilience
+    oridecon.search
+    oridecon.security
+    oridecon.sql
+    oridecon.storage
+    oridecon.tasks
+    oridecon.testing
+    oridecon.ui
+    oridecon.vector
+    oridecon.web
+    oridecon.workflow
     # AI family
-    lexigram.ai
+    oridecon.ai
     # Multimedia family
-    lexigram.multimedia
+    oridecon.multimedia
 
 # =============================================================================
 # Contract 4 — Regular extension packages are independent of each other
@@ -259,193 +259,193 @@ forbidden_modules =
 #     intentionally designed to compose multiple extensions.
 #
 # Documented ignore_imports:
-#   • lexigram.web.** -> lexigram.ui.**  — documented exception (web renders
+#   • oridecon.web.** -> oridecon.ui.**  — documented exception (web renders
 #     HTML using the UI layout components)
-#   • lexigram.web.** -> lexigram.security.**  — TRACKED VIOLATION; web's
-#     middleware.security imports lexigram.security config directly; this
-#     should be refactored to route through lexigram.contracts so that
+#   • oridecon.web.** -> oridecon.security.**  — TRACKED VIOLATION; web's
+#     middleware.security imports oridecon.security config directly; this
+#     should be refactored to route through oridecon.contracts so that
 #     web has no direct extension dependency on security.
-#   • lexigram.ai.** -> lexigram.ai.*  — orchestrator is allowed to import
+#   • oridecon.ai.** -> oridecon.ai.*  — orchestrator is allowed to import
 #     sub-packages for composition and wiring.
 
 [importlinter:contract:regular-extensions-independence]
 name = Regular extension packages are independent of each other
 type = independence
 modules =
-    lexigram.auth
-    lexigram.cache
-    lexigram.events
-    lexigram.features
-    lexigram.graph
-    lexigram.graphql
-    lexigram.http
-    lexigram.mapping
-    lexigram.middleware
-    lexigram.monitor
-    lexigram.nosql
-    lexigram.notification
-    lexigram.plugins
-    lexigram.queue
-    lexigram.resilience
-    lexigram.search
-    lexigram.security
-    lexigram.sql
-    lexigram.storage
-    lexigram.tasks
-    lexigram.ui
-    lexigram.vector
-    lexigram.web
-    lexigram.workflow
+    oridecon.auth
+    oridecon.cache
+    oridecon.events
+    oridecon.features
+    oridecon.graph
+    oridecon.graphql
+    oridecon.http
+    oridecon.mapping
+    oridecon.middleware
+    oridecon.monitor
+    oridecon.nosql
+    oridecon.notification
+    oridecon.plugins
+    oridecon.queue
+    oridecon.resilience
+    oridecon.search
+    oridecon.security
+    oridecon.sql
+    oridecon.storage
+    oridecon.tasks
+    oridecon.ui
+    oridecon.vector
+    oridecon.web
+    oridecon.workflow
 ignore_imports =
     # Documented exception: web renders HTML using UI layout components
-    lexigram.web.** -> lexigram.ui.**
+    oridecon.web.** -> oridecon.ui.**
     # Tracked violation: web security middleware imports security config
-    # directly.  Refactor target: route through lexigram.contracts.
+    # directly.  Refactor target: route through oridecon.contracts.
     # Filed as tech-debt: replace with a contracts-based interface boundary.
-    lexigram.web.** -> lexigram.security.**
+    oridecon.web.** -> oridecon.security.**
     # Tracked violation: ambient hashing (AGENTS.md) used from sql repositories
     # for cache-key derivation; same refactor target as the web entry.
-    lexigram.sql.** -> lexigram.security.**
+    oridecon.sql.** -> oridecon.security.**
     # Owned by 2026-08-15-admin-contributor-refactor.md Phase 2 (WidgetContent),
     # executed before Step 6 of 2026-08-17-architecture-admin-auth-rbac-boundaries-design.md;
     # these entries are REMOVED by that plan's final task — do not remove here.
-    lexigram.auth.** -> lexigram.ui
-    lexigram.cache.** -> lexigram.ui
-    lexigram.events.** -> lexigram.ui
-    lexigram.queue.** -> lexigram.ui
-    lexigram.sql.** -> lexigram.ui
-    lexigram.tasks.** -> lexigram.ui
-    lexigram.web.** -> lexigram.ui
-    # Tracked violation: events/middleware/tasks use lexigram.resilience for
-    # retry and rate-limiting utilities.  These were moved from lexigram.primitives
-    # to lexigram.resilience (cc-p1).  Refactor target: promote retry and
+    oridecon.auth.** -> oridecon.ui
+    oridecon.cache.** -> oridecon.ui
+    oridecon.events.** -> oridecon.ui
+    oridecon.queue.** -> oridecon.ui
+    oridecon.sql.** -> oridecon.ui
+    oridecon.tasks.** -> oridecon.ui
+    oridecon.web.** -> oridecon.ui
+    # Tracked violation: events/middleware/tasks use oridecon.resilience for
+    # retry and rate-limiting utilities.  These were moved from oridecon.primitives
+    # to oridecon.resilience (cc-p1).  Refactor target: promote retry and
     # TokenBucket to a foundational package (or contracts) so these extension
     # packages can remain independent.
-    lexigram.events.** -> lexigram.resilience.**
-    lexigram.middleware.** -> lexigram.resilience.**
-    lexigram.tasks.** -> lexigram.resilience.**
-    # Documented allowance: lexigram.ai is the orchestrator and is intentionally
+    oridecon.events.** -> oridecon.resilience.**
+    oridecon.middleware.** -> oridecon.resilience.**
+    oridecon.tasks.** -> oridecon.resilience.**
+    # Documented allowance: oridecon.ai is the orchestrator and is intentionally
     # allowed to import from its sub-packages for composition and wiring.
-    lexigram.ai.** -> lexigram.ai.agents.**
-    lexigram.ai.** -> lexigram.ai.feedback.**
-    lexigram.ai.** -> lexigram.ai.governance.**
-    lexigram.ai.** -> lexigram.ai.guard.**
-    lexigram.ai.** -> lexigram.ai.llm.**
-    lexigram.ai.** -> lexigram.ai.mcp.**
-    lexigram.ai.** -> lexigram.ai.memory.**
-    lexigram.ai.** -> lexigram.ai.observability.**
-    lexigram.ai.** -> lexigram.ai.prompt.**
-    lexigram.ai.** -> lexigram.ai.rag.**
-    lexigram.ai.** -> lexigram.ai.session.**
-    lexigram.ai.** -> lexigram.ai.skills.**
-    lexigram.ai.** -> lexigram.vector.**
-    lexigram.ai.** -> lexigram.ai.workers.**
-    # Documented allowance: lexigram.ai imports lexigram.vector for
+    oridecon.ai.** -> oridecon.ai.agents.**
+    oridecon.ai.** -> oridecon.ai.feedback.**
+    oridecon.ai.** -> oridecon.ai.governance.**
+    oridecon.ai.** -> oridecon.ai.guard.**
+    oridecon.ai.** -> oridecon.ai.llm.**
+    oridecon.ai.** -> oridecon.ai.mcp.**
+    oridecon.ai.** -> oridecon.ai.memory.**
+    oridecon.ai.** -> oridecon.ai.observability.**
+    oridecon.ai.** -> oridecon.ai.prompt.**
+    oridecon.ai.** -> oridecon.ai.rag.**
+    oridecon.ai.** -> oridecon.ai.session.**
+    oridecon.ai.** -> oridecon.ai.skills.**
+    oridecon.ai.** -> oridecon.vector.**
+    oridecon.ai.** -> oridecon.ai.workers.**
+    # Documented allowance: oridecon.ai imports oridecon.vector for
     # vector store integration and composition.
-    lexigram.ai.** -> lexigram.vector.**
-    # Documented allowance: lexigram.multimedia is the orchestrator and is
+    oridecon.ai.** -> oridecon.vector.**
+    # Documented allowance: oridecon.multimedia is the orchestrator and is
     # intentionally allowed to import from its sub-packages for composition
-    # and wiring (mirrors the lexigram.ai allowance above).
-    lexigram.multimedia.** -> lexigram.multimedia.beat.**
-    lexigram.multimedia.** -> lexigram.multimedia.image.**
-    lexigram.multimedia.** -> lexigram.multimedia.interpolate.**
-    lexigram.multimedia.** -> lexigram.multimedia.music.**
-    lexigram.multimedia.** -> lexigram.multimedia.tts.**
-    lexigram.multimedia.** -> lexigram.multimedia.upscale.**
-    lexigram.multimedia.** -> lexigram.multimedia.video.**
+    # and wiring (mirrors the oridecon.ai allowance above).
+    oridecon.multimedia.** -> oridecon.multimedia.beat.**
+    oridecon.multimedia.** -> oridecon.multimedia.image.**
+    oridecon.multimedia.** -> oridecon.multimedia.interpolate.**
+    oridecon.multimedia.** -> oridecon.multimedia.music.**
+    oridecon.multimedia.** -> oridecon.multimedia.tts.**
+    oridecon.multimedia.** -> oridecon.multimedia.upscale.**
+    oridecon.multimedia.** -> oridecon.multimedia.video.**
 unmatched_ignore_imports_alerting = warn
 
 # =============================================================================
 # Contract 5 — AI sub-packages are independent of each other
 # =============================================================================
-# Per AGENTS.md: "lexigram.ai.* packages do NOT import from each other".
-# The AI parent package (lexigram.ai) acts as the orchestrator/facade and
+# Per AGENTS.md: "oridecon.ai.* packages do NOT import from each other".
+# The AI parent package (oridecon.ai) acts as the orchestrator/facade and
 # is intentionally excluded from this independence list — it IS allowed to
 # import from sub-packages to wire them together.
 #
-# lexigram.tasks is listed as a peer so AI sub-packages can never import
+# oridecon.tasks is listed as a peer so AI sub-packages can never import
 # the tasks implementation directly — cross-extension communication goes
-# through lexigram.contracts.infra.tasks protocols (audit finding §51,
+# through oridecon.contracts.infra.tasks protocols (audit finding §51,
 # 2026-08-18-architecture-ai-governance-tasks-import-design.md).
 
 [importlinter:contract:ai-sub-independence]
-name = AI sub-packages do not import from each other or from lexigram.tasks
+name = AI sub-packages do not import from each other or from oridecon.tasks
 type = independence
 modules =
-    lexigram.ai.agents
-    lexigram.ai.evaluation
-    lexigram.ai.feedback
-    lexigram.ai.governance
-    lexigram.ai.guard
-    lexigram.ai.llm
-    lexigram.ai.mcp
-    lexigram.ai.memory
-    lexigram.ai.observability
-    lexigram.ai.prompt
-    lexigram.ai.rag
-    lexigram.ai.session
-    lexigram.ai.skills
-    lexigram.vector
-    lexigram.ai.workers
-    lexigram.tasks
+    oridecon.ai.agents
+    oridecon.ai.evaluation
+    oridecon.ai.feedback
+    oridecon.ai.governance
+    oridecon.ai.guard
+    oridecon.ai.llm
+    oridecon.ai.mcp
+    oridecon.ai.memory
+    oridecon.ai.observability
+    oridecon.ai.prompt
+    oridecon.ai.rag
+    oridecon.ai.session
+    oridecon.ai.skills
+    oridecon.vector
+    oridecon.ai.workers
+    oridecon.tasks
 
 # =============================================================================
 # Contract 5b — Multimedia sub-packages are independent of each other
 # =============================================================================
 # Mirrors Contract 5 (ai-sub-independence). The multimedia parent package
-# (lexigram.multimedia) acts as the orchestrator/facade and is intentionally
+# (oridecon.multimedia) acts as the orchestrator/facade and is intentionally
 # excluded from this independence list — it IS allowed to import from
 # sub-packages to wire them together. Per each sub-package's own docstrings
 # (e.g. video_upscale_service.py: "never a direct import of
-# lexigram-multimedia-video (design spec §4.3)"), siblings must depend on
-# each other only through lexigram-contracts protocols.
+# oridecon-multimedia-video (design spec §4.3)"), siblings must depend on
+# each other only through oridecon-contracts protocols.
 
 [importlinter:contract:multimedia-sub-independence]
 name = Multimedia sub-packages do not import from each other
 type = independence
 modules =
-    lexigram.multimedia.beat
-    lexigram.multimedia.image
-    lexigram.multimedia.interpolate
-    lexigram.multimedia.music
-    lexigram.multimedia.tts
-    lexigram.multimedia.upscale
-    lexigram.multimedia.video
+    oridecon.multimedia.beat
+    oridecon.multimedia.image
+    oridecon.multimedia.interpolate
+    oridecon.multimedia.music
+    oridecon.multimedia.tts
+    oridecon.multimedia.upscale
+    oridecon.multimedia.video
 
 # =============================================================================
-# Contract 6 — AI sub-packages do not import from the AI parent (lexigram.ai)
+# Contract 6 — AI sub-packages do not import from the AI parent (oridecon.ai)
 # =============================================================================
-# Per AGENTS.md: "lexigram.ai.* packages … do NOT import from lexigram.ai".
+# Per AGENTS.md: "oridecon.ai.* packages … do NOT import from oridecon.ai".
 # Sub-packages must not reach back up to the orchestrator layer.
 #
 # NOTE: A dedicated forbidden contract cannot be expressed here due to a
-# grimp limitation: when checking "lexigram.ai.agents cannot import from
-# lexigram.ai", grimp raises "Modules have shared descendants" because
-# lexigram.ai.agents is itself a descendant of lexigram.ai — grimp cannot
+# grimp limitation: when checking "oridecon.ai.agents cannot import from
+# oridecon.ai", grimp raises "Modules have shared descendants" because
+# oridecon.ai.agents is itself a descendant of oridecon.ai — grimp cannot
 # perform ancestor-as-forbidden checks.
 #
 # Enforcement strategy:
 #   1. Verified clean at Phase 8 setup — grep confirms zero sub→parent imports.
 #   2. Contract 5 (ai-sub-independence) already prevents cross-sub-package
 #      pollution which would be the main surface for back-channel parent access.
-#   3. Any future lexigram.ai.* → lexigram.ai import will be caught by code
+#   3. Any future oridecon.ai.* → oridecon.ai import will be caught by code
 #      review and the mypy --no-implicit-reexport discipline.
 #
 # To manually verify:
-#   grep -rn "from lexigram.ai import\|import lexigram.ai$" \
-#     lexigram-ai-*/src/lexigram/ai/
+#   grep -rn "from oridecon.ai import\|import oridecon.ai$" \
+#     oridecon-ai-*/src/oridecon/ai/
 
 # =============================================================================
 # Contract 7 — Local protocol modules are package-internal seams only
 # =============================================================================
-# Per guide docs/lexigram-docs/guides/contracts.md (R4): a package-local
+# Per guide docs/oridecon-docs/guides/contracts.md (R4): a package-local
 # protocols.py exists for internal implementation seams and must never be
 # imported across packages.  Cross-package sharing requires promoting the
-# protocol into lexigram-contracts (R1/R2).  Imports by the owning package
+# protocol into oridecon-contracts (R1/R2).  Imports by the owning package
 # itself are permitted (wildcard ** matches zero or more submodules).
 #
-# Excluded from the forbidden list: lexigram.ui.protocols (RenderableProtocol)
-# is reachable only through the lexigram.ui package, which other packages
+# Excluded from the forbidden list: oridecon.ui.protocols (RenderableProtocol)
+# is reachable only through the oridecon.ui package, which other packages
 # (web/admin/admin pages) legitimately import under documented allowances.
 # Forbidden checks are chain-based, and import-linter has no "direct imports
 # only" mode, so ui.protocols is reviewed by grep instead of this contract.
@@ -455,106 +455,106 @@ name = Local protocol modules are package-internal seams (no cross-package impor
 type = forbidden
 source_modules =
     # Core
-    lexigram.app
-    lexigram.config
-    lexigram.primitives
-    lexigram.di
-    lexigram.logging
-    lexigram.result
+    oridecon.app
+    oridecon.config
+    oridecon.primitives
+    oridecon.di
+    oridecon.logging
+    oridecon.result
     # Extension packages (owners of the forbidden modules below are
     # excluded; their intra-package usage is allowed)
-    lexigram.auth
-    lexigram.cache
-    lexigram.concurrency
-    lexigram.domain
-    lexigram.events
-    lexigram.features
-    lexigram.graph
-    lexigram.graphql
-    lexigram.http
-    lexigram.mapping
-    lexigram.middleware
-    lexigram.monitor
-    lexigram.nosql
-    lexigram.notification
-    lexigram.queue
-    lexigram.resilience
-    lexigram.search
-    lexigram.security
-    lexigram.serialization
-    lexigram.sql
-    lexigram.storage
-    lexigram.tasks
-    lexigram.testing
-    lexigram.validation
-    lexigram.vector
-    lexigram.web
-    lexigram.workflow
+    oridecon.auth
+    oridecon.cache
+    oridecon.concurrency
+    oridecon.domain
+    oridecon.events
+    oridecon.features
+    oridecon.graph
+    oridecon.graphql
+    oridecon.http
+    oridecon.mapping
+    oridecon.middleware
+    oridecon.monitor
+    oridecon.nosql
+    oridecon.notification
+    oridecon.queue
+    oridecon.resilience
+    oridecon.search
+    oridecon.security
+    oridecon.serialization
+    oridecon.sql
+    oridecon.storage
+    oridecon.tasks
+    oridecon.testing
+    oridecon.validation
+    oridecon.vector
+    oridecon.web
+    oridecon.workflow
 forbidden_modules =
-    lexigram.ai.llm.protocols
-    lexigram.ai.agents.protocols
-    lexigram.ai.agents.speculation.protocols
-    lexigram.ai.memory.protocols
-    lexigram.cli.protocols
-    lexigram.admin.auth.protocols
-    lexigram.admin.auth.store.protocols
+    oridecon.ai.llm.protocols
+    oridecon.ai.agents.protocols
+    oridecon.ai.agents.speculation.protocols
+    oridecon.ai.memory.protocols
+    oridecon.cli.protocols
+    oridecon.admin.auth.protocols
+    oridecon.admin.auth.store.protocols
 ignore_imports =
     # Owner-package usage only — intra-package seam imports are allowed
-    lexigram.ai.llm.** -> lexigram.ai.llm.protocols
-    lexigram.ai.agents -> lexigram.ai.agents.protocols
-    lexigram.ai.agents.speculation.** -> lexigram.ai.agents.speculation.protocols
-    lexigram.ai.memory -> lexigram.ai.memory.protocols
-    lexigram.cli.** -> lexigram.cli.protocols
-    lexigram.admin.** -> lexigram.admin.auth.protocols
-    lexigram.admin.** -> lexigram.admin.auth.store.protocols
+    oridecon.ai.llm.** -> oridecon.ai.llm.protocols
+    oridecon.ai.agents -> oridecon.ai.agents.protocols
+    oridecon.ai.agents.speculation.** -> oridecon.ai.agents.speculation.protocols
+    oridecon.ai.memory -> oridecon.ai.memory.protocols
+    oridecon.cli.** -> oridecon.cli.protocols
+    oridecon.admin.** -> oridecon.admin.auth.protocols
+    oridecon.admin.** -> oridecon.admin.auth.store.protocols
 
 # =============================================================================
-# Contract 8 — lexigram.admin imports only its allowed dependency set
+# Contract 8 — oridecon.admin imports only its allowed dependency set
 # =============================================================================
 # Admin is a high-level composite.  Per AGENTS.md §1.2 it may import from:
-#   * core namespaces (lexigram.app, lexigram.config, lexigram.di, ...),
-#   * lexigram.contracts,
-#   * documented exceptions: lexigram.auth, lexigram.cache, lexigram.features,
-#     lexigram.resilience, lexigram.ui.
+#   * core namespaces (oridecon.app, oridecon.config, oridecon.di, ...),
+#   * oridecon.contracts,
+#   * documented exceptions: oridecon.auth, oridecon.cache, oridecon.features,
+#     oridecon.resilience, oridecon.ui.
 # Everything else is forbidden — cross-subsystem imports must route through
 # contracts or the container.
 
 [importlinter:contract:admin-import-allowlist]
-name = lexigram.admin imports only its allowed dependency set
+name = oridecon.admin imports only its allowed dependency set
 type = forbidden
 source_modules =
-    lexigram.admin
+    oridecon.admin
 forbidden_modules =
-    lexigram.ai
-    lexigram.cli
-    lexigram.events
-    lexigram.graph
-    lexigram.graphql
-    lexigram.http
-    lexigram.monitor
-    lexigram.multimedia
-    lexigram.nosql
-    lexigram.notification
-    lexigram.queue
-    lexigram.search
-    lexigram.sql
-    lexigram.storage
-    lexigram.tasks
-    lexigram.testing
-    lexigram.vector
-    lexigram.web
-    lexigram.workflow
+    oridecon.ai
+    oridecon.cli
+    oridecon.events
+    oridecon.graph
+    oridecon.graphql
+    oridecon.http
+    oridecon.monitor
+    oridecon.multimedia
+    oridecon.nosql
+    oridecon.notification
+    oridecon.queue
+    oridecon.search
+    oridecon.sql
+    oridecon.storage
+    oridecon.tasks
+    oridecon.testing
+    oridecon.vector
+    oridecon.web
+    oridecon.workflow
 
 # =============================================================================
-# Contract 9 — lexigram.auth must not import lexigram.admin (auth ⊥ admin)
+# Contract 9 — oridecon.auth must not import oridecon.admin (auth ⊥ admin)
 # =============================================================================
 # The panel delegates to auth, never the reverse: prevents an admin<->auth
-# cycle and keeps lexigram-auth reusable without the dashboard layer.
+# cycle and keeps oridecon-auth reusable without the dashboard layer.
 
 [importlinter:contract:auth-banned-from-admin]
-name = lexigram.auth must not import lexigram.admin
+name = oridecon.auth must not import oridecon.admin
 type = forbidden
 source_modules =
-    lexigram.auth
+    oridecon.auth
 forbidden_modules =
-    lexigram.admin
+    oridecon.admin
