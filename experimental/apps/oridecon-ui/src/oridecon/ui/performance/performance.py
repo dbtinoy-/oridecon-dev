@@ -210,7 +210,7 @@ def lazy_load_placeholder(
     url: str,
     target_id: str,
     trigger: str = "load",
-    placeholder: str | None = None,
+    placeholder: Any | None = None,
 ) -> str:
     """
     Create a lazy-load placeholder that fetches content on trigger.
@@ -219,26 +219,27 @@ def lazy_load_placeholder(
         url: URL to fetch content from
         target_id: ID of the element to replace
         trigger: HTMX trigger (load, revealed, intersect, etc.)
-        placeholder: Optional placeholder content (defaults to skeleton)
+        placeholder: Optional structured placeholder or display text. Pre-rendered
+            markup must use an explicit TrustedHTML value. Defaults to a skeleton.
 
     Returns:
         HTML string for the placeholder
     """
     from oridecon.ui.atoms.skeleton import Skeleton
-    from oridecon.ui.core.base import el, raw
+    from oridecon.ui.core.base import Element
 
-    if placeholder is None:
-        placeholder = render_to_string(Skeleton(variant="table", rows=5))
-
+    placeholder_content = (
+        Skeleton(variant="table", rows=5) if placeholder is None else placeholder
+    )
     return render_to_string(
-        el(
+        Element(
             "div",
-            raw(placeholder),
+            placeholder_content,
             id=target_id,
             hx_get=url,
             hx_trigger=trigger,
             hx_swap="outerHTML",
-        ),
+        )
     )
 
 
