@@ -164,6 +164,27 @@ class SearchService:
             pass
         return resources
 
+    async def can_view_resource(self, user: Any, resource_name: str) -> bool:
+        """Return whether *user* may navigate to a resource.
+
+        An absent authorizer means admin authorization is disabled, preserving
+        the explicitly open development configuration. Once an authorizer is
+        configured, an absent principal fails closed and all decisions are
+        delegated to that same request-bound authorization service.
+
+        Args:
+            user: Authenticated principal, or None for an anonymous request.
+            resource_name: Canonical admin resource/area name.
+
+        Returns:
+            True only when the active authorization policy permits viewing.
+        """
+        if self._authorizer is None:
+            return True
+        if user is None:
+            return False
+        return bool(await self._authorizer.can_view(user, resource_name))
+
     async def allowed_resources_for(self, user: Any) -> set[str] | None:
         """Resolve the searchable resources the user may view.
 
@@ -171,16 +192,18 @@ class SearchService:
             user: Authenticated user, or None for anonymous requests.
 
         Returns:
-            The set of viewable resource names, or None when there is no
-            permission context (no user, or no authorizer configured) —
-            callers then keep the unfiltered cross-resource behavior.
+            The set of viewable resource names. None means authorization is
+            explicitly disabled; an absent user with an active authorizer
+            returns an empty set so callers fail closed.
         """
-        if user is None or self._authorizer is None:
+        if self._authorizer is None:
             return None
+        if user is None:
+            return set()
         allowed: set[str] = set()
         for resource in self.get_searchable_resources():
             name = getattr(resource, "name", "")
-            if name and await self._authorizer.can_view(user, name):
+            if name and await self.can_view_resource(user, name):
                 allowed.add(name)
         return allowed
 

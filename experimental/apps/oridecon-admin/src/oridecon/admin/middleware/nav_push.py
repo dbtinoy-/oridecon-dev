@@ -55,10 +55,17 @@ class AdminNavPushMiddleware:
                 status: int = message.get("status", 0)
                 response_headers = message.get("headers") or []
                 if 200 <= status < 300 and self._is_html(response_headers):
-                    message["headers"] = [
-                        *response_headers,
-                        (b"hx-push-url", push_url_bytes),
+                    # This middleware owns the fallback history value for body
+                    # navigation. Replace any downstream spelling instead of
+                    # emitting ambiguous duplicate HX-Push-Url headers, while
+                    # preserving unrelated repeated headers such as Set-Cookie.
+                    updated_headers = [
+                        (key, value)
+                        for key, value in response_headers
+                        if key.lower() != b"hx-push-url"
                     ]
+                    updated_headers.append((b"hx-push-url", push_url_bytes))
+                    message["headers"] = updated_headers
             await send(message)
 
         await self._app(scope, receive, send_with_push)
@@ -133,9 +140,13 @@ class AdminNavPushMiddleware:
         """
         raw_path = scope.get("raw_path")
         if raw_path:
-            return raw_path.decode("latin-1")
-        root_path = scope.get("root_path", "")
-        path: str = scope["path"]
+            path = raw_path.decode("latin-1")
+        else:
+            root_path = scope.get("root_path", "")
+            request_path: str = scope["path"]
+            path = f"{root_path}{request_path}"
+
         query: bytes = scope.get("query_string", b"")
-        query_string = query.decode("latin-1") if query else ""
-        return f"{root_path}{path}{'?' + query_string if query_string else ''}"
+        if not query:
+            return path
+        return f"{path}?{query.decode('latin-1')}"

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from copy import copy
 from typing import Any
 
 from oridecon.ui.core.base import Component, el
@@ -45,26 +46,45 @@ class FormField(Component):
         self.visible_condition = visible_condition
 
     def render(self) -> Any:
+        # Decorate a shallow clone so rendering a FormField never mutates a
+        # reusable input component supplied by its caller.
+        input_component = copy(self.input_component)
+        input_component.props = dict(self.input_component.props)
+
         # Build container attributes
         container_attrs: dict[str, Any] = {"class": "mb-6"}
         input_id = (
-            getattr(self.input_component, "id", None)
-            or getattr(self.input_component, "input_id", None)
-            or getattr(self.input_component, "name", None)
+            getattr(input_component, "id", None)
+            or getattr(input_component, "input_id", None)
+            or getattr(input_component, "name", None)
             or "field"
         )
+
+        described_by: list[str] = []
+        existing_description = input_component.props.pop(
+            "aria_describedby",
+            input_component.props.get("aria-describedby"),
+        )
+        if existing_description:
+            described_by.extend(str(existing_description).split())
+        if self.help_text:
+            described_by.append(f"{input_id}-help")
         if self.error:
-            error_id = f"{input_id}-error"
-            container_attrs["aria_describedby"] = error_id
-            container_attrs["aria_invalid"] = "true"
-            props = getattr(self.input_component, "props", None)
-            if isinstance(props, dict):
-                props.setdefault("aria_describedby", error_id)
-                props.setdefault("aria_invalid", "true")
-        elif self.help_text:
-            props = getattr(self.input_component, "props", None)
-            if isinstance(props, dict):
-                props.setdefault("aria_describedby", f"{input_id}-help")
+            described_by.append(f"{input_id}-error")
+            input_component.props["aria-invalid"] = "true"
+        if described_by:
+            input_component.props["aria-describedby"] = " ".join(
+                dict.fromkeys(described_by)
+            )
+
+        required_if = self.props.get("required_if")
+        if required_if:
+            input_component.props["x-bind:required"] = required_if
+            input_component.props["x-bind:aria-required"] = f"Boolean({required_if})"
+        elif self.required:
+            input_component.props["aria-required"] = "true"
+            if hasattr(input_component, "required"):
+                input_component.required = True
 
         # Handle hidden state
         if self.hidden:
@@ -85,7 +105,6 @@ class FormField(Component):
                 label_text = self.label
 
                 # Dynamic requirement asterisk
-                required_if = self.props.get("required_if")
                 if required_if:
                     header_parts.append(
                         el(
@@ -95,6 +114,7 @@ class FormField(Component):
                                 "span",
                                 "*",
                                 class_="text-destructive ml-1",
+                                aria_hidden="true",
                                 **{"x-show": required_if},
                             ),
                             for_=input_id,
@@ -105,8 +125,13 @@ class FormField(Component):
                     header_parts.append(
                         el(
                             "label",
-                            label_text
-                            + el("span", "*", class_="text-destructive ml-1"),
+                            label_text,
+                            el(
+                                "span",
+                                "*",
+                                class_="text-destructive ml-1",
+                                aria_hidden="true",
+                            ),
                             for_=input_id,
                             class_="block text-sm font-medium text-foreground",
                         ),
@@ -139,30 +164,10 @@ class FormField(Component):
                 ),
             )
 
-        # Input
-        try:
-            if self.error:
-                props = getattr(self.input_component, "props", None)
-                if isinstance(props, dict):
-                    props.setdefault("aria_invalid", "true")
-            rendered_input = self.input_component.render()
-            elements.append(rendered_input)
-        except (AttributeError, ValueError, TypeError):
-            # Fail-safe: avoid bubbling render errors to outer HTML rendering
-            from oridecon.logging import get_logger
-
-            logger = get_logger(__name__)
-            logger.exception(
-                "Error rendering input component %s",
-                getattr(self.input_component, "__class__", None),
-            )
-            elements.append(
-                el(
-                    "div",
-                    "Error rendering field",
-                    class_="mb-2 p-2 rounded bg-destructive/10 text-destructive",
-                ),
-            )
+        # Keep the input structured so the normal renderer owns failures and
+        # escaping. Broken form controls must not be replaced by a generic box
+        # that makes the form appear usable.
+        elements.append(input_component)
 
         # Error message
         if self.error:
@@ -177,8 +182,9 @@ class FormField(Component):
                 ),
             )
 
-        # Help text
-        if self.help_text and not self.error:
+        # Help remains available when validation errors are shown; the control
+        # references both descriptions in deterministic order.
+        if self.help_text:
             elements.append(
                 el(
                     "p",

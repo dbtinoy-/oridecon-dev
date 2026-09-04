@@ -21,6 +21,7 @@ _STATIC_COMMANDS: list[dict[str, Any]] = [
         "href": "/admin/users",
         "icon": "users",
         "shortcut": "G U",
+        "required_resource": "users",
     },
     {
         "label": "Toggle Dark Mode",
@@ -33,6 +34,7 @@ _STATIC_COMMANDS: list[dict[str, Any]] = [
         "href": "/admin/settings",
         "icon": "settings",
         "shortcut": ",",
+        "required_resource": "settings",
     },
 ]
 
@@ -55,19 +57,42 @@ class CommandPaletteController:
         commands: list[dict[str, Any]] = []
 
         admin_prefix = admin_prefix_from_request(request)
+        user = getattr(request.state, "user", None)
 
-        # Filter static commands by query without mutating the shared defaults.
+        # Filter static commands by query and the same authorizer used for
+        # dynamic resources. Navigation visibility is not endpoint security,
+        # but the palette must not advertise privileged areas to principals
+        # that cannot view them.
         for original in _STATIC_COMMANDS:
-            cmd = dict(original)
+            if query and query.lower() not in original["label"].lower():
+                continue
+
+            required_resource = original.get("required_resource")
+            if required_resource:
+                try:
+                    if not await self._search_service.can_view_resource(
+                        user, required_resource
+                    ):
+                        continue
+                except Exception:  # noqa: BLE001 — command fails closed
+                    logger.exception(
+                        "Command palette authorization failed for resource=%s",
+                        required_resource,
+                    )
+                    continue
+
+            cmd = {
+                key: value
+                for key, value in original.items()
+                if key != "required_resource"
+            }
             if cmd.get("href"):
                 cmd["href"] = mount_admin_url(cmd["href"], admin_prefix)
-            if not query or query.lower() in cmd["label"].lower():
-                commands.append(cmd)
+            commands.append(cmd)
 
         # Dynamic search results from backend
         if len(query) >= _MIN_QUERY_LENGTH:
             try:
-                user = getattr(request.state, "user", None)
                 allowed = await self._search_service.allowed_resources_for(user)
                 results = await self._search_service.search(
                     query, allowed_resources=allowed

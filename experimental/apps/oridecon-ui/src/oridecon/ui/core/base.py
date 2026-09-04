@@ -355,24 +355,10 @@ def render_to_string(value: str | Any) -> str:
         return render_to_string(value.render())
 
     if _is_htpy_element(value):
-        try:
-            # Prefer the explicit HTML representation if available
-            return cast("str", value.__html__())
-        except (AttributeError, TypeError):
-            from oridecon.logging import get_logger
-
-            logger = get_logger(__name__)
-            logger.exception("htpy element __html__() raised an exception")
-
-            try:
-                return str(value)
-            except (TypeError, ValueError) as e:
-                logger.debug(
-                    "str() conversion failed for htpy element; falling back to repr: %s",
-                    e,
-                    exc_info=True,
-                )
-                return repr(value)
+        # Rendering errors are correctness failures. Falling back to ``str``
+        # or ``repr`` can hide a broken form/component behind object text and
+        # can invoke the same failing renderer more than once.
+        return cast("str", value.__html__())
 
     # fallback for objects with render method but not inheriting from Component
     if hasattr(value, "render") and callable(value.render):

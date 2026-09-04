@@ -18,34 +18,30 @@ class CommandPalette(Component):
         admin_prefix: str = "/admin",
         **props,
     ) -> None:
-        super().__init__(commands=commands or [], **props)
         self.admin_prefix = admin_prefix.rstrip("/") or "/admin"
-        self.commands = commands or [
-            {
-                "label": "Go to Dashboard",
-                "href": f"{self.admin_prefix}/",
-                "icon": "home",
-                "shortcut": "G D",
-            },
-            {
-                "label": "Manage Users",
-                "href": f"{self.admin_prefix}/users/",
-                "icon": "users",
-                "shortcut": "G U",
-            },
-            {
-                "label": "Toggle Dark Mode",
-                "action": "darkMode = !darkMode",
-                "icon": "moon",
-                "shortcut": "T D",
-            },
-            {
-                "label": "Settings",
-                "href": f"{self.admin_prefix}/settings",
-                "icon": "settings",
-                "shortcut": ",",
-            },
-        ]
+        # Defaults must be safe without a request-bound permission decision.
+        # Privileged resource links are supplied by the authorized endpoint;
+        # an explicit empty list is meaningful and must stay empty.
+        resolved_commands = (
+            [
+                {
+                    "label": "Go to Dashboard",
+                    "href": f"{self.admin_prefix}/",
+                    "icon": "home",
+                    "shortcut": "G D",
+                },
+                {
+                    "label": "Toggle Dark Mode",
+                    "action": "darkMode = !darkMode",
+                    "icon": "moon",
+                    "shortcut": "T D",
+                },
+            ]
+            if commands is None
+            else commands
+        )
+        super().__init__(commands=resolved_commands, **props)
+        self.commands = resolved_commands
 
     def render(self) -> Any:
         from oridecon.ui import get_icon
@@ -325,9 +321,11 @@ class CommandPalette(Component):
                             this.open = false;
                         }},
                         next() {{
+                            if (this.filteredCommands.length === 0) return;
                             this.selectedIndex = (this.selectedIndex + 1) % this.filteredCommands.length;
                         }},
                         prev() {{
+                            if (this.filteredCommands.length === 0) return;
                             this.selectedIndex = (this.selectedIndex - 1 + this.filteredCommands.length) % this.filteredCommands.length;
                         }},
                         execute(idx = null) {{

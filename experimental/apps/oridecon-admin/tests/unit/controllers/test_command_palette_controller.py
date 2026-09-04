@@ -35,6 +35,7 @@ class TestCommandPaletteController:
             )
         )
         service.allowed_resources_for = AsyncMock(return_value=None)
+        service.can_view_resource = AsyncMock(return_value=True)
         return service
 
     @pytest.fixture

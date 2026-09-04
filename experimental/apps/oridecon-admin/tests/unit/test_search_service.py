@@ -178,11 +178,20 @@ class TestSearchService:
     ) -> None:
         assert await service.allowed_resources_for({"id": "u1"}) is None
 
+    async def test_allowed_resources_for_anonymous_user_fails_closed(
+        self, mock_manager: MagicMock
+    ) -> None:
+        authorizer = AsyncMock()
+        service = SearchService(resource_manager=mock_manager, authorizer=authorizer)
+
+        assert await service.allowed_resources_for(None) == set()
+        authorizer.can_view.assert_not_awaited()
+
     async def test_allowed_resources_for_gates_by_can_view(
         self, mock_manager: MagicMock
     ) -> None:
         authorizer = AsyncMock()
-        authorizer.can_view.side_effect = lambda user, name: {
+        authorizer.can_view.side_effect = lambda _user, name: {
             "users": True,
             "posts": False,
         }.get(name, False)
@@ -198,6 +207,31 @@ class TestSearchService:
             call(user, "users"),
             call(user, "posts"),
         ]
+
+    async def test_can_view_resource_allows_when_authorization_is_disabled(
+        self, service: SearchService
+    ) -> None:
+        assert await service.can_view_resource(None, "users") is True
+
+    async def test_can_view_resource_denies_anonymous_user_when_authorizer_exists(
+        self, mock_manager: MagicMock
+    ) -> None:
+        authorizer = AsyncMock()
+        service = SearchService(resource_manager=mock_manager, authorizer=authorizer)
+
+        assert await service.can_view_resource(None, "users") is False
+        authorizer.can_view.assert_not_awaited()
+
+    async def test_can_view_resource_delegates_to_authorizer(
+        self, mock_manager: MagicMock
+    ) -> None:
+        authorizer = AsyncMock()
+        authorizer.can_view.return_value = True
+        service = SearchService(resource_manager=mock_manager, authorizer=authorizer)
+        user = {"id": "u1"}
+
+        assert await service.can_view_resource(user, "settings") is True
+        authorizer.can_view.assert_awaited_once_with(user, "settings")
 
     async def test_search_aggregates_results_from_multiple_resources(
         self, service: SearchService
@@ -363,6 +397,7 @@ class TestSearchServiceIndexedPath:
         )
         from oridecon.admin import integrations as _integrations
         from oridecon.admin.integrations import IntegrationRegistry
+
         monkeypatch.setattr(_integrations, "_registry", IntegrationRegistry())
         _integrations.register("SearchIntegration", integration)
 
@@ -386,6 +421,7 @@ class TestSearchServiceIndexedPath:
         integration = _FakeIntegration(results=[ObjDoc()])
         from oridecon.admin import integrations as _integrations
         from oridecon.admin.integrations import IntegrationRegistry
+
         monkeypatch.setattr(_integrations, "_registry", IntegrationRegistry())
         _integrations.register("SearchIntegration", integration)
 
@@ -402,6 +438,7 @@ class TestSearchServiceIndexedPath:
         integration = _FakeIntegration(available=False)
         from oridecon.admin import integrations as _integrations
         from oridecon.admin.integrations import IntegrationRegistry
+
         monkeypatch.setattr(_integrations, "_registry", IntegrationRegistry())
         _integrations.register("SearchIntegration", integration)
 
@@ -421,6 +458,7 @@ class TestSearchServiceIndexedPath:
         )
         from oridecon.admin import integrations as _integrations
         from oridecon.admin.integrations import IntegrationRegistry
+
         monkeypatch.setattr(_integrations, "_registry", IntegrationRegistry())
         _integrations.register("SearchIntegration", integration)
 
@@ -451,6 +489,7 @@ class TestSearchServiceIndexedPath:
         integration = _FakeIntegration(results=[{"title": "No Id"}])
         from oridecon.admin import integrations as _integrations
         from oridecon.admin.integrations import IntegrationRegistry
+
         monkeypatch.setattr(_integrations, "_registry", IntegrationRegistry())
         _integrations.register("SearchIntegration", integration)
 
