@@ -31,8 +31,9 @@ from oridecon.ui.atoms.skeleton import Skeleton
 from oridecon.ui.atoms.spinner import Spinner
 from oridecon.ui.atoms.switch import Switch
 from oridecon.ui.atoms.tooltip import Tooltip
-from oridecon.ui.charts import BarChart, LineChart, MiniBar, PieChart, Sparkline
+from oridecon.ui.charts import BarChart, LineChart, PieChart, Sparkline
 from oridecon.ui.charts.types import ChartDataPoint
+from oridecon.ui.core.base import el
 from oridecon.ui.molecules.alert import Alert
 from oridecon.ui.molecules.card import Card
 from oridecon.ui.molecules.dropdown import Dropdown
@@ -145,7 +146,13 @@ def build_gallery() -> dict[str, str]:
         ),
         ("TextArea", TextArea(name="notes", label="Notes")),
         ("TextInput", TextInput(name="name", label="Name")),
-        ("Tooltip", Tooltip("More info here")),
+        (
+            "Tooltip",
+            Tooltip(
+                "More info here",
+                el("button", "More information", id="gallery-tooltip-trigger"),
+            ),
+        ),
     ]
 
     pages: dict[str, str] = {}
