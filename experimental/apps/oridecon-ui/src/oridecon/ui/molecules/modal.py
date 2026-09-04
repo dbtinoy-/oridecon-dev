@@ -68,9 +68,16 @@ class Modal(Component):
         max_width: str | None = None,
         max_height: str | None = None,
         modal_id: str | None = None,
+        body: Any = None,
         **props: Any,
     ) -> None:
+        if body is not None and "children" in props:
+            raise TypeError(
+                "Modal: pass body= or children=, not both; positional children "
+                "are canonical"
+            )
         super().__init__(
+            *(body,) if body is not None else (),
             title=title,
             trigger=trigger,
             footer=footer or [],

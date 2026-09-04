@@ -1,0 +1,62 @@
+{
+  "experimental/apps/oridecon-admin/tests/unit/dashboard/test_placeholder_page_shell.py": {
+    "owner": "oridecon-ui security/tests",
+    "reason": "exercises or defines the legacy raw()/Markup compatibility shim within the documented v0.2.0 migration window",
+    "removal_version": "0.2.0"
+  },
+  "experimental/apps/oridecon-admin/tests/unit/engine/test_renderer_shell_escape.py": {
+    "owner": "oridecon-ui security/tests",
+    "reason": "exercises or defines the legacy raw()/Markup compatibility shim within the documented v0.2.0 migration window",
+    "removal_version": "0.2.0"
+  },
+  "experimental/apps/oridecon-admin/tests/unit/test_overlays.py": {
+    "owner": "oridecon-ui security/tests",
+    "reason": "exercises or defines the legacy raw()/Markup compatibility shim within the documented v0.2.0 migration window",
+    "removal_version": "0.2.0"
+  },
+  "experimental/apps/oridecon-admin/tests/unit/ui/test_column_html_string_dx.py": {
+    "owner": "oridecon-ui security/tests",
+    "reason": "exercises or defines the legacy raw()/Markup compatibility shim within the documented v0.2.0 migration window",
+    "removal_version": "0.2.0"
+  },
+  "experimental/apps/oridecon-admin/tests/unit/ui/test_shell_secondary_nav.py": {
+    "owner": "oridecon-ui security/tests",
+    "reason": "exercises or defines the legacy raw()/Markup compatibility shim within the documented v0.2.0 migration window",
+    "removal_version": "0.2.0"
+  },
+  "experimental/apps/oridecon-ui/src/oridecon/ui/core/base.py": {
+    "owner": "oridecon-ui security/tests",
+    "reason": "exercises or defines the legacy raw()/Markup compatibility shim within the documented v0.2.0 migration window",
+    "removal_version": "0.2.0"
+  },
+  "experimental/apps/oridecon-ui/tests/unit/test_escaping_policy.py": {
+    "owner": "oridecon-ui security/tests",
+    "reason": "exercises or defines the legacy raw()/Markup compatibility shim within the documented v0.2.0 migration window",
+    "removal_version": "0.2.0"
+  },
+  "experimental/apps/oridecon-ui/tests/unit/test_html_string_notice.py": {
+    "owner": "oridecon-ui security/tests",
+    "reason": "exercises or defines the legacy raw()/Markup compatibility shim within the documented v0.2.0 migration window",
+    "removal_version": "0.2.0"
+  },
+  "experimental/apps/oridecon-ui/tests/unit/test_render_boundary.py": {
+    "owner": "oridecon-ui security/tests",
+    "reason": "exercises or defines the legacy raw()/Markup compatibility shim within the documented v0.2.0 migration window",
+    "removal_version": "0.2.0"
+  },
+  "experimental/apps/oridecon-ui/tests/unit/test_render_escaping.py": {
+    "owner": "oridecon-ui security/tests",
+    "reason": "exercises or defines the legacy raw()/Markup compatibility shim within the documented v0.2.0 migration window",
+    "removal_version": "0.2.0"
+  },
+  "experimental/apps/oridecon-ui/tests/unit/test_spine_edge_cases.py": {
+    "owner": "oridecon-ui security/tests",
+    "reason": "exercises or defines the legacy raw()/Markup compatibility shim within the documented v0.2.0 migration window",
+    "removal_version": "0.2.0"
+  },
+  "experimental/apps/oridecon-ui/tests/unit/test_trusted_html.py": {
+    "owner": "oridecon-ui security/tests",
+    "reason": "exercises or defines the legacy raw()/Markup compatibility shim within the documented v0.2.0 migration window",
+    "removal_version": "0.2.0"
+  }
+}

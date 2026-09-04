@@ -20,7 +20,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import ClassVar
 
-from oridecon.ui.core.render_context import RenderScope
+from oridecon.ui.core.render_context import RenderScope, get_render_context, get_render_scope
 
 
 class SwapMode(str, Enum):
@@ -310,10 +310,16 @@ class Zones:
 
     @classmethod
     def table_zone_id(cls, zone: Zone, *, table_key: str) -> str:
-        """Resolve one stable table ID for request/fragment routing code."""
+        """Resolve one stable table ID for request/fragment routing code.
+
+        Inside an active response render scope this returns exactly the ID
+        the table will render, so HTMX ``HX-Target`` values computed at
+        routing time match the emitted DOM. Outside a request (standalone
+        helpers/tests) a deterministic fallback scope is used.
+        """
         if zone not in cls._TABLE_SCOPED:
             raise ValueError(f"{zone!r} is not scoped to a data table")
-        return cls._table_ids(RenderScope(), table_key)[zone.role]
+        return cls._table_ids(get_render_scope(), table_key)[zone.role]
 
     @classmethod
     def data_refresh_oob_select(cls) -> str:

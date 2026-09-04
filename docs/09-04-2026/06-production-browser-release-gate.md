@@ -41,9 +41,14 @@ auth/session stores, and shipped admin assets. It is also opt-in.
 
 ### CI
 
-Playwright and `pytest-playwright` are already declared in root tooling/QA
-groups, but no required job installs Chromium. Both primary workflows are
-manual-only at present (doc 09 fixes triggers).
+Playwright and `pytest-playwright` are declared in root tooling/QA groups.
+As of the 2026-09-04 remediation, `.github/workflows/ci.yml` enables
+push/PR triggers, adds a required `browser` job that installs Chromium
+(`uv run playwright install --with-deps chromium`), runs the admin browser
+suite with `--browser-gate` (missing tooling is a hard failure, never a
+skip), and aggregates every required job into a single `aggregate` status
+that must be green for the check to pass. `dep-refresh.yml` runs weekly on
+schedule again.
 
 ## 3. Test topology
 

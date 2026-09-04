@@ -48,7 +48,7 @@ class AdminRenderer:
             content_html: Fully-rendered, framework-composed HTML.
             title: Page title.
         """
-        from markupsafe import Markup
+        from oridecon.ui import trusted_template_output
 
         return self.render_template(
             request,
@@ -56,9 +56,11 @@ class AdminRenderer:
             {
                 # admin_shell.html renders {{ content }} under autoescaping
                 # and has no `| safe` filter, so already-rendered HTML must
-                # be marked trusted here or it reaches the browser as
-                # entity text.
-                "content": Markup(content_html),  # noqa: S704
+                # be granted trust here, at the template output boundary.
+                "content": trusted_template_output(
+                    content_html,
+                    template="admin_shell.html (autoescape on, no |safe)",
+                ),
                 "title": f"{title} - {self._config.title}"
                 if title
                 else self._config.title,

@@ -389,8 +389,14 @@ class AdminController(ControllerProtocol):
         target = request.headers.get("HX-Target")
 
         if is_htmx and target == "main-content":
-            # Only return the partial content
-            return self.renderer.render_partial(content)
+            # Only return the partial content. The response declares the
+            # navigation contract the client controller applies: the swap
+            # target and the title for the document.
+            response = self.renderer.render_partial(content)
+            response.headers["HX-Target"] = "#main-content"
+            if title:
+                response.headers["X-Admin-Title"] = title
+            return response
 
         return self.renderer.render_page(
             content,

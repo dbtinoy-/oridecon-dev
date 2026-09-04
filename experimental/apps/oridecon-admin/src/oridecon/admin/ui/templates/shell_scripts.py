@@ -122,35 +122,11 @@ def search_overlay_markup() -> Any:
                 }
             });
 
-            // SPA navigation: intercept plain same-origin link clicks and
-            // swap the full page response into the body. Handled here via
-            // document-level delegation so it survives body swaps.
-            document.addEventListener('click', function(e) {
-                if (e.defaultPrevented || e.button !== 0) return;
-                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-                var el = e.target instanceof Element ? e.target.closest('a[href]') : null;
-                if (!el) return;
-                if (el.getAttribute('target') === '_blank' || el.hasAttribute('download')) return;
-                if (el.hasAttribute('hx-get') || el.hasAttribute('hx-post') || el.hasAttribute('hx-delete')) return;
-                var href = el.getAttribute('href');
-                if (!href || href.startsWith('#')) return;
-                var url;
-                try { url = new URL(el.href, location.href); } catch (err) { return; }
-                if (url.origin !== location.origin) return;
-                e.preventDefault();
-                if (window.htmx) {
-                    // Abort stale in-flight widget loads — they belong to the
-                    // page we are leaving and would otherwise hold browser
-                    // connection slots until the swap completes.
-                    document.querySelectorAll('.widget-body[hx-get]').forEach(function(w) {
-                        w.dispatchEvent(new Event('htmx:abort', { bubbles: true }));
-                    });
-                    window.htmx.ajax('GET', url.href, { target: 'body', swap: 'innerHTML' });
-                } else {
-                    location.href = url.href;
-                }
-                window.scrollTo(0, 0);
-            });
+            // SPA navigation is owned by window.OrideconNavigator (see
+            // admin_navigator_script): plain same-origin link clicks route
+            // through it, and it owns abort/title/scroll/focus/history.
+            // Delegation below survives body swaps because the navigator is
+            // registered as a document-level listener as well.
 
             // Keep contributor settings links truthful when a panel swaps
             // only the Configuration Center content column. The sidebar
@@ -219,6 +195,154 @@ def search_overlay_markup() -> Any:
         </script>
         """,
         source="AdminShell search overlay markup",
+    )
+
+
+def admin_navigator_script(login_url: str = "/admin/login") -> Any:
+    """Build the single client-side navigation controller.
+
+    All SPA-style navigation in the admin shell — plain link clicks and
+    command-palette commands — must route through ``window.OrideconNavigator``
+    so the lifecycle is owned in one place: aborting stale widget requests,
+    swapping ``#main-content``, updating the title from the server's
+    ``X-Admin-Title`` header, resetting ``.admin-shell-scroll``, moving focus
+    for assistive technology, handling auth expiry, and driving history.
+
+    Args:
+        login_url: Same-origin login path used when a navigation response is
+            rejected with 401/403.
+
+    Returns:
+        Structured trusted script markup for the admin shell.
+    """
+    return trusted_html(
+        f"""
+        <script>
+        (function () {{
+            if (window.__orideconAdminNavigatorInit) return;
+            window.__orideconAdminNavigatorInit = true;
+
+            var MAIN_CONTENT_SELECTOR = '#main-content';
+            var SCROLL_SELECTOR = '.admin-shell-scroll';
+            var loginUrl = {js_string(login_url)};
+
+            function abortStaleRequests() {{
+                // Abort stale in-flight widget loads — they belong to the page
+                // we are leaving and would otherwise hold connection slots or
+                // swap late into the new content.
+                document.querySelectorAll('.widget-body[hx-get]').forEach(function (w) {{
+                    w.dispatchEvent(new Event('htmx:abort', {{ bubbles: true }}));
+                }});
+            }}
+
+            function sameOriginUrl(href) {{
+                try {{
+                    var url = new URL(href, window.location.href);
+                    return url.origin === window.location.origin &&
+                        ['http:', 'https:'].includes(url.protocol) ? url : null;
+                }} catch (_error) {{
+                    return null;
+                }}
+            }}
+
+            var navigator = {{
+                targetSelector: MAIN_CONTENT_SELECTOR,
+
+                navigate: function (href) {{
+                    var url = sameOriginUrl(href);
+                    if (!url) {{
+                        window.location.assign(href);
+                        return;
+                    }}
+                    abortStaleRequests();
+                    if (window.htmx && document.querySelector(MAIN_CONTENT_SELECTOR)) {{
+                        window.htmx.ajax('GET', url.href, {{
+                            target: MAIN_CONTENT_SELECTOR,
+                            swap: 'innerHTML',
+                            headers: {{ 'HX-Target': MAIN_CONTENT_SELECTOR }}
+                        }});
+                    }} else {{
+                        window.location.assign(url.href);
+                    }}
+                }},
+
+                onAfterSwap: function (event) {{
+                    var detail = event.detail || {{}};
+                    var target = detail.target;
+                    if (!target || target.id !== 'main-content') return;
+                    var xhr = detail.xhr;
+                    if (xhr) {{
+                        var declaredTarget = xhr.getResponseHeader('HX-Target');
+                        if (declaredTarget && declaredTarget !== MAIN_CONTENT_SELECTOR) {{
+                            // The response declared a different owner; do not
+                            // apply navigation lifecycle it did not request.
+                            return;
+                        }}
+                        var title = xhr.getResponseHeader('X-Admin-Title');
+                        if (title) document.title = title;
+                    }}
+                    var scroller = document.querySelector(SCROLL_SELECTOR);
+                    if (scroller) scroller.scrollTop = 0;
+                    window.scrollTo(0, 0);
+                    var main = document.getElementById('main-content');
+                    if (main) main.focus({{ preventScroll: true }});
+                    document.dispatchEvent(new CustomEvent('oridecon:nav:complete', {{
+                        detail: {{ target: target }}
+                    }}));
+                }},
+
+                onResponseError: function (event) {{
+                    var detail = event.detail || {{}};
+                    var status = detail.xhr && detail.xhr.status;
+                    if (status === 401 || status === 403) {{
+                        window.location.assign(loginUrl);
+                    }}
+                }},
+
+                onPopState: function () {{
+                    if (window.htmx) {{
+                        try {{
+                            window.htmx.restoreHistory();
+                            return;
+                        }} catch (_error) {{ /* fall through to reload */ }}
+                    }}
+                    window.location.reload();
+                }}
+            }};
+
+            window.OrideconNavigator = navigator;
+
+            // Document-level wiring survives body/partial swaps.
+            document.addEventListener('htmx:afterSwap', navigator.onAfterSwap);
+            document.addEventListener('htmx:responseError', navigator.onResponseError);
+            window.addEventListener('popstate', function () {{
+                window.setTimeout(navigator.onPopState, 0);
+            }});
+
+            // Intercept plain same-origin link clicks and route them through
+            // the single navigator. Elements that declare their own htmx
+            // behaviour keep it; the dirty-form guard (capture phase) still
+            // runs first.
+            document.addEventListener('click', function (e) {{
+                if (e.defaultPrevented || e.button !== 0) return;
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                var el = e.target instanceof Element ? e.target.closest('a[href]') : null;
+                if (!el) return;
+                if (el.getAttribute('target') === '_blank' || el.hasAttribute('download')) return;
+                if (el.hasAttribute('hx-get') || el.hasAttribute('hx-post') ||
+                    el.hasAttribute('hx-delete') || el.hasAttribute('hx-put') ||
+                    el.hasAttribute('hx-patch')) return;
+                var href = el.getAttribute('href');
+                if (!href || href.startsWith('#')) return;
+                var url = sameOriginUrl(el.href);
+                if (!url) return;
+                e.preventDefault();
+                navigator.navigate(url.href);
+            }});
+        }})();
+        </script>
+        """,
+        source="AdminShell navigation controller",
     )
 
 

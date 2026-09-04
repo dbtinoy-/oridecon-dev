@@ -122,9 +122,22 @@ class TestTemplateTrustBoundary:
 
         assert "<div>ok</div>" in rendered
 
+    def test_trusted_template_output_renders_verbatim(self) -> None:
+        from oridecon.ui import trusted_template_output
+
+        rendered = self._template().render(  # type: ignore[attr-defined]
+            content=trusted_template_output(
+                "<div>ok</div>", template="admin_shell.html"
+            ),
+            title="T",
+            dark_mode="",
+        )
+
+        assert "<div>ok</div>" in rendered
+
 
 class TestAllShellCallersDeclareTrust:
-    """Every admin_shell.html caller must wrap content in Markup."""
+    """Every admin_shell.html caller must declare trust at its boundary."""
 
     @pytest.mark.parametrize(
         "module_path",
@@ -135,7 +148,7 @@ class TestAllShellCallersDeclareTrust:
             "oridecon/admin/engine/renderer.py",
         ],
     )
-    def test_caller_wraps_content_in_markup(self, module_path: str) -> None:
+    def test_caller_wraps_content_in_trusted_template_output(self, module_path: str) -> None:
         from pathlib import Path
 
         import oridecon.admin as admin_pkg
@@ -144,4 +157,5 @@ class TestAllShellCallersDeclareTrust:
         source = (root / module_path).read_text()
 
         assert "admin_shell.html" in source, "test target moved"
-        assert "Markup(" in source
+        assert "trusted_template_output(" in source
+        assert "Markup(" not in source

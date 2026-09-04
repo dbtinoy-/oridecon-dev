@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from markupsafe import Markup
+from oridecon.ui import trusted_template_output
 
 from oridecon.admin.actions.standard import (
     CreateAction,
@@ -212,7 +212,11 @@ def render_action_button(
     # New admin actions return an HTML string for compatibility. Mark it safe
     # only after it was produced by ActionButton; otherwise Element would
     # escape the complete button when it is nested in a row container.
-    return Markup(rendered) if rendered else ""
+    if not rendered:
+        return ""
+    if isinstance(rendered, str):
+        return trusted_template_output(rendered, template="AdminActionButton.render_button")
+    return rendered
 
 
 def render_bulk_action_button(
@@ -288,7 +292,10 @@ def render_bulk_action_button(
             type="button",
             **attrs,
         ).render()
-        return Markup(str(rendered)) if rendered else ""
+        if not rendered:
+            return ""
+        markup = str(rendered)
+        return trusted_template_output(markup, template="ActionButton.render")
 
     attrs = {}
     _hx_delete = getattr(action, "_hx_delete", None)

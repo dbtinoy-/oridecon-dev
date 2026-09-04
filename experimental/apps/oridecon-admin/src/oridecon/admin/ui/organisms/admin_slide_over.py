@@ -72,7 +72,7 @@ def render_slide_over_fragment(
         size=size,
         variant=variant,
         footer=footer or [],
-        children=[content],
+        body=content,
     )
     return render_to_string(panel)
 

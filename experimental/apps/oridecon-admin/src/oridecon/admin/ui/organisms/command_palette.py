@@ -206,13 +206,19 @@ class CommandPalette(Component):
                     this.error = 'That command points to an unsafe destination.';
                     return;
                 }}
-                const destination = url.pathname + url.search + url.hash;
+                const destination = url.href;
                 this.close();
-                if (window.htmx) {{
+                // Single navigation owner: the shell navigator handles the
+                // swap target, title, scroll/focus lifecycle, auth expiry
+                // and history entries. Fall back to a direct assignment in
+                // environments where the admin shell script is absent.
+                if (window.OrideconNavigator) {{
+                    window.OrideconNavigator.navigate(destination);
+                }} else if (window.htmx) {{
                     window.htmx.ajax('GET', destination, {{
-                        target: '#main-content', swap: 'innerHTML'
+                        target: '#main-content', swap: 'innerHTML',
+                        headers: {{ 'HX-Target': '#main-content' }}
                     }});
-                    window.history.pushState({{}}, '', destination);
                 }} else {{
                     window.location.assign(destination);
                 }}

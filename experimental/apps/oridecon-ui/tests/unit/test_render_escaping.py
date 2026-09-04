@@ -16,6 +16,12 @@ from oridecon.ui.core.base import el, raw, render_to_string
 class TestStringChildrenEscaped:
     """Plain ``str`` children are escaped in text context (audit PoC)."""
 
+    def test_top_level_string_escaped(self) -> None:
+        # Unified policy: render_to_string is not a verbatim escape hatch.
+        assert render_to_string("<script>alert(1)</script>") == (
+            "&lt;script&gt;alert(1)&lt;/script&gt;"
+        )
+
     def test_audit_poc_script_escaped(self) -> None:
         output = render_to_string(el("div", "<script>alert(1)</script>"))
         assert "<script>alert(1)</script>" not in output
@@ -74,10 +80,17 @@ class TestAttributeEscapingUnchanged:
 
 
 class TestRenderToStringContract:
-    """Top-level ``render_to_string(str)`` stays verbatim (fragment injection)."""
+    """Top-level ``render_to_string(str)`` is data, not fragment injection."""
 
-    def test_top_level_string_verbatim(self) -> None:
-        assert render_to_string("<b>ok</b>") == "<b>ok</b>"
+    def test_top_level_string_escaped(self) -> None:
+        assert render_to_string("<b>ok</b>") == "&lt;b&gt;ok&lt;/b&gt;"
 
     def test_element_string_repr_escapes(self) -> None:
         assert str(el("div", "<b>")) == "<div>&lt;b&gt;</div>"
+
+    def test_trusted_html_still_verbatim_at_top_level(self) -> None:
+        from oridecon.ui import trusted_html
+
+        assert render_to_string(trusted_html("<b>ok</b>", source="test")) == (
+            "<b>ok</b>"
+        )

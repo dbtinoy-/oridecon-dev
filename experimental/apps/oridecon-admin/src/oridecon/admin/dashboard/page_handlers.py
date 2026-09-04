@@ -5,7 +5,7 @@ import re
 import types
 from typing import TYPE_CHECKING, Any, cast, get_args, get_origin, get_type_hints
 
-from markupsafe import Markup
+from oridecon.ui import trusted_template_output
 from starlette.requests import Request as StarletteRequest
 from starlette.responses import HTMLResponse
 
@@ -448,7 +448,10 @@ async def wrap_page_in_shell(
         request,
         "admin_shell.html",
         context={
-            "content": Markup(shell_html),  # noqa: S704 — framework-composed trusted HTML
+            "content": trusted_template_output(
+                shell_html,
+                template="admin_shell.html (autoescape on, no |safe)",
+            ),
             "title": title,
             "site_name": branding.get("site_name", ""),
             "favicon_url": branding.get("favicon_url", ""),

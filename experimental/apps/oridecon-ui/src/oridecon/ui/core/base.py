@@ -8,6 +8,7 @@ import importlib
 import re
 from types import TracebackType
 from typing import Any, Self, cast
+import warnings
 
 from markupsafe import Markup
 
@@ -16,6 +17,46 @@ from oridecon.ui.core.render_context import ensure_render_context, get_render_co
 from oridecon.ui.core.trusted_html import TrustedHTML
 
 logger = get_logger(__name__)
+
+#: Declared minor release in which the legacy trust/deprecation shims are
+#: removed. All framework call sites must migrate in this release; the shims
+#: below are the only temporary rollback mechanism and always warn.
+_LEGACY_TEARDOWN_VERSION = "0.2.0"
+
+#: (name, replacement) pairs already warned — deduplicates the warning emitted
+#: per framework call site so a table of 50 rows does not flood the log.
+_deprecation_warned: set[tuple[str, str]] = set()
+
+
+def _warn_deprecated(name: str, replacement: str) -> None:
+    """Emit one deduplicated DeprecationWarning for a legacy render API."""
+    key = (name, replacement)
+    if key in _deprecation_warned:
+        return
+    _deprecation_warned.add(key)
+    warnings.warn(
+        f"oridecon.ui: {name} is deprecated and will be removed in "
+        f"v{_LEGACY_TEARDOWN_VERSION}; use {replacement}",
+        DeprecationWarning,
+        stacklevel=3,
+    )
+
+
+def _legacy_markup(value: Markup) -> TrustedHTML:
+    """Convert a markupsafe ``Markup`` into an attributed trust grant.
+
+    ``Markup`` is a plain-string subclass that previously bypassed escaping
+    anywhere it was rendered. It is kept working for one migration window as a
+    deduplicated deprecation adapter; the string is never re-sanitized here.
+    """
+    _warn_deprecated(
+        "markupsafe.Markup",
+        "trusted_html(value, source=...) after sanitizing the markup",
+    )
+    return TrustedHTML(
+        value=str(value),
+        source="legacy markupsafe.Markup compatibility adapter",
+    )
 
 _ALPINE_ARGUMENT_RE = re.compile(r"^[a-z][a-z0-9:_-]*$")
 _ALPINE_MODIFIER_RE = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
@@ -127,6 +168,12 @@ class Element:
         while self.children and isinstance(self.children[0], dict):
             self.attrs.update(self.children.pop(0))
 
+        if "children" in self.attrs:
+            raise TypeError(
+                "Element/el() do not accept children=; pass children "
+                "positionally or use fragment(...) for a pre-existing sequence"
+            )
+
         # Auto-add type="button" for HTMX-enabled buttons to avoid accidental form submits
         if self.tag == "button":
             if "type" not in self.attrs:
@@ -202,8 +249,12 @@ class RawHTML(TrustedHTML):
 
     __slots__ = ()
 
-    def __init__(self, value: str) -> None:
-        super().__init__(value=value, source="legacy raw() compatibility adapter")
+    def __new__(cls, value: str) -> "RawHTML":
+        _warn_deprecated(
+            "raw()/RawHTML",
+            "trusted_html(value, source=...) after sanitizing the markup",
+        )
+        return TrustedHTML.__new__(cls, value, "legacy raw() compatibility adapter")
 
 
 def raw(value: str) -> RawHTML:
@@ -234,9 +285,12 @@ def _render_child(child: Any) -> str:
     - Plain strings are escaped (they are text content). This includes
       plain strings returned by ``Component.render()``: a component is
       resolved first and its string result is treated as data.
-    - ``Markup`` (markupsafe), ``TrustedHTML``, legacy ``RawHTML``, framework
-      ``Element``, and concrete supported htpy nodes pass through verbatim.
-      An arbitrary ``__html__`` method does not grant markup trust.
+    - ``TrustedHTML`` (including source-attributed grants) and framework
+      ``Element`` / concrete supported htpy nodes pass through verbatim.
+      ``markupsafe.Markup`` and legacy ``raw()`` pass through during one
+      documented migration window through an attributed compatibility
+      adapter that warns. An arbitrary ``__html__`` method does not grant
+      markup trust.
     - Iterables are rendered element-wise under the same policy.
 
     This closes the previous inconsistency where a ``Component`` child
@@ -246,19 +300,19 @@ def _render_child(child: Any) -> str:
     """
     if child is None:
         return ""
+    if isinstance(child, Markup):
+        return _render_child(_legacy_markup(child))
+    # Explicit framework/trusted/htpy values are structure — checked before
+    # the plain-string branch because TrustedHTML is a str subclass.
+    if _is_html_structure(child):
+        return render_to_string(child)
     if isinstance(child, str):
-        if isinstance(child, Markup):
-            return child
         return html.escape(child, quote=False)
     if isinstance(child, Component):
         as_child_result = child._render_as_child()
         if as_child_result is not None:
             return _render_child(as_child_result)
         return _render_child(child.render())
-    # Explicit framework/trusted/htpy values are structure. This must be
-    # checked before Iterable because htpy elements support iteration.
-    if _is_html_structure(child):
-        return render_to_string(child)
     renderer = _declared_renderer(child)
     if renderer is not None:
         return _render_child(renderer())
@@ -270,15 +324,27 @@ def _render_child(child: Any) -> str:
 def render_child_to_string(value: Any) -> str:
     """Render one nested value for wrappers that must inspect owned markup.
 
-    Unlike the legacy top-level ``render_to_string`` string contract, this
-    boundary always treats plain strings and plain component results as text.
-    New wrappers should preserve nodes directly; this adapter exists for the
-    small set that must inspect or transform form structure before rendering.
+    This boundary always treats plain strings and plain component results as
+    text — the same policy as the top-level renderer since the unified trust
+    boundary landed. New wrappers should preserve nodes directly; this adapter
+    exists for the small set that must inspect or transform form structure
+    before rendering.
     """
     if get_render_context() is None:
         with ensure_render_context():
             return render_child_to_string(value)
     return _render_child(value)
+
+
+def fragment(*values: Any) -> tuple[Any, ...]:
+    """Build an ordered render sequence from a pre-existing iterable.
+
+    Positional children remain canonical for ``el``/``Component``. This helper
+    exists for the case where a child sequence already lives in a list and
+    must be spread without inventing a ``children=`` keyword. Tuples render
+    element-wise under the same escaping policy.
+    """
+    return tuple(values)
 
 
 # Compatibility state for Streamlit-like ``with`` composition. ContextVars
@@ -387,11 +453,23 @@ class Component:
     """
 
     def __init__(self, *children: Any, as_child: bool = False, **props: Any) -> None:
+        if as_child:
+            _warn_deprecated(
+                f"{type(self).__name__}(as_child=True)",
+                "Slot(child, attrs=...) for explicit polymorphic composition",
+            )
         self.as_child = as_child
         self.props = props
-        self.children: list[Any] = (
-            list(children) if children else list(props.pop("children", []))
-        )
+        if children:
+            self.children: list[Any] = list(children)
+        elif "children" in props:
+            _warn_deprecated(
+                f"{type(self).__name__}(children=...)",
+                "positional children or fragment(...)",
+            )
+            self.children = list(props.pop("children", []))
+        else:
+            self.children = []
         # Support Streamlit-like `with` usage by adding ourselves to the current context
         add_child_to_current(self)
         self.on_mount()
@@ -490,10 +568,13 @@ class Component:
 def render_to_string(value: str | Any) -> str:
     """Render a component or htpy element to an HTML string.
 
-    This performs a best-effort conversion: strings are returned verbatim,
-    htpy elements are converted if they provide a renderer, iterables are
-    flattened by rendering each child and concatenating the results, and
-    component instances are rendered via their `render()` method.
+    A plain Python string is **text at every render depth**, including
+    top-level values and ``Component.render()`` results. HTML structure is a
+    typed value (``Element`` / supported htpy nodes); verbatim markup requires
+    an explicit source-attributed ``TrustedHTML`` grant. The legacy
+    ``markupsafe.Markup`` and ``raw()`` values survive this migration window
+    through warning compatibility adapters and are removed in
+    ``v{_LEGACY_TEARDOWN_VERSION}``.
     """
     if get_render_context() is None:
         with ensure_render_context():
@@ -503,11 +584,27 @@ def render_to_string(value: str | Any) -> str:
     if value is None:
         return ""
 
-    # Strings are returned verbatim. Escaping happens at the Element/htpy
-    # attribute layer when content is inserted into HTML. To include
-    # pre-rendered HTML safely, use source-attributed TrustedHTML.
+    if isinstance(value, Markup):
+        return render_to_string(_legacy_markup(value))
+
+    # Note: we check for Component first to avoid infinite recursion if
+    # Component implements __html__ (which it does, calling this function).
+    if isinstance(value, Component):
+        return render_to_string(value.render())
+
+    # Explicit framework/trusted/htpy values are structure — checked before
+    # the plain-string branch because TrustedHTML is a str subclass, and
+    # before Iterable because htpy elements support iteration (``with`` use).
+    if _is_html_structure(value):
+        # Rendering errors are correctness failures. Falling back to ``str``
+        # or ``repr`` can hide a broken form/component behind object text and
+        # can invoke the same failing renderer more than once.
+        return cast("str", value.__html__())
+
+    # Strings are data: they are escaped here, exactly as they are at every
+    # other render boundary.
     if isinstance(value, str):
-        return value
+        return html.escape(value, quote=False)
 
     # Iterables (lists/tuples/generators) are rendered element-wise. We
     # explicitly exclude `bytes`/`dict` as they are not HTML sequences.
@@ -516,17 +613,6 @@ def render_to_string(value: str | Any) -> str:
         if hasattr(value, "iter_chunks"):
             return "".join(render_to_string(chunk) for chunk in value.iter_chunks())
         return "".join(render_to_string(v) for v in value)
-
-    # Note: we check for Component first to avoid infinite recursion if
-    # Component implements __html__ (which it does, calling this function).
-    if isinstance(value, Component):
-        return render_to_string(value.render())
-
-    if _is_html_structure(value):
-        # Rendering errors are correctness failures. Falling back to ``str``
-        # or ``repr`` can hide a broken form/component behind object text and
-        # can invoke the same failing renderer more than once.
-        return cast("str", value.__html__())
 
     # Fallback for objects with a concrete render method but not inheriting
     # from Component. Dynamic instance attributes do not establish a protocol.
@@ -559,8 +645,16 @@ _debug_components_cache: bool | None = None
 
 
 def looks_like_html(value: Any) -> bool:
-    """Heuristic: does this string look like it contains an HTML tag?"""
-    return isinstance(value, str) and bool(_HTML_TAG_RE.search(value))
+    """Heuristic: does this string look like it contains an HTML tag?
+
+    ``TrustedHTML`` values are (str subclass) explicitly trusted markup, not a
+    renderer mistake, so they never match.
+    """
+    if not isinstance(value, str):
+        return False
+    if isinstance(value, (TrustedHTML,)):
+        return False
+    return bool(_HTML_TAG_RE.search(value))
 
 
 def warn_html_string_render(

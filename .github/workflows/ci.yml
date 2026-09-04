@@ -1,12 +1,9 @@
 name: CI
 
-# on:
-#   push:
-#     branches: [main]
-#   pull_request:
-#   workflow_dispatch:
-
 on:
+  push:
+    branches: [main]
+  pull_request:
   workflow_dispatch:
 
 concurrency:
@@ -115,6 +112,9 @@ jobs:
       - name: Datetime awareness gate (no bare datetime.now())
         run: uv run python dev/checks/datetime_awareness.py
 
+      - name: UI trust boundary gate (no unallowlisted raw/Markup)
+        run: uv run python dev/checks/ui_trusted_html.py
+
       - name: env.example coverage
         run: uv run python dev/checks/env_example.py --root .
 
@@ -219,6 +219,71 @@ jobs:
       - name: coverage test
         run: |
           uv run pytest -m "not integration and not slow" --cov --cov-fail-under=70
+
+  example:
+    name: Examples gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        run: uv python install 3.11
+
+  browser:
+    name: Browser gate (Playwright, admin UI)
+    needs: changes
+    if: needs.changes.outputs.groups != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        run: uv python install 3.11
+
+      - name: install workspace (locked)
+        run: uv sync --group tooling --group qa --group security --locked
+
+      - name: Install Playwright Chromium (+ system deps)
+        run: uv run playwright install --with-deps chromium
+
+      - name: browser tests (fail, not skip, when tooling is missing)
+        run: uv run pytest experimental/apps/oridecon-admin/tests/browser --browser-gate -q --no-cov
+
+  aggregate:
+    name: Required aggregate status
+    if: always()
+    needs:
+      - quality
+      - tests
+      - integration
+      - coverage
+      - example
+      - audit
+      - browser
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if any required job did not succeed (skips allowed)
+        if: >-
+          contains(needs.*.result, 'failure') ||
+          contains(needs.*.result, 'cancelled') ||
+          contains(needs.*.result, 'timed_out')
+        run: |
+          echo "Required job failed: ${{ toJSON(needs.*.result) }}"
+          exit 1
+
+      - name: Aggregate status is green
+        run: |
+          echo "All required jobs passed: ${{ toJSON(needs.*.result) }}"
 
   example:
     name: Examples gate

@@ -219,7 +219,7 @@ class ConfigLayout(Component):
 
         # Empty state
         return Card(
-            children=[
+            content=[
                 el(
                     "div",
                     el("div", "⚙️", class_="text-5xl mb-4"),

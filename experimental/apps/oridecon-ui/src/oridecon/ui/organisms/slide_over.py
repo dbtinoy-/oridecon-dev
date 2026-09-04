@@ -59,9 +59,16 @@ class SlideOver(Component):
         size: str = "lg",
         variant: str = "default",
         subtitle: str | None = None,
+        body: Any = None,
         **props: Any,
     ) -> None:
+        if body is not None and "children" in props:
+            raise TypeError(
+                "SlideOver: pass body= or children=, not both; positional "
+                "children are canonical"
+            )
         super().__init__(
+            *(body,) if body is not None else (),
             title=title,
             trigger=trigger,
             id=slide_id,

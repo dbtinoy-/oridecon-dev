@@ -132,11 +132,25 @@ class TestComponentChildrenNoBypass:
         assert "&lt;b&gt;nested&lt;/b&gt;" in out
 
 
-class TestTopLevelRenderVerbatim:
-    def test_top_level_string_verbatim(self) -> None:
-        # render_to_string is the final-output path: escaping happens at the
-        # Element boundary, so top-level strings pass through unchanged.
-        assert render_to_string("raw <b>string</b>") == "raw <b>string</b>"
+class TestTopLevelRenderEscapes:
+    """A plain string is text at every render depth, including top level."""
+
+    def test_top_level_string_escaped(self) -> None:
+        assert render_to_string("raw <b>string</b>") == (
+            "raw &lt;b&gt;string&lt;/b&gt;"
+        )
+
+    def test_top_level_ampersand_escaped(self) -> None:
+        assert render_to_string("Tom & Jerry < 3") == "Tom &amp; Jerry &lt; 3"
+
+    def test_callable_value_escaped_once(self) -> None:
+        assert render_to_string("<i>x</i>") == "&lt;i&gt;x&lt;/i&gt;"
+
+    def test_component_string_result_escaped_top_level(self) -> None:
+        out = render_to_string(_UserInput("<script>alert(1)</script>"))
+        assert "<script>" not in out
+        assert "&lt;script&gt;alert(1)&lt;/script&gt;" in out
+        assert "<b>" not in out
 
 
 class TestLooksLikeHtml:

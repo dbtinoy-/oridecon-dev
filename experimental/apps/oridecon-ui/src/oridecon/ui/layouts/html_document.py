@@ -9,7 +9,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any
 
-from markupsafe import Markup, escape
+from markupsafe import escape
+from oridecon.ui.core.trusted_html import trusted_template_output
 
 from oridecon.ui.config import HTMLDocumentConfig
 
@@ -63,7 +64,7 @@ class HTMLDocument(ABC):
         # Close HTML
         parts.append("</html>")
 
-        return Markup("\n".join(parts))  # noqa: S704 — framework-composed trusted HTML
+        return trusted_template_output("\n".join(parts), template="HTMLDocument")
 
     def _render_head(self, title: str, **context: Any) -> str:
         """Render the head section."""

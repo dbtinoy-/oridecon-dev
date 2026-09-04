@@ -7,6 +7,7 @@ from oridecon.admin.ui.organisms.sidebar import Sidebar
 from oridecon.admin.ui.organisms.topbar import TopBar
 from oridecon.admin.ui.templates.shell_scripts import (
     admin_form_ux_script,
+    admin_navigator_script,
     dark_mode_expr,
     loading_bar_script,
     search_overlay_markup,
@@ -209,6 +210,9 @@ class AdminShell(Component):
         # Global HTMX loading indicator and error handling
         loading_bar = loading_bar_script(Zones.FLASH.id)
         form_ux = admin_form_ux_script()
+        # Single navigation owner: link clicks, the command palette, title,
+        # scroll reset, focus, auth expiry and history all route here.
+        navigator = admin_navigator_script(login_url=f"{self.admin_prefix}/login")
 
         dm_expr = dark_mode_expr(self.dark_mode)
 
@@ -230,6 +234,7 @@ class AdminShell(Component):
             skip_link,
             loading_bar,
             form_ux,
+            navigator,
             theme_style,
             search_overlay,
             sidebar_container,

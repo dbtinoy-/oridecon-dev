@@ -12,6 +12,7 @@ from oridecon.admin.auth.services._cookie_config import (
     build_session_cookie_kwargs,
 )
 from oridecon.admin.config import AdminConfig
+from oridecon.admin.middleware.render_scope import AdminRenderScopeMiddleware
 from oridecon.admin.controllers.command_palette import CommandPaletteController
 from oridecon.admin.controllers.search import SearchController
 from oridecon.admin.openapi.controller import OpenAPIController
@@ -149,6 +150,10 @@ class AdminRouter:
         #   4. add Session last     (outermost — runs first, populates scope["session"])
         for middleware_class, options in reversed(self._middleware_stack):
             admin_app.add_middleware(middleware_class, **options)  # type: ignore[arg-type]
+
+        # Pure-ASGI, order-independent: gives every admin request exactly one
+        # response-wide RenderScope for DOM identity (doc 02 / doc 05 §5).
+        admin_app.add_middleware(AdminRenderScopeMiddleware)
 
         admin_app.add_middleware(SessionMiddleware, **cookie_kwargs)
 

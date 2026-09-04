@@ -13,6 +13,7 @@ class Form(Component):
 
     def __init__(
         self,
+        *children: Any,
         action_url: str | None = None,
         method: str = "post",
         submit_label: str = "Save",
@@ -27,6 +28,7 @@ class Form(Component):
         **props: Any,
     ) -> None:
         super().__init__(
+            *children,
             action_url=action_url,
             method=method,
             submit_label=submit_label,

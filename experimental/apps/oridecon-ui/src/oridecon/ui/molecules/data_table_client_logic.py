@@ -14,6 +14,12 @@ class DataTableScriptRenderer:
         table_root_selector = "[data-oridecon-table-root]"
         script_js = f"""
         (function() {{
+            // Guard first: this script is emitted once per table instance
+            // today, so without an early exit every extra table on the page
+            // would re-register the document-level bulk-progress listener.
+            if (window.LexigramTableInitialized) return;
+            window.LexigramTableInitialized = true;
+
             const serializeTableQuery = function(table) {{
                 const params = new URLSearchParams();
                 const ignored = new Set(['ids', 'csrf_token', 'action', 'scope', 'list_query']);
@@ -433,9 +439,6 @@ class DataTableScriptRenderer:
                     }}
                 }});
             }}
-
-            if (window.LexigramTableInitialized) return;
-            window.LexigramTableInitialized = true;
 
             window.LexigramTableLogic = {{
                 updateActiveFiltersState() {{

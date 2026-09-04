@@ -335,21 +335,28 @@ and reject them rather than emitting browser-reparsed syntax.
 
 ## 8. Acceptance criteria
 
-- [ ] `render_to_string("<b>x</b>")` returns escaped text.
-- [ ] A Component returning that string is escaped top-level and nested.
-- [ ] Card, AdminCard, layouts, full pages, and partials preserve structured
+Status is as of the 2026-09-04 full remediation; unit/type/lint gates run in
+CI and the Playwright browser gate fails (never skips) when tooling is
+missing.
+
+- [x] `render_to_string("<b>x</b>")` returns escaped text.
+- [x] A Component returning that string is escaped top-level and nested.
+- [x] Card, AdminCard, layouts, full pages, and partials preserve structured
       children without pre-render/re-raw cycles.
-- [ ] Arbitrary `__html__` no longer grants final-state trust.
-- [ ] Every verbatim framework string is a `TrustedHTML` with an attributable
+- [x] Arbitrary `__html__` no longer grants final-state trust.
+- [x] Every verbatim framework string is a `TrustedHTML` with an attributable
       source or a temporary allowlisted legacy adapter.
-- [ ] `auto_escape` cannot disable escaping.
-- [ ] Slot rejects zero/multiple/non-element roots, merges deterministically,
+- [x] `auto_escape` cannot disable escaping.
+- [x] Slot rejects zero/multiple/non-element roots, merges deterministically,
       and does not mutate its child.
-- [ ] `children=` misuse has a targeted diagnostic and a declared removal path.
-- [ ] Concurrent/interleaved composition and render scopes are isolated.
-- [ ] Two same-type components in one scope have unique, stable IDs; an HTMX
+- [x] `children=` misuse has a targeted diagnostic and a declared removal path
+      (migration release: `Component(children=...)` warns; `el(children=)`
+      raises; removed in v0.2.0).
+- [x] Concurrent/interleaved composition and render scopes are isolated.
+- [x] Two same-type components in one scope have unique, stable IDs; an HTMX
       replacement can reproduce its target ID from a stable key.
-- [ ] UI/admin unit, type, lint, and production browser security tests pass.
+- [x] UI/admin unit, type, lint, and production browser security tests pass
+      (unit suites green; browser gate runs in CI with `--browser-gate`).
 
 ## 9. Rollback and compatibility
 

@@ -133,7 +133,6 @@ class TestAdminNavPushMiddleware:
         ("scope", "status", "headers"),
         [
             (_scope(method="POST"), 200, [(b"content-type", b"text/html")]),
-            (_scope(target=b"main-content"), 200, [(b"content-type", b"text/html")]),
             (_scope(), 302, [(b"content-type", b"text/html")]),
             (_scope(), 200, [(b"content-type", b"application/json")]),
         ],
@@ -147,3 +146,37 @@ class TestAdminNavPushMiddleware:
         messages = await _invoke(scope, status=status, response_headers=headers)
 
         assert _history_headers(messages) == []
+
+    @pytest.mark.parametrize("target", [b"main-content", b"#main-content"])
+    async def test_main_content_target_gets_navigation_contract(
+        self, target: bytes
+    ) -> None:
+        """The client navigator receives push URL + declared swap target."""
+        messages = await _invoke(_scope(target=target))
+
+        assert _history_headers(messages) == [b"/admin/users"]
+        start = messages[0]
+        headers = {name: value for name, value in start["headers"]}
+        assert headers[b"hx-target"] == b"#main-content"
+
+    async def test_main_content_contract_preserves_unrelated_headers(self) -> None:
+        messages = await _invoke(
+            _scope(target=b"main-content"),
+            response_headers=[
+                (b"content-type", b"text/html"),
+                (b"x-admin-title", b"Users"),
+                (b"set-cookie", b"a=1"),
+                (b"set-cookie", b"b=2"),
+            ],
+        )
+
+        start = messages[0]
+        headers = {name: value for name, value in start["headers"]}
+        assert headers[b"hx-push-url"] == b"/admin/users"
+        assert headers[b"hx-target"] == b"#main-content"
+        assert headers[b"x-admin-title"] == b"Users"
+        assert [
+            value
+            for name, value in start["headers"]
+            if name.lower() == b"set-cookie"
+        ] == [b"a=1", b"b=2"]

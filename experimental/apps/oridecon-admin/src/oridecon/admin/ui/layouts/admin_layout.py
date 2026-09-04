@@ -18,7 +18,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from markupsafe import Markup, escape
+from markupsafe import escape
 
 from oridecon.admin.theme.tailwind import (
     DARK_BOOTSTRAP_SCRIPT,
@@ -453,7 +453,7 @@ def admin_layout(
         Complete HTML page markup
     """
     layout = AdminLayout(config=config, context=context)
-    return Markup(layout.render(str(content)))  # noqa: S704 — framework-composed trusted HTML
+    return trusted_template_output(layout.render(str(content)), template="AdminLayout")
 
 
 __all__ = [

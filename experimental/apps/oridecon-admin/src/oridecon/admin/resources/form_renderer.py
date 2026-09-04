@@ -126,7 +126,7 @@ class FormRenderer(WizardRendererMixin):
                 trigger=None,
                 render_trigger=False,
                 is_open=True,
-                children=[form_component],
+                body=form_component,
             )
             return HTMLResponse(render_to_string(overlay))
         if overlay_mode:
@@ -137,7 +137,7 @@ class FormRenderer(WizardRendererMixin):
                 render_trigger=False,
                 is_open=True,
                 size="xl",
-                children=[form_component],
+                body=form_component,
             )
             return HTMLResponse(render_to_string(overlay))
 
@@ -250,7 +250,7 @@ class FormRenderer(WizardRendererMixin):
                 trigger=None,
                 render_trigger=False,
                 is_open=True,
-                children=[form_component],
+                body=form_component,
             )
             return HTMLResponse(render_to_string(overlay))
         if overlay_mode:
@@ -261,7 +261,7 @@ class FormRenderer(WizardRendererMixin):
                 render_trigger=False,
                 is_open=True,
                 size="xl",
-                children=[form_component],
+                body=form_component,
             )
             return HTMLResponse(render_to_string(overlay))
 

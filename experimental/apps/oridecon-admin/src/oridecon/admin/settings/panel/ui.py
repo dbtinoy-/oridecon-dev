@@ -243,7 +243,7 @@ class ConfigDashboardUI:
     def render_empty_state(self) -> Any:
         """Render the empty state when no namespace is selected."""
         return Card(
-            children=[
+            content=[
                 el(
                     "div",
                     el("div", "⚙️", class_="text-4xl mb-4"),
@@ -414,25 +414,7 @@ class ConfigDashboardUI:
             )
             body.append(
                 Form(
-                    action_url=action,
-                    method="POST",
-                    submit_label="",
-                    form_id=form_id,
-                    form_attrs={
-                        "data-admin-form": "true",
-                        # Keep the settings marker for consumers that still
-                        # target settings-specific forms during migration.
-                        "data-settings-form": "true",
-                        "data-settings-namespace": namespace,
-                        "x-data": "{ dirty: false }",
-                        "x-on:input": "dirty = true",
-                        "x-on:change": "dirty = true",
-                        "x-on:submit": "dirty = false",
-                        "data-settings-dirty": "true",
-                    },
-                    hx_target="#config-card",
-                    hx_swap="outerHTML",
-                    children=[
+                    [
                         *hidden,
                         el("div", *fields, class_="space-y-4"),
                         el(
@@ -462,6 +444,24 @@ class ConfigDashboardUI:
                         ),
                         actions,
                     ],
+                    action_url=action,
+                    method="POST",
+                    submit_label="",
+                    form_id=form_id,
+                    form_attrs={
+                        "data-admin-form": "true",
+                        # Keep the settings marker for consumers that still
+                        # target settings-specific forms during migration.
+                        "data-settings-form": "true",
+                        "data-settings-namespace": namespace,
+                        "x-data": "{ dirty: false }",
+                        "x-on:input": "dirty = true",
+                        "x-on:change": "dirty = true",
+                        "x-on:submit": "dirty = false",
+                        "data-settings-dirty": "true",
+                    },
+                    hx_target="#config-card",
+                    hx_swap="outerHTML",
                 )
             )
         else:
@@ -483,7 +483,7 @@ class ConfigDashboardUI:
 
         return Card(
             title=spec.get("label", "Configuration"),
-            children=body,
+            content=body,
             class_="w-full",
             id="config-card",
         )

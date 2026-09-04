@@ -15,6 +15,7 @@ from starlette.responses import HTMLResponse
 
 from oridecon import serialization as json
 from oridecon.logging import get_logger
+from oridecon.ui.core.trusted_html import trusted_template_output
 
 logger = get_logger(__name__)
 
@@ -89,10 +90,12 @@ class Jinja2Templates:
         self._add_default_globals()
 
     def _add_default_filters(self) -> None:
-        def tojson(obj: Any) -> Markup | str:
+        def tojson(obj: Any) -> str:
             try:
-                json_str = json.dumps(obj, default=str, ensure_ascii=False)
-                return Markup(json_str)
+                json_str = json.dumps_str(obj, default=str, ensure_ascii=False)
+                return trusted_template_output(
+                    json_str, template="tojson filter (JSON is safe by construction)"
+                )
             except (TypeError, ValueError) as e:
                 logger.debug("tojson filter failed, falling back to str(): %s", e)
                 return str(obj)

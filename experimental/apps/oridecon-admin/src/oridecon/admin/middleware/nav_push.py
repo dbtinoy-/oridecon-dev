@@ -14,13 +14,18 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 
 class AdminNavPushMiddleware:
-    """Add ``HX-Push-Url`` to HTML responses for body-targeted htmx GETs.
+    """Add navigation-contract headers to htmx page GETs.
 
-    Any htmx request without an ``HX-Target`` (or with target ``body``)
-    that receives a 2xx HTML response gets an ``HX-Push-Url`` header set
-    to the request URL, so the browser address bar matches the page the
-    server rendered.
+    Any htmx request targeting the shell's navigation surfaces — no
+    ``HX-Target``, ``body``, or ``#main-content`` — that receives a 2xx
+    HTML response gets an ``HX-Push-Url`` header set to the request URL,
+    so the browser address bar matches the page the server rendered. When
+    the request targets ``#main-content`` the response also declares
+    ``HX-Target: #main-content``; the client navigator verifies the swap
+    owner before applying the navigation lifecycle.
     """
+
+    _MAIN_CONTENT_TARGETS = (b"main-content", b"#main-content")
 
     def __init__(self, app: ASGIApp) -> None:
         """Initialise the middleware.
@@ -43,28 +48,36 @@ class AdminNavPushMiddleware:
             return
 
         headers = scope.get("headers") or []
-        if not self._is_body_targeted_get(headers, scope["method"]):
+        target = self._get_header(headers, b"hx-target")
+        if not self._is_navigation_get(headers, scope["method"]):
             await self._app(scope, receive, send)
             return
 
         push_url = self._build_push_url(scope)
         push_url_bytes = push_url.encode("utf-8")
+        # htmx sends the resolved target's bare element id; accept both the
+        # id and the CSS-selector spelling callers may use directly.
+        declare_target = target in self._MAIN_CONTENT_TARGETS
+        target_bytes = b"#main-content"
 
         async def send_with_push(message: Message) -> None:
             if message["type"] == "http.response.start":
                 status: int = message.get("status", 0)
                 response_headers = message.get("headers") or []
                 if 200 <= status < 300 and self._is_html(response_headers):
-                    # This middleware owns the fallback history value for body
-                    # navigation. Replace any downstream spelling instead of
-                    # emitting ambiguous duplicate HX-Push-Url headers, while
-                    # preserving unrelated repeated headers such as Set-Cookie.
+                    # This middleware owns the fallback history value for
+                    # navigation responses. Replace any downstream spelling
+                    # instead of emitting ambiguous duplicate HX-Push-Url
+                    # headers, while preserving unrelated repeated headers
+                    # such as Set-Cookie.
                     updated_headers = [
                         (key, value)
                         for key, value in response_headers
-                        if key.lower() != b"hx-push-url"
+                        if key.lower() not in (b"hx-push-url", b"hx-target")
                     ]
                     updated_headers.append((b"hx-push-url", push_url_bytes))
+                    if declare_target:
+                        updated_headers.append((b"hx-target", target_bytes))
                     message["headers"] = updated_headers
             await send(message)
 
@@ -75,25 +88,26 @@ class AdminNavPushMiddleware:
     # ------------------------------------------------------------------
 
     @classmethod
-    def _is_body_targeted_get(
+    def _is_navigation_get(
         cls, headers: list[tuple[bytes, bytes]], method: str
     ) -> bool:
-        """Return True for htmx GET/HEAD requests targeting the body.
+        """Return True for htmx GET/HEAD requests targeting the shell.
 
         Args:
             headers: Request headers from the ASGI scope.
             method: Request method.
 
         Returns:
-            True when the request is a GET/HEAD htmx request without a
-            specific swap target (or with target ``body``).
+            True when the request is a GET/HEAD htmx request targeting a
+            navigation surface: no specific swap target, ``body``, or
+            ``#main-content``.
         """
         if method not in ("GET", "HEAD"):
             return False
         if cls._get_header(headers, b"hx-request") != b"true":
             return False
         target = cls._get_header(headers, b"hx-target")
-        return target is None or target == b"body"
+        return target is None or target == b"body" or target in cls._MAIN_CONTENT_TARGETS
 
     @staticmethod
     def _get_header(headers: list[tuple[bytes, bytes]], name: bytes) -> bytes | None:

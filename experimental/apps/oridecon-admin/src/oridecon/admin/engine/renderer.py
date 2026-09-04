@@ -141,6 +141,12 @@ class AdminRenderer:
         from oridecon.admin.resources.urls import admin_prefix_from_request
         from oridecon.admin.state.context import AdminContextManager
         from oridecon.admin.ui.templates.shell import AdminShell
+        from oridecon.ui import (
+    RenderContext,
+    RenderScope,
+    render_context,
+    trusted_template_output,
+)
         from oridecon.ui.core.base import render_to_string
 
         user = getattr(request.state, "user", None) if request else None
@@ -233,7 +239,14 @@ class AdminRenderer:
         templates_dir = Path(__file__).parent.parent / "views" / "templates"
         templates = Jinja2Templates(directory=str(templates_dir))
 
-        shell_html = Markup(render_to_string(shell))
+        # One response-wide render scope even when the renderer is used
+        # directly (browser harness, unit tests) without the ASGI middleware.
+        with render_context(RenderContext(scope=RenderScope())):
+            shell_html = render_to_string(shell)
+        shell_html = trusted_template_output(
+            shell_html,
+            template="admin_shell.html (autoescape on, no |safe)",
+        )
 
         # Render using template
         return templates.TemplateResponse(
@@ -257,6 +270,10 @@ class AdminRenderer:
     ) -> HTMLResponse:
         """Render a partial for HTMX requests.
 
+        Plain strings are the renderer's legacy HTML contract and are
+        attributed at this single output boundary; structured component
+        values pass through the same unified escaping policy untouched.
+
         Args:
             content: Partial content
             headers: Optional HTMX response headers
@@ -264,6 +281,14 @@ class AdminRenderer:
         Returns:
             HTMLResponse with partial content
         """
-        from oridecon.ui import render_to_string
+        from oridecon.ui import (
+            RenderContext,
+            RenderScope,
+            render_context,
+            render_to_string,
+            trusted_template_output,
+        )
 
-        return HTMLResponse(render_to_string(content), headers=headers or {})
+        with render_context(RenderContext(scope=RenderScope())):
+            body = render_to_string(_page_content_node(content))
+        return HTMLResponse(body, headers=headers or {})

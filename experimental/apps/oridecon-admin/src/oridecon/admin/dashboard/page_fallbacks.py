@@ -88,7 +88,7 @@ async def _placeholder_page(
     try:
         from pathlib import Path
 
-        from markupsafe import Markup
+        from oridecon.ui import trusted_template_output
         from starlette.templating import Jinja2Templates
 
         from oridecon.admin.ui.templates.shell import AdminShell
@@ -138,12 +138,15 @@ async def _placeholder_page(
                 admin_prefix_from_request(request) if request is not None else "/admin"
             ),
         )
-        # Markup, not a plain str: admin_shell.html renders {{ content }}
+        # TrustedHTML, not a plain str: admin_shell.html renders {{ content }}
         # under autoescaping, so an unwrapped string is escaped and the
         # whole shell reaches the browser as entity text. The template
         # deliberately has no `| safe` filter -- trust is declared here, at
         # the point that knows the HTML was framework-composed.
-        shell_html = Markup(render_to_string(shell))  # noqa: S704
+        shell_html = trusted_template_output(
+            render_to_string(shell),
+            template="admin_shell.html (autoescape on, no |safe)",
+        )
 
         templates_dir = Path(__file__).resolve().parent.parent / "views" / "templates"
         templates = Jinja2Templates(directory=str(templates_dir))

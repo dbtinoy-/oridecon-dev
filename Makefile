@@ -66,6 +66,10 @@ lint-depth:  ## Check import depth ≤ 4 (source only, excludes tests)
 lint-datetime:  ## Enforce aware-UTC datetimes in production code (no bare datetime.now())
 	$(UV) run python dev/checks/datetime_awareness.py
 
+.PHONY: lint-ui-trust
+lint-ui-trust:  ## Reject legacy render-trust shims outside the audited allowlist
+	$(UV) run python dev/checks/ui_trusted_html.py
+
 .PHONY: dep-tree
 dep-tree:  ## Regenerate docs/reference/DEPENDENCY_TREE.md (sorted, fenced)
 	$(UV) run python dev/generators/dep_tree.py
@@ -108,6 +112,7 @@ ci:  ## Full CI pipeline: lint + type-check + tests with coverage gate
 	  && $(MYPY) $(CORE_SRC) \
 	  && cd $(WEB_DIR) && $(MYPY) src/oridecon/web
 	for p in $(TYPED_PKGS); do (cd $$p && $(MYPY) src) || exit 1; done
+	$(UV) run python dev/checks/ui_trusted_html.py
 	$(PYTEST) --tb=short --cov-fail-under=70
 	$(MAKE) check-demos
 

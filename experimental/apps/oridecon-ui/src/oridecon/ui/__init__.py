@@ -83,6 +83,7 @@ if TYPE_CHECKING:
         Element,
         RawHTML,
         el,
+        fragment,
         raw,
         render_to_string,
     )
@@ -100,7 +101,13 @@ if TYPE_CHECKING:
         get_render_scope,
         render_context,
     )
-    from oridecon.ui.core.trusted_html import TrustedHTML, trusted_html
+    from oridecon.ui.core.trusted_html import (
+        TrustedHTML,
+        trusted_html,
+        trusted_static_script,
+        trusted_svg_icon,
+        trusted_template_output,
+    )
     from oridecon.ui.core.url import is_safe_navigation_url
     from oridecon.ui.core.zones import SwapMode, Zone, Zones
     from oridecon.ui.decorators import component

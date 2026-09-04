@@ -106,8 +106,8 @@ class TestRenderToStringEdgeCases:
     def test_none_returns_empty(self) -> None:
         assert render_to_string(None) == ""
 
-    def test_string_returns_verbatim(self) -> None:
-        assert render_to_string("<hello>") == "<hello>"
+    def test_string_is_escaped_not_verbatim(self) -> None:
+        assert render_to_string("<hello>") == "&lt;hello&gt;"
 
     def test_iterable_flattens(self) -> None:
         assert render_to_string(["a", "b", "c"]) == "abc"

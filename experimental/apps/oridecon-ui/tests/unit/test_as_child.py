@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from oridecon.ui.core.base import Component, el
 from oridecon.ui.core.slot import Slot
 
@@ -13,8 +15,8 @@ class Button(Component):
         super().__init__(**kwargs)
         self.label = label
 
-    def render(self) -> str:
-        return str(el(self.tag, self.label or "", class_="btn", **self.props))
+    def render(self) -> Any:
+        return el(self.tag, self.label or "", class_="btn", **self.props)
 
 
 class Link(Component):
@@ -24,8 +26,8 @@ class Link(Component):
         super().__init__(**kwargs)
         self.text = text
 
-    def render(self) -> str:
-        return str(el(self.tag, self.text or "", href="#", class_="link", **self.props))
+    def render(self) -> Any:
+        return el(self.tag, self.text or "", href="#", class_="link", **self.props)
 
 
 def test_button_renders_as_link_with_as_child():
