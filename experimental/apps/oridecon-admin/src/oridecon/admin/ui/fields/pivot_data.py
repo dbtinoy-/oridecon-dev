@@ -10,7 +10,7 @@ from oridecon.admin.schema.base import SchemaField
 from oridecon.admin.schema.exceptions import FieldError
 from oridecon.result import Ok, Result
 from oridecon.serialization import dumps_str
-from oridecon.ui import Element, raw
+from oridecon.ui import Element, get_render_scope
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -50,50 +50,86 @@ class PivotDataField(SchemaField):
         self, value: dict[str, Any] | None, *, errors: list[str] | None = None
     ) -> Element:
         data = value or {}
+        scope = get_render_scope().child("pivot-data")
+        field_key = f"{self.name}-{self._related_id}" if self._related_id else self.name
+        group_id = scope.id("group", key=field_key)
+        error_id = scope.id("error", key=field_key) if errors else None
 
         children: list[Element] = []
-        for col in self.pivot_columns:
-            current = data.get(col.name, col.default)
-            input_html = self._build_pivot_input(col, current)
-
+        for column in self.pivot_columns:
+            current = data.get(column.name, column.default)
+            input_id = scope.id("input", key=f"{field_key}-{column.name}")
             children.append(
                 Element(
                     "div",
                     Element(
                         "label",
-                        col.label,
+                        column.label,
+                        for_=input_id,
                         class_="text-xs font-medium text-muted-foreground w-24",
                     ),
-                    raw(input_html),
+                    self._build_pivot_input(
+                        column,
+                        current,
+                        input_id=input_id,
+                        error_id=error_id,
+                    ),
                     class_="flex items-center gap-2 mb-2",
                 )
             )
 
+        error_node = (
+            Element("p", errors[0], id=error_id, class_="text-sm text-destructive")
+            if errors
+            else None
+        )
         return Element(
             "div",
             *children,
+            error_node,
+            id=group_id,
+            role="group",
+            aria_label=self.label or self.name.replace("_", " ").title(),
             class_="pivot-data-fields",
         )
 
-    def _build_pivot_input(self, col: PivotColumn, value: str) -> str:
-        # These fragments are inserted via raw() and must therefore escape
-        # every dynamic value themselves: record data (``value``) and the
-        # declarative field type both cross into attribute/HTML context.
-        attrs = f'name="pivot_{_html.escape(col.name, quote=True)}" '
-        if col.field_type == "checkbox":
-            checked = "checked" if value else ""
-            return f'<input type="checkbox" {attrs} {checked} class="rounded border-border text-primary-600" />'
-        if col.field_type == "select":
-            option_text = _html.escape(str(value))
-            return (
-                f'<select {attrs} class="px-2 py-1 text-sm border rounded">'
-                f"{option_text}</select>"
+    def _build_pivot_input(
+        self,
+        column: PivotColumn,
+        value: Any,
+        *,
+        input_id: str,
+        error_id: str | None,
+    ) -> Element:
+        common: dict[str, Any] = {
+            "id": input_id,
+            "name": f"pivot_{column.name}",
+            "required": column.required,
+            "aria_invalid": "true" if error_id else None,
+            "aria_describedby": error_id,
+        }
+        if column.field_type == "checkbox":
+            return Element(
+                "input",
+                type="checkbox",
+                checked=bool(value),
+                class_="rounded border-border text-primary-600",
+                **common,
             )
-        field_type = _html.escape(str(col.field_type), quote=True)
-        escaped_value = _html.escape(str(value), quote=True)
-        return (
-            f'<input type="{field_type}" {attrs} value="{escaped_value}" '
-            f'class="px-2 py-1 text-sm border rounded w-full" />'
+        if column.field_type == "select":
+            text = str(value)
+            return Element(
+                "select",
+                Element("option", text, value=text, selected=True),
+                class_="px-2 py-1 text-sm border rounded",
+                **common,
+            )
+        return Element(
+            "input",
+            type=str(column.field_type),
+            value=str(value),
+            class_="px-2 py-1 text-sm border rounded w-full",
+            **common,
         )
 
     def render_column(self, record: Any, value: dict[str, Any] | None) -> Element:

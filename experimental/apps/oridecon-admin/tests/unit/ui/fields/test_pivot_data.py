@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 from oridecon.admin.schema import SchemaField
 from oridecon.admin.schema.belongs_to_many import BelongsToManyField
 from oridecon.admin.ui.fields.pivot_data import PivotColumn, PivotDataField, PivotTable
@@ -200,8 +202,7 @@ class TestPivotTable:
 
 
 class TestPivotInputEscaping:
-    """Pivot inputs are built as raw HTML strings — dynamic values must be
-    escaped before they cross into attribute/text context."""
+    """Pivot inputs keep dynamic values inside structured attribute/text nodes."""
 
     def _render(self, value: str, field_type: str = "text") -> str:
         field = PivotDataField(
@@ -243,3 +244,75 @@ class TestPivotInputEscaping:
         assert "&quot;" in html
         # The field type string remains inside the quoted attribute value
         assert 'type="text&quot; autofocus onfocus=&quot;x"' in html
+
+
+class TestPivotInputStructureAndAccessibility:
+    def _field(self, **kwargs: object) -> PivotDataField:
+        return PivotDataField(
+            name="pivot_data",
+            related_id="role-1",
+            pivot_columns=[
+                PivotColumn(name="role", label="Role", required=True),
+                PivotColumn(
+                    name="primary",
+                    label="Primary",
+                    field_type="checkbox",
+                ),
+            ],
+            **kwargs,
+        )
+
+    def test_labels_are_linked_to_scoped_inputs(self) -> None:
+        html = str(self._field().render_form({"role": "owner"}))
+
+        group_id = re.search(r'id="(oridecon-pivot-data-group-[^"]+)"', html)
+        role_id = re.search(
+            r'id="(oridecon-pivot-data-input-[^"]+)" name="pivot_role"', html
+        )
+
+        assert group_id is not None
+        assert role_id is not None
+        assert f'for="{role_id.group(1)}"' in html
+        assert "required" in html
+
+    def test_errors_are_linked_to_each_input(self) -> None:
+        html = str(self._field().render_form({}, errors=["Invalid pivot values"]))
+
+        error_id = re.search(r'id="(oridecon-pivot-data-error-[^"]+)"', html)
+
+        assert error_id is not None
+        assert 'aria-invalid="true"' in html
+        assert html.count(f'aria-describedby="{error_id.group(1)}"') == 2
+        assert "Invalid pivot values" in html
+
+    def test_checkbox_state_is_structured(self) -> None:
+        checked = str(self._field().render_form({"primary": True}))
+        unchecked = str(self._field().render_form({"primary": False}))
+
+        assert 'type="checkbox" checked' in checked
+        assert 'type="checkbox" checked' not in unchecked
+
+    def test_select_wraps_current_value_in_an_option(self) -> None:
+        field = PivotDataField(
+            name="pivot_data",
+            pivot_columns=[PivotColumn(name="role", label="Role", field_type="select")],
+        )
+
+        html = str(field.render_form({"role": "owner"}))
+
+        assert 'id="oridecon-pivot-data-input-' in html
+        assert 'name="pivot_role"' in html
+        assert '<option value="owner" selected>owner</option>' in html
+
+    def test_rendered_tree_has_no_legacy_raw_fragment(self) -> None:
+        rendered = self._field().render_form({"role": "owner"})
+
+        def descendants(node: object) -> list[object]:
+            if not isinstance(node, Element):
+                return [node]
+            values: list[object] = [node]
+            for child in node.children:
+                values.extend(descendants(child))
+            return values
+
+        assert all(type(node).__name__ != "RawHTML" for node in descendants(rendered))
