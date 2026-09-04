@@ -9,7 +9,7 @@ from typing import Any
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, Response
 
-from oridecon.admin.dashboard.content_renderer import render_content
+from oridecon.admin.dashboard.content_renderer import trusted_content
 from oridecon.admin.params import parse_widget_params
 from oridecon.contracts.admin.protocols import AdminContributorRegistryProtocol
 from oridecon.contracts.admin.types import WidgetContent
@@ -161,7 +161,7 @@ async def render_health_check_fragment(
     result = await contributor.render_health_check(resolved_check_name)
 
     if result.is_ok():
-        return HTMLResponse(render_content(result.unwrap()))
+        return HTMLResponse(str(trusted_content(result.unwrap())))
 
     error = result.unwrap_err()
     return Response(content=str(error), status_code=422)
@@ -173,9 +173,9 @@ def wrap_widget_body(
     error: str | None = None,
 ) -> str:
     """Wrap widget body in a container with optional error banner."""
-    from oridecon.ui.core.base import el, raw, render_to_string
+    from oridecon.ui.core.base import el, render_to_string
 
-    inner = render_content(content)
+    inner = trusted_content(content)
     children: list[object] = []
     if title:
         children.append(
@@ -193,7 +193,7 @@ def wrap_widget_body(
                 class_="text-xs text-destructive bg-destructive/10 rounded px-2 py-1 mb-2",
             )
         )
-    children.append(el("div", raw(inner), class_="widget-content"))
+    children.append(el("div", inner, class_="widget-content"))
     return render_to_string(el("div", *children, class_="widget-body-container"))
 
 

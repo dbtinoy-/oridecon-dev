@@ -9,9 +9,15 @@ from __future__ import annotations
 
 from starlette.responses import HTMLResponse
 
-from oridecon.admin.dashboard.content_renderer import render_content
+from oridecon.admin.dashboard.content_renderer import trusted_content
 from oridecon.contracts.admin.page_content import PageContent, PaginationContent
-from oridecon.ui import PageSizeSelector, PaginationLinks, el, raw, render_to_string
+from oridecon.ui import (
+    PageSizeSelector,
+    PaginationLinks,
+    el,
+    render_to_string,
+    trusted_html,
+)
 
 
 def _render_pagination(pagination: PaginationContent) -> str:
@@ -82,9 +88,14 @@ def render_page_content(
             standalone contributor settings panels; ordinary management
             pages leave it unset and retain their existing markup.
     """
-    body_html = render_content(content.body)
-    pagination_html = (
-        _render_pagination(content.pagination) if content.pagination else ""
+    body_node = trusted_content(content.body)
+    pagination_node = (
+        trusted_html(
+            _render_pagination(content.pagination),
+            source="admin PageContent pagination renderer",
+        )
+        if content.pagination
+        else ""
     )
     back_link = (
         el(
@@ -138,8 +149,8 @@ def render_page_content(
             el(
                 "div",
                 {"id": "table-data"},
-                raw(body_html),
-                raw(pagination_html),
+                body_node,
+                pagination_node,
             ),
         )
     )
