@@ -20,9 +20,14 @@ from oridecon.admin.middleware.security_headers import (
     resolve_report_only_csp,
 )
 from oridecon.admin.services.security.csp_reports import (
+    KNOWN_ALPINE_EVAL,
+    KNOWN_INLINE_SCRIPT,
+    KNOWN_INLINE_STYLE,
     MAX_REPORT_BODY_BYTES,
+    UNEXPECTED,
     CspReportEndpoint,
     CspReportStore,
+    classify_csp_violation,
     parse_csp_reports,
 )
 from oridecon.admin.settings.panel.models import DEFAULT_CSP, STRICT_CSP
@@ -151,7 +156,98 @@ class TestParser:
 # ---------------------------------------------------------------------------
 
 
+class TestClassification:
+    """Every report-only violation maps to a documented blocker or 'unexpected'.
+
+    These are the exact classes a developer sees in DevTools on any stock
+    admin page (docs/09-01-2026/14 §3, 30): the strict candidate omits
+    unsafe-inline/unsafe-eval, so Alpine's Function-compiled directives, the
+    shell's inline scripts, and inline styles all report.
+    """
+
+    def test_alpine_standard_build_eval(self) -> None:
+        report = {
+            "directive": "script-src",
+            "blocked_uri": "inline",
+            "source_file": "https://x/admin/static/js/alpine.min.js",
+        }
+        assert classify_csp_violation(report) == KNOWN_ALPINE_EVAL
+
+    def test_inline_script_block(self) -> None:
+        report = {
+            "directive": "script-src-elem",
+            "blocked_uri": "inline",
+            "source_file": "https://x/admin/",
+        }
+        assert classify_csp_violation(report) == KNOWN_INLINE_SCRIPT
+
+    def test_inline_style_element(self) -> None:
+        report = {
+            "directive": "style-src-elem",
+            "blocked_uri": "inline",
+            "source_file": "https://x/admin/",
+        }
+        assert classify_csp_violation(report) == KNOWN_INLINE_STYLE
+
+    def test_inline_style_attribute(self) -> None:
+        report = {
+            "directive": "style-src-attr",
+            "blocked_uri": "inline",
+            "source_file": "https://x/admin/",
+        }
+        assert classify_csp_violation(report) == KNOWN_INLINE_STYLE
+
+    def test_unexpected_directives_are_flagged(self) -> None:
+        report = {
+            "directive": "script-src",
+            "blocked_uri": "https://cdn.example/evil.js",
+            "source_file": "",
+        }
+        assert classify_csp_violation(report) == UNEXPECTED
+
+    def test_unexpected_document_uri_only(self) -> None:
+        report = {
+            "directive": "connect-src",
+            "blocked_uri": "https://cdn.example/api",
+            "source_file": "",
+        }
+        assert classify_csp_violation(report) == UNEXPECTED
+
+
 class TestStore:
+    def test_classifies_and_counts_known_vs_unexpected(self) -> None:
+        store = CspReportStore()
+        store.add(
+            {
+                "directive": "script-src",
+                "blocked_uri": "inline",
+                "source_file": "https://x/admin/static/js/alpine.min.js",
+            }
+        )
+        store.add(
+            {
+                "directive": "style-src-elem",
+                "blocked_uri": "inline",
+                "source_file": "https://x/admin/",
+            }
+        )
+        store.add(
+            {
+                "directive": "script-src",
+                "blocked_uri": "https://cdn.example/evil.js",
+                "source_file": "",
+            }
+        )
+
+        assert store.known_count == 2
+        assert store.unexpected_count == 1
+        classifications = {v.classification for v in store.list_violations()}
+        assert classifications == {
+            KNOWN_ALPINE_EVAL,
+            KNOWN_INLINE_STYLE,
+            UNEXPECTED,
+        }
+
     def test_dedupes_by_signature_and_counts(self):
         store = CspReportStore()
         report = {"directive": "script-src", "blocked_uri": "inline", "source_file": "x"}
@@ -238,6 +334,13 @@ class TestEndpoint:
         payload = json.loads(root.body)
         assert payload["total_received"] == 1
         assert payload["violations"][0]["directive"] == "script-src"
+        # Known-blocker breakdown lets the tab answer DevTools noise.
+        assert payload["summary"] == {
+            "distinct": 1,
+            "known_blockers": 1,
+            "unexpected": 0,
+        }
+        assert payload["violations"][0]["classification"] == KNOWN_INLINE_SCRIPT
 
 
 # ---------------------------------------------------------------------------

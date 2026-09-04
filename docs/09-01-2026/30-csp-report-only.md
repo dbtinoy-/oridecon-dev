@@ -145,3 +145,32 @@ audit); no real-browser validation of report delivery in this sandbox (no
 Playwright browsers) — wire formats covered by unit fixtures matching the CSP2/CSP3
 specs; enforcement flip and inline-code migration remain out of scope (doc 14 §3).
 
+
+## 5. Interpreting the DevTools console (what "report-only" noise means)
+
+With the strict candidate on by default, every stock admin page reports
+violations in the browser console. **These are expected and non-blocking**:
+the report-only header never stops a resource; the enforced
+`Content-Security-Policy` (which includes `'unsafe-inline' 'unsafe-eval'`)
+is what actually governs execution. The DevTools entries are the v2 work
+list. Exact message mapping (observed on `/admin/users`):
+
+| Console message | Classification | Roadmap item |
+| --- | --- | --- |
+| "settings would block an inline script (script-src-elem) … users:1056:5001" | `known-inline-script` | externalize shell inline `<script>` blocks → static assets |
+| "would block a JavaScript eval (script-src) … alpine.min.js" (can be tens of reports) | `known-alpine-eval` | swap vendored standard Alpine for the CSP build, register every directive expression via `Alpine.data` |
+| "Prevented too many CSP reports from being sent within a short period" | — (browser-side rate limit) | consequence of the eval flood; the server store still dedupes by signature |
+| "would block an inline style (style-src-elem)" / `style-src-attr` | `known-inline-style` | move inline `<style>`/`style=` (sticky offsets, dynamic widths) to classes / CSS custom properties |
+
+`CspReportStore` now classifies every collected signature as one of the
+three known blockers or `unexpected`; the Security Center → CSP tab shows
+the split (e.g. "3 distinct · 2 known blockers · 1 unexpected") and a
+banner explaining known blockers or warning when anything unexpected
+arrives. The JSON viewer (`/admin/security/csp-reports`) includes the same
+`summary` breakdown plus a per-violation `classification`.
+
+**Do not** silence this by loosening `STRICT_CSP` (a loosened candidate
+stops measuring the v2 goal) or by editing the default report-only
+setting without a documented reason. Operators who want a quiet console on
+dev machines can set `admin.security.csp_report_only = off`, and the
+Security Center tab will show "Report-only monitoring is disabled".

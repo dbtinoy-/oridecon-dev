@@ -32,6 +32,55 @@ MAX_REPORT_BODY_BYTES = 32 * 1024
 #: Maximum distinct violation signatures retained (oldest evicted).
 MAX_SIGNATURES = 200
 
+#: Violation class labels returned by :func:`classify_csp_violation`.
+KNOWN_ALPINE_EVAL = "known-alpine-eval"
+KNOWN_INLINE_SCRIPT = "known-inline-script"
+KNOWN_INLINE_STYLE = "known-inline-style"
+UNEXPECTED = "unexpected"
+
+_SCRIPT_DIRECTIVES = frozenset({"script-src", "script-src-elem"})
+_STYLE_DIRECTIVES = frozenset({"style-src", "style-src-elem", "style-src-attr"})
+
+#: Blocked-uri value browsers report for inline content.
+_INLINE_URI = "inline"
+
+_ALPINE_ASSET = "alpine.min.js"
+
+
+def classify_csp_violation(report: dict[str, Any]) -> str:
+    """Classify a normalized violation against the known CSP-v2 blockers.
+
+    The report-only candidate (``STRICT_CSP``) deliberately omits
+    ``'unsafe-inline'``/``'unsafe-eval'`` (docs/09-01-2026/14 §3, 30), so the
+    stock admin is expected to produce exactly three classes:
+
+    - ``known-alpine-eval`` — the vendored standard Alpine build compiles
+      directive expressions via the ``Function`` constructor;
+    - ``known-inline-script`` — shell/component inline ``<script>`` blocks;
+    - ``known-inline-style`` — inline ``<style>`` blocks and ``style=``
+      attributes (sticky offsets, dynamic widths).
+
+    Anything else is ``unexpected`` and should be investigated before the
+    report-only candidate is ever flipped to enforced.
+
+    Args:
+        report: A normalized violation dict (see ``_normalize``).
+
+    Returns:
+        One of the four class labels above.
+    """
+    directive = str(report.get("directive", ""))
+    blocked_uri = str(report.get("blocked_uri", ""))
+    source_file = str(report.get("source_file", ""))
+
+    if directive in _SCRIPT_DIRECTIVES and _ALPINE_ASSET in source_file:
+        return KNOWN_ALPINE_EVAL
+    if directive in _SCRIPT_DIRECTIVES and blocked_uri == _INLINE_URI:
+        return KNOWN_INLINE_SCRIPT
+    if directive in _STYLE_DIRECTIVES and blocked_uri == _INLINE_URI:
+        return KNOWN_INLINE_STYLE
+    return UNEXPECTED
+
 #: Content types accepted by the ingest endpoint. ``application/json`` is
 #: included for tooling/manual testing; browsers use the first two.
 _ACCEPTED_CONTENT_TYPES = (
@@ -118,6 +167,7 @@ class CspViolation:
     document_uri: str
     source_file: str
     line: str
+    classification: str = UNEXPECTED
     count: int = 1
     first_seen: str = field(
         default_factory=lambda: datetime.now(UTC).isoformat(timespec="seconds")
@@ -133,10 +183,16 @@ class CspViolation:
             "document_uri": self.document_uri,
             "source_file": self.source_file,
             "line": self.line,
+            "classification": self.classification,
             "count": self.count,
             "first_seen": self.first_seen,
             "last_seen": self.last_seen,
         }
+
+    @property
+    def is_known(self) -> bool:
+        """Return True when this violation matches a documented blocker."""
+        return self.classification != UNEXPECTED
 
 
 class CspReportStore:
@@ -171,6 +227,7 @@ class CspReportStore:
             document_uri=report.get("document_uri", ""),
             source_file=report.get("source_file", ""),
             line=report.get("line", ""),
+            classification=classify_csp_violation(report),
         )
         if len(self._by_signature) >= self._max:
             oldest = next(iter(self._by_signature))
@@ -183,6 +240,16 @@ class CspReportStore:
         return sorted(
             self._by_signature.values(), key=lambda v: v.count, reverse=True
         )
+
+    @property
+    def known_count(self) -> int:
+        """Number of distinct signatures matching a documented blocker."""
+        return sum(1 for v in self._by_signature.values() if v.is_known)
+
+    @property
+    def unexpected_count(self) -> int:
+        """Number of distinct signatures not matching a documented blocker."""
+        return sum(1 for v in self._by_signature.values() if not v.is_known)
 
 
 class CspReportEndpoint:
@@ -220,21 +287,30 @@ class CspReportEndpoint:
             return PlainTextResponse("Authentication required", status_code=401)
         if getattr(user, "is_superuser", False) is not True:
             return PlainTextResponse("Forbidden", status_code=403)
+        violations = self._store.list_violations()
         return JSONResponse(
             {
                 "total_received": self._store.total_received,
-                "violations": [
-                    v.as_dict() for v in self._store.list_violations()
-                ],
+                "summary": {
+                    "distinct": len(violations),
+                    "known_blockers": self._store.known_count,
+                    "unexpected": self._store.unexpected_count,
+                },
+                "violations": [v.as_dict() for v in violations],
             }
         )
 
 
 __all__ = [
+    "KNOWN_ALPINE_EVAL",
+    "KNOWN_INLINE_SCRIPT",
+    "KNOWN_INLINE_STYLE",
     "MAX_REPORT_BODY_BYTES",
     "MAX_SIGNATURES",
+    "UNEXPECTED",
     "CspReportEndpoint",
     "CspReportStore",
     "CspViolation",
+    "classify_csp_violation",
     "parse_csp_reports",
 ]

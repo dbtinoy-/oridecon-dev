@@ -29,6 +29,19 @@ STORE_UNAVAILABLE = (
     "reports are collected."
 )
 
+#: Text shown when every collected violation matches a documented blocker.
+ALL_KNOWN_STATE = (
+    "All reported violations match the documented CSP-v2 blockers "
+    "(inline script/style, Alpine eval). The enforced policy is unaffected; "
+    "see docs/09-01-2026/30 for the migration plan."
+)
+
+#: Text shown when at least one signature is not a documented blocker.
+UNEXPECTED_STATE = (
+    "Some violations do not match a documented blocker — investigate before "
+    "promoting the report-only candidate to enforced."
+)
+
 
 async def resolve_csp_policies(
     settings_store: Any,
@@ -217,6 +230,18 @@ def render_csp_violations_region(
         )
 
     violations = store.list_violations()
+    note = (
+        ALL_KNOWN_STATE
+        if violations and store.unexpected_count == 0
+        else UNEXPECTED_STATE
+        if store.unexpected_count
+        else EMPTY_STATE
+    )
+    note_tone = (
+        "text-muted-foreground"
+        if not store.unexpected_count
+        else "text-warning"
+    )
     return render_to_string(
         el(
             "div",
@@ -230,11 +255,14 @@ def render_csp_violations_region(
                 el(
                     "span",
                     f"{store.total_received} received · "
-                    f"{len(violations)} distinct",
+                    f"{len(violations)} distinct · "
+                    f"{store.known_count} known blockers · "
+                    f"{store.unexpected_count} unexpected",
                     class_="text-xs text-muted-foreground",
                 ),
                 class_="flex items-baseline justify-between",
             ),
+            el("p", note, class_=f"text-xs {note_tone}"),
             _violations_table(violations),
             id="security-csp-violations",
             data_testid="security-csp-violations-region",

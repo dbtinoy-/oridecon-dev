@@ -19,8 +19,10 @@ from starlette.requests import Request
 from oridecon.admin.controllers.security import SecurityController
 from oridecon.admin.services.security.csp_reports import CspReportStore
 from oridecon.admin.services.security.pages import (
+    ALL_KNOWN_STATE,
     EMPTY_STATE,
     STORE_UNAVAILABLE,
+    UNEXPECTED_STATE,
     render_csp_cards,
     render_csp_violations_region,
     resolve_csp_policies,
@@ -174,9 +176,38 @@ class TestViolationsRegion:
         store.add(dict(report))
         html = render_csp_violations_region(store, self.FRAGMENT_URL)
         assert "2 received · 1 distinct" in html
+        assert "1 known blockers · 0 unexpected" in html
         assert "script-src" in html
         assert "/admin/app.js:7" in html
         assert EMPTY_STATE not in html
+
+    def test_all_known_blockers_get_explanation(self):
+        store = CspReportStore()
+        store.add(
+            {
+                "directive": "script-src",
+                "blocked_uri": "inline",
+                "source_file": "/admin/static/js/alpine.min.js",
+            }
+        )
+        html = render_csp_violations_region(store, self.FRAGMENT_URL)
+        assert ALL_KNOWN_STATE in html
+        assert "1 known blockers · 0 unexpected" in html
+        assert UNEXPECTED_STATE not in html
+
+    def test_unexpected_violation_warns_before_flip(self):
+        store = CspReportStore()
+        store.add(
+            {
+                "directive": "script-src",
+                "blocked_uri": "https://cdn.example/evil.js",
+                "source_file": "",
+            }
+        )
+        html = render_csp_violations_region(store, self.FRAGMENT_URL)
+        assert UNEXPECTED_STATE in html
+        assert "0 known blockers · 1 unexpected" in html
+        assert ALL_KNOWN_STATE not in html
 
 
 # ---------------------------------------------------------------------------
