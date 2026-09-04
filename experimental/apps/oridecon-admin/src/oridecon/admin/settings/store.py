@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Collection
 from typing import TYPE_CHECKING, Any
 
 from oridecon.admin.settings.panel.registry import StoreBase
@@ -83,6 +84,42 @@ class TenantConfigStore(StoreBase):
             return
         for key, value in items.items():
             await self._service.set(tenant, key, value)
+
+    async def delete(self, key: str, tenant_id: str | None = None) -> None:
+        """Remove an explicit value so the declared default becomes effective."""
+        delete = getattr(self._service, "delete", None)
+        if not callable(delete):
+            raise NotImplementedError("This settings service cannot remove values")
+        await delete(tenant_id or self._tenant, key)
+
+    async def apply_many(
+        self,
+        items: dict[str, Any],
+        *,
+        delete_keys: Collection[str] = frozenset(),
+        expected: dict[str, Any] | None = None,
+        tenant_id: str | None = None,
+    ) -> None:
+        """Apply writes and removals through the service's combined operation."""
+        tenant = tenant_id or self._tenant
+        apply = getattr(self._service, "apply_many_if_unchanged", None)
+        if callable(apply):
+            await apply(
+                tenant,
+                items,
+                delete_names=delete_keys,
+                expected=expected,
+            )
+            return
+
+        # Compatibility path for services predating exact rollback support.
+        if expected is None:
+            if items:
+                await self.set_many(items, tenant_id=tenant)
+        elif items:
+            await self.set_many_if_unchanged(items, expected, tenant_id=tenant)
+        for key in delete_keys:
+            await self.delete(key, tenant_id=tenant)
 
     async def set_many_if_unchanged(
         self,

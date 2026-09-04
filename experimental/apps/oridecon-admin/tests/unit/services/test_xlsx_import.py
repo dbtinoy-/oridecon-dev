@@ -109,6 +109,7 @@ class TestXlsxParse:
 
     @pytest.mark.asyncio
     async def test_corrupt_file_is_a_clean_error(self) -> None:
+        pytest.importorskip("openpyxl")
         result = await _service().parse(
             b"this is not a zip archive", filename="products.xlsx"
         )

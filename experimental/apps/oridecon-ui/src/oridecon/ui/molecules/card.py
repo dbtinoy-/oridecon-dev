@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from oridecon.ui.atoms.button import Button
-from oridecon.ui.core.base import Component, el, raw, render_to_string
+from oridecon.ui.core.base import Component, el
 
 
 class Card(Component):
@@ -42,25 +42,19 @@ class Card(Component):
         # Header
         header = None
         if self.title:
-            title_content = self.title
-            if not hasattr(title_content, "__html__"):
-                title_content = str(title_content)
             header = el(
                 "div",
-                title_content,
+                self.title,
                 class_="px-6 py-4 border-b border-border font-semibold text-card-foreground card-header",
             )
 
-        # Body
-        body_content = self.content or ""
-        if not hasattr(body_content, "__html__"):
-            body_content = render_to_string(body_content)
-
-        # Add any children from Streamlit-style usage
-        if self.children:
-            body_content += "".join(render_to_string(c) for c in self.children)
-
-        body = el("div", raw(body_content), class_="px-6 py-4 card-body")
+        # Preserve structure until the Element boundary so text follows the
+        # same escaping policy whether supplied as content or as a child.
+        body_children = []
+        if self.content is not None:
+            body_children.append(self.content)
+        body_children.extend(self.children)
+        body = el("div", *body_children, class_="px-6 py-4 card-body")
 
         # Footer / Actions (for backward compatibility)
         footer_el = None
@@ -82,10 +76,9 @@ class Card(Component):
                         Button(str(a), color="primary", class_="mx-1"),
                     )
 
-            footer_content = raw("".join(render_to_string(c) for c in footer_children))
             footer_el = el(
                 "div",
-                footer_content,
+                *footer_children,
                 class_="px-6 py-4 bg-muted border-t border-border card-footer",
             )
 

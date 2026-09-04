@@ -172,4 +172,4 @@ class TestB28FrontendHelperExists:
         source = (
             _PKG_ROOT / "src/oridecon/admin/ui/layouts/admin_layout.py"
         ).read_text(encoding="utf-8")
-        assert "window.__lexigramCsrfToken" in source
+        assert "window.__orideconCsrfToken" in source

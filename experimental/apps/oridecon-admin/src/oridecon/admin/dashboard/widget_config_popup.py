@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from oridecon.admin.dashboard.widget_types import ConfigField
-from oridecon.ui import el
+from oridecon.ui import el, get_render_scope
 
 
 def render_widget_config_popup(
@@ -17,6 +17,8 @@ def render_widget_config_popup(
     admin_prefix: str = "/admin",
 ) -> str:
     """Render HTML for a widget config dialog."""
+    scope = get_render_scope().child("widget-config")
+    form_id = scope.id("form", key=widget_name)
     rows: list[Any] = [
         el(
             "label",
@@ -35,11 +37,17 @@ def render_widget_config_popup(
         if isinstance(f, dict):
             f = ConfigField(**f)
         value = current_values.get(f.name, f.default)
+        field_id = scope.id("field", key=f"{widget_name}-{f.name}")
         rows.append(
             el(
                 "div",
-                el("label", f.label, class_="block text-sm font-medium mb-1"),
-                _render_field_input(f, value),
+                el(
+                    "label",
+                    f.label,
+                    for_=field_id,
+                    class_="block text-sm font-medium mb-1",
+                ),
+                _render_field_input(f, value, input_id=field_id),
                 class_="mb-3",
             ),
         )
@@ -55,7 +63,7 @@ def render_widget_config_popup(
         "form",
         *rows,
         el("input", type_="hidden", name="widget_name", value=widget_name),
-        id=f"widget-config-form-{widget_name}",
+        id=form_id,
         **{
             "hx-post": config_endpoint,
             "hx-swap": "none",
@@ -81,7 +89,7 @@ def render_widget_config_popup(
                 "button",
                 "Save",
                 type_="submit",
-                form=f"widget-config-form-{widget_name}",
+                form=form_id,
                 class_="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/90 transition-colors",
             ),
         ],
@@ -89,54 +97,51 @@ def render_widget_config_popup(
 
 
 def _render_field_input(
-    field: ConfigField, current: Any, widget_name: str | None = None
-) -> str:
+    field: ConfigField,
+    current: Any,
+    widget_name: str | None = None,
+    *,
+    input_id: str | None = None,
+) -> Any:
+    """Build a structured widget setting input."""
     prefix = f"param__{widget_name}__" if widget_name else "param_"
+    common = {"id": input_id, "name": f"{prefix}{field.name}"}
     if field.type == "select" and field.options:
-        opts = [
-            el(
-                "option",
-                label,
-                value=str(val),
-                selected="selected" if val == current else None,
-            )
-            for val, label in field.options
-        ]
-        return str(
-            el(
-                "select",
-                *opts,
-                name=f"{prefix}{field.name}",
-                class_="w-full border rounded px-2 py-1 text-sm",
-            )
+        return el(
+            "select",
+            *[
+                el(
+                    "option",
+                    label,
+                    value=str(value),
+                    selected="selected" if value == current else None,
+                )
+                for value, label in field.options
+            ],
+            class_="w-full border rounded px-2 py-1 text-sm",
+            **common,
         )
     if field.type == "number":
-        return str(
-            el(
-                "input",
-                type_="number",
-                name=f"{prefix}{field.name}",
-                value=str(current) if current is not None else "",
-                class_="w-full border rounded px-2 py-1 text-sm",
-            )
-        )
-    if field.type == "boolean":
-        return str(
-            el(
-                "input",
-                type_="checkbox",
-                name=f"{prefix}{field.name}",
-                checked="checked" if current else None,
-            )
-        )
-    return str(
-        el(
+        return el(
             "input",
-            type_="text",
-            name=f"{prefix}{field.name}",
+            type_="number",
             value=str(current) if current is not None else "",
             class_="w-full border rounded px-2 py-1 text-sm",
+            **common,
         )
+    if field.type == "boolean":
+        return el(
+            "input",
+            type_="checkbox",
+            checked="checked" if current else None,
+            **common,
+        )
+    return el(
+        "input",
+        type_="text",
+        value=str(current) if current is not None else "",
+        class_="w-full border rounded px-2 py-1 text-sm",
+        **common,
     )
 
 

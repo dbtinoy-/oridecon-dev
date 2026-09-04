@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+import re
+
+import pytest
+
 from oridecon.admin.dashboard.widgets import WidgetRegistry
 from oridecon.contracts.admin import (
     DashboardWidgetDefinition,
@@ -9,9 +13,17 @@ from oridecon.contracts.admin import (
     WidgetKind,
     WidgetSize,
 )
+from oridecon.ui import TrustedHTML
 
 
 class TestWidgetRegistry:
+    def test_trusted_contributor_widgets_attributes_registry_markup(self) -> None:
+        rendered = WidgetRegistry().trusted_contributor_widgets([])
+
+        assert isinstance(rendered, TrustedHTML)
+        assert rendered.source == "structured admin contributor-widget card renderer"
+        assert "widget-empty-state" in rendered.value
+
     def test_render_contributor_widgets_empty(self) -> None:
         """Empty widget list returns styled empty state."""
         registry = WidgetRegistry()
@@ -37,6 +49,41 @@ class TestWidgetRegistry:
         result = registry.render_contributor_widgets([widget])
         assert "Test Widget" in result
         assert "widget-card" in result
+
+    def test_widget_dom_ids_are_scoped_normalized_and_stable(self) -> None:
+        widget = DashboardWidgetDefinition(
+            name="Sales / EU",
+            title="Sales",
+            contributor="test",
+            category=WidgetCategory.METRICS,
+            size=WidgetSize.SMALL,
+            render_endpoint="/admin/sales",
+            view_kind=WidgetKind.STAT,
+        )
+        registry = WidgetRegistry()
+
+        first = registry.render_contributor_widgets([widget])
+        second = registry.render_contributor_widgets([widget])
+        ids = re.findall(r' id="([^"]+)"', first)
+
+        assert first == second
+        assert ids
+        assert all(re.fullmatch(r"[a-z][a-z0-9-]*", value) for value in ids)
+        assert "Sales / EU" not in ids
+
+    def test_duplicate_widget_names_fail_before_emitting_duplicate_ids(self) -> None:
+        widget = DashboardWidgetDefinition(
+            name="sales",
+            title="Sales",
+            contributor="test",
+            category=WidgetCategory.METRICS,
+            size=WidgetSize.SMALL,
+            render_endpoint="/admin/sales",
+            view_kind=WidgetKind.STAT,
+        )
+
+        with pytest.raises(ValueError, match="Duplicate RenderScope ID"):
+            WidgetRegistry().render_contributor_widgets([widget, widget])
 
     def test_render_contributor_widgets_contributor_label(self) -> None:
         """Widget card includes contributor name and description."""
@@ -137,6 +184,27 @@ class TestWidgetRegistry:
         ]
         result = registry.render_contributor_widgets(widgets)
         assert result.count("new EventSource(") == 1
+
+    def test_live_event_source_serializes_the_admin_prefix(self) -> None:
+        widget = DashboardWidgetDefinition(
+            name="live-widget",
+            title="Live Widget",
+            contributor="test",
+            category=WidgetCategory.ACTIVITY,
+            size=WidgetSize.SMALL,
+            render_endpoint="/admin/test/live",
+            live_resource_types=("users",),
+            view_kind=WidgetKind.TABLE,
+        )
+        payload = "';</script><script>alert(1)</script>"
+        result = WidgetRegistry().render_contributor_widgets(
+            [widget],
+            admin_prefix=payload,
+        )
+
+        assert payload not in result
+        assert "\\u003c/script\\u003e" in result
+        assert result.count("<script>") == 2
 
     def test_render_contributor_widgets_no_live_resource_no_script(self) -> None:
         """A dashboard with only polling widgets emits no EventSource script."""

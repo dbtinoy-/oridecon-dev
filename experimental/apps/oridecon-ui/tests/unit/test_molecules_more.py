@@ -1,7 +1,6 @@
 """Tests for additional molecule components."""
-from __future__ import annotations
 
-import pytest
+from __future__ import annotations
 
 from oridecon.ui.molecules.form_actions import FormActions
 from oridecon.ui.molecules.input_group import InputGroup
@@ -96,6 +95,13 @@ class TestInputGroup:
         result = str(ig)
         assert "Email" in result
         assert "email" in result
+        assert 'type="text"' in result
+        assert "&lt;class &#x27;type&#x27;&gt;" not in result
+
+    def test_render_respects_input_type(self) -> None:
+        result = str(InputGroup(label="Email", name="email", input_type="email"))
+
+        assert 'type="email"' in result
 
     def test_render_with_prefix(self) -> None:
         ig = InputGroup(label="Price", name="price", prefix="$")

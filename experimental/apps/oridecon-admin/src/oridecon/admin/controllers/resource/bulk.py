@@ -64,6 +64,8 @@ class ResourceBulkMixin:
         html = render_bulk_delete_confirm(
             record_count=record_count,
             bulk_url=bulk_url,
+            record_ids=ids,
+            table_key=self.meta.name,
         )
         return HTMLResponse(html)
 
@@ -81,16 +83,21 @@ class ResourceBulkMixin:
         html = render_bulk_delete_confirm(
             record_count=record_count,
             bulk_url=bulk_url,
+            record_ids=ids,
             action="purge",
+            table_key=self.meta.name,
             title="Purge Records",
             heading="Confirm Bulk Purge",
             confirm_phrase="PURGE",
             subtitle=f"Purging {record_count} record{'s' if record_count != 1 else ''}",
             confirm_label="Purge",
-            message=(
-                f"You are about to permanently purge <strong>{record_count}</strong> "
-                f"record{'s' if record_count != 1 else ''}. "
-                "This action <strong>cannot be undone</strong>."
+            message=el(
+                "span",
+                "You are about to permanently purge ",
+                el("strong", str(record_count)),
+                f" record{'s' if record_count != 1 else ''}. This action ",
+                el("strong", "cannot be undone"),
+                ".",
             ),
         )
         return HTMLResponse(html)
@@ -109,15 +116,19 @@ class ResourceBulkMixin:
         html = render_bulk_delete_confirm(
             record_count=record_count,
             bulk_url=bulk_url,
+            record_ids=ids,
             action="restore",
+            table_key=self.meta.name,
             title="Restore Records",
             heading="Confirm Bulk Restore",
             confirm_phrase="RESTORE",
             subtitle=f"Restoring {record_count} record{'s' if record_count != 1 else ''}",
             confirm_label="Restore",
-            message=(
-                f"You are about to restore <strong>{record_count}</strong> "
-                f"soft-deleted record{'s' if record_count != 1 else ''}."
+            message=el(
+                "span",
+                "You are about to restore ",
+                el("strong", str(record_count)),
+                f" soft-deleted record{'s' if record_count != 1 else ''}.",
             ),
             variant="default",
             confirm_button_class=(
@@ -140,7 +151,9 @@ class ResourceBulkMixin:
             # Starlette's multipart form typing includes UploadFile, but this
             # field is intentionally an ID-only control. Reject non-string
             # values rather than coercing an uploaded file into an ID.
-            ids = [value for value in form_data.getlist("ids") if isinstance(value, str)]
+            ids = [
+                value for value in form_data.getlist("ids") if isinstance(value, str)
+            ]
 
             # R25: an export submitted with scope=filtered and no ids means
             # "export everything matching the current list view".

@@ -16,7 +16,6 @@ Pairing ``hx-select`` with ``hx-select-oob`` keeps those fragments.
 from __future__ import annotations
 
 import re
-from html import unescape
 
 import pytest
 
@@ -24,7 +23,12 @@ from oridecon.admin.ui.organisms.data_table.coordinator import DataTable
 from oridecon.ui import TableState, Zones, render_to_string
 from oridecon.ui.columns.types import TextColumn
 
-SELECT_ATTR = f'hx-select="{Zones.DATA.selector}"'
+TABLE_KEY = "/admin/users"
+DATA_ID = Zones.table_zone_id(Zones.DATA, table_key=TABLE_KEY)
+TOOLBAR_ID = Zones.table_zone_id(Zones.TOOLBAR, table_key=TABLE_KEY)
+SCOPE_TABS_ID = Zones.table_zone_id(Zones.SCOPE_TABS, table_key=TABLE_KEY)
+SELECT_ATTR = f'hx-select="#{DATA_ID}"'
+OOB_SELECTORS = [f"#{TOOLBAR_ID}-switchers", f"#{SCOPE_TABS_ID}"]
 
 
 def _table(**state_kwargs: object) -> DataTable:
@@ -59,7 +63,9 @@ class TestEverySelectIsPairedWithSelectOob:
 
     def test_no_control_narrows_the_swap_without_preserving_oob(self) -> None:
         unpaired = [
-            tag for tag in _tags_with_select(_full_render()) if "hx-select-oob" not in tag
+            tag
+            for tag in _tags_with_select(_full_render())
+            if "hx-select-oob" not in tag
         ]
 
         assert unpaired == []
@@ -90,10 +96,8 @@ class TestEverySelectIsPairedWithSelectOob:
 class TestSelectorsMatchTheServerResponse:
     """A selector that matches nothing preserves nothing."""
 
-    @pytest.mark.parametrize("selector", Zones.data_refresh_oob_select().split(","))
-    def test_each_selector_is_present_in_the_htmx_fragment(
-        self, selector: str
-    ) -> None:
+    @pytest.mark.parametrize("selector", OOB_SELECTORS)
+    def test_each_selector_is_present_in_the_htmx_fragment(self, selector: str) -> None:
         element_id = selector.strip().lstrip("#")
 
         assert f'id="{element_id}"' in _htmx_fragment()
@@ -101,9 +105,7 @@ class TestSelectorsMatchTheServerResponse:
     def test_fragment_actually_marks_those_elements_oob(self) -> None:
         fragment = _htmx_fragment()
 
-        assert fragment.count("hx-swap-oob") == len(
-            Zones.data_refresh_oob_select().split(",")
-        )
+        assert fragment.count("hx-swap-oob") == len(OOB_SELECTORS)
 
     def test_oob_fragments_sit_outside_the_selected_subtree(self) -> None:
         """If they were nested inside #table-data, hx-select would already
@@ -121,7 +123,7 @@ class TestSelectorsMatchTheServerResponse:
                 self, tag: str, attrs: list[tuple[str, str | None]]
             ) -> None:
                 attributes = dict(attrs)
-                if attributes.get("id") == Zones.DATA.id:
+                if attributes.get("id") == DATA_ID:
                     self.stack.append("DATA")
                 elif tag not in ("input", "img", "br", "hr", "meta", "link"):
                     self.stack.append(tag)
@@ -147,9 +149,7 @@ class TestDisabledControlsDropTheAttribute:
         from oridecon.ui.molecules.sort_switcher import SortSwitcher
 
         for module in (PaginationLinks, SortSwitcher):
-            source = __import__(
-                module.__module__, fromlist=["__file__"]
-            ).__file__
+            source = __import__(module.__module__, fromlist=["__file__"]).__file__
             assert source is not None
             text = open(source).read()  # noqa: SIM115, PTH123
             # Wherever hx_select is removed, hx_select_oob must go too.

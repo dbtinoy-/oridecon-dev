@@ -16,6 +16,7 @@ from oridecon.admin.actions.types import (
     ConfirmationConfig,
 )
 from oridecon.result import Err, Ok, Result
+from oridecon.ui import Zones
 
 
 class DeleteBulkAction(BulkAction):
@@ -44,7 +45,7 @@ class DeleteBulkAction(BulkAction):
             "hx-target": "#slide-over-container",
             "hx-swap": "innerHTML",
             "hx-push-url": "false",
-            "hx-include": "#oridecon-table [name='ids']:checked",
+            "hx-include": f"{Zones.TABLE.selector} [name='ids']:checked",
         }
 
     def confirm(self) -> ConfirmationConfig | None:
@@ -94,7 +95,7 @@ class PurgeBulkAction(BulkAction):
             "hx-target": "#slide-over-container",
             "hx-swap": "innerHTML",
             "hx-push-url": "false",
-            "hx-include": "#oridecon-table [name='ids']:checked",
+            "hx-include": f"{Zones.TABLE.selector} [name='ids']:checked",
         }
 
     def confirm(self) -> ConfirmationConfig | None:
@@ -153,7 +154,7 @@ class RestoreBulkAction(BulkAction):
             "hx-target": "#slide-over-container",
             "hx-swap": "innerHTML",
             "hx-push-url": "false",
-            "hx-include": "#oridecon-table [name='ids']:checked",
+            "hx-include": f"{Zones.TABLE.selector} [name='ids']:checked",
         }
 
     def confirm(self) -> ConfirmationConfig | None:

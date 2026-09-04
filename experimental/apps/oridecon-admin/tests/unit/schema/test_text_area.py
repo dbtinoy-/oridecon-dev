@@ -11,7 +11,7 @@ from oridecon.admin.schema import (
 )
 from oridecon.admin.schema import text_area as text_area_module
 from oridecon.result import Ok
-from oridecon.ui import Element
+from oridecon.ui import Element, TrustedHTML
 
 
 class TestTextAreaField:
@@ -219,8 +219,9 @@ class TestRichTextField:
 
     def test_vendored_trix_assets_exist(self) -> None:
         """The static files referenced by render_assets are shipped."""
-        import oridecon.admin as admin_pkg
         from pathlib import Path
+
+        import oridecon.admin as admin_pkg
 
         static = Path(admin_pkg.__file__).parent / "static"
         assert (static / "css" / "trix.css").is_file()
@@ -231,6 +232,15 @@ class TestRichTextField:
         field = RichTextField(name="content")
         output = str(field.render_column(None, "<p>Hello</p>"))
         assert "<p>Hello</p>" in output
+
+    def test_render_column_attributes_sanitized_html_provenance(self) -> None:
+        pytest.importorskip("nh3", reason="HTML sanitization requires nh3")
+        field = RichTextField(name="content")
+
+        rendered = field.render_column(None, "<p>Hello</p>")
+
+        assert isinstance(rendered.children[0], TrustedHTML)
+        assert rendered.children[0].source == "admin rich-text sanitizer"
 
     def test_render_column_sanitizes_script_tags(self) -> None:
         pytest.importorskip("nh3", reason="HTML sanitization requires nh3")

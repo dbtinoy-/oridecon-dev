@@ -24,7 +24,7 @@ from oridecon.admin.ui.organisms.table.views.tabular_rows import (
     extract_row_id,
     get_attr,
 )
-from oridecon.ui import Checkbox, DateColumn, HTMXAttrs, el
+from oridecon.ui import Checkbox, DateColumn, HTMXAttrs, Zones, el
 
 _MONTH_RE = re.compile(r"^(\d{4})-(\d{2})$")
 
@@ -420,7 +420,7 @@ class CalendarView(AbstractDataView):
         if prefix and self.config.bulk_actions and rid:
             select_node = Checkbox(
                 name="ids",
-                id=f"calendar-select-{rid}",
+                id=Zones.claim_table_id("calendar-select", key=rid),
                 value=rid,
                 x_model="selectedIds",
                 class_="flex-shrink-0 mt-0.5",

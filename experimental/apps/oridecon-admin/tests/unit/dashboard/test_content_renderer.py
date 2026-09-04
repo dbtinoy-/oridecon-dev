@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from oridecon.admin.dashboard.content_renderer import render_content
+from oridecon.admin.dashboard.content_renderer import render_content, trusted_content
 from oridecon.contracts.admin.health_payload import HealthCheckPayload
 from oridecon.contracts.admin.widget_content import (
     ChartContent,
@@ -18,6 +18,15 @@ from oridecon.contracts.admin.widget_content import (
     Tone,
 )
 from oridecon.contracts.core.health import HealthStatus
+from oridecon.ui import TrustedHTML
+
+
+def test_trusted_content_attributes_the_host_renderer() -> None:
+    rendered = trusted_content(MessageContent(text="All good"))
+
+    assert isinstance(rendered, TrustedHTML)
+    assert rendered.source == "structured admin WidgetContent renderer"
+    assert "All good" in rendered.value
 
 
 def test_render_content_message_includes_text_and_tone_class() -> None:

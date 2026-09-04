@@ -8,7 +8,7 @@ from oridecon.admin.config import TableConfiguration
 from oridecon.admin.resources.config import clone_table_configuration
 from oridecon.admin.ui.organisms.data_table.actions import ActionManager
 from oridecon.admin.ui.organisms.data_table.rendering import DataTableRenderer
-from oridecon.ui import Component, TableState
+from oridecon.ui import Component, TableState, Zones, get_render_scope, trusted_html
 
 
 class DataTable(Component):
@@ -39,6 +39,7 @@ class DataTable(Component):
         data_view: str | None = None,
         next_cursor: str | None = None,
         summary: dict[str, Any] | None = None,
+        table_key: str | None = None,
         **props,
     ) -> None:
         super().__init__(**props)
@@ -70,6 +71,14 @@ class DataTable(Component):
                 default_sort_order=sort_order or "asc",
                 per_page=max(1, per_page if per_page is not None else 20),
             )
+
+        self.table_key = (
+            table_key
+            or self.config.resource_name
+            or self.config.resource_prefix
+            or resource_prefix
+            or "table"
+        )
 
         # Resolve State. Config defaults are the source of truth when legacy
         # overrides are omitted, which keeps resource declarations effective
@@ -149,20 +158,24 @@ class DataTable(Component):
         )
 
     def render(self) -> Any:
-        """Render the data table using the modular renderer."""
-        renderer = DataTableRenderer(
-            data=self.data,
-            config=self.config,
-            state=self.state,
-            total=self.total,
-            user=self.user,
-            loading=self.loading,
-            error=self.error,
-            next_cursor=self.next_cursor,
-            summary=self.summary,
-            props=self.props,
-        )
-        return renderer.render()
+        """Render the table with stable, response-local zone identities."""
+        with Zones.table_scope(get_render_scope(), self.table_key):
+            renderer = DataTableRenderer(
+                data=self.data,
+                config=self.config,
+                state=self.state,
+                total=self.total,
+                user=self.user,
+                loading=self.loading,
+                error=self.error,
+                next_cursor=self.next_cursor,
+                summary=self.summary,
+                props=self.props,
+            )
+            return trusted_html(
+                renderer.render(),
+                source="structured admin DataTable renderer",
+            )
 
 
 __all__ = ["DataTable"]

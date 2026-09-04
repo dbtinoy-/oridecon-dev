@@ -3,19 +3,26 @@
 from __future__ import annotations
 
 from oridecon.ui.atoms.tooltip import Tooltip
-from oridecon.ui.molecules.tabs import Tabs
+from oridecon.ui.core.base import el
+from oridecon.ui.molecules.tabs import TabPanel, Tabs
 
 
 class TestTabsContainer:
     def test_tabs_container(self) -> None:
-        html = str(Tabs([("A", "a"), ("B", "b")]))
+        html = str(
+            Tabs(
+                [("A", "a"), ("B", "b")],
+                tabs_id="parity-tabs",
+                children=[TabPanel("a", "A panel"), TabPanel("b", "B panel")],
+            )
+        )
         assert 'role="tablist"' in html
         assert "bg-muted p-1 text-muted-foreground" in html
 
 
 class TestTooltipAria:
     def test_tooltip_aria(self) -> None:
-        html = str(Tooltip("More info"))
+        html = str(Tooltip("More info", el("button", "Help", id="help")))
         assert 'role="tooltip"' in html
 
 

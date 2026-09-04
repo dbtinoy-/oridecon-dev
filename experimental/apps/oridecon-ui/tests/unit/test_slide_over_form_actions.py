@@ -119,6 +119,6 @@ class TestSlideOverFormActions:
         )
         submits = _submits(html)
         assert len(submits) == 1
-        assert 'form="slide-over-form"' in submits[0]
-        assert 'id="slide-over-form"' in html
+        assert 'form="oridecon-slide-over-panel-1-form"' in submits[0]
+        assert 'id="oridecon-slide-over-panel-1-form"' in html
         assert "Cancel" in html

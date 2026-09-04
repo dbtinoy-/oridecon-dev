@@ -6,7 +6,7 @@ from typing import Any
 
 from oridecon.admin.schema.text import TextField
 from oridecon.security.sanitization.html import sanitize_html
-from oridecon.ui import Element, MarkdownEditor, RichEditor, TextArea, raw
+from oridecon.ui import Element, MarkdownEditor, RichEditor, TextArea, trusted_html
 
 
 def _sanitize_rich_text(value: str) -> str:
@@ -172,4 +172,10 @@ class RichTextField(TextAreaField):
     def render_column(self, record: Any, value: str | None) -> Element:
         if value is None:
             return Element("span", "\u2014", class_="text-muted")
-        return Element("div", raw(_sanitize_rich_text(value)))
+        return Element(
+            "div",
+            trusted_html(
+                _sanitize_rich_text(value),
+                source="admin rich-text sanitizer",
+            ),
+        )

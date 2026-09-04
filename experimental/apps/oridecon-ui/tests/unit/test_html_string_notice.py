@@ -14,13 +14,14 @@ debugging is on.
 from __future__ import annotations
 
 from collections.abc import Iterator
+import json  # noqa: TID251 - strict JS-literal assertions need stdlib decoding
 from typing import Any
 
 import pytest
 
-import oridecon.ui.core.base as base
 from oridecon.ui import render_to_string
 from oridecon.ui.columns.types import TextColumn
+from oridecon.ui.core import base
 from oridecon.ui.core.base import el, raw
 
 HTML_STRING = "<span class='badge'>Active</span>"
@@ -105,7 +106,7 @@ class TestDebugRendering:
 
         rendered = _cell(HTML_STRING)
 
-        assert "raw()/Markup" in rendered
+        assert "source-attributed TrustedHTML" in rendered
 
     def test_value_is_escaped_in_debug_too(self) -> None:
         _set_debug(True)
@@ -216,16 +217,12 @@ class TestCopyableClipboardInjection:
         ],
     )
     def test_cell_value_cannot_escape_the_handler(self, payload: str) -> None:
-        import json
-
         handler = self._click_handler(payload)
         literal = handler[len("navigator.clipboard.writeText(") : -1]
 
         assert json.loads(literal) == payload
 
     def test_apostrophe_still_copies_correctly(self) -> None:
-        import json
-
         handler = self._click_handler("O'Brien")
         literal = handler[len("navigator.clipboard.writeText(") : -1]
 

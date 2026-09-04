@@ -1,9 +1,17 @@
 """Tests for TableControlFragments OOB rendering."""
+
 from __future__ import annotations
 
-from oridecon.ui.columns.types import TextColumn
 from oridecon.admin.ui.organisms.data_table import DataTable
+from oridecon.ui import Zones
+from oridecon.ui.columns.types import TextColumn
 from oridecon.ui.core.base import render_to_string
+
+_TABLE_KEY = "/admin/users"
+
+
+def _zone_id(zone) -> str:
+    return Zones.table_zone_id(zone, table_key=_TABLE_KEY)
 
 
 def test_htmx_request_emits_switchers_oob() -> None:
@@ -16,7 +24,7 @@ def test_htmx_request_emits_switchers_oob() -> None:
     )
     html = render_to_string(dt)
     assert 'hx-swap-oob="outerHTML"' in html
-    assert "table-toolbar-switchers" in html
+    assert f"{_zone_id(Zones.TOOLBAR)}-switchers" in html
 
 
 def test_htmx_request_emits_scope_tabs_oob() -> None:
@@ -30,7 +38,7 @@ def test_htmx_request_emits_scope_tabs_oob() -> None:
     )
     html = render_to_string(dt)
     # Scope tabs should be rendered as an OOB element
-    assert 'id="table-scope-tabs"' in html
+    assert f'id="{_zone_id(Zones.SCOPE_TABS)}"' in html
     assert 'hx-swap-oob="outerHTML"' in html
 
 
@@ -54,7 +62,7 @@ def test_htmx_request_contains_data_zone() -> None:
         htmx_request=True,
     )
     html = render_to_string(dt)
-    assert 'id="table-data"' in html
+    assert f'id="{_zone_id(Zones.DATA)}"' in html
 
 
 def test_htmx_request_reflects_layout_state() -> None:

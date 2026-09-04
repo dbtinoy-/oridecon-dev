@@ -1,17 +1,21 @@
 """Tests for UI atoms/icons."""
 
+from collections.abc import Mapping
+
 import pytest
 
 from oridecon.ui.atoms import icons
+from oridecon.ui.core.base import Element
+from oridecon.ui.core.trusted_html import TrustedHTML
 
 
 class TestIcons:
     """Tests for icon system."""
 
-    def test_icons_dict_exists(self) -> None:
-        """Test ICONS dict exists."""
+    def test_icons_registry_exists(self) -> None:
+        """Test the public icon registry is a mapping."""
         assert hasattr(icons, "ICONS")
-        assert isinstance(icons.ICONS, dict)
+        assert isinstance(icons.ICONS, Mapping)
 
     def test_home_icon_exists(self) -> None:
         """Test home icon is defined."""
@@ -103,6 +107,13 @@ class TestGetIcon:
         result_str = str(result)
         assert "svg" in result_str
 
+    def test_builtin_svg_fragment_has_specific_provenance(self) -> None:
+        result = icons.get_icon("check")
+
+        assert isinstance(result, Element)
+        assert isinstance(result.children[0], TrustedHTML)
+        assert result.children[0].source == "built-in icon registry: check"
+
     def test_get_icon_with_additional_attrs(self) -> None:
         """Test additional attributes are passed through."""
         result = icons.get_icon("home", data_testid="home-icon")
@@ -142,5 +153,9 @@ class TestIconsDict:
 
     def test_icons_keys_are_strings(self) -> None:
         """Test all icon keys are strings."""
-        for name in icons.ICONS.keys():
+        for name in icons.ICONS:
             assert isinstance(name, str), f"Icon key {name} is not a string"
+
+    def test_registry_cannot_be_mutated_into_a_trusted_source(self) -> None:
+        with pytest.raises(TypeError):
+            icons.ICONS["untrusted"] = "<script>alert(1)</script>"  # type: ignore[index]

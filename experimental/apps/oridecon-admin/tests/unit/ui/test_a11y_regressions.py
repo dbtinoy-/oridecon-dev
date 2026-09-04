@@ -16,8 +16,8 @@ Covers the fixes from docs/09-01-2026/13-a11y-and-dead-handlers.md:
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
+import re
 
 SRC = Path(__file__).resolve().parents[3] / "src" / "oridecon" / "admin"
 
@@ -69,18 +69,20 @@ class TestCommandPaletteA11y:
         html = self._html()
         assert 'role="combobox"' in html
         assert 'aria-expanded="true"' in html
-        assert 'aria-controls="command-palette-options"' in html
+        options_id = re.search(r'<ul id="([^"]+)" role="listbox"', html)
+        assert options_id is not None
+        assert f'aria-controls="{options_id.group(1)}"' in html
         assert 'aria-autocomplete="list"' in html
         assert "aria-activedescendant" in html
         assert 'aria-label="Search commands and navigation"' in html
 
     def test_options_have_unique_bound_ids_and_selection_state(self) -> None:
         html = self._html()
-        assert 'id="command-palette-options"' in html
-        # el() HTML-escapes attribute values, so the single quotes in the
-        # Alpine :id binding render as &#x27;.
-        assert ":id=\"&#x27;command-palette-option-&#x27; + index\"" in html
-        assert ":aria-selected=" in html
+        options_id = re.search(r'<ul id="([^"]+)" role="listbox"', html)
+        assert options_id is not None
+        assert options_id.group(1).startswith("oridecon-command-palette-options-")
+        assert 'x-bind:id="&quot;oridecon-command-palette-option-' in html
+        assert 'x-bind:aria-selected="selectedIndex === index"' in html
         # The old static duplicate id must not come back.
         assert 'id="option-1"' not in html
 
@@ -90,6 +92,35 @@ class TestCommandPaletteA11y:
         assert 'aria-label="Command palette"' in html
         assert 'role="dialog"' in html
         assert 'aria-modal="true"' in html
+
+    def test_default_commands_do_not_assume_privileged_access(self) -> None:
+        html = self._html()
+
+        assert "Go to Dashboard" in html
+        assert "Toggle Dark Mode" in html
+        assert "Manage Users" not in html
+        assert '"label":"Settings"' not in html
+
+    def test_explicit_empty_command_list_stays_empty(self) -> None:
+        from oridecon.admin.ui.organisms.command_palette import CommandPalette
+
+        html = str(CommandPalette(commands=[]).render())
+
+        assert "Go to Dashboard" not in html
+        assert "Toggle Dark Mode" not in html
+
+
+def test_sidebar_overlay_uses_canonical_transition_directives() -> None:
+    from oridecon.admin.ui.templates.shell_sections import build_sidebar_container
+    from oridecon.ui import el
+
+    html = str(build_sidebar_container(el("nav", "Navigation")))
+
+    assert 'x-transition:enter="transition-opacity ease-linear duration-300"' in html
+    assert 'x-transition:enter-start="opacity-0"' in html
+    assert 'x-transition:leave-end="opacity-0"' in html
+    assert "x-transition-enter" not in html
+    assert "x-transition-leave" not in html
 
 
 def test_flash_close_buttons_are_labeled() -> None:
@@ -106,13 +137,14 @@ def test_flash_close_buttons_are_labeled() -> None:
 def test_table_views_render_unique_row_checkbox_ids() -> None:
     views = SRC / "ui" / "organisms" / "table" / "views"
     expected = {
-        "tabular_rows.py": 'id=f"row-select-{rid}"',
-        "grid.py": 'id=f"grid-select-{rid}"',
-        "stacked.py": 'id=f"stacked-select-{rid}"',
-        "calendar.py": 'id=f"calendar-select-{rid}"',
+        "tabular_rows.py": '"row-select"',
+        "grid.py": '"grid-select"',
+        "stacked.py": '"stacked-select"',
+        "calendar.py": '"calendar-select"',
     }
     for filename, marker in expected.items():
         source = (views / filename).read_text(encoding="utf-8")
+        assert "Zones.claim_table_id(" in source
         assert marker in source, (
             f"{filename}: row checkboxes must carry unique ids — every row "
             'previously rendered the duplicate id="ids"'
@@ -124,7 +156,9 @@ def test_result_counts_are_polite_live_regions() -> None:
         source = (SRC / rel).read_text(encoding="utf-8")
         showing = source.index('"Showing ",')
         window = source[max(0, showing - 600) : showing]
-        assert '"role": "status"' in window and '"aria-live": "polite"' in window, (
+        message = (
             f"{rel}: the 'Showing X to Y of Z' block must be a polite live "
             "region so HTMX swaps announce result changes"
         )
+        assert '"role": "status"' in window, message
+        assert '"aria-live": "polite"' in window, message

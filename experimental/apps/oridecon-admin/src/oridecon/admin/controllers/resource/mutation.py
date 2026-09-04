@@ -549,6 +549,7 @@ class ResourceMutationMixin:
         html = render_delete_confirm(
             record_label=record_label,
             delete_url=delete_url,
+            table_key=self.meta.name,
         )
         return HTMLResponse(html)
 

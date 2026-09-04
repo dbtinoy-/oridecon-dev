@@ -15,7 +15,7 @@ from oridecon.admin.ui.organisms.data_table.view_controls import (
     DATA_VIEWS,
     controls_for,
 )
-from oridecon.ui import TableState, render_to_string
+from oridecon.ui import TableState, Zones, render_to_string
 from oridecon.ui.columns.types import DateColumn, TextColumn
 
 _VIEWS = DATA_VIEWS
@@ -127,7 +127,8 @@ class TestAllViewsShareWorkingChrome:
         for view in _VIEWS:
             html = _html(view)
             assert 'name="search"' in html
-            assert 'id="table-search"' in html
+            search_id = Zones.table_zone_id(Zones.SEARCH, table_key="people")
+            assert f'id="{search_id}"' in html
 
     def test_filters_present_on_every_view(self) -> None:
         for view in _VIEWS:

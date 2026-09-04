@@ -208,7 +208,7 @@ class LocalProgressTracker:
         self,
         task_id: str,
         result: str = "",
-        metadata: dict[str, Any] | None = None,
+        metadata: Mapping[str, object] | None = None,
     ) -> None:
         existing = self._snapshots.get(task_id)
         await self._publish(
@@ -226,7 +226,7 @@ class LocalProgressTracker:
         self,
         task_id: str,
         error: str,
-        metadata: dict[str, Any] | None = None,
+        metadata: Mapping[str, object] | None = None,
     ) -> None:
         existing = self._snapshots.get(task_id)
         await self._publish(

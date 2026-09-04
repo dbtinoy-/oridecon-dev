@@ -23,7 +23,7 @@ from oridecon.admin.engine.renderer import AdminRenderer
 from oridecon.contracts.admin.types import PageFilterField, WidgetSize
 from oridecon.contracts.web import get
 from oridecon.di.decorators import inject
-from oridecon.ui import el
+from oridecon.ui import RenderScope, el, get_render_scope, js_string, trusted_html
 
 # Request-scoped in-memory dict, isolated per async context.
 _request_cache_var: contextvars.ContextVar[dict[str, Any] | None] = (
@@ -38,6 +38,164 @@ def _get_request_cache() -> dict[str, Any]:
     """Return the request-scoped cache dict for the current async context."""
     cache = _request_cache_var.get()
     return cache if cache is not None else {}
+
+
+def _dashboard_dnd_nodes(
+    *,
+    scope: RenderScope,
+    dashboard_key: str,
+    grid_id: str,
+    reorder_url: str,
+    csrf_token: str,
+) -> tuple[Any, Any]:
+    """Build scoped layout controls and their generated client controller."""
+    controls_id = scope.id("dnd-controls", key=dashboard_key)
+    status_id = scope.id("layout-status", key=dashboard_key)
+    save_id = scope.id("save-layout", key=dashboard_key)
+    controls = el(
+        "div",
+        el(
+            "span",
+            id=status_id,
+            role="status",
+            aria_live="polite",
+            class_="text-xs text-muted-foreground",
+        ),
+        el(
+            "button",
+            el("span", "✦", aria_hidden=True),
+            " Save layout",
+            id=save_id,
+            type="button",
+            class_=(
+                "hidden inline-flex items-center gap-2 rounded-lg border "
+                "border-primary/20 bg-primary/10 px-3 py-2 text-sm font-medium "
+                "text-primary transition hover:bg-primary/15 "
+                "focus-visible:outline-none focus-visible:ring-2 "
+                "focus-visible:ring-ring focus-visible:ring-offset-2"
+            ),
+        ),
+        id=controls_id,
+        data_csrf_token=csrf_token,
+        class_=("dashboard-dnd-controls mt-1 flex items-center justify-end gap-3"),
+    )
+    script = f"""
+(function() {{
+  var controllerKey = {js_string(controls_id)};
+  var registry = window.__orideconDashboardControllers;
+  if (!(registry instanceof Map)) {{
+    registry = window.__orideconDashboardControllers = new Map();
+  }}
+  var previous = registry.get(controllerKey);
+  if (previous) previous.destroy();
+
+  var grid = null;
+  var saveBtn = document.getElementById({js_string(save_id)});
+  var status = document.getElementById({js_string(status_id)});
+  var controls = document.getElementById({js_string(controls_id)});
+  var sortableInstance = null;
+  var saveRequest = null;
+  var destroyed = false;
+  var controller = {{destroy: destroy}};
+
+  function setStatus(message) {{
+    if (status && status.isConnected) status.textContent = message || '';
+  }}
+
+  function initSortable() {{
+    if (destroyed) return;
+    var nextGrid = document.getElementById({js_string(grid_id)});
+    if (nextGrid !== grid) {{
+      if (sortableInstance) sortableInstance.destroy();
+      sortableInstance = null;
+      grid = nextGrid;
+    }}
+    if (!grid || sortableInstance || typeof Sortable === 'undefined') return;
+    sortableInstance = new Sortable(grid, {{
+      animation: 150,
+      handle: '.widget-card',
+      onEnd: function() {{
+        if (saveBtn) saveBtn.classList.remove('hidden');
+        setStatus('Layout changed');
+      }}
+    }});
+  }}
+
+  async function saveLayout() {{
+    initSortable();
+    if (!sortableInstance || !grid || !saveBtn) return;
+    var order = Array.from(grid.querySelectorAll('.widget-card')).map(function(card) {{
+      return card.dataset.widgetName;
+    }});
+    if (saveRequest) saveRequest.abort();
+    var request = new AbortController();
+    saveRequest = request;
+    saveBtn.disabled = true;
+    setStatus('Saving layout…');
+    try {{
+      var csrf = controls ? controls.dataset.csrfToken || '' : '';
+      var resp = await fetch({js_string(reorder_url)}, {{
+        method: 'POST',
+        headers: {{'Content-Type': 'application/json', 'X-CSRF-Token': csrf}},
+        body: JSON.stringify({{order: order}}),
+        signal: request.signal
+      }});
+      if (!resp.ok) throw new Error('save_failed');
+      if (saveRequest === request) {{
+        saveBtn.classList.add('hidden');
+        setStatus('Layout saved');
+      }}
+    }} catch (error) {{
+      if (error.name !== 'AbortError' && saveRequest === request) {{
+        setStatus('Could not save layout. Try again.');
+      }}
+    }} finally {{
+      if (saveRequest === request) {{
+        saveRequest = null;
+        if (saveBtn.isConnected) saveBtn.disabled = false;
+      }}
+    }}
+  }}
+
+  function afterSwap() {{
+    if (!controls || !controls.isConnected) {{
+      destroy();
+      return;
+    }}
+    initSortable();
+  }}
+
+  function beforeCleanup(event) {{
+    var target = event.detail && event.detail.elt || event.target;
+    if (target && controls && (target === controls ||
+        (typeof target.contains === 'function' && target.contains(controls)))) destroy();
+  }}
+
+  function destroy() {{
+    if (destroyed) return;
+    destroyed = true;
+    document.body.removeEventListener('htmx:afterSwap', afterSwap);
+    document.body.removeEventListener('htmx:beforeCleanupElement', beforeCleanup);
+    window.removeEventListener('pagehide', destroy);
+    if (saveBtn) saveBtn.removeEventListener('click', saveLayout);
+    if (saveRequest) saveRequest.abort();
+    if (sortableInstance) sortableInstance.destroy();
+    if (registry.get(controllerKey) === controller) registry.delete(controllerKey);
+  }}
+
+  registry.set(controllerKey, controller);
+  document.body.addEventListener('htmx:afterSwap', afterSwap);
+  document.body.addEventListener('htmx:beforeCleanupElement', beforeCleanup);
+  window.addEventListener('pagehide', destroy, {{once: true}});
+  if (saveBtn) saveBtn.addEventListener('click', saveLayout);
+  initSortable();
+}})();
+"""
+    script_node = el(
+        "script",
+        trusted_html(script, source="generated dashboard layout controller"),
+    )
+    return controls, script_node
 
 
 @inject
@@ -75,8 +233,6 @@ class DashboardController(AdminController):
     @get("/")
     async def index(self, request: Request) -> HTMLResponse:
         """Render the main dashboard overview."""
-        from html import escape
-
         from oridecon.admin.ui.organisms.dashboard.widgets import (
             ActivityFeed,
             ActivityItem,
@@ -85,7 +241,6 @@ class DashboardController(AdminController):
             StatCardGrid,
             SystemHealthWidget,
         )
-        from oridecon.ui.core.base import raw
 
         await self._ensure_csrf_token(request)
         dashboard_id = request.query_params.get("id", "default")
@@ -159,25 +314,28 @@ class DashboardController(AdminController):
         if custom_order:
             contributor_widgets.sort(key=lambda w: custom_order.get(w.name, w.order))
 
+        dashboard_scope = get_render_scope().child("dashboard")
+        grid_id = dashboard_scope.id("grid", key=dashboard_id)
+
         if contributor_widgets and self.widget_registry is not None:
             # Render HTMX lazy-load widget cards via the registry, annotating
             # each fetch URL with the current page filter values
-            rendered_html = self.widget_registry.render_contributor_widgets(
+            contributor_markup = self.widget_registry.trusted_contributor_widgets(
                 contributor_widgets,
                 page_filters=filter_state,
                 admin_prefix=admin_prefix,
             )
             widgets_section = el(
                 "div",
-                raw(rendered_html),
-                id="dashboard-grid",
+                contributor_markup,
+                id=grid_id,
                 class_="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4",
             )
         elif contributor_widgets and self.widget_registry is None:
             # Fallback: basic title rendering when no registry is available
-            rendered_widgets: list[Any] = []
+            fallback_widgets: list[Any] = []
             for w in contributor_widgets:
-                rendered_widgets.append(
+                fallback_widgets.append(
                     el(
                         "div",
                         el("h3", w.title, class_="font-semibold"),
@@ -186,7 +344,8 @@ class DashboardController(AdminController):
                 )
             widgets_section = el(
                 "div",
-                *rendered_widgets,
+                *fallback_widgets,
+                id=grid_id,
                 class_="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4",
             )
         else:
@@ -264,85 +423,21 @@ class DashboardController(AdminController):
                 ),
                 chart_row,
                 bottom_row,
+                id=grid_id,
                 class_="space-y-6",
             )
 
-        # SortableJS drag-and-drop controls + widget config helpers
-        dnd_html = raw(
-            """
-<div id="dashboard-dnd-controls" class="dashboard-dnd-controls mt-1 flex items-center justify-end gap-3" data-csrf-token="__LEXIGRAM_CSRF_TOKEN__">
-  <span id="dashboard-layout-status" class="text-xs text-muted-foreground" role="status" aria-live="polite"></span>
-  <button id="save-layout-btn" type="button"
-          class="hidden inline-flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/10 px-3 py-2 text-sm font-medium text-primary transition hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-    <span aria-hidden="true">✦</span> Save layout
-  </button>
-</div>
-<script>
-(function() {
-  var grid = document.getElementById('dashboard-grid');
-  var saveBtn = document.getElementById('save-layout-btn');
-  var status = document.getElementById('dashboard-layout-status');
-  var sortableInstance = null;
-
-  function setStatus(message) {
-    if (status) status.textContent = message || '';
-  }
-
-  function initSortable() {
-    grid = document.getElementById('dashboard-grid');
-    if (!grid || sortableInstance || typeof Sortable === 'undefined') return;
-    sortableInstance = new Sortable(grid, {
-      animation: 150,
-      handle: '.widget-card',
-      onEnd: function() {
-        if (saveBtn) saveBtn.classList.remove('hidden');
-        setStatus('Layout changed');
-      }
-    });
-  }
-
-  initSortable();
-  if (!window.__adminDashboardListeners) {
-    window.__adminDashboardListeners = 1;
-    document.body.addEventListener('htmx:afterSwap', initSortable);
-    document.body.addEventListener('htmx:afterSwap', function(e) {
-      var t = e.detail && e.detail.target;
-      if (t && window.htmx) { try { htmx.process(t); } catch (err) {} }
-    });
-  }
-
-  if (saveBtn) {
-    saveBtn.addEventListener('click', async function() {
-      if (!sortableInstance) return;
-      var order = Array.from(grid.querySelectorAll('.widget-card')).map(function(card) {
-        return card.dataset.widgetName;
-      });
-      saveBtn.disabled = true;
-      setStatus('Saving layout…');
-      try {
-        var csrf = document.getElementById('dashboard-dnd-controls').dataset.csrfToken || '';
-        var resp = await fetch('/admin/core/widgets/reorder', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json', 'X-CSRF-Token': csrf},
-          body: JSON.stringify({order: order})
-        });
-        if (!resp.ok) throw new Error('save_failed');
-        saveBtn.classList.add('hidden');
-        setStatus('Layout saved');
-      } catch(e) {
-        setStatus('Could not save layout. Try again.');
-      } finally {
-        saveBtn.disabled = false;
-      }
-    });
-  }
-})();
-</script>
-""".replace(
-                "/admin/core/widgets/reorder",
-                f"{admin_prefix}/core/widgets/reorder",
-            ).replace("__LEXIGRAM_CSRF_TOKEN__", escape(csrf_token))
-        )
+        # Drag-and-drop only applies to contributor cards, which are direct
+        # grid children with stable ``data-widget-name`` identities.
+        dnd_nodes: tuple[Any, ...] = ()
+        if contributor_widgets and self.widget_registry is not None:
+            dnd_nodes = _dashboard_dnd_nodes(
+                scope=dashboard_scope,
+                dashboard_key=dashboard_id,
+                grid_id=grid_id,
+                reorder_url=f"{admin_prefix}/core/widgets/reorder",
+                csrf_token=csrf_token,
+            )
 
         customize_btn = el(
             "button",
@@ -413,7 +508,7 @@ class DashboardController(AdminController):
             dashboard_header,
             filter_form,
             widgets_section,
-            dnd_html,
+            *dnd_nodes,
             class_="dashboard-view dashboard-page space-y-6",
         )
 

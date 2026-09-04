@@ -8,7 +8,7 @@ from oridecon.admin.ui.organisms.table.views.tabular_rows import (
     extract_row_id,
     get_attr,
 )
-from oridecon.ui import Checkbox, el
+from oridecon.ui import Checkbox, Zones, el
 
 
 class StackedView(AbstractDataView):
@@ -29,7 +29,10 @@ class StackedView(AbstractDataView):
                         "div",
                         Checkbox(
                             name="ids",
-                            id=f"stacked-select-{rid}",
+                            id=Zones.claim_table_id(
+                                "stacked-select",
+                                key=f"{_}-{rid}",
+                            ),
                             value=rid,
                             x_model="selectedIds",
                             aria_label=f"Select {rid}",
@@ -154,7 +157,7 @@ class StackedView(AbstractDataView):
         if next_cursor and self.config.resource_prefix:
             from urllib.parse import urlencode
 
-            from oridecon.ui import InfiniteScrollTrigger, Zones
+            from oridecon.ui import InfiniteScrollTrigger
 
             params = {**self.state.to_query_params(), "cursor": next_cursor}
             next_url = f"{self.config.resource_prefix}/?{urlencode(params, doseq=True)}"

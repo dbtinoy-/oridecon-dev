@@ -1,5 +1,6 @@
-from oridecon.ui.columns.types import TextColumn
 from oridecon.admin.ui.organisms.data_table import DataTable
+from oridecon.ui import Zones
+from oridecon.ui.columns.types import TextColumn
 
 
 def test_layout_switcher_and_attrs():
@@ -19,8 +20,9 @@ def test_layout_switcher_and_attrs():
     assert "layout-switcher" in out
     # Buttons render as ActionButton content (icon buttons should be present)
     assert "aria-pressed" in out or "svg" in out
-    # Layout buttons target the root container (for full table re-render on layout change)
-    assert 'hx-target="#oridecon-table"' in out
+    # Layout buttons target this instance's root for a full table refresh.
+    table_id = Zones.table_zone_id(Zones.TABLE, table_key="/admin/users")
+    assert f'hx-target="#{table_id}"' in out
     # Buttons should use baked URL approach, not hx-include
     assert 'hx-params="none"' in out
 

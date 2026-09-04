@@ -39,6 +39,28 @@ def test_button_renders_as_link_with_as_child():
     assert "btn" not in html  # Button's class should not appear
 
 
+def test_as_child_clones_before_merging_parent_props():
+    """Polymorphic rendering must not mutate or contaminate a reused child."""
+    link = Link("click me", title="child title")
+    original_props = dict(link.props)
+    original_children = list(link.children)
+
+    html = Button(
+        as_child=True,
+        children=[link],
+        title="parent title",
+        data_source="first-parent",
+    ).__html__()
+
+    assert 'title="child title"' in html
+    assert 'data-source="first-parent"' in html
+    assert link.props == original_props
+    assert link.children == original_children
+
+    reused = Button(as_child=True, children=[link]).__html__()
+    assert "data-source" not in reused
+
+
 def test_as_child_falls_back_to_normal_render():
     """Without as_child, button renders normally."""
     btn = Button("save")
@@ -48,11 +70,11 @@ def test_as_child_falls_back_to_normal_render():
 
 
 def test_as_child_with_slot():
-    """Slot child renders its content directly."""
-    slot = Slot("raw text")
+    """Slot child delegates one typed element without flattening it."""
+    slot = Slot(el("a", "Open", href="/details"), class_name="slotted")
     btn = Button(as_child=True, children=[slot])
     html = btn.__html__()
-    assert html == "raw text"
+    assert html == '<a href="/details" class="slotted">Open</a>'
 
 
 def test_as_child_with_no_children():

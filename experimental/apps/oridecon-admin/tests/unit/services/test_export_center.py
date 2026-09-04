@@ -219,9 +219,7 @@ class TestCreateExport:
     async def test_creates_owned_job_and_redirects(self, tmp_path):
         perms = _AllowPermissions(True)
         center, service, _ = make_center(tmp_path, permission_service=perms)
-        req = make_request(
-            make_user("u1"), form={"resource": "items", "format": "xlsx"}
-        )
+        req = make_request(make_user("u1"), form={"resource": "items", "format": "csv"})
         resp = await center.create(req)
         assert resp.status_code == 303
         assert resp.headers["location"] == "/admin/exports"
@@ -229,7 +227,7 @@ class TestCreateExport:
         jobs = service.list_jobs()
         assert len(jobs) == 1
         assert jobs[0].user_id == "u1"
-        assert jobs[0].format is ExportFormat.EXCEL
+        assert jobs[0].format is ExportFormat.CSV
         assert perms.calls[-1][1] == "items"
 
     @pytest.mark.asyncio

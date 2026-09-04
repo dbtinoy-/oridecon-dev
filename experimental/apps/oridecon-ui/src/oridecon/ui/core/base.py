@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
+from contextvars import ContextVar, Token
+from copy import copy
 import html
 import importlib
 import re
@@ -10,8 +12,49 @@ from typing import Any, Self, cast
 from markupsafe import Markup
 
 from oridecon.logging import get_logger
+from oridecon.ui.core.render_context import ensure_render_context, get_render_context
+from oridecon.ui.core.trusted_html import TrustedHTML
 
 logger = get_logger(__name__)
+
+_ALPINE_ARGUMENT_RE = re.compile(r"^[a-z][a-z0-9:_-]*$")
+_ALPINE_MODIFIER_RE = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
+_ALPINE_COLON_FAMILIES = ("x-on", "x-bind", "x-transition")
+
+
+def _validate_alpine_attribute_name(name: str) -> None:
+    """Reject Alpine spellings that browsers retain but Alpine ignores."""
+    if not name.startswith("x-"):
+        return
+    if name != name.lower():
+        raise ValueError(f"Alpine attribute names must be lowercase: {name!r}")
+    if "--" in name:
+        raise ValueError(f"Malformed Alpine attribute name: {name!r}")
+
+    for family in _ALPINE_COLON_FAMILIES:
+        if name.startswith(f"{family}-"):
+            raise ValueError(
+                f"Malformed Alpine attribute {name!r}; use {family}:<argument>"
+            )
+        if name.startswith(f"{family}:"):
+            directive, *modifiers = name[len(family) + 1 :].split(".")
+            if not _ALPINE_ARGUMENT_RE.fullmatch(directive):
+                raise ValueError(f"Invalid Alpine directive argument in {name!r}")
+            if any(
+                not _ALPINE_MODIFIER_RE.fullmatch(item) for item in modifiers
+            ) or len(set(modifiers)) != len(modifiers):
+                raise ValueError(f"Invalid Alpine directive modifiers in {name!r}")
+            return
+
+    if name in {"x-on", "x-bind"} or name.startswith(("x-on.", "x-bind.")):
+        raise ValueError(f"Alpine attribute {name!r} requires a directive argument")
+    if name.startswith("x-transition."):
+        modifiers = name.removeprefix("x-transition.").split(".")
+        if any(not _ALPINE_MODIFIER_RE.fullmatch(item) for item in modifiers) or len(
+            set(modifiers)
+        ) != len(modifiers):
+            raise ValueError(f"Invalid Alpine transition modifiers in {name!r}")
+
 
 # Prefer a real `htpy` module when available, but tolerate environments
 # without it (tests, minimal installs). We expose an `el` factory that
@@ -24,11 +67,44 @@ except ImportError:  # pragma: no cover - networks / minimal envs
     _htpy = None  # type: ignore[assignment]
 
 
-def _is_htpy_element(el: Any) -> bool:
-    # Only consider objects that provide an explicit HTML conversion
-    # method (``__html__``). Components also implement ``render`` so
-    # checking for ``render`` would misclassify them as htpy elements.
-    return hasattr(el, "__html__")
+def _load_htpy_structure_types() -> tuple[type[Any], ...]:
+    """Load the concrete public htpy node types supported by this adapter.
+
+    Trust is based on library types, never on an object's module name or the
+    mere presence of ``__html__``. Dynamic lookup keeps htpy optional and lets
+    older supported releases omit node categories they do not expose.
+    """
+    if _htpy is None:
+        return ()
+    candidates = (
+        getattr(_htpy, name, None)
+        for name in ("BaseElement", "Fragment", "ContextConsumer", "ContextProvider")
+    )
+    return tuple(candidate for candidate in candidates if isinstance(candidate, type))
+
+
+_HTPY_STRUCTURE_TYPES = _load_htpy_structure_types()
+
+
+def _is_html_structure(value: Any) -> bool:
+    """Return whether ``value`` has an explicitly supported HTML provenance."""
+    return isinstance(
+        value,
+        (Element, RawHTML, TrustedHTML, *_HTPY_STRUCTURE_TYPES),
+    )
+
+
+def _declared_renderer(value: Any) -> Callable[[], Any] | None:
+    """Return a render method declared by the value's concrete type.
+
+    Instance-level ``__getattr__`` fallbacks (notably mocks) must not create an
+    accidental render protocol: calling a dynamically fabricated ``render``
+    can recurse forever and bypass the typed structure boundary.
+    """
+    if not callable(getattr(type(value), "render", None)):
+        return None
+    renderer = value.render
+    return renderer if callable(renderer) else None
 
 
 class Element:
@@ -68,7 +144,7 @@ class Element:
         add_child_to_current(self)
 
     def __enter__(self) -> Self:
-        _context_stack.append(self)
+        _enter_composition_context(self)
         return self
 
     def __exit__(
@@ -77,10 +153,13 @@ class Element:
         exc: BaseException | None,
         tb: TracebackType | None,
     ) -> None:
-        if _context_stack and _context_stack[-1] is self:
-            _context_stack.pop()
+        _exit_composition_context(self)
 
     def __html__(self) -> str:
+        if get_render_context() is None:
+            with ensure_render_context():
+                return self.__html__()
+
         parts: list[str] = [f"<{self.tag}"]
         for k, v in self.attrs.items():
             # Map pythonic kwarg names like `class_` to `class`, `for_` to `for`,
@@ -92,6 +171,8 @@ class Element:
                 attr_name = k[:-1]
             else:
                 attr_name = k.replace("_", "-")
+
+            _validate_alpine_attribute_name(attr_name)
 
             if v is True:
                 parts.append(f" {attr_name}")
@@ -116,18 +197,13 @@ class Element:
         return self.__html__()
 
 
-class RawHTML:
-    """Wrapper for raw HTML strings that should be included verbatim.
+class RawHTML(TrustedHTML):
+    """Compatibility wrapper for the legacy unattributed ``raw()`` API."""
 
-    Instances implement ``__html__`` so they are detected as htpy-like
-    elements and their contents are not escaped when inserted as children.
-    """
+    __slots__ = ()
 
     def __init__(self, value: str) -> None:
-        self.value = value
-
-    def __html__(self) -> str:
-        return str(self.value)
+        super().__init__(value=value, source="legacy raw() compatibility adapter")
 
 
 def raw(value: str) -> RawHTML:
@@ -158,9 +234,9 @@ def _render_child(child: Any) -> str:
     - Plain strings are escaped (they are text content). This includes
       plain strings returned by ``Component.render()``: a component is
       resolved first and its string result is treated as data.
-    - ``Markup`` (markupsafe), ``RawHTML`` (via ``raw()``), ``Element``
-      and any other ``__html__``-bearing object pass through verbatim —
-      those are explicit opt-outs signalling pre-rendered HTML.
+    - ``Markup`` (markupsafe), ``TrustedHTML``, legacy ``RawHTML``, framework
+      ``Element``, and concrete supported htpy nodes pass through verbatim.
+      An arbitrary ``__html__`` method does not grant markup trust.
     - Iterables are rendered element-wise under the same policy.
 
     This closes the previous inconsistency where a ``Component`` child
@@ -179,40 +255,124 @@ def _render_child(child: Any) -> str:
         if as_child_result is not None:
             return _render_child(as_child_result)
         return _render_child(child.render())
-    # Elements / RawHTML / htpy elements and any other __html__-bearing
-    # object are structure: render verbatim (escaping already happened at
-    # their own boundaries). Must be checked before Iterable because htpy
-    # elements are iterable (for `with` support).
-    if _is_htpy_element(child):
+    # Explicit framework/trusted/htpy values are structure. This must be
+    # checked before Iterable because htpy elements support iteration.
+    if _is_html_structure(child):
         return render_to_string(child)
+    renderer = _declared_renderer(child)
+    if renderer is not None:
+        return _render_child(renderer())
     if isinstance(child, Iterable) and not isinstance(child, (bytes, dict)):
         return "".join(_render_child(item) for item in child)
     return render_to_string(child)
 
 
-# Context stack to support Streamlit-like `with` usage
-_context_stack: list[Any] = []
-_no_context: bool = False
+def render_child_to_string(value: Any) -> str:
+    """Render one nested value for wrappers that must inspect owned markup.
+
+    Unlike the legacy top-level ``render_to_string`` string contract, this
+    boundary always treats plain strings and plain component results as text.
+    New wrappers should preserve nodes directly; this adapter exists for the
+    small set that must inspect or transform form structure before rendering.
+    """
+    if get_render_context() is None:
+        with ensure_render_context():
+            return render_child_to_string(value)
+    return _render_child(value)
+
+
+# Compatibility state for Streamlit-like ``with`` composition. ContextVars
+# keep implicit parents task-local while immutable tuples prevent child tasks
+# from sharing and mutating one process-wide stack.
+_CompositionStack = tuple[Any, ...]
+_CompositionEntry = tuple[Any, Token[_CompositionStack]]
+_NoContextEntry = tuple[Any, Token[bool]]
+
+_context_stack: ContextVar[_CompositionStack] = ContextVar(
+    "oridecon_ui_composition_stack", default=()
+)
+_context_entries: ContextVar[tuple[_CompositionEntry, ...]] = ContextVar(
+    "oridecon_ui_composition_entries", default=()
+)
+_no_context: ContextVar[bool] = ContextVar(
+    "oridecon_ui_composition_disabled", default=False
+)
+_no_context_entries: ContextVar[tuple[_NoContextEntry, ...]] = ContextVar(
+    "oridecon_ui_no_context_entries", default=()
+)
+
+
+def _enter_composition_context(parent: Any) -> None:
+    """Push ``parent`` in the current task and retain its reset token."""
+    token = _context_stack.set((*_context_stack.get(), parent))
+    _context_entries.set((*_context_entries.get(), (parent, token)))
+
+
+def _exit_composition_context(parent: Any) -> None:
+    """Pop ``parent`` with strict LIFO validation and deterministic cleanup."""
+    entries = _context_entries.get()
+    matching_index = next(
+        (
+            index
+            for index in range(len(entries) - 1, -1, -1)
+            if entries[index][0] is parent
+        ),
+        None,
+    )
+    if matching_index is None:
+        raise RuntimeError("Composition context is not active in this task")
+
+    _, token = entries[matching_index]
+    is_lifo = matching_index == len(entries) - 1 and (
+        bool(_context_stack.get()) and _context_stack.get()[-1] is parent
+    )
+    # Resetting the token restores the exact stack from before this parent was
+    # entered. On a mismatched exit this also removes any poisoned descendants.
+    _context_stack.reset(token)
+    _context_entries.set(entries[:matching_index])
+    if not is_lifo:
+        raise RuntimeError("Composition contexts must exit in LIFO order")
 
 
 class NoContext:
-    """Context manager to temporarily disable auto-registration of components."""
+    """Temporarily disable implicit child registration in the current task."""
 
-    def __enter__(self) -> Any:
-        global _no_context
-        self.old = _no_context
-        _no_context = True
+    def __enter__(self) -> Self:
+        token = _no_context.set(True)
+        _no_context_entries.set((*_no_context_entries.get(), (self, token)))
+        return self
 
-    def __exit__(self, *args: object) -> Any:
-        global _no_context
-        _no_context = self.old
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
+        entries = _no_context_entries.get()
+        matching_index = next(
+            (
+                index
+                for index in range(len(entries) - 1, -1, -1)
+                if entries[index][0] is self
+            ),
+            None,
+        )
+        if matching_index is None:
+            raise RuntimeError("NoContext is not active in this task")
+
+        _, token = entries[matching_index]
+        is_lifo = matching_index == len(entries) - 1
+        _no_context.reset(token)
+        _no_context_entries.set(entries[:matching_index])
+        if not is_lifo:
+            raise RuntimeError("NoContext managers must exit in LIFO order")
 
 
 def add_child_to_current(child: Any) -> None:
-    """If a component is active in a `with` context, append child to it."""
-    if _context_stack and not _no_context:
-        parent = _context_stack[-1]
-        parent.children.append(child)
+    """Append ``child`` to the current task's implicit composition parent."""
+    stack = _context_stack.get()
+    if stack and not _no_context.get():
+        stack[-1].children.append(child)
 
 
 class Component:
@@ -249,13 +409,15 @@ class Component:
             return child.render()
 
         if isinstance(child, Component):
-            # Merge parent's non-conflicting props into the child
-            for key, value in self.props.items():
-                if key not in child.props:
-                    child.props[key] = value
-            return child.render()
+            # Render a shallow structural clone so polymorphic composition never
+            # leaks parent attributes into a caller-owned component. Child
+            # values retain the established precedence over parent defaults.
+            cloned_child = copy(child)
+            cloned_child.props = {**self.props, **child.props}
+            cloned_child.children = list(child.children)
+            return cloned_child.render()
 
-        return str(child)
+        return child
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
@@ -268,7 +430,7 @@ class Component:
         """Lifecycle hook called when component is instantiated."""
 
     def __enter__(self) -> Self:
-        _context_stack.append(self)
+        _enter_composition_context(self)
         return self
 
     def __exit__(
@@ -277,9 +439,7 @@ class Component:
         exc: BaseException | None,
         tb: TracebackType | None,
     ) -> None:
-        # Pop self from the stack if it's the active context
-        if _context_stack and _context_stack[-1] is self:
-            _context_stack.pop()
+        _exit_composition_context(self)
 
     def add(self, *children: Any) -> Component:
         """Fluent API to add children to this component."""
@@ -290,6 +450,10 @@ class Component:
         raise NotImplementedError
 
     def __html__(self) -> str:
+        if get_render_context() is None:
+            with ensure_render_context():
+                return self.__html__()
+
         # Check asChild delegation first
         as_child_result = self._render_as_child()
         if as_child_result is not None:
@@ -331,13 +495,17 @@ def render_to_string(value: str | Any) -> str:
     flattened by rendering each child and concatenating the results, and
     component instances are rendered via their `render()` method.
     """
+    if get_render_context() is None:
+        with ensure_render_context():
+            return render_to_string(value)
+
     # None becomes empty string
     if value is None:
         return ""
 
     # Strings are returned verbatim. Escaping happens at the Element/htpy
     # attribute layer when content is inserted into HTML. To include
-    # pre-rendered HTML safely, use RawHTML (via raw()) which signals intent.
+    # pre-rendered HTML safely, use source-attributed TrustedHTML.
     if isinstance(value, str):
         return value
 
@@ -354,29 +522,17 @@ def render_to_string(value: str | Any) -> str:
     if isinstance(value, Component):
         return render_to_string(value.render())
 
-    if _is_htpy_element(value):
-        try:
-            # Prefer the explicit HTML representation if available
-            return cast("str", value.__html__())
-        except (AttributeError, TypeError):
-            from oridecon.logging import get_logger
+    if _is_html_structure(value):
+        # Rendering errors are correctness failures. Falling back to ``str``
+        # or ``repr`` can hide a broken form/component behind object text and
+        # can invoke the same failing renderer more than once.
+        return cast("str", value.__html__())
 
-            logger = get_logger(__name__)
-            logger.exception("htpy element __html__() raised an exception")
-
-            try:
-                return str(value)
-            except (TypeError, ValueError) as e:
-                logger.debug(
-                    "str() conversion failed for htpy element; falling back to repr: %s",
-                    e,
-                    exc_info=True,
-                )
-                return repr(value)
-
-    # fallback for objects with render method but not inheriting from Component
-    if hasattr(value, "render") and callable(value.render):
-        return render_to_string(value.render())
+    # Fallback for objects with a concrete render method but not inheriting
+    # from Component. Dynamic instance attributes do not establish a protocol.
+    renderer = _declared_renderer(value)
+    if renderer is not None:
+        return render_to_string(renderer())
 
     return html.escape(str(value))
 
@@ -412,8 +568,8 @@ def warn_html_string_render(
     snippet: Any,
     *,
     fix: str = (
-        "return an element built with el(...), or wrap the string in "
-        "raw()/Markup when pre-rendered HTML is intended"
+        "return an element built with el(...), or use "
+        "trusted_html(markup, source=...) after sanitizing pre-rendered HTML"
     ),
 ) -> None:
     """Warn (once per origin/snippet) that a renderer returned an HTML string.
@@ -511,6 +667,6 @@ def html_string_notice(value: Any, origin: str = "") -> Any:
         class_="inline-flex items-center gap-0.5 align-middle",
         title=(
             "This renderer returned an HTML string, which is escaped and "
-            "shown as text. Return el(...) or wrap it in raw()/Markup."
+            "shown as text. Return el(...) or use source-attributed TrustedHTML."
         ),
     )

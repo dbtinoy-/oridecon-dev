@@ -71,10 +71,13 @@ async def _placeholder_page(
 
     if secondary_nav:
         from oridecon.admin.ui.organisms.secondary_nav import ClusterLayout
-        from oridecon.ui import raw, render_to_string
+        from oridecon.ui import render_to_string, trusted_html
 
         content = render_to_string(
-            ClusterLayout(items=secondary_nav, content=raw(content))
+            ClusterLayout(
+                items=secondary_nav,
+                content=trusted_html(content, source="placeholder page body"),
+            )
         )
 
     is_htmx = wants_fragment(request)
@@ -89,7 +92,7 @@ async def _placeholder_page(
         from starlette.templating import Jinja2Templates
 
         from oridecon.admin.ui.templates.shell import AdminShell
-        from oridecon.ui import render_to_string
+        from oridecon.ui import render_to_string, trusted_html
 
         user = (
             getattr(request.state, "user", None) if hasattr(request, "state") else None
@@ -124,7 +127,7 @@ async def _placeholder_page(
         from oridecon.admin.resources.urls import admin_prefix_from_request
 
         shell = AdminShell(
-            content=content,
+            content=trusted_html(content, source="placeholder shell page body"),
             title="Under Construction",
             user=user,
             nav_items=nav_items,

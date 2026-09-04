@@ -11,7 +11,7 @@ from oridecon.admin.lib.template.layout import (
     _flash_messages,
     _standalone_card,
 )
-from oridecon.ui import el, raw, render_to_string
+from oridecon.ui import TrustedHTML, el, render_to_string
 
 
 def render_mfa_challenge_page(
@@ -101,7 +101,7 @@ def render_mfa_challenge_page(
 
 def render_mfa_setup_page(
     enabled: bool,
-    qr_svg: str = "",
+    qr_svg: TrustedHTML | str = "",
     secret: str = "",
     csrf_token: str = "",
     email_verified: bool | None = None,
@@ -118,7 +118,8 @@ def render_mfa_setup_page(
 
     Args:
         enabled: True when 2FA is already active.
-        qr_svg: Inline SVG QR code (trusted output of the MFA service).
+        qr_svg: Source-attributed MFA service output. Plain strings are
+            escaped rather than interpreted as SVG markup.
         secret: Base32 TOTP secret to store in the authenticator.
         csrf_token: CSRF token to embed as a hidden form field.
         email_verified: Optional email verification status badge; when
@@ -143,7 +144,7 @@ def render_mfa_setup_page(
         heading = "Two-Factor Authentication"
         copy = "Enabled — your account is protected by an authenticator app"
     else:
-        qr = el("div", raw(qr_svg), class_="flex justify-center mb-4")
+        qr = el("div", qr_svg, class_="flex justify-center mb-4")
         secret_block = el(
             "div",
             el(

@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from oridecon.admin.config import TableConfiguration
-from oridecon.ui import TableState, el, raw
+from oridecon.ui import TableState, el
 
 
 class LayoutComposer:
@@ -23,14 +23,14 @@ class LayoutComposer:
     ) -> Any:
         """Compose the layout based on state and configuration."""
         if self.state.layout == "sidebar" and self.config.resource_prefix:
-            aside_content = ""
+            sidebar_sections = []
             if search_section:
-                aside_content += str(el("div", search_section, class_="mb-4"))
+                sidebar_sections.append(el("div", search_section, class_="mb-4"))
             if filter_section:
-                aside_content += str(el("div", filter_section, class_=""))
+                sidebar_sections.append(el("div", filter_section))
             left_sidebar = el(
                 "aside",
-                raw(aside_content),
+                *sidebar_sections,
                 class_="w-full lg:w-72 lg:mr-6 flex-shrink-0 lg:sticky lg:top-4 lg:self-start",
             )
             main_content = el(
@@ -46,8 +46,8 @@ class LayoutComposer:
             )
         return el(
             "div",
-            el("div", raw(search_section), class_="mb-4") if search_section else "",
-            el("div", raw(filter_section), class_="mb-4") if filter_section else "",
+            el("div", search_section, class_="mb-4") if search_section else "",
+            el("div", filter_section, class_="mb-4") if filter_section else "",
             inner_form,
             class_="block oridecon-data-table-container",
         )

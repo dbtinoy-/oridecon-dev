@@ -5,7 +5,10 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 from starlette.responses import HTMLResponse
 
-from oridecon.admin.controllers.dashboard import DashboardController
+from oridecon.admin.controllers.dashboard import (
+    DashboardController,
+    _dashboard_dnd_nodes,
+)
 from oridecon.admin.dashboard.widgets import DashboardWidgetDefinition, WidgetRegistry
 from oridecon.contracts.admin import (
     PageFilterField,
@@ -13,6 +16,51 @@ from oridecon.contracts.admin import (
     WidgetKind,
     WidgetSize,
 )
+from oridecon.ui import Element, RenderScope, TrustedHTML, render_to_string
+
+
+def test_dashboard_dnd_nodes_scope_ids_and_serialize_dynamic_values() -> None:
+    payload = '"></script><script>alert(1)</script>'
+    nodes = _dashboard_dnd_nodes(
+        scope=RenderScope(),
+        dashboard_key="operations",
+        grid_id="dashboard-grid",
+        reorder_url=payload,
+        csrf_token=payload,
+    )
+    html = render_to_string(nodes)
+
+    assert 'id="oridecon-dnd-controls-operations"' in html
+    assert 'id="oridecon-layout-status-operations"' in html
+    assert 'id="oridecon-save-layout-operations"' in html
+    assert payload not in html
+    assert "\\u003c/script\\u003e" in html
+    assert "&lt;/script&gt;&lt;script&gt;" in html
+    assert html.count("<script") == 1
+
+
+def test_dashboard_dnd_controller_replaces_and_cleans_up_its_listeners() -> None:
+    _controls, script = _dashboard_dnd_nodes(
+        scope=RenderScope(),
+        dashboard_key="operations",
+        grid_id="dashboard-grid",
+        reorder_url="/admin/widgets/reorder",
+        csrf_token="csrf",
+    )
+
+    assert isinstance(script, Element)
+    assert isinstance(script.children[0], TrustedHTML)
+    assert script.children[0].source == "generated dashboard layout controller"
+    source = script.children[0].value
+    assert "window.__orideconDashboardControllers" in source
+    assert "if (previous) previous.destroy()" in source
+    assert "htmx:beforeCleanupElement" in source
+    assert "removeEventListener('htmx:afterSwap', afterSwap)" in source
+    assert "saveBtn.removeEventListener('click', saveLayout)" in source
+    assert "sortableInstance.destroy()" in source
+    assert "new AbortController()" in source
+    assert "window.__adminDashboardListeners" not in source
+    assert "htmx.process(" not in source
 
 
 class TestDashboardController:
@@ -69,7 +117,8 @@ class TestDashboardController:
         assert b"Welcome back" in body
         assert b"/backoffice/users" in body
         assert b"/backoffice/widgets/stats" in body
-        assert b"/backoffice/core/widgets/reorder" in body
+        assert b"/backoffice/core/widgets/customize" in body
+        assert b"/backoffice/core/widgets/reorder" not in body
 
     @pytest.mark.asyncio
     async def test_index_fallback_has_default_sections(
@@ -177,8 +226,8 @@ class TestDashboardController:
         )
         response = await controller.index(mock_request)
         body = response.body
-        assert b"save-layout-btn" in body
-        assert b"dashboard-dnd-controls" in body
+        assert b"oridecon-dashboard-save-layout-default" in body
+        assert b"oridecon-dashboard-dnd-controls-default" in body
         assert b"Sortable(" in body
         assert b"initSortable" in body
         assert b"htmx:afterSwap" in body
@@ -200,6 +249,8 @@ class TestDashboardController:
         body = response.body
         assert b"space-y-6" in body
         assert b"dashboard-view" in body
+        assert b"dashboard-dnd-controls" not in body
+        assert b"/core/widgets/reorder" not in body
 
     @pytest.mark.asyncio
     async def test_index_handles_app_state_errors(
@@ -303,7 +354,7 @@ class TestDashboardHeroActions:
     @pytest.fixture
     def renderer(self) -> MagicMock:
         renderer = MagicMock()
-        renderer.render_page.side_effect = lambda content, **kwargs: HTMLResponse(
+        renderer.render_page.side_effect = lambda content, **_kwargs: HTMLResponse(
             str(content)
         )
         return renderer

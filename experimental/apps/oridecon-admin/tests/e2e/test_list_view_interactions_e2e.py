@@ -33,8 +33,10 @@ from oridecon.admin.data import QueryResult
 from oridecon.admin.resources.handler import ResourceHandler
 from oridecon.admin.resources.roles import RolesResource
 from oridecon.contracts.auth import RoleDefinition
+from oridecon.ui import Zones
 
-HTMX_HEADERS = {"HX-Request": "true", "HX-Target": "table-data"}
+DATA_ID = Zones.table_zone_id(Zones.DATA, table_key="roles")
+HTMX_HEADERS = {"HX-Request": "true", "HX-Target": DATA_ID}
 
 
 class _RecordingDataSource:
@@ -107,7 +109,8 @@ class TestControlUrlsHitTheRouteDirectly:
         async with _client(source) as client:
             page = await client.get("/admin/roles")
             match = re.search(
-                r'<button[^>]*hx-get="([^"]*)"[^>]*hx-target="#table-data"', page.text
+                rf'<button[^>]*hx-get="([^"]*)"[^>]*hx-target="#{DATA_ID}"',
+                page.text,
             )
             assert match, "no sort control rendered"
             sort_url = match.group(1).replace("&amp;", "&")
@@ -146,9 +149,7 @@ class TestInteractionsReachTheDataLayer:
         assert source.last_query["sort_order"] == "desc"
 
     @pytest.mark.asyncio
-    async def test_search_reaches_the_query(
-        self, source: _RecordingDataSource
-    ) -> None:
+    async def test_search_reaches_the_query(self, source: _RecordingDataSource) -> None:
         async with _client(source) as client:
             await client.get("/admin/roles?search=alp", headers=HTMX_HEADERS)
 
@@ -159,9 +160,7 @@ class TestInteractionsReachTheDataLayer:
         self, source: _RecordingDataSource
     ) -> None:
         async with _client(source) as client:
-            await client.get(
-                "/admin/roles?include_deleted=true", headers=HTMX_HEADERS
-            )
+            await client.get("/admin/roles?include_deleted=true", headers=HTMX_HEADERS)
 
         assert source.last_query["include_deleted"] is True
 
@@ -172,9 +171,7 @@ class TestInteractionsReachTheDataLayer:
         """The allowlist is a security control; widening it must not let an
         arbitrary URL-supplied field through to the data source."""
         async with _client(source) as client:
-            await client.get(
-                "/admin/roles?sort_by=__secret__", headers=HTMX_HEADERS
-            )
+            await client.get("/admin/roles?sort_by=__secret__", headers=HTMX_HEADERS)
 
         assert source.last_query["sort_by"] != "__secret__"
 
@@ -191,7 +188,7 @@ class TestSwapShapeIsUsable:
                 "/admin/roles?sort_by=name", headers=HTMX_HEADERS
             )
 
-        assert response.text.count('id="table-data"') == 1
+        assert response.text.count(f'id="{DATA_ID}"') == 1
 
     @pytest.mark.asyncio
     async def test_data_controls_replace_rather_than_nest(
@@ -200,7 +197,10 @@ class TestSwapShapeIsUsable:
         async with _client(source) as client:
             page = await client.get("/admin/roles")
 
-        for tag in re.findall(r'<[^>]*hx-select="#table-data"[^>]*>', page.text):
+        for tag in re.findall(
+            rf'<[^>]*hx-select="#{DATA_ID}"[^>]*>',
+            page.text,
+        ):
             assert 'hx-swap="outerHTML"' in tag
 
     @pytest.mark.asyncio

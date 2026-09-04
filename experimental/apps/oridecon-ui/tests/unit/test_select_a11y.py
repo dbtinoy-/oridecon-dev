@@ -36,7 +36,11 @@ class TestSelectA11y:
 
 class TestRichSelectA11y:
     def test_rich_select_combobox_role(self) -> None:
-        html = str(RichSelect(label="Choose", name="s", options=[{"value": "a", "label": "Alpha"}]))
+        html = str(
+            RichSelect(
+                label="Choose", name="s", options=[{"value": "a", "label": "Alpha"}]
+            )
+        )
         assert 'role="combobox"' in html
         assert 'aria-expanded="false"' in html or ":aria-expanded" in html
         assert "aria-controls" in html
@@ -46,7 +50,10 @@ class TestRichSelectA11y:
             RichSelect(
                 label="Choose",
                 name="s",
-                options=[{"value": "a", "label": "Alpha"}, {"value": "b", "label": "Beta"}],
+                options=[
+                    {"value": "a", "label": "Alpha"},
+                    {"value": "b", "label": "Beta"},
+                ],
             )
         )
         assert 'role="listbox"' in html

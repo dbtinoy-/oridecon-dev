@@ -70,6 +70,7 @@ class TestSSEStream:
     @pytest.mark.asyncio
     async def test_sse_stream_generator_basic(self) -> None:
         """Test SSEStream with basic generator."""
+
         async def generator() -> AsyncGenerator[SSEMessage, None]:
             yield SSEMessage("message 1")
             yield SSEMessage("message 2")
@@ -83,6 +84,7 @@ class TestSSEStream:
     @pytest.mark.asyncio
     async def test_sse_stream_with_custom_headers(self) -> None:
         """Test SSEStream with custom headers."""
+
         async def generator() -> AsyncGenerator[SSEMessage, None]:
             yield SSEMessage("data")
 
@@ -119,6 +121,7 @@ class TestSSEStreamContent:
     @pytest.mark.asyncio
     async def test_sse_stream_empty_generator(self) -> None:
         """Test SSEStream with empty generator."""
+
         async def generator() -> AsyncGenerator[SSEMessage, None]:
             return
             yield  # type: ignore[unreachable]

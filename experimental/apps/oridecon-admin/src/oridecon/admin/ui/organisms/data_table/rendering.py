@@ -14,7 +14,7 @@ from oridecon.admin.ui.organisms.data_table.states import StateRenderer
 from oridecon.admin.ui.organisms.data_table.views import view_strategy_registry
 from oridecon.admin.ui.organisms.pagination import Pagination
 from oridecon.serialization import dumps_str
-from oridecon.ui import TableState, Zones, el, raw, render_to_string
+from oridecon.ui import TableState, Zones, el, render_to_string
 
 
 class DataTableRenderer:
@@ -113,9 +113,9 @@ class DataTableRenderer:
         is_htmx = self.props.get("htmx_request", False)
 
         # Scope tabs — inline for full render, OOB for HTMX data-only
-        tabs_html = ""
+        tabs_node: Any = ""
         if can_view and not (self.props.get("render_fragment") or is_htmx):
-            tabs_html = self._render_scope_tabs()
+            tabs_node = self._render_scope_tabs()
 
         # View content
         view_content = self._render_view_content()
@@ -133,6 +133,8 @@ class DataTableRenderer:
             view_content,
             pagination_el if pagination_el else "",
             id=Zones.DATA.id,
+            data_oridecon_table_data=True,
+            data_oridecon_table_ids=self.all_ids_json,
         )
 
         # HTMX wrapper
@@ -169,22 +171,52 @@ class DataTableRenderer:
 
         # Script and final markup
         script = self._render_script()
+        resource_label = self.config.resource_name or (
+            self.config.resource_prefix.rstrip("/").rsplit("/", 1)[-1]
+            if self.config.resource_prefix
+            else "Data"
+        )
+        table_accessible_name = (
+            str(resource_label).replace("_", " ").replace("-", " ").title() + " table"
+        )
 
         return render_to_string(
             [
                 script,
                 el(
                     "div",
-                    raw(header_section),
-                    raw(tabs_html),
+                    header_section,
+                    tabs_node,
                     container,
                     id=Zones.TABLE.id,
-                    x_data=f"{{ selectedIds: [], expandedIds: [], collapsedGroups: [], lastSelected: null, focusedId: null, hasActiveFiltersState: false, allIds: {self.all_ids_json}, ...window.LexigramTableLogic }}",
+                    tabindex="0",
+                    role="region",
+                    class_=(
+                        "rounded-lg focus:outline-none focus-visible:ring-2 "
+                        "focus-visible:ring-ring focus-visible:ring-offset-2"
+                    ),
+                    aria_label=table_accessible_name,
+                    data_oridecon_table_root=True,
+                    data_oridecon_table_refresh_event=(
+                        f"oridecon-refresh-table-{Zones.TABLE.id}"
+                    ),
+                    hx_sync=f"{Zones.TABLE.selector}:replace",
+                    x_data=(
+                        "{ ...window.LexigramTableLogic, selectedIds: [], "
+                        "expandedIds: [], collapsedGroups: [], lastSelected: null, "
+                        "focusedId: null, hasActiveFiltersState: false, "
+                        f"selectionEnabled: {dumps_str(bool(self.config.bulk_actions))}, "
+                        f"expansionEnabled: {dumps_str(bool(self.config.expandable_relationship))}, "
+                        f"allIds: {self.all_ids_json} }}"
+                    ),
                     **{
-                        "@keydown.window": "handleKeydown($event)",
-                        "@htmx:after-swap.window": "$nextTick(() => updateActiveFiltersState())",
-                        "@input.window": f"if ($event.target.closest('{Zones.SEARCH.selector}') || $event.target.closest('{Zones.FILTERS.selector}')) $nextTick(() => updateActiveFiltersState())",
-                        "@change.window": f"if ($event.target.closest('{Zones.SEARCH.selector}') || $event.target.closest('{Zones.FILTERS.selector}')) $nextTick(() => updateActiveFiltersState())",
+                        "@keydown": "handleKeydown($event)",
+                        "@htmx:after-swap": (
+                            "$nextTick(() => { updateActiveFiltersState(); "
+                            "refreshIdsFrom($event.detail.target); })"
+                        ),
+                        "@input": "if ($event.target.closest('[data-oridecon-table-search], [data-oridecon-table-filters]')) $nextTick(() => updateActiveFiltersState())",
+                        "@change": "if ($event.target.closest('[data-oridecon-table-search], [data-oridecon-table-filters]')) $nextTick(() => updateActiveFiltersState())",
                     },
                 ),
             ],
@@ -203,7 +235,7 @@ class DataTableRenderer:
             "filter": toolbar.render_filters(),
         }
 
-    def _render_scope_tabs(self, oob: bool = False) -> str:
+    def _render_scope_tabs(self, oob: bool = False) -> Any:
         """Render Active/Trash scope tabs for soft-delete toggling."""
         from oridecon.ui import HTMXAttrs
 
@@ -244,25 +276,26 @@ class DataTableRenderer:
                 **htmx_attrs,
             )
 
-        outer_attrs: dict[str, Any] = {"class_": "mb-4", "id": "table-scope-tabs"}
+        outer_attrs: dict[str, Any] = {
+            "class_": "mb-4",
+            "id": Zones.SCOPE_TABS.id,
+        }
         if oob:
             outer_attrs["hx_swap_oob"] = "outerHTML"
 
-        return render_to_string(
+        return el(
+            "div",
             el(
                 "div",
                 el(
-                    "div",
-                    el(
-                        "nav",
-                        _tab("Active", active, active_url, active_attrs),
-                        _tab("Trash", not active, trash_url, trash_attrs),
-                        class_="flex space-x-8 border-b border-border",
-                    ),
-                    class_="px-6",
+                    "nav",
+                    _tab("Active", active, active_url, active_attrs),
+                    _tab("Trash", not active, trash_url, trash_attrs),
+                    class_="flex space-x-8 border-b border-border",
                 ),
-                **outer_attrs,
-            )
+                class_="px-6",
+            ),
+            **outer_attrs,
         )
 
     def _render_oob_fragments(self) -> list[Any]:
@@ -405,17 +438,22 @@ class DataTableRenderer:
             "div",
             table_content,
             id=Zones.TABLE.id + "-inner",
-            hx_trigger="refreshTable from:body",
+            hx_trigger=(
+                "refreshTable from:body, "
+                f"oridecon-refresh-table-{Zones.TABLE.id} from:body"
+            ),
             # hx-select-oob travels with hx-select; children that inherit one
             # without the other would swap OOB fragments they never asked for.
             hx_disinherit="hx-select hx-select-oob",
             **htmx_attrs,
         )
 
-    def _render_script(self) -> str:
-        """Render Alpine.js script."""
-        from oridecon.ui import DataTableScriptRenderer
+    def _render_script(self) -> Any:
+        """Render the compatibility controller at most once per response."""
+        from oridecon.ui import DataTableScriptRenderer, get_render_scope
 
+        if not get_render_scope().claim_once("data-table-client-controller"):
+            return ""
         return DataTableScriptRenderer.render(self._all_ids)
 
     def render_bulk_actions(self) -> Any:

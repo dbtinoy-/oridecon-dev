@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from oridecon.ui.core.base import Component, el, raw, render_to_string
+from oridecon.ui.core.base import Component, el
 
 
 class AdminCard(Component):
@@ -48,19 +48,15 @@ class AdminCard(Component):
         if self.title:
             header_el = el(
                 "div",
-                str(self.title),
+                self.title,
                 class_="px-6 py-4 border-b border-border font-semibold text-card-foreground",
             )
 
-        body_content: str
-        if self.content is None:
-            body_content = ""
-        elif hasattr(self.content, "__html__") or hasattr(self.content, "render"):
-            body_content = render_to_string(self.content)
-        else:
-            body_content = str(self.content)
-
-        body_el = el("div", raw(body_content), class_="px-6 py-4")
+        body_el = el(
+            "div",
+            self.content if self.content is not None else "",
+            class_="px-6 py-4",
+        )
 
         return el("div", header_el, body_el, class_=cls, **attrs)
 
@@ -110,15 +106,9 @@ class PageLayout(Component):
 
         actions_el = None
         if self.actions:
-            rendered_actions = [
-                raw(render_to_string(a))
-                if hasattr(a, "__html__") or hasattr(a, "render")
-                else str(a)
-                for a in self.actions
-            ]
             actions_el = el(
                 "div",
-                *rendered_actions,
+                *self.actions,
                 class_="flex items-center gap-2",
             )
 
@@ -129,15 +119,9 @@ class PageLayout(Component):
             class_="flex items-center justify-between px-6 py-4 border-b border-border bg-background",
         )
 
-        rendered_children = [
-            raw(render_to_string(c))
-            if hasattr(c, "__html__") or hasattr(c, "render")
-            else str(c)
-            for c in self.children
-        ]
         content_el = el(
             "div",
-            *rendered_children,
+            *self.children,
             class_="flex-1 p-6",
         )
 

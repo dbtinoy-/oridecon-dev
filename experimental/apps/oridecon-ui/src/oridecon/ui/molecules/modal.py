@@ -1,13 +1,16 @@
 from __future__ import annotations
 
-import itertools
 import re
 from typing import Any
 
 from oridecon.ui.atoms.button import Button, ButtonVariant, SubmitButton
-from oridecon.ui.core.base import Component, el, raw, render_to_string
-
-_counter = itertools.count()
+from oridecon.ui.core.base import (
+    Component,
+    el,
+    render_child_to_string,
+)
+from oridecon.ui.core.render_context import get_render_scope
+from oridecon.ui.core.trusted_html import trusted_html
 
 
 def _first_form_id(html: str) -> str | None:
@@ -64,6 +67,7 @@ class Modal(Component):
         render_trigger: bool = True,
         max_width: str | None = None,
         max_height: str | None = None,
+        modal_id: str | None = None,
         **props: Any,
     ) -> None:
         super().__init__(
@@ -81,13 +85,19 @@ class Modal(Component):
         self.render_trigger = render_trigger
         self.max_width = max_width or self.PANEL_MAX_WIDTH
         self.max_height = max_height or self.PANEL_MAX_HEIGHT
-        self.id_suffix = next(_counter)
+        self.modal_id = modal_id
 
     def _build_panel_classes(self) -> str:
         """Build the panel classes with configurable max width/height."""
         return f"{self.PANEL_CLASSES} {self.max_width} {self.max_height} flex flex-col"
 
     def render(self) -> Any:
+        modal_scope = get_render_scope().child("modal")
+        dialog_id = modal_scope.id("dialog", key=self.modal_id)
+        identity_suffix = dialog_id.removeprefix(f"{modal_scope.prefix}-dialog-")
+        title_id = f"{modal_scope.prefix}-title-{identity_suffix}"
+        description_id = f"{modal_scope.prefix}-description-{identity_suffix}"
+
         trigger_node = None
         if getattr(self, "render_trigger", True) and self.trigger is not None:
             if isinstance(self.trigger, str):
@@ -105,18 +115,9 @@ class Modal(Component):
                     **{"x-on:keydown.space.prevent": "open = true"},
                 )
 
-        rendered_children = list(map(render_to_string, self.children))
+        rendered_children = [render_child_to_string(child) for child in self.children]
 
-        footer_html: list[Any] = []
-        if self.footer:
-            footer_html = [
-                (
-                    raw(render_to_string(c))
-                    if hasattr(c, "__html__") or hasattr(c, "render")
-                    else str(c)
-                )
-                for c in self.footer
-            ]
+        footer_html: list[Any] = list(self.footer)
 
         footer_found: list[str] = []
         if not footer_html:
@@ -134,23 +135,22 @@ class Modal(Component):
             rendered_children = new_rendered_children
 
         if footer_found and not footer_html:
-            footer_html = list(map(raw, footer_found))
+            footer_html = [
+                trusted_html(fragment, source="Modal extracted footer adapter")
+                for fragment in footer_found
+            ]
 
         if not footer_html:
             # Match SlideOver's form contract: a delegated form action bar
             # needs a real form binding, while a form that already owns its
             # submit control must not receive a duplicate footer submit.
             content_html = "".join(rendered_children)
-            form_present = "<form" in content_html.lower()
             form_obj = next(
                 (c for c in self.children if hasattr(c, "submit_label")),
                 None,
             )
             form_suppresses = bool(getattr(form_obj, "suppress_submit", False))
             form_id = getattr(form_obj, "form_id", None) or _first_form_id(content_html)
-            has_own_submit = bool(
-                re.search(r'<button[^>]*type=["\\\']submit', content_html)
-            )
 
             # Modal footers are owned by a form component that explicitly
             # delegates its actions (``suppress_submit``). A raw HTML form is
@@ -158,7 +158,7 @@ class Modal(Component):
             # also own its submit/cancel semantics and should not receive
             # invisible, out-of-form controls injected by the container.
             if form_obj and form_suppresses and not form_id:
-                auto_form_id = "modal-form"
+                auto_form_id = f"{dialog_id}-form"
                 rendered_children = [
                     _inject_form_id(s, auto_form_id) if isinstance(s, str) else s
                     for s in rendered_children
@@ -179,9 +179,11 @@ class Modal(Component):
                 )
                 footer_html = [cancel_btn, save_btn]
 
-        children_html = list(
-            map(raw, filter(lambda s: s and s.strip(), rendered_children)),
-        )
+        children_html = [
+            trusted_html(fragment, source="Modal normalized child adapter")
+            for fragment in rendered_children
+            if fragment.strip()
+        ]
 
         return el(
             "div",
@@ -219,10 +221,11 @@ class Modal(Component):
                     "div",
                     {
                         "class": "fixed inset-0 z-10 w-screen overflow-y-auto",
+                        "id": dialog_id,
                         "role": "dialog",
                         "aria-modal": "true",
-                        "aria-labelledby": f"modal-title-{self.id_suffix}",
-                        "aria-describedby": f"modal-description-{self.id_suffix}",
+                        "aria-labelledby": title_id,
+                        "aria-describedby": description_id,
                     },
                     el(
                         "div",
@@ -257,7 +260,7 @@ class Modal(Component):
                                             "h3",
                                             {
                                                 "class": "text-base font-semibold leading-6 text-foreground",
-                                                "id": f"modal-title-{self.id_suffix}",
+                                                "id": title_id,
                                             },
                                             self.title,
                                         ),
@@ -269,7 +272,7 @@ class Modal(Component):
                                 "div",
                                 {
                                     "class": "relative mt-2 flex-1 overflow-y-auto px-4 sm:px-6",
-                                    "id": f"modal-description-{self.id_suffix}",
+                                    "id": description_id,
                                 },
                                 *children_html,
                             ),

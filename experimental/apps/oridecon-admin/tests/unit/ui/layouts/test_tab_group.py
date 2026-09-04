@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from oridecon.admin.schema import TextField
-from oridecon.ui import Tab, TabGroup
-from oridecon.ui import Element
+from oridecon.ui import Element, Tab, TabGroup, get_icon
 
 
 class TestTab:
@@ -16,7 +15,7 @@ class TestTab:
             name="settings",
             label="Settings",
             schema_fields=[TextField(name="key")],
-            icon="<svg></svg>",
+            icon=get_icon("settings"),
             badge=3,
         )
         assert tab.name == "settings"
@@ -69,7 +68,7 @@ class TestTabGroup:
         assert "5" in output
 
     def test_render_with_icon(self) -> None:
-        tabs = [Tab(name="general", label="General", icon="<svg></svg>")]
+        tabs = [Tab(name="general", label="General", icon=get_icon("home"))]
         group = TabGroup(tabs=tabs)
         output = str(group.render())
         assert "<svg" in output

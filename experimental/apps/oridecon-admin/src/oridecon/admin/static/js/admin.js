@@ -27,26 +27,45 @@
     function toast(message, type) {
       if (window.showToast) window.showToast(message, type);
     }
+    function serializeTableQuery(table) {
+      const params = new URLSearchParams();
+      const ignored = new Set(['ids', 'csrf_token', 'action', 'scope', 'list_query']);
+      table.querySelectorAll('input[name], select[name], textarea[name]').forEach(function(control) {
+        if (control.disabled || ignored.has(control.name)) return;
+        const type = String(control.type || '').toLowerCase();
+        if ((type === 'checkbox' || type === 'radio') && !control.checked) return;
+        if (control.tagName === 'SELECT' && control.multiple) {
+          Array.from(control.selectedOptions).forEach(function(option) {
+            params.append(control.name, option.value);
+          });
+        } else if (!['button', 'file', 'reset', 'submit'].includes(type)) {
+          params.append(control.name, control.value);
+        }
+      });
+      return params.toString();
+    }
     try {
       const url = btn.getAttribute('data-bulk-download-url');
       if (!url) return;
       const action = btn.getAttribute('data-bulk-action') || 'export';
-      const checked = document.querySelectorAll('input[name="ids"]:checked');
+      const table = btn.closest('[data-oridecon-table-root]');
+      if (!table) return;
+      const checked = table.querySelectorAll('input[name="ids"]:checked');
       const filtered = !checked.length;
       const body = new FormData();
       body.append('action', action);
       if (filtered) {
-        // R25: no selection means "export everything matching the current
-        // view" — forward the list's URL state to the server.
+        // R25: no selection means "export everything matching this table's
+        // current view" — sibling tables may hold independent state.
         body.append('scope', 'filtered');
-        body.append('list_query', window.location.search.replace(/^\?/, ''));
+        body.append('list_query', serializeTableQuery(table));
       } else {
         checked.forEach(function(box) { body.append('ids', box.value); });
       }
-      const csrfInput = document.querySelector('input[name="csrf_token"]');
+      const csrfInput = table.querySelector('input[name="csrf_token"]');
       const csrfEl = document.querySelector('[data-csrf-token]');
-      const csrf = window.__orideconCsrfToken ||
-        (csrfInput && csrfInput.value) ||
+      const csrf = (csrfInput && csrfInput.value) ||
+        window.__orideconCsrfToken ||
         (csrfEl && csrfEl.getAttribute('data-csrf-token'));
       if (csrf) body.append('csrf_token', csrf);
       const headers = {};

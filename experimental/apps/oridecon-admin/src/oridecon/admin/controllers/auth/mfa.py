@@ -15,6 +15,7 @@ from oridecon.admin.controllers.auth.core import (
 )
 from oridecon.admin.lib.template import render_mfa_challenge_page, render_mfa_setup_page
 from oridecon.contracts.web import get, post
+from oridecon.ui import trusted_html
 
 if TYPE_CHECKING:
     from oridecon.admin.auth.protocols import (
@@ -303,7 +304,10 @@ class AuthMfaMixin(AuthCoreMixin):
                 request.session["mfa_pending_secret"] = secret
                 html = render_mfa_setup_page(
                     enabled=False,
-                    qr_svg=svg,
+                    qr_svg=trusted_html(
+                        svg,
+                        source="MFA service QR SVG generator",
+                    ),
                     secret=secret,
                     csrf_token=csrf_token,
                     email_verified=email_verified,

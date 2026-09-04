@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from oridecon.ui.core.base import Component, el
+from oridecon.ui.core.render_context import get_render_scope
 from oridecon.ui.htmx.attrs import hx_get, hx_swap, hx_target, hx_trigger
 
 
@@ -27,21 +28,27 @@ class RealTimeFeed(Component):
         interval: str | None = "10s",
         use_sse: bool = False,
         content: Any = None,
+        feed_key: str | None = None,
         **props: Any,
     ) -> None:
         super().__init__(**props)
         self.url = url
         self.interval = interval
         self.use_sse = use_sse
+        self.feed_key = feed_key
         self.initial_content = content or el(
             "div",
             {"class": "animate-pulse h-4 bg-muted rounded w-3/4"},
         )
 
     def render(self) -> Any:
+        feed_id = self.props.get("id") or get_render_scope().id(
+            "real-time-feed",
+            key=self.feed_key,
+        )
         attrs = {
             "class": "real-time-feed",
-            "id": self.props.get("id", "feed-" + str(id(self))),
+            "id": feed_id,
         }
 
         if self.use_sse:
@@ -80,6 +87,11 @@ class LiveCounter(Component):
             el(
                 "dd",
                 {"class": "mt-1 text-3xl font-semibold text-foreground"},
-                RealTimeFeed(url=self.url, interval=self.interval, content="--"),
+                RealTimeFeed(
+                    url=self.url,
+                    interval=self.interval,
+                    content="--",
+                    feed_key=self.url,
+                ),
             ),
         )

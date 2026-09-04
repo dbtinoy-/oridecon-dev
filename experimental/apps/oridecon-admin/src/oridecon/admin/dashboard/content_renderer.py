@@ -31,8 +31,10 @@ from oridecon.ui import (
     EmptyState,
     LineChart,
     PieChart,
+    TrustedHTML,
     el,
     render_to_string,
+    trusted_html,
 )
 
 if TYPE_CHECKING:
@@ -171,6 +173,14 @@ def render_content(content: WidgetContent) -> str:
     raise TypeError(f"unhandled WidgetContent variant: {type(content)!r}")
 
 
+def trusted_content(content: WidgetContent) -> TrustedHTML:
+    """Render host-owned structured content with attributable markup trust."""
+    return trusted_html(
+        render_content(content),
+        source="structured admin WidgetContent renderer",
+    )
+
+
 def _render_stat_content(content: StatContent) -> str:
     """Render a stat card grid (single stat or N-stats)."""
     cards: list[Any] = []
@@ -287,4 +297,9 @@ def _render_chart_content(content: ChartContent) -> str:
     return render_to_string(chart_cls(points))
 
 
-__all__ = ["render_chart_fragment", "render_content", "render_stat_fragment"]
+__all__ = [
+    "render_chart_fragment",
+    "render_content",
+    "render_stat_fragment",
+    "trusted_content",
+]

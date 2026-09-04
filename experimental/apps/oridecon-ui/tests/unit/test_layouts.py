@@ -85,7 +85,9 @@ class TestHTMLDocument:
         assert 'content="#663399"' in html
 
     def test_extra_head(self) -> None:
-        config = HTMLDocumentConfig(extra_head="<link rel='preload' href='/font.woff2'>")
+        config = HTMLDocumentConfig(
+            extra_head="<link rel='preload' href='/font.woff2'>"
+        )
         doc = _make_doc(config=config)
         html = str(doc.render("Test"))
         assert "preload" in html
@@ -157,6 +159,18 @@ class TestStack:
         stack = Stack()
         html = str(stack)
         assert "flex flex-col gap-4" in html
+
+    def test_plain_string_children_cannot_inject_markup(self) -> None:
+        html = str(Stack(children=['<img src=x onerror="attack()">']))
+
+        assert "<img " not in html
+        assert "&lt;img src=x" in html
+
+    def test_class_values_are_escaped_by_the_element_boundary(self) -> None:
+        html = str(Stack(class_='safe" onmouseover="attack()'))
+
+        assert 'onmouseover="attack()"' not in html
+        assert "&quot; onmouseover=&quot;" in html
 
 
 class TestLayoutBase:

@@ -17,7 +17,7 @@ from oridecon.admin.state.context import wants_fragment
 from oridecon.di.decorators import inject
 from oridecon.logging import get_logger
 from oridecon.serialization import dumps_str
-from oridecon.ui import InfolistWidget, el, raw, render_to_string
+from oridecon.ui import InfolistWidget, el, render_to_string
 
 logger = get_logger(__name__)
 _MASKED_FIELD_VALUE = "[REDACTED]"
@@ -174,7 +174,7 @@ class DetailRenderer:
         request_user = user
         if request_user is None:
             request_user = getattr(getattr(request, "state", None), "user", None)
-        item_html = await self._get_item_html(
+        item_node = await self._get_item_node(
             resource,
             item_id,
             label,
@@ -203,7 +203,7 @@ class DetailRenderer:
                 ),
                 el(
                     "div",
-                    raw(item_html),
+                    item_node,
                     class_="resource-content",
                 ),
                 (
@@ -468,9 +468,7 @@ class DetailRenderer:
             )
             field_rows.append(row)
 
-        table_html = render_to_string(
-            el("table", *field_rows, class_="detail-inline-edit-table w-full")
-        )
+        table_node = el("table", *field_rows, class_="detail-inline-edit-table w-full")
 
         resource_url = f"{prefix}/{self.resource_name}"
         detail_url = f"{resource_url}/{item_id}"
@@ -499,7 +497,7 @@ class DetailRenderer:
                 ),
                 el(
                     "div",
-                    raw(table_html),
+                    table_node,
                     class_="resource-content",
                 ),
             )
@@ -536,9 +534,28 @@ class DetailRenderer:
         request: Any | None = None,
         user: Any = None,
     ) -> str:
-        """Get HTML representation of the item."""
+        """Serialize an item node for legacy callers outside composition."""
+        node = await self._get_item_node(
+            resource,
+            item_id,
+            label,
+            request=request,
+            user=user,
+        )
+        return render_to_string(node)
+
+    async def _get_item_node(
+        self,
+        resource,
+        item_id: str,
+        label: str,
+        *,
+        request: Any | None = None,
+        user: Any = None,
+    ) -> Any:
+        """Build the structured item representation used by detail composition."""
         if not resource:
-            return render_to_string(el("p", f"Item #{item_id}"))
+            return el("p", f"Item #{item_id}")
 
         item = None
         # Resolve the canonical source first. This keeps detail and inline
@@ -572,7 +589,7 @@ class DetailRenderer:
                 request=request,
                 user=user,
             )
-        return render_to_string(el("p", "Item not found"))
+        return el("p", "Item not found")
 
     async def _render_item_infolist(
         self,
@@ -581,8 +598,8 @@ class DetailRenderer:
         *,
         request: Any | None = None,
         user: Any = None,
-    ) -> str:
-        """Render item fields as an infolist widget.
+    ) -> Any:
+        """Build item fields as a structured infolist widget.
 
         Prefers the resource's ``infolist()`` API when available
         (``HasInfolist`` mixin); otherwise derives entries from the
@@ -620,7 +637,7 @@ class DetailRenderer:
                     for field in schema.fields
                     if field.visible_in_view and field.name in item_dict
                 ]
-            return render_to_string(InfolistWidget(entries=entries, columns=2).render())
+            return InfolistWidget(entries=entries, columns=2).render()
         except (ImportError, AttributeError, TypeError, ValueError) as exc:
             logger.debug(
                 "infolist render failed for %s: %s",
@@ -634,10 +651,8 @@ class DetailRenderer:
                 if key in safe_names
             ]
             if not rows:
-                return render_to_string(
-                    el("p", "No detail fields are configured.", class_="text-muted")
-                )
-            return render_to_string(el("table", *rows, class_="detail-table"))
+                return el("p", "No detail fields are configured.", class_="text-muted")
+            return el("table", *rows, class_="detail-table")
 
 
 __all__ = ["DetailRenderer"]

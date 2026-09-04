@@ -97,7 +97,7 @@ class ColumnRenderingMixin:
         # Render the value. A plain HTML string returned here is data, not
         # structure: the element layer will escape it and the browser will
         # show literal markup. Detect that and warn once so the developer
-        # knows to return an el() tree or wrap the string in raw()/Markup.
+        # knows to return an el() tree or source-attributed TrustedHTML.
         content = self.render(formatted_value, record)
         if (
             isinstance(content, str)
@@ -110,7 +110,7 @@ class ColumnRenderingMixin:
                 snippet=content,
                 fix=(
                     "return an element via el(...) (e.g. el('span', value)), "
-                    "or wrap the string in raw()/Markup when HTML is intended"
+                    "or use trusted_html(markup, source=...) after sanitizing HTML"
                 ),
             )
             # The log only reaches the developer. Present the value in the

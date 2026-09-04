@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from oridecon.ui.core.base import Component, el, raw, render_to_string
+from oridecon.ui.core.base import Component, el
 
 
 class Fieldset(Component):
@@ -26,13 +26,6 @@ class Fieldset(Component):
         self.description = description
 
     def render(self) -> Any:
-        children_html = [
-            raw(render_to_string(c))
-            if hasattr(c, "__html__") or hasattr(c, "render")
-            else str(c)
-            for c in self.children
-        ]
-
         legend_el = el(
             "legend",
             self.legend,
@@ -60,7 +53,7 @@ class Fieldset(Component):
             "fieldset",
             legend_el,
             desc_el,
-            el("div", *children_html, class_="space-y-4"),
+            el("div", *self.children, class_="space-y-4"),
             class_="border border-border rounded-lg p-6 mb-6",
             **attrs,
         )
