@@ -148,51 +148,25 @@ class TestTaskProgress:
     def _script(self, **kwargs: object) -> str:
         from oridecon.ui.organisms.task_progress import TaskProgress
 
-        # The script here is carried in an Alpine x-data attribute, so the
-        # browser HTML-decodes it before Alpine evaluates it as JavaScript.
-        # Decode here too, or the assertion inspects the wrong string.
         return html.unescape(render_to_string(TaskProgress(**kwargs)))  # type: ignore[arg-type]
 
-    def _event_source_arg(self, rendered: str) -> str:
-        """Return the decoded argument of ``new EventSource(...)``.
+    def _stream_url(self, rendered: str) -> str:
+        return _literal_at(rendered, "const streamUrl = ")
 
-        Unlike the notification bell, this literal is embedded in a larger
-        JS source fragment, so it can legitimately contain JS escapes such
-        as ``\\'`` that are not valid JSON. Scan for the closing quote
-        honouring backslash escapes, then interpret them as JS would.
-        """
-        start = rendered.index("new EventSource(") + len("new EventSource(")
-        assert rendered[start] == '"', "argument must be a quoted literal"
-
-        index = start + 1
-        chars: list[str] = []
-        while rendered[index] != '"':
-            if rendered[index] != "\\":
-                chars.append(rendered[index])
-                index += 1
-                continue
-
-            escape = rendered[index + 1]
-            if escape == "u":
-                chars.append(chr(int(rendered[index + 2 : index + 6], 16)))
-                index += 6
-            else:
-                # \' is valid JS but not valid JSON; the rest are shared.
-                chars.append("'" if escape == "'" else json.loads(f'"\\{escape}"'))
-                index += 2
-        return "".join(chars)
+    def _completion_action(self, rendered: str) -> object:
+        return _literal_at(rendered, "const completionAction = ")
 
     @pytest.mark.parametrize("payload", BREAKOUT_PAYLOADS)
     def test_stream_url_cannot_escape_its_literal(self, payload: str) -> None:
         rendered = self._script(task_id="t", stream_url=payload)
 
-        assert self._event_source_arg(rendered) == payload
+        assert self._stream_url(rendered) == payload
 
     def test_task_id_cannot_escape_the_derived_url(self) -> None:
         rendered = self._script(task_id="');alert(1);//")
 
-        assert self._event_source_arg(rendered) == (
-            "/admin/progress/');alert(1);///stream"
+        assert self._stream_url(rendered) == (
+            "/admin/progress/%27%29%3Balert%281%29%3B%2F%2F/stream"
         )
 
     @pytest.mark.parametrize(
@@ -218,20 +192,32 @@ class TestTaskProgress:
 
         assert "evil.test" not in rendered
 
-    def test_identifier_callback_still_runs(self) -> None:
+    def test_identifier_callback_becomes_inert_action_data(self) -> None:
         rendered = self._script(task_id="t", on_complete="app.onDone")
 
-        assert "app.onDone();" in rendered
+        assert self._completion_action(rendered) == {
+            "kind": "callback",
+            "target": "app.onDone",
+        }
+        assert "app.onDone();" not in rendered
 
-    def test_local_redirect_still_works(self) -> None:
+    def test_local_redirect_becomes_inert_action_data(self) -> None:
         rendered = self._script(task_id="t", on_complete="/admin/done")
 
-        assert 'window.location.href = "/admin/done";' in rendered
+        assert self._completion_action(rendered) == {
+            "kind": "navigate",
+            "target": "/admin/done",
+        }
+        assert "window.location.href =" not in rendered
 
     def test_redirect_target_is_an_encoded_literal(self) -> None:
-        rendered = self._script(task_id="t", on_complete='/admin/"+alert(1)+"')
+        target = '/admin/"+alert(1)+"'
+        rendered = self._script(task_id="t", on_complete=target)
 
-        assert "+alert(1)+" not in rendered.replace('\\"+alert(1)+\\"', "")
+        assert self._completion_action(rendered) == {
+            "kind": "navigate",
+            "target": target,
+        }
 
 
 class TestInfolistIcon:
