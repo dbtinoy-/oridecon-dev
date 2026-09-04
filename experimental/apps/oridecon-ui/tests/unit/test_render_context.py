@@ -70,6 +70,22 @@ class TestRenderScope:
         with pytest.raises(ValueError, match="Duplicate"):
             root.child("panel").id("region", key="main")
 
+    def test_once_claims_are_shared_across_child_scopes(self) -> None:
+        root = RenderScope("page")
+
+        assert root.child("orders").claim_once("table-controller") is True
+        assert root.child("customers").claim_once("table-controller") is False
+        assert RenderScope("next-response").claim_once("table-controller") is True
+
+    @pytest.mark.parametrize("value", ["", "   "])
+    def test_blank_once_claims_are_rejected(self, value: str) -> None:
+        with pytest.raises(ValueError, match="must not be blank"):
+            RenderScope("page").claim_once(value)
+
+    def test_non_string_once_claims_are_rejected(self) -> None:
+        with pytest.raises(TypeError, match="must be a string"):
+            RenderScope("page").claim_once(42)  # type: ignore[arg-type]
+
     @pytest.mark.parametrize(
         "value",
         ["User Settings", "123", "a/b", "Ünicode", "x" * 100],

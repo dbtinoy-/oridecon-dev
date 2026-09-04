@@ -443,9 +443,11 @@ class DataTableRenderer:
         )
 
     def _render_script(self) -> Any:
-        """Render Alpine.js script."""
-        from oridecon.ui import DataTableScriptRenderer
+        """Render the compatibility controller at most once per response."""
+        from oridecon.ui import DataTableScriptRenderer, get_render_scope
 
+        if not get_render_scope().claim_once("data-table-client-controller"):
+            return ""
         return DataTableScriptRenderer.render(self._all_ids)
 
     def render_bulk_actions(self) -> Any:

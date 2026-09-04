@@ -119,6 +119,7 @@ def test_sibling_tables_resolve_distinct_internal_zones() -> None:
 
     assert html.count(" data-oridecon-table-root") == 2
     assert html.count(" data-oridecon-table-data") == 2
+    assert html.count("window.LexigramTableLogic =") == 1
     assert "@keydown.window" not in html
     assert html.count('@keydown="handleKeydown($event)"') == 2
 

@@ -50,6 +50,7 @@ class _ScopeState:
     counters: defaultdict[tuple[str, ...], int] = field(
         default_factory=lambda: defaultdict(int)
     )
+    once_claims: set[str] = field(default_factory=set)
 
 
 class RenderScope:
@@ -87,6 +88,23 @@ class RenderScope:
             _segments=(*self._segments, _segment(namespace, kind="namespace")),
             _state=self._state,
         )
+
+    def claim_once(self, key: str) -> bool:
+        """Claim a response-wide resource once across this scope and its children.
+
+        Returns ``True`` to the first claimant and ``False`` thereafter. This is
+        intended for invariant support markup such as an inline compatibility
+        controller while shared assets migrate to the external runtime.
+        """
+        if not isinstance(key, str):
+            raise TypeError("RenderScope once-claim key must be a string")
+        claim = key.strip()
+        if not claim:
+            raise ValueError("RenderScope once-claim key must not be blank")
+        if claim in self._state.once_claims:
+            return False
+        self._state.once_claims.add(claim)
+        return True
 
     def id(self, role: str, *, key: str | None = None) -> str:
         """Allocate one deterministic ID for ``role`` and an optional stable key."""

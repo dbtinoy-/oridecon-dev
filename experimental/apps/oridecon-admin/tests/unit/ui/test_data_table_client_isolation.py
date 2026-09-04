@@ -45,6 +45,20 @@ def test_root_local_ids_remain_encoded_in_the_alpine_attribute() -> None:
     assert "window.LexigramTableLogic = {\n                allIds:" not in html
 
 
+def test_separate_render_responses_each_include_controller_support() -> None:
+    def render(key: str) -> str:
+        return render_to_string(
+            DataTable(
+                columns=[TextColumn("name")],
+                data=[{"id": key, "name": key}],
+                table_key=key,
+            )
+        )
+
+    assert render("orders").count("window.LexigramTableLogic =") == 1
+    assert render("customers").count("window.LexigramTableLogic =") == 1
+
+
 def test_search_filter_and_data_regions_expose_instance_markers() -> None:
     config = TableConfiguration(
         columns=[TextColumn("name")],
