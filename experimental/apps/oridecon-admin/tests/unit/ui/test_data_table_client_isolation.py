@@ -102,6 +102,17 @@ def test_table_script_does_not_reprocess_htmx_swaps_or_bind_per_table_globals() 
     assert "LexigramTableInitialized" in source
 
 
+def test_resizer_removes_window_listeners_when_a_header_is_destroyed() -> None:
+    source = _source()
+
+    assert "LexigramResizableRegistered" not in source
+    assert "destroy()" in source
+    assert "this.stopResize()" in source
+    assert "removeEventListener('mousemove', this.resizeMove)" in source
+    assert "removeEventListener('mouseup', this.resizeEnd)" in source
+    assert "removeEventListener('blur', this.resizeEnd)" in source
+
+
 def test_generated_script_has_specific_provenance() -> None:
     script = DataTableScriptRenderer.render([])
 

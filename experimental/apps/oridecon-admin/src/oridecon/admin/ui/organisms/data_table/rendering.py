@@ -196,6 +196,7 @@ class DataTableRenderer:
                     data_oridecon_table_refresh_event=(
                         f"oridecon-refresh-table-{Zones.TABLE.id}"
                     ),
+                    hx_sync=f"{Zones.TABLE.selector}:replace",
                     x_data=(
                         "{ ...window.LexigramTableLogic, selectedIds: [], "
                         "expandedIds: [], collapsedGroups: [], lastSelected: null, "

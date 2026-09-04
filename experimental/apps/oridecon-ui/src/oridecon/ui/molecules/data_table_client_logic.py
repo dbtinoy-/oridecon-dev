@@ -642,31 +642,49 @@ class DataTableScriptRenderer:
                 }}
             }};
 
-            // Register resizable columns robustly
+            // Alpine calls destroy() when a header is replaced, so an HTMX
+            // swap in the middle of a drag cannot retain window listeners.
             const registerResizable = () => {{
-                if (window.Alpine && !window.LexigramResizableRegistered) {{
-                    Alpine.data('resizableColumn', () => ({{
-                        startResize(e) {{
-                             const th = this.$el;
-                             const startX = e.clientX;
-                             const startWidth = th.offsetWidth;
-                             const onMove = (moveEvent) => {{
-                                 const currentWidth = startWidth + (moveEvent.clientX - startX);
-                                 if (currentWidth > 50) {{
-                                     th.style.width = `${{currentWidth}}px`;
-                                     th.style.minWidth = `${{currentWidth}}px`;
-                                 }}
-                             }};
-                             const onUp = () => {{
-                                 window.removeEventListener('mousemove', onMove);
-                                 window.removeEventListener('mouseup', onUp);
-                             }};
-                             window.addEventListener('mousemove', onMove);
-                             window.addEventListener('mouseup', onUp);
+                if (!window.Alpine) return;
+                Alpine.data('resizableColumn', () => ({{
+                    resizeMove: null,
+                    resizeEnd: null,
+
+                    stopResize() {{
+                        if (this.resizeMove) {{
+                            window.removeEventListener('mousemove', this.resizeMove);
                         }}
-                    }}));
-                    window.LexigramResizableRegistered = true;
-                }}
+                        if (this.resizeEnd) {{
+                            window.removeEventListener('mouseup', this.resizeEnd);
+                            window.removeEventListener('blur', this.resizeEnd);
+                        }}
+                        this.resizeMove = null;
+                        this.resizeEnd = null;
+                    }},
+
+                    startResize(e) {{
+                        this.stopResize();
+                        e.preventDefault();
+                        const th = this.$el;
+                        const startX = e.clientX;
+                        const startWidth = th.offsetWidth;
+                        this.resizeMove = (moveEvent) => {{
+                            const currentWidth = startWidth + (moveEvent.clientX - startX);
+                            if (currentWidth > 50) {{
+                                th.style.width = `${{currentWidth}}px`;
+                                th.style.minWidth = `${{currentWidth}}px`;
+                            }}
+                        }};
+                        this.resizeEnd = () => this.stopResize();
+                        window.addEventListener('mousemove', this.resizeMove);
+                        window.addEventListener('mouseup', this.resizeEnd);
+                        window.addEventListener('blur', this.resizeEnd);
+                    }},
+
+                    destroy() {{
+                        this.stopResize();
+                    }}
+                }}));
             }};
 
             if (window.Alpine) {{

@@ -115,6 +115,7 @@ def test_sibling_tables_resolve_distinct_internal_zones() -> None:
         refresh_event = f"oridecon-refresh-table-{table_id}"
         assert f'data-oridecon-table-refresh-event="{refresh_event}"' in html
         assert f"{refresh_event} from:body" in html
+        assert f'hx-sync="#{table_id}:replace"' in html
 
     assert html.count(" data-oridecon-table-root") == 2
     assert html.count(" data-oridecon-table-data") == 2
