@@ -12,6 +12,7 @@ from typing import Any, Self, cast
 from markupsafe import Markup
 
 from oridecon.logging import get_logger
+from oridecon.ui.core.render_context import ensure_render_context, get_render_context
 from oridecon.ui.core.trusted_html import TrustedHTML
 
 logger = get_logger(__name__)
@@ -155,6 +156,10 @@ class Element:
         _exit_composition_context(self)
 
     def __html__(self) -> str:
+        if get_render_context() is None:
+            with ensure_render_context():
+                return self.__html__()
+
         parts: list[str] = [f"<{self.tag}"]
         for k, v in self.attrs.items():
             # Map pythonic kwarg names like `class_` to `class`, `for_` to `for`,
@@ -431,6 +436,10 @@ class Component:
         raise NotImplementedError
 
     def __html__(self) -> str:
+        if get_render_context() is None:
+            with ensure_render_context():
+                return self.__html__()
+
         # Check asChild delegation first
         as_child_result = self._render_as_child()
         if as_child_result is not None:
@@ -472,6 +481,10 @@ def render_to_string(value: str | Any) -> str:
     flattened by rendering each child and concatenating the results, and
     component instances are rendered via their `render()` method.
     """
+    if get_render_context() is None:
+        with ensure_render_context():
+            return render_to_string(value)
+
     # None becomes empty string
     if value is None:
         return ""

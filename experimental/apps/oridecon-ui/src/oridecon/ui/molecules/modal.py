@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-import itertools
 import re
 from typing import Any
 
 from oridecon.ui.atoms.button import Button, ButtonVariant, SubmitButton
 from oridecon.ui.core.base import Component, el, raw, render_to_string
-
-_counter = itertools.count()
+from oridecon.ui.core.render_context import get_render_scope
 
 
 def _first_form_id(html: str) -> str | None:
@@ -64,6 +62,7 @@ class Modal(Component):
         render_trigger: bool = True,
         max_width: str | None = None,
         max_height: str | None = None,
+        modal_id: str | None = None,
         **props: Any,
     ) -> None:
         super().__init__(
@@ -81,13 +80,19 @@ class Modal(Component):
         self.render_trigger = render_trigger
         self.max_width = max_width or self.PANEL_MAX_WIDTH
         self.max_height = max_height or self.PANEL_MAX_HEIGHT
-        self.id_suffix = next(_counter)
+        self.modal_id = modal_id
 
     def _build_panel_classes(self) -> str:
         """Build the panel classes with configurable max width/height."""
         return f"{self.PANEL_CLASSES} {self.max_width} {self.max_height} flex flex-col"
 
     def render(self) -> Any:
+        modal_scope = get_render_scope().child("modal")
+        dialog_id = modal_scope.id("dialog", key=self.modal_id)
+        identity_suffix = dialog_id.removeprefix(f"{modal_scope.prefix}-dialog-")
+        title_id = f"{modal_scope.prefix}-title-{identity_suffix}"
+        description_id = f"{modal_scope.prefix}-description-{identity_suffix}"
+
         trigger_node = None
         if getattr(self, "render_trigger", True) and self.trigger is not None:
             if isinstance(self.trigger, str):
@@ -219,10 +224,11 @@ class Modal(Component):
                     "div",
                     {
                         "class": "fixed inset-0 z-10 w-screen overflow-y-auto",
+                        "id": dialog_id,
                         "role": "dialog",
                         "aria-modal": "true",
-                        "aria-labelledby": f"modal-title-{self.id_suffix}",
-                        "aria-describedby": f"modal-description-{self.id_suffix}",
+                        "aria-labelledby": title_id,
+                        "aria-describedby": description_id,
                     },
                     el(
                         "div",
@@ -257,7 +263,7 @@ class Modal(Component):
                                             "h3",
                                             {
                                                 "class": "text-base font-semibold leading-6 text-foreground",
-                                                "id": f"modal-title-{self.id_suffix}",
+                                                "id": title_id,
                                             },
                                             self.title,
                                         ),
@@ -269,7 +275,7 @@ class Modal(Component):
                                 "div",
                                 {
                                     "class": "relative mt-2 flex-1 overflow-y-auto px-4 sm:px-6",
-                                    "id": f"modal-description-{self.id_suffix}",
+                                    "id": description_id,
                                 },
                                 *children_html,
                             ),
