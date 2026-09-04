@@ -6,6 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from oridecon.contracts.exceptions.base import OrideconError
+from oridecon.contracts.exceptions.container import UnresolvableDependencyError
 
 
 @dataclass(frozen=True, slots=True)
@@ -21,9 +22,10 @@ def summarize_contributor_boot_failure(exc: Exception) -> ContributorBootFailure
     """Classify a contributor boot exception as expected or genuine.
 
     ``ModuleNotFoundError`` and ``ImportError`` raised during contributor
-    boot are typically expected when an optional backing service is not
-    registered in this deployment.  All other errors are treated as
-    genuine failures.
+    boot are typically expected when an optional package is absent.
+    ``UnresolvableDependencyError`` likewise means an optional contributor's
+    backing service is not registered in this deployment. All other errors
+    are treated as genuine failures.
     """
     if isinstance(exc, (ModuleNotFoundError, ImportError)):
         name = getattr(exc, "name", "") or str(exc)
@@ -31,6 +33,16 @@ def summarize_contributor_boot_failure(exc: Exception) -> ContributorBootFailure
             expected=True,
             reason=f"optional dependency not installed: {name}",
             summary=str(exc),
+        )
+
+    if isinstance(exc, UnresolvableDependencyError):
+        dependency = str(exc.details.get("dependency") or "").strip()
+        return ContributorBootFailure(
+            expected=True,
+            reason="required service is not registered",
+            # OrideconError.__str__ includes codes, hints, and newlines. The
+            # structured dependency name is the useful, log-safe summary.
+            summary=dependency or exc.message.splitlines()[0],
         )
 
     if isinstance(exc, OrideconError):
