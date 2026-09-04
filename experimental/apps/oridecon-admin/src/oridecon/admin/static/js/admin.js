@@ -1,5 +1,5 @@
 /**
- * Lexigram Admin - Core JavaScript
+ * Oridecon Admin - Core JavaScript
  */
 (function() {
   'use strict';
