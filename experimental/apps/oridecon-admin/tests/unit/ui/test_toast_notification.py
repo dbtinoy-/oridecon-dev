@@ -67,11 +67,13 @@ class TestToastNotification:
     def test_render_renders_actions(self) -> None:
         html = (
             ToastNotification.make("x")
-            .actions([{"label": "Go", "onclick": "go()"}])
+            .actions([{"label": "Go", "href": "/go"}])
             .render()
         )
         assert "Go" in html
-        assert "go()" in html
+        assert 'href="/go"' in html
+        # Actions are CSP-clean: no inline onclick attributes.
+        assert "onclick=" not in html
 
     def test_send_flashes_full_payload(self, monkeypatch: pytest.MonkeyPatch) -> None:
         calls: list[tuple[object, ...]] = []

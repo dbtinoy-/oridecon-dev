@@ -8,23 +8,30 @@ document and dispatched events. These tests drive it in Chromium.
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 import pytest
 from starlette.applications import Starlette
-from starlette.responses import HTMLResponse
+from starlette.responses import HTMLResponse, PlainTextResponse
 from starlette.routing import Route
 
-from oridecon.admin.ui.templates.shell_scripts import admin_form_ux_script
-from oridecon.ui import render_to_string
-
 pytestmark = pytest.mark.browser
+
+_SHELL_JS = (
+    Path(__file__).parents[2]
+    / "src"
+    / "oridecon"
+    / "admin"
+    / "static"
+    / "js"
+    / "admin-shell.js"
+)
 
 
 def _page_html() -> str:
     """A minimal document carrying the admin shell's behaviour script."""
-    body = render_to_string(admin_form_ux_script())
-    return f"""<!DOCTYPE html>
+    return """<!DOCTYPE html>
 <html><head><title>Form harness</title></head>
 <body>
   <a href="/elsewhere" id="leave">Leave</a>
@@ -34,7 +41,7 @@ def _page_html() -> str:
     <button type="submit" id="save">Save</button>
     <button type="reset" id="discard">Discard</button>
   </form>
-  {body}
+  <script src="/admin/static/js/admin-shell.js"></script>
 </body></html>"""
 
 
@@ -45,10 +52,17 @@ def _app() -> Starlette:
     async def elsewhere(request: Any) -> HTMLResponse:
         return HTMLResponse("<html><body><h1>Elsewhere</h1></body></html>")
 
+    async def shell_js(request: Any) -> PlainTextResponse:
+        return PlainTextResponse(
+            _SHELL_JS.read_text(encoding="utf-8"),
+            media_type="application/javascript",
+        )
+
     return Starlette(
         routes=[
             Route("/", index),
             Route("/elsewhere", elsewhere),
+            Route("/admin/static/js/admin-shell.js", shell_js),
         ]
     )
 

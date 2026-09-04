@@ -159,17 +159,26 @@ class ServerToastChannel:
 
         parts.append(f'<div class="toast-message">{escape(toast.message)}</div>')
 
-        # Actions
+        # Actions (CSP-clean: no inline onclick). An entry carries either an
+        # ``href`` (rendered as a link) or an ``action`` descriptor handled by
+        # the delegated listener in the external shell bundle
+        # (static/js/admin-shell.js / admin.js): "reload" or "dismiss".
         if toast.actions:
             parts.append('<div class="toast-actions">')
             for action in toast.actions:
-                parts.append(f"""
-                <button type="button"
-                        class="toast-action"
-                        onclick="{escape(action.get("onclick", ""))}">
-                    {escape(action.get("label", "Action"))}
-                </button>
-                """)
+                href = action.get("href")
+                label = escape(action.get("label", "Action"))
+                if href:
+                    parts.append(
+                        f'<a class="toast-action" href="{escape(href)}">'
+                        f"{label}</a>"
+                    )
+                else:
+                    descriptor = action.get("action", "reload")
+                    parts.append(
+                        f'<button type="button" class="toast-action" '
+                        f'data-action="{escape(descriptor)}">{label}</button>'
+                    )
             parts.append("</div>")
 
         parts.append("</div>")  # toast-content
@@ -179,7 +188,8 @@ class ServerToastChannel:
             parts.append(f"""
             <button type="button"
                     class="toast-dismiss"
-                    onclick="dismissToast('{escape(toast_id)}')"
+                    data-action="dismiss-toast"
+                    data-dismiss-toast="{escape(toast_id)}"
                     aria-label="Dismiss notification">
                 <i data-lucide="x" class="w-4 h-4"></i>
             </button>
@@ -202,89 +212,18 @@ class ServerToastChannel:
         return position_map.get(self.config.position, "toast-top toast-right")
 
     def _render_toast_script(self) -> str:
-        """Render JavaScript for toast handling."""
-        return f"""
-        <script>
-        // Toast management
-        function showToast(options) {{
-            const container = document.getElementById('toast-container');
-            if (!container) return;
+        """Return the (now external) toast runtime.
 
-            const toast = document.createElement('div');
-            toast.className = 'toast toast-' + (options.type || 'info');
-            toast.setAttribute('role', 'alert');
+        The toast behaviour (``showToast``/``dismissToast``, HTMX
+        ``X-Toast`` header handling, auto-dismiss of initial toasts) moved to
+        the generated ``static/js/admin-shell.js`` bundle (admin shell pages)
+        and ``static/js/admin.js`` (legacy layouts) — both external assets, so
+        no inline ``<script>`` block is emitted (CSP ``script-src 'self'``).
 
-            const iconMap = {{
-                success: 'check-circle',
-                error: 'x-circle',
-                warning: 'alert-triangle',
-                info: 'info'
-            }};
-
-            toast.innerHTML = `
-                <div class="toast-icon">
-                    <i data-lucide="${{iconMap[options.type] || 'info'}}" class="w-5 h-5"></i>
-                </div>
-                <div class="toast-content">
-                    ${{options.title ? '<div class="toast-title">' + escapeHtml(options.title) + '</div>' : ''}}
-                    <div class="toast-message">${{escapeHtml(options.message)}}</div>
-                </div>
-                <button type="button" class="toast-dismiss" onclick="this.parentElement.remove()">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-            `;
-
-            container.appendChild(toast);
-
-            // Refresh lucide icons
-            if (window.lucide) lucide.createIcons();
-
-            // Auto dismiss
-            const duration = options.duration || {self.config.default_duration_ms};
-            if (duration > 0) {{
-                setTimeout(() => toast.remove(), duration);
-            }}
-        }}
-
-        function dismissToast(id) {{
-            const toast = document.getElementById(id);
-            if (toast) toast.remove();
-        }}
-
-        // Close a toast by ID from any component via browser event:
-        // dispatch(new CustomEvent('oridecon:close-toast', {{ detail: {{ id: 'toast-...' }} }}))
-        document.addEventListener('oridecon:close-toast', function(evt) {{
-            const id = evt.detail && evt.detail.id;
-            if (id) dismissToast(id);
-        }});
-
-        function escapeHtml(text) {{
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }}
-
-        // Listen for HTMX events
-        document.addEventListener('htmx:afterRequest', function(evt) {{
-            const xhr = evt.detail.xhr;
-            const toastHeader = xhr.getResponseHeader('X-Toast');
-            if (toastHeader) {{
-                try {{
-                    const toast = JSON.parse(toastHeader);
-                    showToast(toast);
-                }} catch (e) {{
-                    console.error('Failed to parse toast header:', e);
-                }}
-            }}
-        }});
-
-        // Auto-dismiss initial toasts
-        document.querySelectorAll('[data-auto-dismiss="true"]').forEach(toast => {{
-            const duration = parseInt(toast.dataset.duration) || {self.config.default_duration_ms};
-            setTimeout(() => toast.remove(), duration);
-        }});
-        </script>
+        Returns:
+            Empty string; the channel markup is script-free.
         """
+        return ""
 
 
 def flash_to_toast(

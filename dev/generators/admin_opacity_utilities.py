@@ -136,14 +136,19 @@ def _scan() -> tuple[set[str], set[tuple[str, str]]]:
     bare: set[str] = set()
     variants: set[tuple[str, str]] = set()
 
-    for path in sorted(SRC.rglob("*.py")):
-        text = path.read_text(encoding="utf-8", errors="ignore")
-        for utility in _BARE.findall(text):
-            if utility not in available:
-                bare.add(utility)
-        for variant, utility in _VARIANT.findall(text):
-            if f"{variant}:{utility}" not in available:
-                variants.add((variant, utility))
+    # Scan Python sources plus the static JS/CSS assets: the CSP v2
+    # migration moved shell markup (error toasts, loading bar) from inline
+    # Python strings into generated static assets, so utility classes now
+    # first appear in .js/.css files.
+    for pattern in ("*.py", "*.js", "*.css", "*.html"):
+        for path in sorted(SRC.rglob(pattern)):
+            text = path.read_text(encoding="utf-8", errors="ignore")
+            for utility in _BARE.findall(text):
+                if utility not in available:
+                    bare.add(utility)
+            for variant, utility in _VARIANT.findall(text):
+                if f"{variant}:{utility}" not in available:
+                    variants.add((variant, utility))
 
     # A variant implies nothing about the base class, and vice versa; keep
     # them independent so `hover:bg-card/80` alone still emits a rule.

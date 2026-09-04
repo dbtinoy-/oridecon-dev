@@ -7,9 +7,7 @@ from typing import Any
 from oridecon.ui.atoms.icons import get_icon
 from oridecon.ui.attributes.alpine import alpine
 from oridecon.ui.core.base import Component, Element
-from oridecon.ui.core.js import js_string
 from oridecon.ui.core.render_context import get_render_scope
-from oridecon.ui.core.trusted_html import trusted_html
 
 
 class NotificationBell(Component):
@@ -41,145 +39,6 @@ class NotificationBell(Component):
         self.csrf_token = csrf_token or ""
         self.max_display = max(1, int(max_display))
         self.notification_key = notification_key
-
-    def _controller_script(self, controller_name: str) -> str:
-        return f"""
-(() => {{
-    const controllerName = {js_string(controller_name)};
-    const controller = () => ({{
-        open: false,
-        loading: true,
-        loadError: '',
-        mutationError: '',
-        unreadCount: 0,
-        notifications: [],
-        eventSource: null,
-        toggle() {{ this.open = !this.open; }},
-        close() {{ this.open = false; }},
-        parseEvent(event) {{
-            try {{ return JSON.parse(event.data); }}
-            catch (_error) {{ return null; }}
-        }},
-        init() {{
-            this.loadInbox();
-            if (this.eventSource) return;
-            this.eventSource = new EventSource({js_string(self.sse_url)});
-            const handleNotification = (event) => {{
-                const envelope = this.parseEvent(event);
-                if (!envelope) return;
-                if (envelope.event && envelope.event !== 'notification') return;
-                const data = envelope.data || envelope;
-                this.notifications.unshift({{
-                    id: envelope.id || data.id || Date.now() + Math.random(),
-                    title: data.title || 'Notification',
-                    message: data.message || '',
-                    level: data.level || 'info',
-                    read: false,
-                    time: data.timestamp
-                }});
-                this.unreadCount += 1;
-                if (this.notifications.length > {self.max_display}) {{
-                    this.notifications.pop();
-                }}
-            }};
-            this.eventSource.addEventListener('message', handleNotification);
-            this.eventSource.addEventListener('notification', handleNotification);
-            this.eventSource.addEventListener('toast', (event) => {{
-                const data = this.parseEvent(event);
-                if (data && typeof window.showToast === 'function') {{
-                    window.showToast(data.message || data.title, data.variant || 'success');
-                }}
-            }});
-            this.eventSource.addEventListener('error', () => {{}});
-        }},
-        async loadInbox() {{
-            this.loading = true;
-            this.loadError = '';
-            try {{
-                const response = await fetch({js_string(self.inbox_api_url)}, {{
-                    headers: {{'X-Requested-With': 'fetch'}}
-                }});
-                if (!response.ok) throw new Error(`HTTP ${{response.status}}`);
-                const data = await response.json();
-                this.notifications = (data.notifications || []).map(notification => ({{
-                    id: notification.id,
-                    title: notification.title || 'Notification',
-                    message: notification.message || '',
-                    level: notification.level || 'info',
-                    read: notification.read === true,
-                    time: notification.timestamp
-                }})).slice(0, {self.max_display});
-                this.unreadCount = data.unread_count || 0;
-            }} catch (_error) {{
-                this.loadError = 'Notifications could not be loaded.';
-            }} finally {{
-                this.loading = false;
-            }}
-        }},
-        destroy() {{
-            if (this.eventSource) {{
-                this.eventSource.close();
-                this.eventSource = null;
-            }}
-        }},
-        async markAsRead(id) {{
-            const notification = this.notifications.find(item => item.id === id);
-            const wasUnread = Boolean(notification && !notification.read);
-            if (wasUnread) {{
-                notification.read = true;
-                this.unreadCount = Math.max(0, this.unreadCount - 1);
-            }}
-            this.mutationError = '';
-            try {{
-                const url = {js_string(self.mark_read_url)}.replace(
-                    '{{message_id}}', encodeURIComponent(String(id))
-                );
-                const response = await fetch(url, {{
-                    method: 'POST',
-                    headers: {{
-                        'X-Requested-With': 'fetch',
-                        'X-CSRF-Token': this.$el.dataset.csrfToken || ''
-                    }}
-                }});
-                if (!response.ok) throw new Error(`HTTP ${{response.status}}`);
-            }} catch (_error) {{
-                if (wasUnread) {{
-                    notification.read = false;
-                    this.unreadCount += 1;
-                }}
-                this.mutationError = 'The notification could not be marked as read.';
-            }}
-        }},
-        async markAllRead() {{
-            const previous = this.notifications.map(item => item.read);
-            const previousUnreadCount = this.unreadCount;
-            this.notifications.forEach(item => {{ item.read = true; }});
-            this.unreadCount = 0;
-            this.mutationError = '';
-            try {{
-                const response = await fetch({js_string(self.mark_all_read_url)}, {{
-                    method: 'POST',
-                    headers: {{
-                        'X-Requested-With': 'fetch',
-                        'X-CSRF-Token': this.$el.dataset.csrfToken || ''
-                    }}
-                }});
-                if (!response.ok) throw new Error(`HTTP ${{response.status}}`);
-            }} catch (_error) {{
-                this.notifications.forEach((item, index) => {{
-                    item.read = previous[index] ?? item.read;
-                }});
-                this.unreadCount = previousUnreadCount;
-                this.mutationError = 'Notifications could not be marked as read.';
-            }}
-        }}
-    }});
-
-    const register = () => window.Alpine.data(controllerName, controller);
-    if (window.Alpine) register();
-    else document.addEventListener('alpine:init', register, {{ once: true }});
-}})();
-"""
 
     def _render_trigger(self, trigger_id: str, panel_id: str) -> Element:
         return Element(
@@ -424,22 +283,14 @@ class NotificationBell(Component):
         trigger_id = scope.id("trigger", key=root_scope_id)
         panel_id = scope.id("panel", key=root_scope_id)
         title_id = scope.id("title", key=root_scope_id)
-        controller_name = root_scope_id.replace("-", "_")
         root_class = " ".join(value for value in ("relative", custom_class) if value)
 
         return Element(
             "div",
             self._render_trigger(trigger_id, panel_id),
             self._render_panel(panel_id, title_id),
-            Element(
-                "script",
-                trusted_html(
-                    self._controller_script(controller_name),
-                    source="generated NotificationBell Alpine controller",
-                ),
-            ),
             id=explicit_id or root_scope_id,
-            **alpine.data(alpine.expr(controller_name)),
+            **alpine.data(alpine.expr("notificationBell")),
             **{"x-init": "init()"},
             **alpine.on("beforeunload", alpine.expr("destroy()"), "window"),
             **alpine.on(
@@ -451,6 +302,9 @@ class NotificationBell(Component):
             data_inbox_url=self.inbox_url or "",
             data_inbox_api_url=self.inbox_api_url,
             data_sse_url=self.sse_url,
+            data_mark_read_url=self.mark_read_url,
+            data_mark_all_read_url=self.mark_all_read_url,
+            data_max_display=str(self.max_display),
             data_csrf_token=self.csrf_token,
             class_=root_class,
             **root_props,

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"{% block html_attrs %}{% endblock %}>
 
 <head>
     <meta charset="UTF-8">
@@ -12,150 +12,22 @@
     <!-- Meta -->
     {% block meta %}{% endblock %}
 
-    <!-- Global Styles -->
-    <style type="text/css">
-        [x-cloak] {
-            display: none !important;
-        }
-
-        /* Native <details> disclosure markers are not suppressed reliably by
-           runtime-scanned utility classes (Tailwind CDN regenerates its
-           stylesheet only after htmx body swaps), so hide them statically. */
-        summary {
-            list-style: none;
-        }
-
-        summary::-webkit-details-marker {
-            display: none;
-        }
-
-        /* Modern Scrollbar Styling */
-        /* Webkit (Chrome, Edge, Safari) */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: transparent;
-            border-radius: 3px;
-        }
-        
-        /* Show scrollbar thumb on hover */
-        *:hover::-webkit-scrollbar-thumb {
-            background-color: var(--border);
-        }
-
-        /* Smooth animations for drawer and overlays */
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-            }
-
-            to {
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-slide-in-right {
-            animation: slideInRight 0.3s ease-out;
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .animate-fade-in-up {
-            animation: fadeInUp 0.3s ease-out;
-        }
-
-        /* Smooth transitions for all interactive elements */
-        * {
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        }
-    </style>
+    <!-- Styles: prebuilt + generated shell chrome (no inline style blocks;
+         CSP style-src 'self' compatible) -->
+    <link rel="stylesheet" href="{{ static_prefix | default('/admin') }}/static/css/tailwind.css">
+    <link rel="stylesheet" href="{{ static_prefix | default('/admin') }}/static/css/admin.css">
+    <link rel="stylesheet" href="{{ static_prefix | default('/admin') }}/static/css/admin-shell.css">
 
     <!-- Scripts -->
     <script src="{{ static_prefix | default('/admin') }}/static/js/htmx.min.js"></script>
     <script src="{{ static_prefix | default('/admin') }}/static/js/lucide.min.js"></script>
     <script src="{{ static_prefix | default('/admin') }}/static/js/alpine-focus.min.js" defer></script>
     <script src="{{ static_prefix | default('/admin') }}/static/js/alpine.min.js" defer></script>
-    <script defer>var origToggle=Element.prototype._x_toggleAndCascadeWithTransitions;origToggle&&(Element.prototype._x_toggleAndCascadeWithTransitions=function(e,t,r,n){var o=origToggle.call(this,e,t,r,n);if(!t&&this._x_hidePromise)this._x_hidePromise.catch(function(a){});return o})</script>
-    <script>window.addEventListener("unhandledrejection",function(e){e.promise&&e.promise.catch(function(){});if(!e.reason)return;var r=e.reason;if(r.isFromCancelledTransition||r instanceof TypeError){e.preventDefault();e.stopImmediatePropagation()}})</script>
+    <script src="{{ static_prefix | default('/admin') }}/static/js/admin-shell.js" defer></script>
 
-    <link rel="stylesheet" href="{{ static_prefix | default('/admin') }}/static/css/tailwind.css">
-    <link rel="stylesheet" href="{{ static_prefix | default('/admin') }}/static/css/admin.css">
-    <script>
-        (function () {
-            var stored = localStorage.getItem('darkMode');
-            var serverDefault = {{ dark_mode | default('') | tojson }};
-            var dark = stored !== null ? stored === 'true'
-                : serverDefault ? serverDefault === 'dark'
-                : window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (dark) document.documentElement.classList.add('dark');
-        })();
-        window.toggleTheme = function () {
-            var dark = !document.documentElement.classList.contains('dark');
-            document.documentElement.classList.toggle('dark', dark);
-            localStorage.setItem('darkMode', String(dark));
-            window.dispatchEvent(new CustomEvent('darkmode-change', { detail: { dark: dark } }));
-        };
-    </script>
-
-    <!-- HTMX Error Debugging -->
-    <script>
-        document.addEventListener("htmx:swapError", function (evt) {
-            console.error("HTMX Swap Error:", evt.detail);
-            var path = evt.detail.requestConfig && evt.detail.requestConfig.path;
-            console.error("Request URL:", path);
-            console.error("Response:", evt.detail.serverResponse);
-            console.error("Target:", evt.detail.target);
-        });
-
-        document.addEventListener("htmx:responseError", function (evt) {
-            if (evt.detail.isFromCancelledTransition) return;
-            console.error("HTMX Response Error:", evt.detail);
-        });
-
-        document.addEventListener("htmx:afterSwap", function () {
-            document.body.classList.remove('overflow-hidden');
-            if (window.lucide) lucide.createIcons();
-        });
-
-        document.addEventListener("DOMContentLoaded", function () {
-            if (window.lucide) lucide.createIcons();
-        });
-
-        window.addEventListener("beforeunload", function () {
-            document.body.classList.remove('overflow-hidden');
-        });
-    </script>
+    <!-- Synchronous head bootstrap: dark mode before first paint + runtime
+         theme overrides. All values come from data attributes on <html>. -->
+    <script src="{{ static_prefix | default('/admin') }}/static/js/admin-head.js"></script>
 
     {% block extra_head %}{% endblock %}
 </head>

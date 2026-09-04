@@ -941,12 +941,15 @@ class UsersController(_AccessControlController):
             if uid == me:
                 lifecycle = ""  # never offer self-deactivation
             elif active:
+                # CSP: the native confirm is applied by the delegated
+                # data-confirm listener in static/js/admin-shell.js; an
+                # inline onsubmit attribute would be blocked under
+                # script-src-attr 'none'-style policies.
                 lifecycle = (
                     f'<form method="post" action="{escape(base)}/'
                     f'{quote_plus(uid)}/deactivate" class="inline" '
-                    "onsubmit=\"return confirm('Deactivate this admin? "
-                    "Their sessions are revoked and they can no longer "
-                    "log in.')\">"
+                    'data-confirm="Deactivate this admin? Their sessions '
+                    'are revoked and they can no longer log in.">'
                     f'<input type="hidden" name="csrf_token" value="{escape(csrf)}">'
                     '<button type="submit" class="text-sm font-medium '
                     'text-destructive hover:underline">Deactivate</button>'

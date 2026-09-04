@@ -69,10 +69,27 @@ and the middleware inherit the fix; operator overrides stored in
 1. Swap `alpine.min.js` for the Alpine CSP build; convert all inline
    directive expressions to registered `Alpine.data` components (large:
    every `x-show="open"`-style expression must become a method/property
-   reference).
+   reference). **Still deferred — requires real-browser verification.**
 2. Externalize the remaining inline `<script>`/`<style>` blocks into
    static assets; move per-page data into `<script type="application/json">`
-   data islands (non-executable, CSP-exempt).
+   data islands (non-executable, CSP-exempt). **Done for the admin shell
+   (`AdminShell` + `base.html` + `/admin/users` path):** the shell scripts
+   moved into the generated `static/js/{admin-head,admin-shell}.js` assets
+   (`dev/generators/admin_shell_assets.py` is the single source of truth),
+   the inline theme `<style>` was replaced by the
+   `data-admin-primary-color` attribute applied by `admin-head.js`,
+   `CommandPalette`/`NotificationBell` now ship static controllers with
+   JSON-island / `data-*` config, `server_toasts.py` is script-free, and
+   inline handlers were replaced by delegated `data-action` /
+   `data-confirm` listeners in `static/js/admin.js`. Runtime sidebar-width
+   injection was replaced with static Tailwind width classes.
+   Verified: users-page render has 0 inline `<script>`, 0 inline
+   `<style>`, 0 `on*=` attributes (browser console still reports
+   `known-alpine-eval` only). **Remaining:** `StandaloneLayout`
+   (login/MFA/password/setup/error pages), legacy `AdminLayout` +
+   `base_layout`/`head`/`mixins`, dashboard charts, Trix rich-text field,
+   `_aria_functions` inline script, and the `data_table`/pagination/
+   bulk-edit/alert/error-boundary inline handlers — a follow-up batch.
 3. Replace inline `style=` attrs (sticky offsets, widths) with CSS custom
    properties set via Alpine `:style` bindings or classes.
 4. Then drop `'unsafe-inline'` and `'unsafe-eval'` together.

@@ -25,15 +25,17 @@ def test_server_toast_channel_renders_x_toast_payload():
     assert "ok" in rendered
 
 
-def test_close_toast_event_listener_rendered():
-    """The toast script should listen for the oridecon:close-toast event."""
+def test_close_toast_event_handling_is_csp_clean():
+    """Toast markup must be script-free; the close-toast listener lives in
+    the external shell bundle (static/js/admin-shell.js)."""
     from oridecon.ui import ServerToastChannel, ToastConfig
 
     channel = ServerToastChannel(config=ToastConfig(listen_for_events=True))
     html = channel.render_container([])
-    assert "oridecon:close-toast" in html
-    assert "dismissToast" in html
-    assert "evt.detail.id" in html
+    assert "oridecon:close-toast" not in html
+    assert "dismissToast" not in html
+    assert "<script" not in html
+    assert "onclick=" not in html
 
 
 def test_close_toast_event_absent_when_disabled():

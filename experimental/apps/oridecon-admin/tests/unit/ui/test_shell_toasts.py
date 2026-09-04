@@ -48,13 +48,15 @@ class TestShellFlashToasts:
                 {
                     "message": "Export queued",
                     "category": "info",
-                    "actions": [{"label": "View", "onclick": "openReport()"}],
+                    "actions": [{"label": "View", "href": "/admin/exports"}],
                 }
             ],
         )
         html = render_to_string(shell)
         assert "View" in html
-        assert "openReport()" in html
+        assert 'href="/admin/exports"' in html
+        # No inline event handlers: CSP script-src-attr clean.
+        assert "onclick=" not in html
 
     def test_flash_zone_is_a_fixed_width_overlay(self) -> None:
         """A first-load flash must not become part of dashboard layout flow."""
@@ -101,12 +103,12 @@ class TestShellFlashToasts:
         assert "document.querySelector('.toast-container, #flash-container')" in js
 
     def test_shell_toast_escapes_dynamic_message_text(self) -> None:
-        shell = AdminShell(
-            content="<p>hi</p>",
-            title="Test",
-            flash_messages=[],
-        )
-        html = render_to_string(shell)
+        # Escaping of dynamically-inserted toast text is implemented in the
+        # generated shell bundle (static/js/admin-shell.js), not in HTML.
+        p = Path(__file__).parents[3]
+        shell_js = (
+            p / "src" / "oridecon" / "admin" / "static" / "js" / "admin-shell.js"
+        ).read_text(encoding="utf-8")
 
-        assert "messageNode.textContent = String(message || '')" in html
-        assert "${safeMessage}" in html
+        assert "messageNode.textContent = String(message || '')" in shell_js
+        assert "${safeMessage}" in shell_js

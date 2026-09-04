@@ -30,8 +30,12 @@ class TestAdminShellTenantContext:
 def test_admin_shell_includes_shared_form_ux_script() -> None:
     html = render_to_string(AdminShell(content="hello"))
 
-    assert "__orideconAdminFormUXInit" in html
-    assert "data-admin-form" in html
-    assert "unsaved form changes" in html
-    assert "SubmitButton already owns an Alpine loading presentation" in html
-    assert "Form saved." in html
+    # The form-UX behaviour lives in the generated shell bundle; the shell
+    # markup carries only the non-executable config island, never an inline
+    # executable <script> block (CSP script-src 'self').
+    assert "__orideconAdminFormUXInit" not in html
+    # The only <script> elements are non-executable JSON config islands.
+    assert html.count("<script") == html.count(
+        '<script type="application/json"'
+    )
+    assert 'type="application/json"' in html

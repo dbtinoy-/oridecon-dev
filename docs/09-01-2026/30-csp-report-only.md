@@ -155,6 +155,17 @@ the report-only header never stops a resource; the enforced
 is what actually governs execution. The DevTools entries are the v2 work
 list. Exact message mapping (observed on `/admin/users`):
 
+**Migration status (latest):** the `/admin/users` page + admin shell is now
+inline-code free — the render harness reports **0 inline `<script>`,
+0 inline `<style>`, 0 `on*=` attributes** — so the only remaining
+`/admin/users` console entries are the `known-alpine-eval` reports from
+the vendored standard Alpine build (deferred: Alpine CSP build, doc 14 §3).
+The other routes (login/MFA/password/setup/error via `StandaloneLayout`,
+dashboard charts, Trix rich-text fields, data-table/pagination/bulk-edit
+controls, legacy `AdminLayout`) still carry inline `<script>`/`<style>` /
+`on*=` and are logged as `known-inline-script` / `known-inline-style` /
+`unexpected` (attribute) until the follow-up batch lands.
+
 | Console message | Classification | Roadmap item |
 | --- | --- | --- |
 | "settings would block an inline script (script-src-elem) … users:1056:5001" | `known-inline-script` | externalize shell inline `<script>` blocks → static assets |

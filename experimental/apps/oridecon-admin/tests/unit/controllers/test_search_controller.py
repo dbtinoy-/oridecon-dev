@@ -453,7 +453,10 @@ class TestSearchHostileData:
         response = await controller.search(request)
         content = response.body.decode()
         start = content.index('id="search-results"')
-        end = content.index("<script>", start)
+        # The shell is script-free now; the nearest following <script> is the
+        # non-executable application/json config island (CSP-exempt), so use
+        # it as the region boundary.
+        end = content.index('<script type="application/json"', start)
         region = content[start:end]
         assert "<script>" not in region
         assert "<img" not in region

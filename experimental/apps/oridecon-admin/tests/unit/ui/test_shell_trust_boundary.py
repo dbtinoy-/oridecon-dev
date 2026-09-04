@@ -47,7 +47,11 @@ def test_explicit_framework_page_output_remains_markup() -> None:
     assert "<section>framework page</section>" in output
 
 
-def test_theme_css_cannot_close_its_style_element() -> None:
+def test_theme_css_is_never_rendered_inline() -> None:
+    # Runtime theme CSS used to be injected as an inline <style> element;
+    # under the strict CSP candidate it is applied by admin-head.js from the
+    # data-admin-primary-color attribute. Untrusted theme_css must not
+    # produce markup at all.
     output = render_to_string(
         AdminShell(
             content="safe",
@@ -56,7 +60,8 @@ def test_theme_css_cannot_close_its_style_element() -> None:
     )
 
     assert "<script id=theme-attack>" not in output
-    assert r"\3c script id=theme-attack" in output
+    assert "<style" not in output
+    assert "admin-theme-css" not in output
 
 
 def test_partial_renderer_rejects_forged_html_protocol() -> None:

@@ -186,6 +186,45 @@
         toast.remove();
       });
     }
+
+    // CSP-clean replacements for the inline toast handlers
+    // (data-action / data-dismiss-toast descriptors instead of onclick).
+    window.dismissToast = function(id) {
+      const toast = document.getElementById(id);
+      if (toast) toast.remove();
+    };
+    document.addEventListener('submit', function(event) {
+      const form = event.target;
+      const message = form && form.getAttribute
+        ? form.getAttribute('data-confirm') : null;
+      if (!message) return;
+      if (window.confirm(message)) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }, true);
+    document.addEventListener('click', function(event) {
+      if (event.defaultPrevented || event.button !== 0) return;
+      const el = event.target instanceof Element
+        ? event.target.closest('[data-action]') : null;
+      if (!el) return;
+      const action = el.getAttribute('data-action');
+      if (action === 'dismiss-toast') {
+        const id = el.getAttribute('data-dismiss-toast');
+        if (id && window.dismissToast) window.dismissToast(id);
+        else {
+          const toast = el.closest('[role="alert"]') || el.parentElement;
+          if (toast) toast.remove();
+        }
+        event.preventDefault();
+      } else if (action === 'dismiss-alert') {
+        const container = el.closest('[role="alert"]') || el.parentElement;
+        if (container) container.remove();
+        event.preventDefault();
+      } else if (action === 'reload') {
+        window.location.reload();
+        event.preventDefault();
+      }
+    }, true);
   }
 
   // ========== Modals ==========

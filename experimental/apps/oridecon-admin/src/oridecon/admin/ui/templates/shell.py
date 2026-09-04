@@ -6,11 +6,8 @@ from oridecon.admin.ui.organisms.command_palette import CommandPalette
 from oridecon.admin.ui.organisms.sidebar import Sidebar
 from oridecon.admin.ui.organisms.topbar import TopBar
 from oridecon.admin.ui.templates.shell_scripts import (
-    admin_form_ux_script,
-    admin_navigator_script,
     dark_mode_expr,
     loading_bar_script,
-    search_overlay_markup,
 )
 from oridecon.admin.ui.templates.shell_sections import (
     build_impersonation_banner,
@@ -150,24 +147,15 @@ class AdminShell(Component):
                 admin_prefix=self.admin_prefix,
             )
 
-        # 3. Theme styles (injected as inline style for runtime primary color)
-        # ``style`` is a raw-text HTML element, so a literal ``<`` could end
-        # the element before CSS parsing. Encode it as a CSS escape before the
-        # one attributable trust grant around generated theme output.
-        theme_style = (
-            el(
-                "style",
-                trusted_html(
-                    self.theme_css.replace("<", r"\3c "),
-                    source="AdminShell generated theme CSS",
-                ),
-                id="admin-theme-css",
-            )
-            if self.theme_css
-            else ""
-        )
-
-        search_overlay = search_overlay_markup()
+        # 3. Theme: the runtime primary colour is applied by admin-head.js
+        # from the data-admin-primary-color attribute on <html>; the shell no
+        # longer emits an inline <style> block (CSP style-src 'self'). The
+        # theme_css parameter is kept for backwards compatibility and is not
+        # rendered.
+        if self.theme_css:
+            # Legacy callers may still pass generated CSS; it is served from
+            # admin.css defaults under strict CSP. Nothing inline is emitted.
+            pass
 
         # Keep framework objects structured through the shell. Plain content
         # strings are text; legacy HTML producers must grant trust at their
@@ -207,12 +195,9 @@ class AdminShell(Component):
             content_inner,
         )
 
-        # Global HTMX loading indicator and error handling
+        # Global HTMX loading indicator (behaviour lives in the generated
+        # static/js/admin-shell.js bundle — no inline <script>).
         loading_bar = loading_bar_script(Zones.FLASH.id)
-        form_ux = admin_form_ux_script()
-        # Single navigation owner: link clicks, the command palette, title,
-        # scroll reset, focus, auth expiry and history all route here.
-        navigator = admin_navigator_script(login_url=f"{self.admin_prefix}/login")
 
         dm_expr = dark_mode_expr(self.dark_mode)
 
@@ -233,10 +218,6 @@ class AdminShell(Component):
             build_root_data_attrs(dm_expr),
             skip_link,
             loading_bar,
-            form_ux,
-            navigator,
-            theme_style,
-            search_overlay,
             sidebar_container,
             main_area,
             el("div", id="search-results"),

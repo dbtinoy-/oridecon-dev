@@ -8,10 +8,25 @@ rejected save announces "Form saved." to assistive technology.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from oridecon.admin.settings.panel.registry import ConfigRegistry
 from oridecon.admin.settings.panel.ui import ConfigDashboardUI
-from oridecon.admin.ui.templates.shell_scripts import admin_form_ux_script
 from oridecon.ui import render_to_string
+
+_SHELL_JS = (
+    Path(__file__).parents[2]
+    / "src"
+    / "oridecon"
+    / "admin"
+    / "static"
+    / "js"
+    / "admin-shell.js"
+)
+
+
+def _form_ux_js() -> str:
+    return _SHELL_JS.read_text(encoding="utf-8")
 
 
 def _cache_spec_dict() -> dict:
@@ -23,17 +38,17 @@ def _cache_spec_dict() -> dict:
 
 class TestFormBehaviorScript:
     def test_rejects_conflict_and_validation_status_codes(self) -> None:
-        script = render_to_string(admin_form_ux_script())
+        script = _form_ux_js()
         assert "xhr.status === 409" in script
         assert "xhr.status === 422" in script
 
     def test_inspects_payload_for_error_markers(self) -> None:
-        script = render_to_string(admin_form_ux_script())
+        script = _form_ux_js()
         assert "data-admin-form-error" in script
         assert 'aria-invalid="true"' in script
 
     def test_success_path_still_reports_saved(self) -> None:
-        script = render_to_string(admin_form_ux_script())
+        script = _form_ux_js()
         assert "'Form saved.'" in script
         assert "responseRejected(detail)" in script
 

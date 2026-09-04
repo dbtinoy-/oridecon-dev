@@ -6,35 +6,52 @@ link clicks and command-palette commands route through
 title on the response so the owner can apply the lifecycle (abort stale
 widget loads, title, scroll reset, focus/announcement, auth expiry,
 history) without duplicating it in every component.
+
+Since the CSP v2 migration the shell scripts ship as the generated static
+asset ``static/js/admin-shell.js`` (source of truth:
+``dev/generators/admin_shell_assets.py``), so the contracts are asserted
+against that file rather than ``render_to_string`` of inline script markup.
 """
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from oridecon.admin.ui.organisms.command_palette import CommandPalette
-from oridecon.admin.ui.templates.shell_scripts import (
-    admin_navigator_script,
-    search_overlay_markup,
-)
 from oridecon.ui import render_to_string
+
+_SHELL_JS = (
+    Path(__file__).parents[3]
+    / "src"
+    / "oridecon"
+    / "admin"
+    / "static"
+    / "js"
+    / "admin-shell.js"
+)
+
+
+def _shell_js() -> str:
+    return _SHELL_JS.read_text(encoding="utf-8")
 
 
 class TestNavigatorScript:
     """The shell ships exactly one navigation controller."""
 
     def test_single_owner_registered(self) -> None:
-        html = render_to_string(admin_navigator_script())
+        html = _shell_js()
 
         assert "window.OrideconNavigator = navigator" in html
         assert "window.__orideconAdminNavigatorInit" in html
 
     def test_routes_through_main_content_swap(self) -> None:
-        html = render_to_string(admin_navigator_script())
+        html = _shell_js()
 
         assert "target: MAIN_CONTENT_SELECTOR" in html
         assert "swap: 'innerHTML'" in html
 
     def test_lifecycle_handlers_present(self) -> None:
-        html = render_to_string(admin_navigator_script())
+        html = _shell_js()
 
         # Abort stale widget loads owned by the page being left.
         assert ".widget-body[hx-get]" in html
@@ -52,7 +69,7 @@ class TestNavigatorScript:
         assert "onPopState" in html
 
     def test_link_interception_uses_navigator(self) -> None:
-        html = render_to_string(admin_navigator_script())
+        html = _shell_js()
 
         assert "navigator.navigate(url.href)" in html
         assert "window.scrollTo(0, 0)" not in html.split("navigator = {")[0]
@@ -62,14 +79,18 @@ class TestShellScriptsDelegation:
     """The legacy body-swap hook must no longer own navigation."""
 
     def test_search_overlay_no_longer_issues_body_swap(self) -> None:
-        html = render_to_string(search_overlay_markup())
+        html = _shell_js()
+        # Scope to the search-overlay section; the navigator legitimately
+        # scrolls to the top after a content swap.
+        search_section = html.split("Search overlay + settings panel nav sync")[1]
+        search_section = search_section.split("Navigation controller")[0]
 
-        assert "SPA navigation is owned by window.OrideconNavigator" in html
-        assert "target: 'body'" not in html
-        assert "window.scrollTo(0, 0);" not in html
+        assert "SPA navigation is owned by window.OrideconNavigator" in search_section
+        assert "target: 'body'" not in search_section
+        assert "window.scrollTo(0, 0);" not in search_section
 
     def test_settings_panel_history_sync_remains(self) -> None:
-        html = render_to_string(search_overlay_markup())
+        html = _shell_js()
 
         assert "syncSettingsPanelNavigation" in html
         assert "htmx:pushedIntoHistory" in html
@@ -88,14 +109,16 @@ class TestCommandPaletteDelegation:
         )
         html = render_to_string(palette)
 
-        assert "window.OrideconNavigator.navigate(destination)" in html
-        # No second history owner. The htmx.ajax fallback is allowed only as
-        # the no-navigator escape hatch, never as the primary path.
+        assert "window.OrideconNavigator.navigate(destination)" in _shell_js()
+        # The palette markup carries only a non-executable JSON data island;
+        # the controller is a static asset, so no inline executable script.
+        assert "type=\"application/json\"" in html
+        assert "<script>" not in html
         assert "window.history.pushState" not in html
-        primary = html.index("if (window.OrideconNavigator)")
-        fallback = html.index("htmx.ajax('GET', destination")
+        primary = _shell_js().index("if (window.OrideconNavigator)")
+        fallback = _shell_js().index("htmx.ajax('GET', destination")
         assert primary < fallback
-        assert html.count("htmx.ajax('GET', destination") == 1
+        assert _shell_js().count("htmx.ajax('GET', destination") == 1
 
     def test_palette_keeps_safe_navigation_check(self) -> None:
         html = render_to_string(
@@ -105,4 +128,5 @@ class TestCommandPaletteDelegation:
             )
         )
 
-        assert "safeNavigationUrl" in html
+        assert "safeNavigationUrl" in _shell_js()
+        assert "application/json" in html

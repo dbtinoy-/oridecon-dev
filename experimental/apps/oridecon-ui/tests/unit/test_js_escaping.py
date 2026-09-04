@@ -106,40 +106,53 @@ class TestJsJson:
 
 
 class TestNotificationBell:
-    """URLs reach this component from configuration and are placed in JS."""
+    """Configuration crosses into the DOM as data attributes.
+
+    After the CSP v2 migration the bell controller is a static asset and
+    per-instance URLs are rendered as escaped ``data-*`` attributes (HTML
+    attribute context), never as JS literals. The security property is that
+    a hostile value cannot break out of the attribute or plant markup.
+    """
 
     @pytest.mark.parametrize("payload", BREAKOUT_PAYLOADS)
-    def test_sse_url_cannot_escape_its_literal(self, payload: str) -> None:
+    def test_sse_url_is_escaped_as_an_attribute(self, payload: str) -> None:
         from oridecon.ui.organisms.notification_bell import NotificationBell
 
         rendered = render_to_string(NotificationBell(sse_url=payload))
 
-        assert _literal_at(rendered, "new EventSource(") == payload
+        assert "data-sse-url=" in rendered
+        # Markup metacharacters are escaped, so no element/attribute can be
+        # opened from the value (and the text is present only in inert form).
+        assert "<script" not in rendered
+        assert "<img" not in rendered
 
-    def test_script_block_is_not_closed_early(self) -> None:
+    def test_script_block_is_not_openable(self) -> None:
         from oridecon.ui.organisms.notification_bell import NotificationBell
 
         rendered = render_to_string(
             NotificationBell(sse_url="</script><img src=x onerror=alert(1)>")
         )
-        body = rendered.split("<script>")[1].split("</script>")[0]
 
-        assert "<img" not in body
+        assert "<img" not in rendered
+        assert "</script>" not in rendered
+        assert "&lt;img" in rendered
 
     def test_normal_url_is_unchanged(self) -> None:
         from oridecon.ui.organisms.notification_bell import NotificationBell
 
         rendered = render_to_string(NotificationBell(sse_url="/admin/_sse/widgets"))
 
-        assert _literal_at(rendered, "new EventSource(") == "/admin/_sse/widgets"
+        assert 'data-sse-url="/admin/_sse/widgets"' in rendered
+        assert "<script" not in rendered
 
-    def test_max_display_is_numeric(self) -> None:
-        """It is emitted bare, outside any quotes, so it must be an int."""
+    def test_max_display_is_a_clamped_integer_attribute(self) -> None:
+        """It is emitted as a numeric data attribute, not executable code."""
         from oridecon.ui.organisms.notification_bell import NotificationBell
 
         rendered = render_to_string(NotificationBell(max_display=7))
 
-        assert "notifications.length > 7" in rendered
+        assert 'data-max-display="7"' in rendered
+        assert "notifications.length > 7" not in rendered
 
 
 class TestTaskProgress:

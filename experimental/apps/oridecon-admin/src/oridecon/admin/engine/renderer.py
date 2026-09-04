@@ -161,20 +161,15 @@ class AdminRenderer:
             flash_messages = list(ctx.flash_messages)
             ctx.flash_messages.clear()
 
-        # Generate theme CSS from config primary_color (overridable per request)
-        theme_css = ""
-        try:
-            from oridecon.admin.theme.service import AdminThemeService
-
-            primary_color = (
-                extra_context.get("primary_color")
-                or self.config.primary_color
-                or "#6b7280"
-            )
-            service = AdminThemeService(primary_color=primary_color)
-            theme_css = service.generate_theme_css()
-        except Exception:  # noqa: BLE001, S110 — non-fatal
-            pass
+        # Theme primary color (overridable per request). The palette default
+        # lives in admin.css; a configured color is applied at run time by
+        # admin-head.js from the data-admin-primary-color attribute, so no
+        # inline <style> block is needed (CSP style-src 'self' compatible).
+        primary_color = (
+            extra_context.get("primary_color")
+            or self.config.primary_color
+            or "#6b7280"
+        )
 
         user_menu_items: list[dict[str, str | None]] = (
             NavigationManager(request).user_menu_items(include_navigation=False)
@@ -214,7 +209,7 @@ class AdminRenderer:
             system_menu_items=system_menu_items,
             breadcrumbs=breadcrumbs,
             flash_messages=flash_messages,
-            theme_css=theme_css,
+            theme_css="",
             features=features,
             site_name=site_name,
             logo_url=logo_url,
@@ -260,6 +255,7 @@ class AdminRenderer:
                 "dark_mode": dark_mode,
                 "csrf_token": csrf_token,
                 "static_prefix": admin_prefix,
+                "primary_color": primary_color,
             },
         )
 
@@ -286,7 +282,6 @@ class AdminRenderer:
             RenderScope,
             render_context,
             render_to_string,
-            trusted_template_output,
         )
 
         with render_context(RenderContext(scope=RenderScope())):

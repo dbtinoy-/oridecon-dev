@@ -15,8 +15,9 @@ ASGI call, so the context is active for every render path in the request.
 
 from __future__ import annotations
 
-from oridecon.ui.core.render_context import RenderContext, RenderScope, render_context
 from starlette.types import ASGIApp, Receive, Scope, Send
+
+from oridecon.ui import RenderContext, RenderScope, render_context
 
 
 class AdminRenderScopeMiddleware:

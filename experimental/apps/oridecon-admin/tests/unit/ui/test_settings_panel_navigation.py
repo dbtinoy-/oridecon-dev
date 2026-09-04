@@ -3,16 +3,33 @@
 The panel sidebar must retain a stable content target, and the shell's
 history-aware script must be present to keep active styling and ARIA state
 truthful after an in-place HTMX swap.
+
+The shell scripts ship as the generated static asset
+``static/js/admin-shell.js`` (CSP v2 migration); the contracts below assert
+against that file.
 """
 
 from __future__ import annotations
 
-from oridecon.admin.ui.templates.shell_scripts import search_overlay_markup
-from oridecon.ui import render_to_string
+from pathlib import Path
+
+_SHELL_JS = (
+    Path(__file__).parents[3]
+    / "src"
+    / "oridecon"
+    / "admin"
+    / "static"
+    / "js"
+    / "admin-shell.js"
+)
+
+
+def _shell_js() -> str:
+    return _SHELL_JS.read_text(encoding="utf-8")
 
 
 def test_shell_script_syncs_settings_panel_state_after_history_navigation() -> None:
-    html = render_to_string(search_overlay_markup())
+    html = _shell_js()
 
     assert "syncSettingsPanelNavigation" in html
     assert "htmx:pushedIntoHistory" in html
@@ -23,7 +40,7 @@ def test_shell_script_syncs_settings_panel_state_after_history_navigation() -> N
 
 
 def test_shell_script_handles_browser_back_forward_for_panel_state() -> None:
-    html = render_to_string(search_overlay_markup())
+    html = _shell_js()
 
     assert "window.addEventListener('popstate'" in html
     assert "new URL(path || location.href, location.href).pathname" in html

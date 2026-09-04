@@ -81,7 +81,7 @@ class TestCommandPaletteA11y:
         options_id = re.search(r'<ul id="([^"]+)" role="listbox"', html)
         assert options_id is not None
         assert options_id.group(1).startswith("oridecon-command-palette-options-")
-        assert 'x-bind:id="&quot;oridecon-command-palette-option-' in html
+        assert 'x-bind:id="optionIdPrefix + index"' in html
         assert 'x-bind:aria-selected="selectedIndex === index"' in html
         # The old static duplicate id must not come back.
         assert 'id="option-1"' not in html
@@ -124,11 +124,20 @@ def test_sidebar_overlay_uses_canonical_transition_directives() -> None:
 
 
 def test_flash_close_buttons_are_labeled() -> None:
-    from oridecon.admin.ui.templates import shell_scripts
-
-    source = Path(shell_scripts.__file__).read_text(encoding="utf-8")
-    closers = re.findall(r"<button[^>]*closest\('\[role=alert\]'\)[^>]*>", source)
-    assert closers, "expected flash close buttons in shell_scripts.py"
+    # Flash close buttons now live in the generated shell bundle (the CSP v2
+    # migration replaced inline onclick handlers with delegated data-actions).
+    asset = (
+        Path(__file__).parents[3]
+        / "src"
+        / "oridecon"
+        / "admin"
+        / "static"
+        / "js"
+        / "admin-shell.js"
+    )
+    source = asset.read_text(encoding="utf-8")
+    closers = re.findall(r'<button[^>]*data-action="dismiss-alert"[^>]*>', source)
+    assert closers, "expected flash close buttons in admin-shell.js"
     for button in closers:
         assert 'aria-label="Dismiss notification"' in button
         assert 'type="button"' in button

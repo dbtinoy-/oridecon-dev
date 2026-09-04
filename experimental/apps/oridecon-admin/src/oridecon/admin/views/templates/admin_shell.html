@@ -2,6 +2,12 @@
 
 {% block title %}{{ title }}{% if site_name %} — {{ site_name }}{% endif %}{% endblock %}
 
+{% block html_attrs %}
+ data-admin-dark-mode="{{ dark_mode | default('') }}"
+ {% if primary_color %}data-admin-primary-color="{{ primary_color }}"{% endif %}
+ data-admin-login-url="{{ static_prefix | default('/admin') }}/login"
+{% endblock %}
+
 {% block meta %}
 {% if csrf_token %}
 <meta name="csrf-token" content="{{ csrf_token }}">

@@ -10,7 +10,6 @@ from oridecon.ui import (
     get_icon,
     get_render_scope,
     js_json,
-    js_string,
     trusted_html,
 )
 from oridecon.ui.atoms.icons import ICONS
@@ -67,180 +66,37 @@ class CommandPalette(Component):
             if name in ICONS
         }
 
-    def _controller_script(
+    def _config_island(
         self,
         *,
-        controller_name: str,
+        config_id: str,
         command_palette_url: str,
         option_id_prefix: str,
-    ) -> str:
-        return f"""
-(() => {{
-    const controllerName = {js_string(controller_name)};
-    const initialCommands = {js_json(self.commands)};
-    const iconMarkup = {js_json(self._safe_icon_markup())};
-    const endpoint = {js_string(command_palette_url)};
+    ) -> Element:
+        """Render the CSP-exempt JSON data island for the palette controller.
 
-    const controller = () => ({{
-        open: false,
-        search: '',
-        selectedIndex: 0,
-        searchTimeout: null,
-        requestController: null,
-        previousFocus: null,
-        loading: false,
-        error: '',
-        icons: iconMarkup,
-        commands: [],
-        staticCommands: [],
-        get filteredCommands() {{ return this.commands; }},
-        get activeOptionId() {{
-            return this.filteredCommands.length
-                ? {js_string(option_id_prefix)} + this.selectedIndex
-                : '';
-        }},
-        normalizeCommands(value) {{
-            if (!Array.isArray(value)) return [];
-            return value
-                .filter(command => command && typeof command.label === 'string')
-                .map((command, index) => ({{
-                    ...command,
-                    icon_html: this.icons[command.icon] || '',
-                    _key: [command.href || '', command.action || '', command.label, index].join(':')
-                }}));
-        }},
-        init() {{
-            this.staticCommands = this.normalizeCommands(initialCommands);
-            this.commands = this.staticCommands;
-            this.$watch('search', value => {{
-                window.clearTimeout(this.searchTimeout);
-                this.selectedIndex = 0;
-                this.searchTimeout = window.setTimeout(() => this.fetchResults(value), 200);
-            }});
-        }},
-        destroy() {{
-            window.clearTimeout(this.searchTimeout);
-            this.requestController?.abort();
-        }},
-        async fetchResults(query) {{
-            const normalizedQuery = query.trim();
-            this.requestController?.abort();
-            if (normalizedQuery.length < 2) {{
-                this.commands = this.staticCommands;
-                this.loading = false;
-                this.error = '';
-                return;
-            }}
-
-            const request = new AbortController();
-            this.requestController = request;
-            this.loading = true;
-            this.error = '';
-            try {{
-                const url = new URL(endpoint, window.location.href);
-                url.searchParams.set('q', normalizedQuery);
-                const response = await fetch(url, {{
-                    headers: {{'X-Requested-With': 'fetch'}},
-                    signal: request.signal
-                }});
-                if (!response.ok) throw new Error(`HTTP ${{response.status}}`);
-                const data = await response.json();
-                if (this.requestController === request) {{
-                    this.commands = this.normalizeCommands(data);
-                    this.selectedIndex = 0;
-                }}
-            }} catch (error) {{
-                if (error.name !== 'AbortError' && this.requestController === request) {{
-                    this.commands = [];
-                    this.error = 'Commands could not be loaded.';
-                }}
-            }} finally {{
-                if (this.requestController === request) {{
-                    this.loading = false;
-                    this.requestController = null;
-                }}
-            }}
-        }},
-        openPalette() {{
-            if (this.open) return;
-            this.previousFocus = document.activeElement;
-            this.open = true;
-            this.search = '';
-            this.commands = this.staticCommands;
-            this.selectedIndex = 0;
-            this.$nextTick(() => this.$refs.search.focus());
-        }},
-        toggle() {{ this.open ? this.close() : this.openPalette(); }},
-        close() {{
-            if (!this.open) return;
-            this.open = false;
-            this.$nextTick(() => this.previousFocus?.focus());
-        }},
-        next() {{
-            if (!this.filteredCommands.length) return;
-            this.selectedIndex = (this.selectedIndex + 1) % this.filteredCommands.length;
-        }},
-        prev() {{
-            if (!this.filteredCommands.length) return;
-            this.selectedIndex = (
-                this.selectedIndex - 1 + this.filteredCommands.length
-            ) % this.filteredCommands.length;
-        }},
-        safeNavigationUrl(href) {{
-            try {{
-                const url = new URL(href, window.location.href);
-                return url.origin === window.location.origin &&
-                    ['http:', 'https:'].includes(url.protocol) ? url : null;
-            }} catch (_error) {{
-                return null;
-            }}
-        }},
-        execute(requestedIndex = null) {{
-            const index = requestedIndex === null ? this.selectedIndex : requestedIndex;
-            const command = this.filteredCommands[index];
-            if (!command) return;
-
-            if (command.href) {{
-                const url = this.safeNavigationUrl(command.href);
-                if (!url) {{
-                    this.error = 'That command points to an unsafe destination.';
-                    return;
-                }}
-                const destination = url.href;
-                this.close();
-                // Single navigation owner: the shell navigator handles the
-                // swap target, title, scroll/focus lifecycle, auth expiry
-                // and history entries. Fall back to a direct assignment in
-                // environments where the admin shell script is absent.
-                if (window.OrideconNavigator) {{
-                    window.OrideconNavigator.navigate(destination);
-                }} else if (window.htmx) {{
-                    window.htmx.ajax('GET', destination, {{
-                        target: '#main-content', swap: 'innerHTML',
-                        headers: {{ 'HX-Target': '#main-content' }}
-                    }});
-                }} else {{
-                    window.location.assign(destination);
-                }}
-                return;
-            }}
-
-            if (command.action === 'darkMode = !darkMode') {{
-                const shell = document.querySelector('[x-data*="darkMode"]');
-                if (shell) {{
-                    const data = window.Alpine.$data(shell);
-                    data.darkMode = !data.darkMode;
-                }}
-                this.close();
-            }}
-        }}
-    }});
-
-    const register = () => window.Alpine.data(controllerName, controller);
-    if (window.Alpine) register();
-    else document.addEventListener('alpine:init', register, {{ once: true }});
-}})();
-"""
+        The controller itself is a static asset
+        (``static/js/admin-shell.js``, generated by
+        ``dev/generators/admin_shell_assets.py``); only per-page data is
+        rendered here, as a non-executable ``application/json`` script block
+        that the browser does not subject to ``script-src``.
+        """
+        config = {
+            "controllerName": "commandPalette",
+            "commands": self.commands,
+            "iconMarkup": self._safe_icon_markup(),
+            "endpoint": command_palette_url,
+            "optionIdPrefix": option_id_prefix,
+        }
+        return Element(
+            "script",
+            trusted_html(
+                js_json(config),
+                source="generated CommandPalette config island (non-executable)",
+            ),
+            type_="application/json",
+            id=config_id,
+        )
 
     @staticmethod
     def _transitions(prefix: str) -> dict[str, str]:
@@ -383,7 +239,7 @@ class CommandPalette(Component):
                         aria_selected="false",
                         **alpine.bind(
                             "id",
-                            alpine.expr(f"{js_string(option_id_prefix)} + index"),
+                            alpine.expr("optionIdPrefix + index"),
                         ),
                         **alpine.bind(
                             "aria-selected",
@@ -478,7 +334,7 @@ class CommandPalette(Component):
         root_scope_id = scope.id("dialog", key=identity_key)
         options_id = scope.id("options", key=root_scope_id)
         option_id_prefix = f"{scope.id('option', key=root_scope_id)}-"
-        controller_name = root_scope_id.replace("-", "_")
+        config_id = scope.id("config", key=root_scope_id)
         command_palette_url = f"{self.admin_prefix}/command-palette"
         root_class = " ".join(
             value
@@ -514,23 +370,17 @@ class CommandPalette(Component):
                     "ring-1 ring-border transition-all"
                 ),
             ),
-            Element(
-                "script",
-                trusted_html(
-                    self._controller_script(
-                        controller_name=controller_name,
-                        command_palette_url=command_palette_url,
-                        option_id_prefix=option_id_prefix,
-                    ),
-                    source="generated CommandPalette Alpine controller",
-                ),
+            self._config_island(
+                config_id=config_id,
+                command_palette_url=command_palette_url,
+                option_id_prefix=option_id_prefix,
             ),
             id=explicit_id or root_scope_id,
             role="dialog",
             aria_modal="true",
             aria_label="Command palette",
             **{"x-cloak": True, "x-trap.noscroll": "open"},
-            **alpine.data(alpine.expr(controller_name)),
+            **alpine.data(alpine.expr("commandPalette")),
             **alpine.show(alpine.expr("open")),
             **alpine.on("open-command-palette", alpine.expr("openPalette()"), "window"),
             **alpine.on(
