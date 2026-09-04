@@ -3,7 +3,10 @@
 HTML escaping does not make a value safe inside JavaScript. A component that
 interpolates into a JS string literal::
 
-    raw(f"new EventSource('{url}');")
+    trusted_html(
+        f"new EventSource('{url}');",
+        source="generated EventSource controller",
+    )
 
 is injectable by a value containing a single quote, and the payload needs no
 HTML metacharacters at all, so passing it through ``Element`` attribute
@@ -15,7 +18,13 @@ the JS parser sees ``&#x27;`` rather than a quote.
 both the JavaScript grammar and the surrounding HTML parser. Use it wherever
 a value crosses into script content:
 
-    el("script", raw(f"new EventSource({js_string(url)});"))
+    el(
+        "script",
+        trusted_html(
+            f"new EventSource({js_string(url)});",
+            source="generated EventSource controller",
+        ),
+    )
 
 Note the absent quotes around the placeholder -- ``js_string`` supplies its
 own. Wrapping it in quotes again would reintroduce the bug it prevents.

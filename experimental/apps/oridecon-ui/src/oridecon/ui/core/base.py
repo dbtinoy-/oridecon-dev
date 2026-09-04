@@ -505,7 +505,7 @@ def render_to_string(value: str | Any) -> str:
 
     # Strings are returned verbatim. Escaping happens at the Element/htpy
     # attribute layer when content is inserted into HTML. To include
-    # pre-rendered HTML safely, use RawHTML (via raw()) which signals intent.
+    # pre-rendered HTML safely, use source-attributed TrustedHTML.
     if isinstance(value, str):
         return value
 
@@ -568,8 +568,8 @@ def warn_html_string_render(
     snippet: Any,
     *,
     fix: str = (
-        "return an element built with el(...), or wrap the string in "
-        "raw()/Markup when pre-rendered HTML is intended"
+        "return an element built with el(...), or use "
+        "trusted_html(markup, source=...) after sanitizing pre-rendered HTML"
     ),
 ) -> None:
     """Warn (once per origin/snippet) that a renderer returned an HTML string.
@@ -667,6 +667,6 @@ def html_string_notice(value: Any, origin: str = "") -> Any:
         class_="inline-flex items-center gap-0.5 align-middle",
         title=(
             "This renderer returned an HTML string, which is escaped and "
-            "shown as text. Return el(...) or wrap it in raw()/Markup."
+            "shown as text. Return el(...) or use source-attributed TrustedHTML."
         ),
     )
