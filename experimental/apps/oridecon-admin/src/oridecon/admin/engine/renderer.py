@@ -166,6 +166,7 @@ class AdminRenderer:
         logo_url = extra_context.get("logo_url") or ""
         favicon_url = extra_context.get("favicon_url") or ""
         dark_mode = extra_context.get("dark_mode") or ""
+        features: dict[str, bool] | None = extra_context.get("features") or None
         current_tenant_id = extra_context.get("current_tenant_id")
         current_tenant_name = extra_context.get("current_tenant_name") or ""
         tenant_list = extra_context.get("tenant_list") or []
@@ -186,6 +187,7 @@ class AdminRenderer:
             breadcrumbs=breadcrumbs,
             flash_messages=flash_messages,
             theme_css=theme_css,
+            features=features,
             site_name=site_name,
             logo_url=logo_url,
             dark_mode=dark_mode,

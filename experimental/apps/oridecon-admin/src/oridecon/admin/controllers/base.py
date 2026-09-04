@@ -176,6 +176,33 @@ class AdminController(ControllerProtocol):
                 value = overrides.get(f"admin.branding.{field}") or overrides.get(field)
                 if value:
                     extra_context.setdefault(field, value)
+
+            # Load admin.features.* flags so the renderer can gate shell items.
+            # Both "flag" and "flag_enabled" keys are populated; shell_sections
+            # looks up the "_enabled" suffix form.
+            _feature_fields = (
+                "command_palette",
+                "keyboard_shortcuts",
+                "theme_toggle",
+                "search",
+                "optimistic_updates",
+                "undo_redo",
+                "autosave",
+                "audit_logging",
+                "activity_feed",
+                "notifications",
+                "webhooks",
+                "api_docs",
+            )
+            features: dict[str, bool] = {}
+            for flag in _feature_fields:
+                raw = overrides.get(f"admin.features.{flag}")
+                if raw is not None:
+                    enabled = str(raw).lower() not in ("false", "0", "no", "off")
+                    features[flag] = enabled
+                    features[f"{flag}_enabled"] = enabled
+            if features:
+                extra_context.setdefault("features", features)
         except Exception:  # noqa: BLE001, S110 — non-fatal
             pass
 
