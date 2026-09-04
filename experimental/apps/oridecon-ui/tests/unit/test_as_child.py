@@ -70,11 +70,11 @@ def test_as_child_falls_back_to_normal_render():
 
 
 def test_as_child_with_slot():
-    """Slot child renders its content directly."""
-    slot = Slot("raw text")
+    """Slot child delegates one typed element without flattening it."""
+    slot = Slot(el("a", "Open", href="/details"), class_name="slotted")
     btn = Button(as_child=True, children=[slot])
     html = btn.__html__()
-    assert html == "raw text"
+    assert html == '<a href="/details" class="slotted">Open</a>'
 
 
 def test_as_child_with_no_children():

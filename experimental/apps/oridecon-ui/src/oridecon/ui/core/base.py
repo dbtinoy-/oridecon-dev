@@ -398,7 +398,7 @@ class Component:
             cloned_child.children = list(child.children)
             return cloned_child.render()
 
-        return str(child)
+        return child
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
