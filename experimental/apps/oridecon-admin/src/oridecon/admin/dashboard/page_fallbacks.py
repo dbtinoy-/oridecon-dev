@@ -144,13 +144,18 @@ async def _placeholder_page(
 
         templates_dir = Path(__file__).resolve().parent.parent / "views" / "templates"
         templates = Jinja2Templates(directory=str(templates_dir))
+        from oridecon.admin.resources.urls import admin_prefix_from_request as _pfx
+
         return templates.TemplateResponse(
             request,
             "admin_shell.html",
             context={
                 "content": shell_html,
                 "title": "Under Construction",
+                "site_name": "",
+                "favicon_url": "",
                 "dark_mode": "",
+                "static_prefix": _pfx(request) if request is not None else "/admin",
             },
         )
     except Exception:  # noqa: BLE001 — rendering must never break the response

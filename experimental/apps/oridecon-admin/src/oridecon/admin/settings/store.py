@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import Collection
 from typing import TYPE_CHECKING, Any
 
 from oridecon.admin.settings.panel.registry import StoreBase
@@ -38,20 +37,30 @@ class TenantConfigStore(StoreBase):
         value = await self._service.get(tenant_id or self._tenant, key)
         return value if value is not None else default
 
-    async def contains(self, key: str, tenant_id: str | None = None) -> bool | None:
-        """Report whether the backing tenant store has an explicit key.
+    async def contains(self, key: str, tenant_id: str | None = None) -> bool:
+        """Return whether an explicit value has been saved for *key*.
 
-        Presence is intentionally separate from ``get``: a stored ``false``,
-        ``0``, or empty string is still a configured override and must not be
-        labelled as the node default in the settings UI.
+        Checks the underlying provider's raw stored rows for the DB key
+        (``admin_ui.<key>``).  Returns ``False`` when no row has been
+        written — meaning the value the form renders is the node default —
+        and ``True`` when an explicit override exists.  This lets the
+        settings UI badge correctly distinguish defaults from saved values.
         """
-        probe = getattr(self._service, "contains", None)
-        if not callable(probe):
-            return None
         try:
-            return await probe(tenant_id or self._tenant, key)
-        except Exception:  # noqa: BLE001 — metadata is best-effort
-            return None
+            from oridecon.admin.services.settings_service import KEY_PREFIX
+
+            tenant = tenant_id or self._tenant
+            provider = getattr(self._service, "_provider", None)
+            if provider is not None:
+                # DB-backed: check whether the namespaced row exists.
+                raw = await provider.get_all_config(tenant)
+                stored_key = f"{KEY_PREFIX}{key}"
+                return stored_key in raw
+            # In-memory fallback: check the memory dict directly.
+            mem: dict = getattr(self._service, "_memory", {})
+            return key in mem.get(tenant, {})
+        except Exception:  # noqa: BLE001 — non-fatal capability probe
+            return False
 
     async def set(self, key: str, value: Any, tenant_id: str | None = None) -> None:
         """Persist a value by key."""
@@ -96,33 +105,6 @@ class TenantConfigStore(StoreBase):
             await conditional(tenant, items, expected)
             return
         await self.set_many(items, tenant_id=tenant)
-
-    async def delete(self, key: str, tenant_id: str | None = None) -> None:
-        """Remove a persisted setting while retaining its application default."""
-        tenant = tenant_id or self._tenant
-        delete = getattr(self._service, "delete", None)
-        if not callable(delete):
-            raise NotImplementedError("Settings service cannot remove values")
-        await delete(tenant, key)
-
-    async def apply_many(
-        self,
-        items: dict[str, Any],
-        *,
-        delete_keys: Collection[str] = frozenset(),
-        expected: dict[str, Any] | None = None,
-        tenant_id: str | None = None,
-    ) -> None:
-        """Apply writes and removals through one service transaction."""
-        tenant = tenant_id or self._tenant
-        apply = getattr(self._service, "apply_many_if_unchanged", None)
-        if callable(apply) and expected is not None:
-            await apply(tenant, items, delete_keys, expected)
-            return
-        if items:
-            await self.set_many(items, tenant_id=tenant)
-        if delete_keys:
-            await self.delete_many(delete_keys, tenant_id=tenant)
 
     async def supports_conditional_write(self) -> bool:
         """Report whether the backing service enforces conditional writes."""

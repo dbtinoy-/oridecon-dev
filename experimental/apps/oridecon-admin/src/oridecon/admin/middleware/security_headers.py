@@ -123,6 +123,7 @@ class SecurityHeadersMiddleware:
         settings_store: Any = None,
         report_endpoint: str | None = None,
         settings_ttl: float = 30.0,
+        registry: "SecurityHeadersRegistry | None" = None,
     ) -> None:
         self._app = app
         self._service: SecurityHeadersProtocol = (
@@ -135,6 +136,10 @@ class SecurityHeadersMiddleware:
         self._settings_ttl = settings_ttl
         self._resolved: SecurityHeadersProtocol | None = None
         self._resolved_at: float | None = None
+        # Doc 33: Register this instance so the settings save path can call
+        # invalidate() without holding a direct reference to this object.
+        if registry is not None:
+            registry.register(self)
 
     def invalidate(self) -> None:
         """Drop the cached resolution so the next request re-reads settings.
@@ -239,8 +244,47 @@ class SecurityHeadersMiddleware:
         await self._app(scope, receive, send_with_headers)
 
 
+class SecurityHeadersRegistry:
+    """Thin holder that lets the settings save path call invalidate().
+
+    Doc 33 §2.3 deferred save-path wiring because the middleware instance is
+    created by Starlette *after* mount code runs and is therefore unreachable
+    without an extra indirection layer.  This registry provides that layer:
+
+    * At mount time ``bundle_provider`` creates one instance and passes it as
+      ``registry=`` to the middleware kwargs *and* stores it on ``app.state``.
+    * On first dispatch ``SecurityHeadersMiddleware.__init__`` calls
+      ``registry.register(self)`` so the holder can forward ``invalidate()``.
+    * After a successful settings-panel save the controller does::
+
+          mw = getattr(request.app.state, "security_headers_middleware", None)
+          if mw is not None:
+              mw.invalidate()
+
+      which calls this class's ``invalidate()``.
+
+    The attribute name ``security_headers_middleware`` is kept intentionally
+    so both tests written against doc 33 and the controller code can use a
+    single name regardless of whether the state attribute holds a middleware
+    instance or this registry object.
+    """
+
+    def __init__(self) -> None:
+        self._instance: SecurityHeadersMiddleware | None = None
+
+    def register(self, instance: "SecurityHeadersMiddleware") -> None:
+        """Called by the middleware in __init__ to record its own reference."""
+        self._instance = instance
+
+    def invalidate(self) -> None:
+        """Forward to the registered middleware, if one has been created."""
+        if self._instance is not None:
+            self._instance.invalidate()
+
+
 __all__ = [
     "AdminSecurityHeaders",
     "SecurityHeadersMiddleware",
+    "SecurityHeadersRegistry",
     "resolve_report_only_csp",
 ]

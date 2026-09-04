@@ -456,6 +456,25 @@ class AdminProvider(
                     },
                 ),
             )
+            # Doc 33: Create a registry so the middleware instance can register
+            # itself on first dispatch and the settings save path can call
+            # invalidate() for same-worker cache eviction.
+            from oridecon.admin.middleware.security_headers import (
+                SecurityHeadersRegistry,
+            )
+
+            registry = SecurityHeadersRegistry()
+            ctx.security_headers_middleware = registry
+            # Replace the kwargs in the stack entry with the registry attached,
+            # so Starlette's add_middleware creates an auto-registering instance.
+            middleware_stack[0] = (
+                SecurityHeadersMiddleware,
+                {
+                    "settings_store": settings_store,
+                    "report_endpoint": report_endpoint,
+                    "registry": registry,
+                },
+            )
             _log.debug("admin.security_headers_middleware_wired")
         except Exception as exc:  # noqa: BLE001 — security headers are best-effort
             _log.warning(

@@ -468,3 +468,107 @@ class TestSettingsControllerUpdate:
         audit.log_event.assert_awaited_once()
         values = await registry.get_values("admin.security")
         assert values.get("hsts_max_age", 0) != 3600
+
+
+class TestSecurityHeadersInvalidationOnSave:
+    """Doc 33: SettingsController calls registry.invalidate() after security settings save."""
+
+    @pytest.mark.asyncio
+    async def test_security_namespace_triggers_invalidate(self) -> None:
+        from unittest.mock import MagicMock
+
+        from oridecon.admin.middleware.security_headers import SecurityHeadersRegistry
+        from oridecon.admin.settings.panel import ConfigSpec, StringNode as TextNode
+
+        class SecuritySpec(ConfigSpec):
+            namespace = "admin.security"
+            label = "Security"
+            icon = "shield"
+            description = ""
+            node_overrides = {
+                "frame_options": TextNode(label="Frame Options"),
+            }
+
+        registry = ConfigRegistry.with_defaults()
+        registry.register_spec(SecuritySpec)
+
+        renderer = MagicMock()
+        renderer.render_page = AsyncMock(return_value=MagicMock())
+        ctrl = SettingsController(renderer=renderer, registry=registry)
+
+        # Build a fake registry and attach it to request.app.state
+        sec_reg = SecurityHeadersRegistry()
+        invalidate_calls: list[bool] = []
+
+        class _TrackingRegistry(SecurityHeadersRegistry):
+            def invalidate(self) -> None:
+                invalidate_calls.append(True)
+
+        tracking_reg = _TrackingRegistry()
+
+        rev = await _revision_for(registry, "admin.security")
+        req = _mock_request(
+            method="POST",
+            form_data={
+                "frame_options": "DENY",
+                "settings_revision": rev,
+            },
+            hx_request=True,
+            user=_FakeUser(permissions=frozenset()),  # superadmin path via empty edit_permissions
+        )
+        req.path_params = {"namespace": "admin.security"}
+        # Attach tracking registry to app.state
+        req.app = MagicMock()
+        req.app.state = MagicMock()
+        req.app.state.security_headers_middleware = tracking_reg
+
+        await ctrl.save_spec(req)
+
+        assert invalidate_calls, "security_headers_middleware.invalidate() was not called"
+
+    @pytest.mark.asyncio
+    async def test_non_security_namespace_does_not_invalidate(self) -> None:
+        from unittest.mock import MagicMock
+
+        from oridecon.admin.middleware.security_headers import SecurityHeadersRegistry
+        from oridecon.admin.settings.panel import ConfigSpec, StringNode as TextNode
+
+        class BrandSpec(ConfigSpec):
+            namespace = "admin.branding"
+            label = "Branding"
+            icon = "palette"
+            description = ""
+            node_overrides = {
+                "site_name": TextNode(label="Site Name"),
+            }
+
+        registry = ConfigRegistry.with_defaults()
+        registry.register_spec(BrandSpec)
+
+        renderer = MagicMock()
+        renderer.render_page = AsyncMock(return_value=MagicMock())
+        ctrl = SettingsController(renderer=renderer, registry=registry)
+
+        invalidate_calls: list[bool] = []
+
+        class _TrackingRegistry(SecurityHeadersRegistry):
+            def invalidate(self) -> None:
+                invalidate_calls.append(True)
+
+        tracking_reg = _TrackingRegistry()
+
+        rev = await _revision_for(registry, "admin.branding")
+        req = _mock_request(
+            method="POST",
+            form_data={"site_name": "ACME", "settings_revision": rev},
+            hx_request=True,
+            user=_FakeUser(permissions=frozenset()),
+        )
+        req.path_params = {"namespace": "admin.branding"}
+        req.app = MagicMock()
+        req.app.state = MagicMock()
+        req.app.state.security_headers_middleware = tracking_reg
+
+        await ctrl.save_spec(req)
+
+        assert not invalidate_calls, "invalidate() must not be called for non-security saves"

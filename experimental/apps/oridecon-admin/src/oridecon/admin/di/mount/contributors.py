@@ -533,16 +533,13 @@ class AdminMountContributorsMixin:
             if admin_app is not None and hasattr(admin_app, "state"):
                 admin_app.state.saved_view_service = ctx.saved_view_service
 
-        # Expose the progress tracker and its owner registry on both apps.
-        # Resource handlers run inside the mounted sub-app while some test and
-        # integration callers resolve state from the outer app.
-        if ctx.progress_tracker is not None:
+        # Doc 33: Expose the SecurityHeadersMiddleware instance on app state
+        # so the settings save path can call invalidate() for same-worker
+        # cache eviction (TTL still bounds cross-worker staleness).
+        if ctx.security_headers_middleware is not None:
             if hasattr(app, "state"):
-                app.state.progress_tracker = ctx.progress_tracker
+                app.state.security_headers_middleware = ctx.security_headers_middleware
             if admin_app is not None and hasattr(admin_app, "state"):
-                admin_app.state.progress_tracker = ctx.progress_tracker
-        if ctx.progress_access is not None:
-            if hasattr(app, "state"):
-                app.state.progress_access = ctx.progress_access
-            if admin_app is not None and hasattr(admin_app, "state"):
-                admin_app.state.progress_access = ctx.progress_access
+                admin_app.state.security_headers_middleware = (
+                    ctx.security_headers_middleware
+                )

@@ -88,7 +88,10 @@ class BrandingSettings(DomainModel):
     dark_mode: Literal["system", "light", "dark"] = Field(
         default="system",
         title="Dark Mode",
-        description="Theme preference: follow the system, force light, or force dark.",
+        description=(
+            "Theme preference: follow the system, force light, or force dark. "
+            "Takes effect on the next full page load."
+        ),
     )
 
 
