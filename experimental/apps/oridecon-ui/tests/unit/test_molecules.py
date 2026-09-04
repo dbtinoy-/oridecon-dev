@@ -282,6 +282,54 @@ class TestFormFieldA11y:
         html = str(FormField(TextInput(name="email"), label="Email", error="Bad email"))
         assert 'role="alert"' in html
 
+    def test_required_marker_is_structured_and_hidden_from_assistive_tech(self) -> None:
+        from oridecon.ui.atoms.inputs import TextInput
+        from oridecon.ui.molecules.form_field import FormField
+
+        html = str(FormField(TextInput(name="email"), label="Email", required=True))
+
+        assert "Error rendering field" not in html
+        assert 'for="email"' in html
+        assert 'aria-hidden="true"' in html
+        assert 'aria-required="true"' in html
+        assert " required" in html
+        assert ">*<" in html
+
+    def test_error_and_help_both_describe_control_without_mutating_input(self) -> None:
+        from oridecon.ui.atoms.inputs import TextInput
+        from oridecon.ui.molecules.form_field import FormField
+
+        input_component = TextInput(name="email")
+        html = str(
+            FormField(
+                input_component,
+                label="Email",
+                error="Bad email",
+                help_text="Use your work address",
+            )
+        )
+
+        assert 'aria-describedby="email-help email-error"' in html
+        assert 'aria-invalid="true"' in html
+        assert 'id="email-help"' in html
+        assert 'id="email-error"' in html
+        assert input_component.props == {}
+
+    def test_input_render_errors_propagate(self) -> None:
+        import pytest
+
+        from oridecon.ui import Component
+        from oridecon.ui.molecules.form_field import FormField
+
+        class BrokenInput(Component):
+            name = "broken"
+
+            def render(self) -> str:
+                raise TypeError("broken control")
+
+        with pytest.raises(TypeError, match="broken control"):
+            str(FormField(BrokenInput(), label="Broken"))
+
 
 class TestToastA11y:
     def test_toast_role_status(self) -> None:

@@ -16,8 +16,8 @@ Covers the fixes from docs/09-01-2026/13-a11y-and-dead-handlers.md:
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
+import re
 
 SRC = Path(__file__).resolve().parents[3] / "src" / "oridecon" / "admin"
 
@@ -79,7 +79,7 @@ class TestCommandPaletteA11y:
         assert 'id="command-palette-options"' in html
         # el() HTML-escapes attribute values, so the single quotes in the
         # Alpine :id binding render as &#x27;.
-        assert ":id=\"&#x27;command-palette-option-&#x27; + index\"" in html
+        assert ':id="&#x27;command-palette-option-&#x27; + index"' in html
         assert ":aria-selected=" in html
         # The old static duplicate id must not come back.
         assert 'id="option-1"' not in html
@@ -90,6 +90,22 @@ class TestCommandPaletteA11y:
         assert 'aria-label="Command palette"' in html
         assert 'role="dialog"' in html
         assert 'aria-modal="true"' in html
+
+    def test_default_commands_do_not_assume_privileged_access(self) -> None:
+        html = self._html()
+
+        assert "Go to Dashboard" in html
+        assert "Toggle Dark Mode" in html
+        assert "Manage Users" not in html
+        assert '"label":"Settings"' not in html
+
+    def test_explicit_empty_command_list_stays_empty(self) -> None:
+        from oridecon.admin.ui.organisms.command_palette import CommandPalette
+
+        html = str(CommandPalette(commands=[]).render())
+
+        assert "Go to Dashboard" not in html
+        assert "Toggle Dark Mode" not in html
 
 
 def test_flash_close_buttons_are_labeled() -> None:
@@ -124,7 +140,9 @@ def test_result_counts_are_polite_live_regions() -> None:
         source = (SRC / rel).read_text(encoding="utf-8")
         showing = source.index('"Showing ",')
         window = source[max(0, showing - 600) : showing]
-        assert '"role": "status"' in window and '"aria-live": "polite"' in window, (
+        message = (
             f"{rel}: the 'Showing X to Y of Z' block must be a polite live "
             "region so HTMX swaps announce result changes"
         )
+        assert '"role": "status"' in window, message
+        assert '"aria-live": "polite"' in window, message

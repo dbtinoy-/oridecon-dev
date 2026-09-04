@@ -35,7 +35,7 @@ class InputGroup(Component):
         )
         self.label = label
         self.name = name
-        self.type = type
+        self.input_type = input_type
         self.prefix = prefix
         self.suffix = suffix
         self.placeholder = placeholder
@@ -69,7 +69,7 @@ class InputGroup(Component):
                 ),
                 el(
                     "input",
-                    type=self.type,
+                    type=self.input_type,
                     name=self.name,
                     id=self.name,
                     value=self.value,

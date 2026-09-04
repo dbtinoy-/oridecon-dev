@@ -51,7 +51,7 @@ class TestCommandPalettePermissions:
     @pytest.fixture
     def authorizer(self) -> AsyncMock:
         authorizer = AsyncMock()
-        authorizer.can_view.side_effect = lambda user, name: {
+        authorizer.can_view.side_effect = lambda _user, name: {
             "users": True,
             "posts": False,
         }.get(name, False)
@@ -85,29 +85,57 @@ class TestCommandPalettePermissions:
             call({"id": "u1"}, "posts"),
         ]
 
-    async def test_all_denied_returns_static_commands_only(self) -> None:
+    async def test_missing_principal_cannot_receive_dynamic_results(
+        self, controller: CommandPaletteController, authorizer: AsyncMock
+    ) -> None:
+        request = self._request("alice")
+        request.state.user = None
+
+        response = await controller.search(request)
+
+        assert loads_str(response.body.decode()) == []
+        authorizer.can_view.assert_not_awaited()
+
+    async def test_all_denied_does_not_restore_privileged_static_commands(
+        self,
+    ) -> None:
         authorizer = AsyncMock()
-        authorizer.can_view.side_effect = lambda *args: False
+        authorizer.can_view.side_effect = lambda *_args: False
         controller = CommandPaletteController(
             search_service=SearchService(
                 resource_manager=_manager(),
                 authorizer=authorizer,
             )
         )
+
         response = await controller.search(self._request("users"))
         commands = loads_str(response.body.decode())
         labels = [c["label"] for c in commands]
-        assert "Manage Users" in labels
+
+        assert "Manage Users" not in labels
         assert "Users: Alice" not in labels
         assert "Posts: Hello World" not in labels
-        assert len(commands) == 1
+        assert commands == []
 
-    async def test_short_queries_skip_permission_resolution(
+    async def test_unrestricted_static_commands_remain_for_restricted_user(
+        self, controller: CommandPaletteController
+    ) -> None:
+        response = await controller.search(self._request(""))
+        commands = loads_str(response.body.decode())
+        labels = [c["label"] for c in commands]
+
+        assert "Go to Dashboard" in labels
+        assert "Toggle Dark Mode" in labels
+        assert "Manage Users" in labels
+        assert "Settings" not in labels
+
+    async def test_short_queries_filter_matching_privileged_commands(
         self, controller: CommandPaletteController, authorizer: AsyncMock
     ) -> None:
-        for query in ("", "a"):
-            response = await controller.search(self._request(query))
-            commands = loads_str(response.body.decode())
-            labels = [c["label"] for c in commands]
-            assert "Go to Dashboard" in labels
-        authorizer.can_view.assert_not_awaited()
+        response = await controller.search(self._request("s"))
+        commands = loads_str(response.body.decode())
+        labels = [c["label"] for c in commands]
+
+        assert "Manage Users" in labels
+        assert "Settings" not in labels
+        assert call({"id": "u1"}, "settings") in authorizer.can_view.await_args_list

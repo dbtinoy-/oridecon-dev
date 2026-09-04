@@ -68,7 +68,10 @@ class AdminShell(Component):
         self.content = content
         self.title = title
         self.user = user or {}
-        self.commands = commands or []
+        # Preserve None (use safe palette defaults) versus [] (authorized empty
+        # command set). Collapsing both with ``or`` restores commands a caller
+        # deliberately removed.
+        self.commands = commands
         self.features = features or {}
         self.theme_css = theme_css
         self.site_name = site_name
