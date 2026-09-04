@@ -140,7 +140,7 @@ class Pagination(Component):
                         hx_swap=self.hx_swap,
                         hx_push_url=self.hx_push_url,
                         hx_include="this",
-                        onclick="return false",
+                        data_action="prevent",
                         preload="mouseover",
                     )
                 ),
@@ -166,7 +166,7 @@ class Pagination(Component):
                         hx_swap=self.hx_swap,
                         hx_push_url=self.hx_push_url,
                         hx_include="this",
-                        onclick="return false",
+                        data_action="prevent",
                         preload="mouseover",
                     )
                 ),

@@ -204,7 +204,7 @@ class AdminErrorMiddleware(BaseHTTPMiddleware):
             </div>
             """
             debug_button = f"""
-            <button onclick="document.getElementById('error-details-{id(exc)}').classList.toggle('hidden')" class="mr-2 text-sm font-medium text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300">
+            <button data-action="toggle-hidden" data-toggle-target="error-details-{id(exc)}" class="mr-2 text-sm font-medium text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300">
               Show Details
             </button>
             """
@@ -224,7 +224,7 @@ class AdminErrorMiddleware(BaseHTTPMiddleware):
           {debug_html}
           <div class="mt-4 flex justify-end">
             {debug_button}
-            <button onclick="this.closest('.admin-error-fragment').remove()" class="text-sm font-medium text-muted-foreground hover:text-foreground">
+            <button data-action="dismiss-fragment" class="text-sm font-medium text-muted-foreground hover:text-foreground">
               Dismiss
             </button>
           </div>

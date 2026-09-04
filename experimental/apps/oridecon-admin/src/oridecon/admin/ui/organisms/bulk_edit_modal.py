@@ -13,7 +13,7 @@ from htpy import div, form, label, option, p, select
 
 from oridecon.admin.actions.bulk_manager import BulkEditField
 from oridecon.admin.ui.organisms.admin_slide_over import render_slide_over_fragment
-from oridecon.ui import Button, Zones, el, get_render_scope, js_string
+from oridecon.ui import Button, Zones, el, get_render_scope
 
 
 def bulk_edit_modal(
@@ -231,10 +231,6 @@ def bulk_assign_modal(
     modal_id = scope.id("modal", key=identity_key)
     form_id = scope.id("form", key=identity_key)
     value_id = scope.id("value", key=identity_key)
-    close_script = (
-        f"document.getElementById({js_string(modal_id)}).classList.add('hidden')"
-    )
-
     return div(
         class_="fixed inset-0 bg-muted bg-opacity-50 hidden",
         id=modal_id,
@@ -253,7 +249,7 @@ def bulk_assign_modal(
                             "✕",
                             type="button",
                             variant="ghost",
-                            onclick=close_script,
+                            data_action="dismiss-modal", data_dismiss_modal=modal_id,
                             aria_label="Close bulk assignment",
                         ),
                     ],
@@ -306,13 +302,13 @@ def bulk_assign_modal(
                         "Cancel",
                         type="button",
                         variant="secondary",
-                        onclick=close_script,
+                        data_action="dismiss-modal", data_dismiss_modal=modal_id,
                     ),
                     Button(
                         "Assign",
                         type="submit",
                         form=form_id,
-                        onclick=close_script,
+                        data_action="dismiss-modal", data_dismiss_modal=modal_id,
                     ),
                 ],
             ]
@@ -352,10 +348,6 @@ def bulk_confirm_dialog(
             key=identity_key,
         )
     )
-    close_script = (
-        f"document.getElementById({js_string(dialog_id)}).classList.add('hidden')"
-    )
-
     return div(
         class_="fixed inset-0 bg-muted bg-opacity-50 hidden",
         id=dialog_id,
@@ -405,7 +397,7 @@ def bulk_confirm_dialog(
                         "Cancel",
                         type="button",
                         variant="secondary",
-                        onclick=close_script,
+                        data_action="dismiss-modal", data_dismiss_modal=dialog_id,
                     ),
                     Button(
                         action_name.title(),
@@ -414,7 +406,7 @@ def bulk_confirm_dialog(
                         hx_post=action_url,
                         hx_target=hx_target or Zones.DATA.selector,
                         hx_swap="outerHTML",
-                        onclick=close_script,
+                        data_action="dismiss-modal", data_dismiss_modal=dialog_id,
                     ),
                 ],
             ]

@@ -152,7 +152,8 @@ class TestExportBulkAction:
         result = action.render_button([{"id": "1"}, {"id": "2"}], ctx)
         assert 'data-bulk-download-url="/users/bulk"' in result
         assert 'data-bulk-action="export"' in result
-        assert "LexigramDownloadBulk" in result
+        assert 'data-action="bulk-download"' in result
+        assert "onclick=" not in result
         assert "hx-post" not in result
 
     def test_bulk_export_defaults(self) -> None:

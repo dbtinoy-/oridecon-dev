@@ -71,7 +71,7 @@ class StateRenderer:
             action=ActionButton(
                 label="Retry",
                 color="primary",
-                onclick="window.location.reload()",
+                data_action="reload",
             ).render(),
         )
 

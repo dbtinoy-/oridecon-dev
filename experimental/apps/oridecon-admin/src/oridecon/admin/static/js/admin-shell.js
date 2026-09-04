@@ -792,6 +792,12 @@ window.addEventListener('beforeunload', function () {
         }
         break;
       }
+      case 'dismiss-modal': {
+        var modalId = el.getAttribute('data-dismiss-modal');
+        var modal = modalId ? document.getElementById(modalId) : null;
+        if (modal) modal.classList.add('hidden');
+        break;
+      }
       case 'bulk-download':
         if (window.LexigramDownloadBulk) window.LexigramDownloadBulk(el);
         break;
@@ -805,6 +811,93 @@ window.addEventListener('beforeunload', function () {
     if (handled) event.preventDefault();
   }, true);
 })();
+
+
+// ========== Bulk export download (B28, shell pages) ==========
+window.LexigramDownloadBulk = function (btn) {
+  downloadBulk(btn);
+  return false;
+};
+
+async function downloadBulk(btn) {
+  function toast(message, type) {
+    if (window.showToast) window.showToast(message, type);
+  }
+  function serializeTableQuery(table) {
+    const params = new URLSearchParams();
+    const ignored = new Set(['ids', 'csrf_token', 'action', 'scope', 'list_query']);
+    table.querySelectorAll('input[name], select[name], textarea[name]').forEach(function(control) {
+      if (control.disabled || ignored.has(control.name)) return;
+      const type = String(control.type || '').toLowerCase();
+      if ((type === 'checkbox' || type === 'radio') && !control.checked) return;
+      if (control.tagName === 'SELECT' && control.multiple) {
+        Array.from(control.selectedOptions).forEach(function(option) {
+          params.append(control.name, option.value);
+        });
+      } else if (!['button', 'file', 'reset', 'submit'].includes(type)) {
+        params.append(control.name, control.value);
+      }
+    });
+    return params.toString();
+  }
+  try {
+    const url = btn.getAttribute('data-bulk-download-url');
+    if (!url) return;
+    const action = btn.getAttribute('data-bulk-action') || 'export';
+    const table = btn.closest('[data-oridecon-table-root]');
+    if (!table) return;
+    const checked = table.querySelectorAll('input[name="ids"]:checked');
+    const filtered = !checked.length;
+    const body = new FormData();
+    body.append('action', action);
+    if (filtered) {
+      // R25: no selection means "export everything matching this table's
+      // current view" — sibling tables may hold independent state.
+      body.append('scope', 'filtered');
+      body.append('list_query', serializeTableQuery(table));
+    } else {
+      checked.forEach(function(box) { body.append('ids', box.value); });
+    }
+    const csrfInput = table.querySelector('input[name="csrf_token"]');
+    const csrfEl = document.querySelector('[data-csrf-token]');
+    const csrf = (csrfInput && csrfInput.value) ||
+      window.__orideconCsrfToken ||
+      (csrfEl && csrfEl.getAttribute('data-csrf-token'));
+    if (csrf) body.append('csrf_token', csrf);
+    const headers = {};
+    if (csrf) headers['X-CSRF-Token'] = csrf;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      body: body,
+      headers: headers,
+      credentials: 'same-origin'
+    });
+    if (!response.ok) {
+      toast('Export failed (' + response.status + ').', 'error');
+      return;
+    }
+    const blob = await response.blob();
+    const disposition = response.headers.get('Content-Disposition') || '';
+    const match = disposition.match(/filename="?([^";]+)"?/i);
+    const filename = match ? match[1] : 'export.csv';
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function() { URL.revokeObjectURL(link.href); }, 4000);
+    toast(
+      filtered
+        ? 'Exported all records matching the current view.'
+        : 'Exported ' + checked.length + ' record' + (checked.length === 1 ? '' : 's') + '.',
+      'success'
+    );
+  } catch (err) {
+    toast('Export failed.', 'error');
+  }
+}
 
 
 // ========== Command palette controller (was CommandPalette._controller_script) ==========

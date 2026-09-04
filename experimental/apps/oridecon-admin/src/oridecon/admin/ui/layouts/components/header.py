@@ -110,7 +110,7 @@ class HeaderRenderer:
         # Mobile menu toggle
         parts.append("""
             <button type="button" class="mobile-menu-btn lg:hidden"
-                    onclick="document.body.classList.toggle('sidebar-open')">
+                    data-action="open-sidebar">
                 <i data-lucide="menu" class="w-5 h-5"></i>
             </button>
         """)
@@ -182,7 +182,7 @@ class HeaderRenderer:
         """Render theme toggle button."""
         return """
         <button type="button" class="theme-toggle-btn"
-                onclick="toggleTheme()"
+                data-action="toggle-theme"
                 title="Toggle theme">
             <i data-lucide="sun" class="w-5 h-5 dark:hidden"></i>
             <i data-lucide="moon" class="w-5 h-5 hidden dark:block"></i>

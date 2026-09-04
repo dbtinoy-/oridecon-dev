@@ -418,4 +418,102 @@
     toggleCommandPalette: toggleCommandPalette
   };
 
+  // ========== Delegated actions (CSP: no inline onclick/onsubmit) ==========
+  // Legacy layouts (admin_layout.py) render components with data-action /
+  // data-confirm descriptors; a capture-phase listener owns the behaviour so
+  // no inline event-handler attribute is emitted.
+  window.toggleTheme = function() {
+    var dark = !document.documentElement.classList.contains('dark');
+    document.documentElement.classList.toggle('dark', dark);
+    localStorage.setItem('darkMode', String(dark));
+    window.dispatchEvent(new CustomEvent('darkmode-change', { detail: { dark: dark } }));
+  };
+  window.toggleSidebar = function() {
+    document.body.classList.toggle('sidebar-open');
+  };
+  window.closeSidebar = function() {
+    document.body.classList.remove('sidebar-open');
+  };
+  window.openSidebar = function() {
+    document.body.classList.add('sidebar-open');
+  };
+
+  document.addEventListener('submit', function (event) {
+    var form = event.target;
+    var message = form && form.getAttribute ? form.getAttribute('data-confirm') : null;
+    if (!message) return;
+    if (window.confirm(message)) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }, true);
+
+  document.addEventListener('click', function (event) {
+    if (event.defaultPrevented || event.button !== 0) return;
+    var el = event.target instanceof Element ? event.target.closest('[data-action]') : null;
+    if (!el) return;
+    var action = el.getAttribute('data-action');
+    var handled = true;
+    switch (action) {
+      case 'reload':
+        window.location.reload();
+        break;
+      case 'dismiss-alert':
+        var container = el.closest('[role="alert"]') || el.parentElement;
+        if (container) container.remove();
+        break;
+      case 'dismiss-fragment':
+        var fragment = el.closest('.admin-error-fragment');
+        if (fragment) fragment.remove();
+        break;
+      case 'toggle-hidden':
+        var targetId = el.getAttribute('data-toggle-target');
+        var target = targetId ? document.getElementById(targetId) : null;
+        if (target) target.classList.toggle('hidden');
+        break;
+      case 'dismiss-toast': {
+        var toastId = el.getAttribute('data-dismiss-toast') || el.getAttribute('data-action-target');
+        if (toastId && window.dismissToast) window.dismissToast(toastId);
+        else {
+          var toast = el.closest('[role="alert"]') || el.parentElement;
+          if (toast) toast.remove();
+        }
+        break;
+      }
+      case 'dismiss-modal': {
+        var modalId = el.getAttribute('data-dismiss-modal');
+        var modal = modalId ? document.getElementById(modalId) : null;
+        if (modal) modal.classList.add('hidden');
+        break;
+      }
+      case 'bulk-download':
+        if (window.LexigramDownloadBulk) window.LexigramDownloadBulk(el);
+        break;
+      case 'prevent':
+        handled = false;
+        event.preventDefault();
+        break;
+      case 'open-sidebar':
+        window.openSidebar();
+        break;
+      case 'close-sidebar':
+        window.closeSidebar();
+        break;
+      case 'toggle-sidebar':
+        window.toggleSidebar();
+        break;
+      case 'toggle-sidebar-item':
+        if (el.parentElement) el.parentElement.classList.toggle('is-collapsed');
+        break;
+      case 'toggle-sidebar-group':
+        if (el.parentElement) el.parentElement.classList.toggle('is-expanded');
+        break;
+      case 'toggle-theme':
+        if (window.toggleTheme) window.toggleTheme();
+        break;
+      default:
+        handled = false;
+    }
+    if (handled) event.preventDefault();
+  }, true);
+
 })();

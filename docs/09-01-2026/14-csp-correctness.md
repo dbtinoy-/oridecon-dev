@@ -85,11 +85,17 @@ and the middleware inherit the fix; operator overrides stored in
    injection was replaced with static Tailwind width classes.
    Verified: users-page render has 0 inline `<script>`, 0 inline
    `<style>`, 0 `on*=` attributes (browser console still reports
-   `known-alpine-eval` only). **Remaining:** `StandaloneLayout`
+   `known-alpine-eval` only). **All inline `on*=` handlers across the
+   admin + UI packages are gone** — alert/error-boundary dismissal,
+   data-table states, pagination, bulk-edit modal close, error-fragment
+   toggle/dismiss and bulk-export now use the delegated `data-action` /
+   `data-confirm` descriptors (shell pages: `admin-shell.js`; legacy
+   layouts: `admin.js`), and `admin-shell.js` carries its own
+   `LexigramDownloadBulk` blob-download so shell-page exports work.
+   **Remaining code still externalized:** `StandaloneLayout`
    (login/MFA/password/setup/error pages), legacy `AdminLayout` +
    `base_layout`/`head`/`mixins`, dashboard charts, Trix rich-text field,
-   `_aria_functions` inline script, and the `data_table`/pagination/
-   bulk-edit/alert/error-boundary inline handlers — a follow-up batch.
+   `_aria_functions` inline script — a follow-up batch.
 3. Replace inline `style=` attrs (sticky offsets, widths) with CSS custom
    properties set via Alpine `:style` bindings or classes.
 4. Then drop `'unsafe-inline'` and `'unsafe-eval'` together.

@@ -157,7 +157,7 @@ class TableToolbar(Component):
                         type="button",
                         data_bulk_download_url=export_url,
                         data_bulk_action=action_name,
-                        onclick="return window.LexigramDownloadBulk(this);",
+                        data_action="bulk-download",
                     )
                     bulk_action_items.append(btn.render())
                     continue

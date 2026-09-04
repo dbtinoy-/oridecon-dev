@@ -53,7 +53,7 @@ class Alert(Component):
                     color="ghost",
                     size="sm",
                     type="button",
-                    onclick="this.parentElement.remove()",
+                    data_action="dismiss-alert",
                     class_="ml-auto text-xl font-bold opacity-50 hover:opacity-100",
                     aria_label="Dismiss alert",
                 ).render(),

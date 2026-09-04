@@ -97,7 +97,7 @@ class SidebarRenderer:
 
         # Mobile overlay
         parts.append(
-            '<div class="sidebar-overlay lg:hidden" onclick="closeSidebar()"></div>',
+            '<div class="sidebar-overlay lg:hidden" data-action="close-sidebar"></div>',
         )
 
         # Sidebar content wrapper
@@ -157,7 +157,7 @@ class SidebarRenderer:
             if group.is_collapsible:
                 parts.append(f"""
                 <button type="button" class="nav-group-header nav-group-toggle"
-                        onclick="this.parentElement.classList.toggle('is-collapsed')">
+                        data-action="toggle-sidebar-item">
                     <span>{escape(group.label)}</span>
                     <i data-lucide="chevron-down" class="nav-group-arrow w-4 h-4"></i>
                 </button>
@@ -217,7 +217,7 @@ class SidebarRenderer:
             # Has submenu
             parts.append(f"""
             <button type="button" class="nav-link nav-link-toggle"
-                    onclick="this.parentElement.classList.toggle('is-expanded')">
+                    data-action="toggle-sidebar-group">
                 <i data-lucide="{escape(item.icon)}" class="nav-icon w-5 h-5"></i>
                 <span class="nav-label">{escape(item.label)}</span>
                 {badge}
@@ -251,7 +251,7 @@ class SidebarRenderer:
         """Render sidebar collapse toggle button."""
         return """
         <button type="button" class="sidebar-collapse-btn"
-                onclick="toggleSidebar()"
+                data-action="toggle-sidebar"
                 title="Toggle sidebar">
             <i data-lucide="panel-left-close" class="w-5 h-5 sidebar-expanded-icon"></i>
             <i data-lucide="panel-left-open" class="w-5 h-5 sidebar-collapsed-icon"></i>

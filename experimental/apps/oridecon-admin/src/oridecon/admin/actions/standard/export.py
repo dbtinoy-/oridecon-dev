@@ -178,7 +178,7 @@ class ExportBulkAction(BulkAction):
             type="button",
             data_bulk_download_url=f"{prefix}/bulk",
             data_bulk_action=self.name,
-            onclick="return window.LexigramDownloadBulk(this);",
+            data_action="bulk-download",
         )
         rendered = button.render()
         return str(rendered) if rendered else ""

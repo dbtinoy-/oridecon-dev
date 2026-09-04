@@ -160,11 +160,14 @@ inline-code free — the render harness reports **0 inline `<script>`,
 0 inline `<style>`, 0 `on*=` attributes** — so the only remaining
 `/admin/users` console entries are the `known-alpine-eval` reports from
 the vendored standard Alpine build (deferred: Alpine CSP build, doc 14 §3).
-The other routes (login/MFA/password/setup/error via `StandaloneLayout`,
-dashboard charts, Trix rich-text fields, data-table/pagination/bulk-edit
-controls, legacy `AdminLayout`) still carry inline `<script>`/`<style>` /
-`on*=` and are logged as `known-inline-script` / `known-inline-style` /
-`unexpected` (attribute) until the follow-up batch lands.
+Inline `on*=` attributes have been removed **across the admin + UI
+packages** (delegated `data-action` / `data-confirm` listeners in
+`admin-shell.js` / `admin.js`), so no page emits `script-src-attr`
+violations anymore. The remaining `known-inline-script` /
+`known-inline-style` reports come from routes that still externalize code
+(login/MFA/password/setup/error via `StandaloneLayout`, legacy
+`AdminLayout` + `base_layout`/`head`/`mixins`, dashboard charts, Trix
+rich-text fields, `_aria_functions`).
 
 | Console message | Classification | Roadmap item |
 | --- | --- | --- |

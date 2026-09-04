@@ -252,7 +252,8 @@ def test_bulk_csv_action_uses_native_download_submission():
 
     assert 'data-bulk-download-url="/admin/users/bulk"' in rendered
     assert 'data-bulk-action="export"' in rendered
-    assert "LexigramDownloadBulk" in rendered
+    assert 'data-action="bulk-download"' in rendered
+    assert "onclick=" not in rendered
     assert "hx-post" not in rendered
 
 

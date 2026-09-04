@@ -49,7 +49,7 @@ class ErrorBoundary(Component):
                     action=el(
                         "button",
                         "Reload Page",
-                        onclick="window.location.reload()",
+                        data_action="reload",
                         class_="px-4 py-2 bg-destructive text-destructive-foreground rounded hover:bg-destructive/90 transition-colors",
                     ),
                 ),
