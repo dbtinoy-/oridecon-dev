@@ -10,7 +10,7 @@ def test_bell_renders_badge_and_alpine_root() -> None:
     bell = NotificationBell()
     html = str(bell)
 
-    assert 'x-data="notificationBell"' in html
+    assert 'x-data="oridecon_notification_bell_root_1"' in html
     assert "x-init" in html
     assert "unreadCount &gt; 0" in html
     assert "99+" in html
@@ -24,8 +24,8 @@ def test_bell_renders_notification_list_and_empty_state() -> None:
     html = str(NotificationBell())
 
     assert "x-for" in html
-    assert "notif.title" in html
-    assert "notif.message" in html
+    assert "notification.title" in html
+    assert "notification.message" in html
     assert "notifications.length === 0" in html
     assert "No new notifications" in html
 
@@ -80,7 +80,8 @@ def test_bell_posts_mark_read_to_inbox_endpoints() -> None:
     )
     html = str(bell)
 
-    assert 'fetch("/custom/read/{message_id}".replace' in html
+    assert '"/custom/read/{message_id}".replace' in html
+    assert "encodeURIComponent(String(id))" in html
     assert "method: 'POST'" in html
     assert 'fetch("/custom/read-all"' in html
 
