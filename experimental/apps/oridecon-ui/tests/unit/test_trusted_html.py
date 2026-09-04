@@ -6,7 +6,13 @@ from dataclasses import FrozenInstanceError
 
 import pytest
 
-from oridecon.ui.core.base import RawHTML, el, raw, render_to_string
+from oridecon.ui.core.base import (
+    RawHTML,
+    el,
+    raw,
+    render_child_to_string,
+    render_to_string,
+)
 from oridecon.ui.core.trusted_html import TrustedHTML, trusted_html
 
 
@@ -67,6 +73,16 @@ class TestTrustedHTML:
         with pytest.raises(FrozenInstanceError):
             value.value = "<script>changed()</script>"  # type: ignore[misc]
         assert render_to_string(el("div", value)) == "<div><em>legacy</em></div>"
+
+
+class TestNestedRenderAdapter:
+    def test_plain_strings_use_child_escaping_policy(self) -> None:
+        assert render_child_to_string("<b>text</b>") == "&lt;b&gt;text&lt;/b&gt;"
+
+    def test_explicit_trusted_html_remains_verbatim(self) -> None:
+        value = trusted_html("<b>owned</b>", source="test fixture")
+
+        assert render_child_to_string(value) == "<b>owned</b>"
 
 
 class TestConcreteTrustBoundary:

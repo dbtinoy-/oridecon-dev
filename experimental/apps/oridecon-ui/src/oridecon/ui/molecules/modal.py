@@ -4,8 +4,13 @@ import re
 from typing import Any
 
 from oridecon.ui.atoms.button import Button, ButtonVariant, SubmitButton
-from oridecon.ui.core.base import Component, el, raw, render_to_string
+from oridecon.ui.core.base import (
+    Component,
+    el,
+    render_child_to_string,
+)
 from oridecon.ui.core.render_context import get_render_scope
+from oridecon.ui.core.trusted_html import trusted_html
 
 
 def _first_form_id(html: str) -> str | None:
@@ -110,18 +115,9 @@ class Modal(Component):
                     **{"x-on:keydown.space.prevent": "open = true"},
                 )
 
-        rendered_children = list(map(render_to_string, self.children))
+        rendered_children = [render_child_to_string(child) for child in self.children]
 
-        footer_html: list[Any] = []
-        if self.footer:
-            footer_html = [
-                (
-                    raw(render_to_string(c))
-                    if hasattr(c, "__html__") or hasattr(c, "render")
-                    else str(c)
-                )
-                for c in self.footer
-            ]
+        footer_html: list[Any] = list(self.footer)
 
         footer_found: list[str] = []
         if not footer_html:
@@ -139,23 +135,22 @@ class Modal(Component):
             rendered_children = new_rendered_children
 
         if footer_found and not footer_html:
-            footer_html = list(map(raw, footer_found))
+            footer_html = [
+                trusted_html(fragment, source="Modal extracted footer adapter")
+                for fragment in footer_found
+            ]
 
         if not footer_html:
             # Match SlideOver's form contract: a delegated form action bar
             # needs a real form binding, while a form that already owns its
             # submit control must not receive a duplicate footer submit.
             content_html = "".join(rendered_children)
-            form_present = "<form" in content_html.lower()
             form_obj = next(
                 (c for c in self.children if hasattr(c, "submit_label")),
                 None,
             )
             form_suppresses = bool(getattr(form_obj, "suppress_submit", False))
             form_id = getattr(form_obj, "form_id", None) or _first_form_id(content_html)
-            has_own_submit = bool(
-                re.search(r'<button[^>]*type=["\\\']submit', content_html)
-            )
 
             # Modal footers are owned by a form component that explicitly
             # delegates its actions (``suppress_submit``). A raw HTML form is
@@ -184,9 +179,11 @@ class Modal(Component):
                 )
                 footer_html = [cancel_btn, save_btn]
 
-        children_html = list(
-            map(raw, filter(lambda s: s and s.strip(), rendered_children)),
-        )
+        children_html = [
+            trusted_html(fragment, source="Modal normalized child adapter")
+            for fragment in rendered_children
+            if fragment.strip()
+        ]
 
         return el(
             "div",

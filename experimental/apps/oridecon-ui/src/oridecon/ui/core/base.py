@@ -267,6 +267,20 @@ def _render_child(child: Any) -> str:
     return render_to_string(child)
 
 
+def render_child_to_string(value: Any) -> str:
+    """Render one nested value for wrappers that must inspect owned markup.
+
+    Unlike the legacy top-level ``render_to_string`` string contract, this
+    boundary always treats plain strings and plain component results as text.
+    New wrappers should preserve nodes directly; this adapter exists for the
+    small set that must inspect or transform form structure before rendering.
+    """
+    if get_render_context() is None:
+        with ensure_render_context():
+            return render_child_to_string(value)
+    return _render_child(value)
+
+
 # Compatibility state for Streamlit-like ``with`` composition. ContextVars
 # keep implicit parents task-local while immutable tuples prevent child tasks
 # from sharing and mutating one process-wide stack.

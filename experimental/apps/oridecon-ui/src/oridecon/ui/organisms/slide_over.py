@@ -3,7 +3,8 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from oridecon.ui.core.base import Component, el, raw, render_to_string
+from oridecon.ui.core.base import Component, el, render_child_to_string
+from oridecon.ui.core.trusted_html import trusted_html
 
 # Width map for size parameter
 _SIZE_WIDTHS = {
@@ -79,7 +80,7 @@ class SlideOver(Component):
         self.subtitle = subtitle
 
     def render(self) -> Any:
-        rendered_children = list(map(render_to_string, self.children))
+        rendered_children = [render_child_to_string(child) for child in self.children]
 
         footer_html: list[Any] = []
         footer_found: list[str] = []
@@ -98,15 +99,13 @@ class SlideOver(Component):
             rendered_children = new_rendered_children
 
         if self.footer:
-            footer_html = [
-                raw(render_to_string(c))
-                if hasattr(c, "__html__") or hasattr(c, "render")
-                else str(c)
-                for c in self.footer
-            ]
+            footer_html = list(self.footer)
 
         if footer_found and not footer_html:
-            footer_html = [raw(f) for f in footer_found]
+            footer_html = [
+                trusted_html(fragment, source="SlideOver extracted footer adapter")
+                for fragment in footer_found
+            ]
 
         content_html_joined = "".join(rendered_children)
         if not footer_html:
@@ -161,7 +160,9 @@ class SlideOver(Component):
                 footer_html = [cancel_btn, save_btn]
 
         children_html = [
-            raw(s) for s in filter(lambda s: s and s.strip(), rendered_children)
+            trusted_html(fragment, source="SlideOver normalized child adapter")
+            for fragment in rendered_children
+            if fragment.strip()
         ]
 
         from oridecon.ui.molecules.action_button import ActionButton
@@ -327,12 +328,20 @@ class SlideOver(Component):
                                                         "focus-visible:ring-2 focus-visible:ring-ring"
                                                     ),
                                                 },
-                                                raw(
-                                                    '<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" '
-                                                    'stroke-width="1.5" stroke="currentColor">'
-                                                    '<path stroke-linecap="round" stroke-linejoin="round" '
-                                                    'd="M6 18L18 6M6 6l12 12"/>'
-                                                    "</svg>"
+                                                el(
+                                                    "svg",
+                                                    el(
+                                                        "path",
+                                                        stroke_linecap="round",
+                                                        stroke_linejoin="round",
+                                                        d="M6 18L18 6M6 6l12 12",
+                                                    ),
+                                                    class_="h-5 w-5",
+                                                    fill="none",
+                                                    viewBox="0 0 24 24",
+                                                    stroke_width="1.5",
+                                                    stroke="currentColor",
+                                                    aria_hidden="true",
                                                 ),
                                             ),
                                         ),
