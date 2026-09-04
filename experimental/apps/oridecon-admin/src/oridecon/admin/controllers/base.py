@@ -203,6 +203,13 @@ class AdminController(ControllerProtocol):
                     features[f"{flag}_enabled"] = enabled
             if features:
                 extra_context.setdefault("features", features)
+                # Cache on request.state so direct renderer.render_page() calls
+                # (list/detail/form renderers that bypass render_response) can
+                # also pick up the feature flags without an extra DB round-trip.
+                try:
+                    request.state.admin_features = features
+                except Exception:  # noqa: BLE001, S110 — non-fatal
+                    pass
         except Exception:  # noqa: BLE001, S110 — non-fatal
             pass
 
