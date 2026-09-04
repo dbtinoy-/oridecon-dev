@@ -58,6 +58,8 @@ engine-backed suite is not enabled.
 - `test_sidebar_navigation.py`: HTMX swaps, fragment/full-page responses, URL
   history, and consecutive navigation.
 - `test_settings_panel_navigation.py`: settings panel navigation behavior.
+- `test_tabs_interactions.py`: shared Tabs focus movement, keyboard wrapping,
+  activation, and panel visibility against the vendored Alpine runtime.
 
 The production-browser plan in `docs/09-04-2026/06-production-browser-release-gate.md`
 tracks the remaining migration from focused behavior fixtures to the complete

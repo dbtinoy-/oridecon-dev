@@ -138,6 +138,7 @@ def build_gallery() -> dict[str, str]:
             Tabs(
                 [("Overview", "overview"), ("Details", "details")],
                 active_tab="overview",
+                tabs_id="gallery-tabs",
                 children=[
                     TabPanel("overview", "Overview content"),
                     TabPanel("details", "Details content"),

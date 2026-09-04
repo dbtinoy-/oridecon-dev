@@ -169,11 +169,17 @@ class TestElementAlpineValidation:
 
 
 def test_migrated_components_render_canonical_bindings() -> None:
-    from oridecon.ui.molecules.tabs import Tabs
+    from oridecon.ui.molecules.tabs import TabPanel, Tabs
     from oridecon.ui.organisms.query_builder import QueryBuilder
     from oridecon.ui.organisms.task_progress import TaskProgress
 
-    tabs = str(Tabs([("First", "first")]).render())
+    tabs = str(
+        Tabs(
+            [("First", "first")],
+            tabs_id="directive-tabs",
+            children=[TabPanel("first", "First panel")],
+        ).render()
+    )
     query = str(QueryBuilder("filters").render())
     progress = str(TaskProgress("task-1").render())
 
