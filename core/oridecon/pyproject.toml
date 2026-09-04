@@ -73,7 +73,7 @@ dependencies = [
     "oridecon-contracts>=0.1.4",
     "orjson>=3.0.0",
     "structlog>=25.1.0",             # Structured logging foundation
-    "pydantic>=2.10.0",              # Required: used unconditionally by config, validation
+    "pydantic>=2.13.5",              # Required: used unconditionally by config, validation
 ]
 
 # =============================================================================
