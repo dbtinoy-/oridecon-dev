@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from contextvars import ContextVar, Token
 import html
 import importlib
 import re
@@ -107,7 +108,7 @@ class Element:
         add_child_to_current(self)
 
     def __enter__(self) -> Self:
-        _context_stack.append(self)
+        _enter_composition_context(self)
         return self
 
     def __exit__(
@@ -116,8 +117,7 @@ class Element:
         exc: BaseException | None,
         tb: TracebackType | None,
     ) -> None:
-        if _context_stack and _context_stack[-1] is self:
-            _context_stack.pop()
+        _exit_composition_context(self)
 
     def __html__(self) -> str:
         parts: list[str] = [f"<{self.tag}"]
@@ -231,29 +231,98 @@ def _render_child(child: Any) -> str:
     return render_to_string(child)
 
 
-# Context stack to support Streamlit-like `with` usage
-_context_stack: list[Any] = []
-_no_context: bool = False
+# Compatibility state for Streamlit-like ``with`` composition. ContextVars
+# keep implicit parents task-local while immutable tuples prevent child tasks
+# from sharing and mutating one process-wide stack.
+_CompositionStack = tuple[Any, ...]
+_CompositionEntry = tuple[Any, Token[_CompositionStack]]
+_NoContextEntry = tuple[Any, Token[bool]]
+
+_context_stack: ContextVar[_CompositionStack] = ContextVar(
+    "oridecon_ui_composition_stack", default=()
+)
+_context_entries: ContextVar[tuple[_CompositionEntry, ...]] = ContextVar(
+    "oridecon_ui_composition_entries", default=()
+)
+_no_context: ContextVar[bool] = ContextVar(
+    "oridecon_ui_composition_disabled", default=False
+)
+_no_context_entries: ContextVar[tuple[_NoContextEntry, ...]] = ContextVar(
+    "oridecon_ui_no_context_entries", default=()
+)
+
+
+def _enter_composition_context(parent: Any) -> None:
+    """Push ``parent`` in the current task and retain its reset token."""
+    token = _context_stack.set((*_context_stack.get(), parent))
+    _context_entries.set((*_context_entries.get(), (parent, token)))
+
+
+def _exit_composition_context(parent: Any) -> None:
+    """Pop ``parent`` with strict LIFO validation and deterministic cleanup."""
+    entries = _context_entries.get()
+    matching_index = next(
+        (
+            index
+            for index in range(len(entries) - 1, -1, -1)
+            if entries[index][0] is parent
+        ),
+        None,
+    )
+    if matching_index is None:
+        raise RuntimeError("Composition context is not active in this task")
+
+    _, token = entries[matching_index]
+    is_lifo = matching_index == len(entries) - 1 and (
+        bool(_context_stack.get()) and _context_stack.get()[-1] is parent
+    )
+    # Resetting the token restores the exact stack from before this parent was
+    # entered. On a mismatched exit this also removes any poisoned descendants.
+    _context_stack.reset(token)
+    _context_entries.set(entries[:matching_index])
+    if not is_lifo:
+        raise RuntimeError("Composition contexts must exit in LIFO order")
 
 
 class NoContext:
-    """Context manager to temporarily disable auto-registration of components."""
+    """Temporarily disable implicit child registration in the current task."""
 
-    def __enter__(self) -> Any:
-        global _no_context
-        self.old = _no_context
-        _no_context = True
+    def __enter__(self) -> Self:
+        token = _no_context.set(True)
+        _no_context_entries.set((*_no_context_entries.get(), (self, token)))
+        return self
 
-    def __exit__(self, *args: object) -> Any:
-        global _no_context
-        _no_context = self.old
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
+        entries = _no_context_entries.get()
+        matching_index = next(
+            (
+                index
+                for index in range(len(entries) - 1, -1, -1)
+                if entries[index][0] is self
+            ),
+            None,
+        )
+        if matching_index is None:
+            raise RuntimeError("NoContext is not active in this task")
+
+        _, token = entries[matching_index]
+        is_lifo = matching_index == len(entries) - 1
+        _no_context.reset(token)
+        _no_context_entries.set(entries[:matching_index])
+        if not is_lifo:
+            raise RuntimeError("NoContext managers must exit in LIFO order")
 
 
 def add_child_to_current(child: Any) -> None:
-    """If a component is active in a `with` context, append child to it."""
-    if _context_stack and not _no_context:
-        parent = _context_stack[-1]
-        parent.children.append(child)
+    """Append ``child`` to the current task's implicit composition parent."""
+    stack = _context_stack.get()
+    if stack and not _no_context.get():
+        stack[-1].children.append(child)
 
 
 class Component:
@@ -309,7 +378,7 @@ class Component:
         """Lifecycle hook called when component is instantiated."""
 
     def __enter__(self) -> Self:
-        _context_stack.append(self)
+        _enter_composition_context(self)
         return self
 
     def __exit__(
@@ -318,9 +387,7 @@ class Component:
         exc: BaseException | None,
         tb: TracebackType | None,
     ) -> None:
-        # Pop self from the stack if it's the active context
-        if _context_stack and _context_stack[-1] is self:
-            _context_stack.pop()
+        _exit_composition_context(self)
 
     def add(self, *children: Any) -> Component:
         """Fluent API to add children to this component."""
