@@ -21,9 +21,14 @@
     <!-- Scripts -->
     <script src="{{ static_prefix | default('/admin') }}/static/js/htmx.min.js"></script>
     <script src="{{ static_prefix | default('/admin') }}/static/js/lucide.min.js"></script>
+    <!-- admin-shell.js must load BEFORE alpine.min.js: the vendored Alpine
+         build starts on queueMicrotask after its own (deferred) evaluation,
+         which happens before the next deferred script runs. The shell picks
+         up the alpine:init listener first and registers its controllers
+         (commandPalette, notificationBell) before Alpine walks the tree. -->
+    <script src="{{ static_prefix | default('/admin') }}/static/js/admin-shell.js" defer></script>
     <script src="{{ static_prefix | default('/admin') }}/static/js/alpine-focus.min.js" defer></script>
     <script src="{{ static_prefix | default('/admin') }}/static/js/alpine.min.js" defer></script>
-    <script src="{{ static_prefix | default('/admin') }}/static/js/admin-shell.js" defer></script>
 
     <!-- Synchronous head bootstrap: dark mode before first paint + runtime
          theme overrides. All values come from data attributes on <html>. -->

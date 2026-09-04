@@ -95,7 +95,7 @@ class PaginationLinks(Component):
         # Merge common navigation props
         attrs: dict[str, Any] = {
             "class_": cls,
-            "onclick": "return false",
+            "data-action": "prevent",
             "preload": "mouseover",
             **{k.replace("-", "_"): v for k, v in htmx_attrs.items()},
         }
@@ -115,7 +115,7 @@ class PaginationLinks(Component):
             ]:
                 attrs.pop(hx_attr, None)
 
-            attrs["onclick"] = ""
+            attrs.pop("onclick", None)
             return el("span", label, **attrs)
 
         return Link(

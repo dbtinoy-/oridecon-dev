@@ -211,7 +211,8 @@ class TestImportButtonRendering:
         ctx = ActionContext(resource_name="products", resource_prefix="/admin/products")
         html = action.render_button(None, ctx)
         assert 'data-import-upload-url="/admin/products/import"' in html
-        assert "LexigramImportUpload" in html
+        assert 'data-action="import-upload"' in html
+        assert "onclick=" not in html
         assert ".csv,.json,.jsonl" in html
         assert "hx-get" not in html
 

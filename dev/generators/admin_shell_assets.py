@@ -266,6 +266,35 @@ def _delegated_actions_js() -> str:
         var target = targetId ? document.getElementById(targetId) : null;
         if (target) target.classList.toggle('hidden');
         break;
+      case 'view-switch-icon': {
+        var svg = el.querySelector('svg');
+        if (svg) {
+          var clone = svg.cloneNode(true);
+          clone.setAttribute('class', 'h-4 w-4 text-muted-foreground dark:text-foreground');
+          var details = el.closest('details');
+          if (details) {
+            var summarySpan = details.querySelector('summary span');
+            if (summarySpan) { summarySpan.innerHTML = ''; summarySpan.appendChild(clone); }
+            details.open = false;
+          }
+        }
+        break;
+      }
+      case 'inline-edit-enter': {
+        var cell = el.closest('[data-inline-cell]');
+        if (cell) {
+          var displayNode = cell.querySelector('[data-display]');
+          var editNode = cell.querySelector('[data-edit]');
+          if (displayNode) displayNode.classList.add('hidden');
+          if (editNode) editNode.classList.remove('hidden');
+          var field = cell.querySelector('input, select, textarea');
+          if (field) field.focus();
+        }
+        break;
+      }
+      case 'import-upload':
+        if (window.LexigramImportUpload) window.LexigramImportUpload(el);
+        break;
       case 'dismiss-toast': {
         var toastId = el.getAttribute('data-dismiss-toast') || el.getAttribute('data-action-target');
         if (toastId && window.dismissToast) window.dismissToast(toastId);

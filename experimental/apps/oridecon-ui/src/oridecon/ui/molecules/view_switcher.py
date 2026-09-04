@@ -54,7 +54,7 @@ class ViewSwitcher(Component):
                 "class": "block px-3 py-2 text-sm text-foreground hover:bg-muted dark:text-foreground dark:hover:bg-muted flex items-center gap-2",
                 "hx_on": f"click:console.log('view:{value}')",
                 # Simple serialized JS to update the trigger icon on click
-                "onclick": "let svg = this.querySelector('svg').cloneNode(true); svg.setAttribute('class', 'h-4 w-4 text-muted-foreground dark:text-foreground'); this.closest('details').querySelector('summary span').innerHTML = ''; this.closest('details').querySelector('summary span').appendChild(svg); this.closest('details').open = false;",
+                "data-action": "view-switch-icon",
             }
 
             # Generate HTMX attrs using the new factory
@@ -105,7 +105,7 @@ class ViewSwitcher(Component):
                 attrs.pop("hx_push_url", None)
                 attrs.pop("hx_boost", None)
                 attrs.pop("hx_on", None)
-                attrs.pop("onclick", None)  # No need to update on click if disabled
+                attrs.pop("data-action", None)  # No need to update on click if disabled
 
                 label = f"{label}"
 

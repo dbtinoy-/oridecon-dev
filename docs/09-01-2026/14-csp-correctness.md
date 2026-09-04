@@ -92,10 +92,21 @@ and the middleware inherit the fix; operator overrides stored in
    `data-confirm` descriptors (shell pages: `admin-shell.js`; legacy
    layouts: `admin.js`), and `admin-shell.js` carries its own
    `LexigramDownloadBulk` blob-download so shell-page exports work.
-   **Remaining code still externalized:** `StandaloneLayout`
+   The last handler class (products/import surface) was converted in a
+   follow-up batch: the import button (`imports.py`), view switcher
+   (`view_switcher.py`), inline-edit cell (`inline_edit_cell.py`) and
+   pagination links (`pagination_links.py`) now emit `data-action` /
+   `data-confirm` descriptors handled by new delegated cases
+   `import-upload`, `view-switch-icon` and `inline-edit-enter`
+   (pagination uses the existing `prevent`); a live authenticated
+   re-scan of `/admin/products` confirms **0 `on*=` attributes**.
+   **Remaining code still inline:** `StandaloneLayout`
    (login/MFA/password/setup/error pages), legacy `AdminLayout` +
-   `base_layout`/`head`/`mixins`, dashboard charts, Trix rich-text field,
-   `_aria_functions` inline script — a follow-up batch.
+   `base_layout`/`head`/`mixins`, dashboard charts, the generated
+   DataTable client controller emitted by `DataTableScriptRenderer`
+   on list pages (`/admin/products`: 1 inline `<script>` left), Trix
+   rich-text field, `_aria_functions` inline script, `debug_error.html`
+   — a follow-up batch.
 3. Replace inline `style=` attrs (sticky offsets, widths) with CSS custom
    properties set via Alpine `:style` bindings or classes.
 4. Then drop `'unsafe-inline'` and `'unsafe-eval'` together.
@@ -130,4 +141,31 @@ and the middleware inherit the fix; operator overrides stored in
 * Real-browser confirmation of the pre-fix breakage was not possible in
   this sandbox (Playwright browser CDN blocked); conclusive static
   evidence recorded in §1.1.
+
+**Follow-up batch (09-04-2026):**
+
+* **Alpine load-order fix.** When the shell inline scripts were
+  externalized, `admin-shell.js` was placed *after* `alpine.min.js` in
+  the `<head>` defer order. The vendored Alpine is the **standard**
+  build: after its own (deferred) evaluation it sets `window.Alpine` and
+  auto-starts with `queueMicrotask(() => Ft.start())`. Microtasks drain
+  between deferred scripts, so `alpine:init` fires **before** any
+  later-deferred script executes. The shell's
+  `document.addEventListener('alpine:init', register)` therefore never
+  fired, and the eager `if (window.Alpine) register()` fallback ran only
+  **after** Alpine's initial tree walk — every authenticated page flooded
+  the console with Expression Errors (`commandPalette is not defined`,
+  `notificationBell is not defined`, `init`, `unreadCount`,
+  `mutationError`, `loading`, `loadError`, `notifications`,
+  `activeOptionId`, `search`, `error`, `filteredCommands`).
+  Fix: `base.html` now loads `admin-shell.js` **before** `alpine.min.js`
+  (it needs nothing from Alpine at load time — every `window.Alpine`
+  reference is inside guarded, runtime-only functions); `alpine-focus`
+  stays between the shell and Alpine because it also registers on
+  `alpine:init`. Verified with the jsdom harness (no real browser in
+  this sandbox): both controllers register before the tree walk, the
+  palette opens with its command list, the bell exposes
+  `loadInbox/markAsRead/markAllRead/toggle/close/destroy`, and **zero**
+  Alpine Expression Errors remain on `/admin/`, `/admin/users`,
+  `/admin/products`.
 

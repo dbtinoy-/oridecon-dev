@@ -163,11 +163,17 @@ the vendored standard Alpine build (deferred: Alpine CSP build, doc 14 §3).
 Inline `on*=` attributes have been removed **across the admin + UI
 packages** (delegated `data-action` / `data-confirm` listeners in
 `admin-shell.js` / `admin.js`), so no page emits `script-src-attr`
-violations anymore. The remaining `known-inline-script` /
-`known-inline-style` reports come from routes that still externalize code
-(login/MFA/password/setup/error via `StandaloneLayout`, legacy
-`AdminLayout` + `base_layout`/`head`/`mixins`, dashboard charts, Trix
-rich-text fields, `_aria_functions`).
+violations anymore. The final handler class — the products/import
+surface: import button, view switcher, inline-edit cell and pagination
+links — was converted in a follow-up batch (new delegated cases
+`import-upload`, `view-switch-icon`, `inline-edit-enter`; pagination
+uses `prevent`), re-verified live on `/admin/products` (0 `on*=`).
+The remaining `known-inline-script` / `known-inline-style` reports come
+from routes that still externalize code (login/MFA/password/setup/error
+via `StandaloneLayout`, legacy `AdminLayout` +
+`base_layout`/`head`/`mixins`, dashboard charts, the generated DataTable
+client controller from `DataTableScriptRenderer` on list pages, Trix
+rich-text fields, `_aria_functions`, `debug_error.html`).
 
 | Console message | Classification | Roadmap item |
 | --- | --- | --- |

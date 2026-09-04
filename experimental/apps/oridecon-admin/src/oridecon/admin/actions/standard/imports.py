@@ -200,7 +200,7 @@ class ImportAction(_ImportReportMixin, HeaderAction):
             "type": "button",
             "data_import_upload_url": url,
             "data_import_accept": ",".join(self._accept_extensions),
-            "onclick": "return window.LexigramImportUpload(this);",
+            "data-action": "import-upload",
         }
 
     def example_csv(self) -> str:

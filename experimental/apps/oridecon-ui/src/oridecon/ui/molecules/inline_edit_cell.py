@@ -127,7 +127,7 @@ class InlineEditCell(Component):
             **{
                 "data-display": "true",
                 "class": "cursor-pointer text-sm text-foreground hover:text-primary-600 dark:hover:text-primary-400 hover:underline",
-                "onclick": "this.closest('[data-inline-cell]').querySelector('[data-display]').classList.add('hidden');this.closest('[data-inline-cell]').querySelector('[data-edit]').classList.remove('hidden');this.closest('[data-inline-cell]').querySelector('input,select,textarea').focus();",
+                "data-action": "inline-edit-enter",
             },
         )
         edit_el = el(
