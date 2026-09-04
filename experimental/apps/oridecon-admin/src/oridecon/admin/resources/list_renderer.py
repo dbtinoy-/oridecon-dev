@@ -591,6 +591,7 @@ class ListRenderer:
             loading=False,
             error=self._fetcher.error,
             csrf_token=getattr(getattr(request, "state", None), "csrf_token", None),
+            table_key=self.resource_name,
         )
 
         is_htmx = wants_fragment(request)
@@ -603,7 +604,11 @@ class ListRenderer:
             # for full-zone swaps (#oridecon-table) and sidebar nav
             # (#main-content) since the primary swap replaces the entire
             # subtree, making OOB redundant.
-            if hx_target == Zones.DATA.id:
+            data_zone_id = Zones.table_zone_id(
+                Zones.DATA,
+                table_key=self.resource_name,
+            )
+            if hx_target in {data_zone_id, Zones.DATA.default_id}:
                 dt.props["htmx_request"] = True
 
             fragment_content = render_to_string(dt)

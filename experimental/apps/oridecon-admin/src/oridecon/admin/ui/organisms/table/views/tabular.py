@@ -10,7 +10,7 @@ from oridecon.admin.ui.organisms.table.views.tabular_summary import (
     effective_summary,
     render_table_footer,
 )
-from oridecon.ui import el
+from oridecon.ui import Zones, el
 
 HEADER_HEIGHT = 50
 
@@ -68,6 +68,7 @@ class AbstractDataView(ABC):
             "div",
             Checkbox(
                 name="select_all",
+                id=Zones.SELECT_ALL.id,
                 aria_label="Select all rows on this page",
                 # Alpine bindings reach Checkbox through **kwargs; the cast
                 # keeps them from being matched against `checked: bool|None`.

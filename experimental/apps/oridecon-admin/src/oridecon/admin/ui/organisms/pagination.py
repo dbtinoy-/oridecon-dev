@@ -114,7 +114,7 @@ class Pagination(Component):
         return el(
             "div",
             {
-                "id": "table-pagination",
+                "id": Zones.PAGINATION.id,
                 "class": "flex items-center justify-between border-t border-border bg-background px-4 py-3 mt-4",
             },
             # Mobile View

@@ -428,7 +428,7 @@ def render_bulk_delete_confirm(
             "hx-target": target,
             "hx-swap": swap,
             "hx-vals": f'{{"action":"{action}"}}',
-            "hx-include": "#oridecon-table [name='ids']:checked",
+            "hx-include": f"{Zones.TABLE.selector} [name='ids']:checked",
             "x-on:click": "open = false",
             "x-bind:disabled": f"confirmText !== '{confirm_phrase}'",
             "class": confirm_button_class or default_button_class,

@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from oridecon.admin.ui.organisms.table.views.tabular_rows import extract_row_id
-from oridecon.ui import Checkbox, el
+from oridecon.ui import Checkbox, Zones, el
 
 
 def render_table_header(
@@ -47,7 +47,11 @@ def render_table_header(
         header_cells.append(
             el(
                 "th",
-                Checkbox(name="select_all", **select_all_attrs),
+                Checkbox(
+                    name="select_all",
+                    id=Zones.SELECT_ALL.id,
+                    **select_all_attrs,
+                ),
                 class_=cls,
                 style=style,
             ),

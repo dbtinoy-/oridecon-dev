@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from oridecon.ui import Checkbox, el
+from oridecon.ui import Checkbox, Zones, el
 
 _ROW_HEIGHT_RE = re.compile(r"^\d+(px|rem|em|vh|%)$")
 
@@ -196,9 +196,10 @@ def _render_single_row(
                 "td",
                 Checkbox(
                     name="ids",
-                    # Unique per-row id: every row sharing id="ids" produced
-                    # duplicate DOM ids across the table (invalid + confuses AT).
-                    id=f"row-select-{rid}",
+                    id=Zones.claim_table_id(
+                        "row-select",
+                        key=f"{group_key or 'ungrouped'}-{index}-{rid}",
+                    ),
                     value=rid,
                     x_model="selectedIds",
                     aria_label=f"Select row {rid}",

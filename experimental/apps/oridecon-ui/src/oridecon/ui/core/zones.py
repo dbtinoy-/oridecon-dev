@@ -13,9 +13,14 @@ the scattered IDs in consts.py with a structured, type-safe system.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass
 from enum import Enum
 from typing import ClassVar
+
+from oridecon.ui.core.render_context import RenderScope
 
 
 class SwapMode(str, Enum):
@@ -28,29 +33,67 @@ class SwapMode(str, Enum):
     NONE = "none"
 
 
-@dataclass(frozen=True)
+@dataclass(slots=True)
+class _ZoneResolution:
+    scope: RenderScope
+    table_key: str
+    ids: dict[str, str]
+
+
+_active_zone_resolution: ContextVar[_ZoneResolution | None] = ContextVar(
+    "oridecon_ui_zone_resolution",
+    default=None,
+)
+
+
+@dataclass(frozen=True, init=False)
 class Zone:
-    """
-    Definition of a UI zone.
+    """Semantic UI region whose DOM ID can be resolved for one render scope.
 
-    A zone represents a targetable region of the page with specific
-    semantics for how it can be updated via HTMX.
-
-    Attributes:
-        id: The HTML element ID for this zone
-        description: Human-readable description of this zone's purpose
-        swappable: Whether this zone can be targeted by HTMX swaps
-        swap_mode: The default HTMX swap mode for this zone
-        preserve_alpine: Whether Alpine.js state should be preserved on swap
-        oob_only: If True, this zone should only be updated via OOB swaps
+    ``id`` remains the compatibility ID outside a scoped component render. A
+    table render activates response-local IDs for its table roles, so existing
+    controls resolve the same target without process-global DOM identities.
     """
 
-    id: str
+    _default_id: str
+    role: str
     description: str
     swappable: bool
     swap_mode: SwapMode
-    preserve_alpine: bool = False
-    oob_only: bool = False
+    preserve_alpine: bool
+    oob_only: bool
+
+    def __init__(
+        self,
+        id: str,
+        description: str,
+        swappable: bool,
+        swap_mode: SwapMode,
+        preserve_alpine: bool = False,
+        oob_only: bool = False,
+        *,
+        role: str | None = None,
+    ) -> None:
+        object.__setattr__(self, "_default_id", id)
+        object.__setattr__(self, "role", role or id)
+        object.__setattr__(self, "description", description)
+        object.__setattr__(self, "swappable", swappable)
+        object.__setattr__(self, "swap_mode", swap_mode)
+        object.__setattr__(self, "preserve_alpine", preserve_alpine)
+        object.__setattr__(self, "oob_only", oob_only)
+
+    @property
+    def id(self) -> str:
+        """Return the active response-local ID or the compatibility default."""
+        resolution = _active_zone_resolution.get()
+        if resolution is None:
+            return self._default_id
+        return resolution.ids.get(self.role, self._default_id)
+
+    @property
+    def default_id(self) -> str:
+        """Return the process-stable compatibility ID used outside a scope."""
+        return self._default_id
 
     @property
     def selector(self) -> str:
@@ -100,6 +143,7 @@ class Zones:
 
     TABLE: ClassVar[Zone] = Zone(
         id="oridecon-table",
+        role="table",
         description="Root table scope with Alpine.js state. Target for full refresh only.",
         swappable=True,
         swap_mode=SwapMode.OUTER_HTML,
@@ -130,6 +174,28 @@ class Zones:
         swappable=True,
         swap_mode=SwapMode.OUTER_HTML,
         oob_only=True,
+    )
+
+    SCOPE_TABS: ClassVar[Zone] = Zone(
+        id="table-scope-tabs",
+        description="Active/trash table scope controls. Updated via OOB swaps.",
+        swappable=True,
+        swap_mode=SwapMode.OUTER_HTML,
+        oob_only=True,
+    )
+
+    PAGINATION: ClassVar[Zone] = Zone(
+        id="table-pagination",
+        description="Pagination controls owned by one table instance.",
+        swappable=False,
+        swap_mode=SwapMode.NONE,
+    )
+
+    SELECT_ALL: ClassVar[Zone] = Zone(
+        id="table-select-all",
+        description="Select-all control owned by one table instance.",
+        swappable=False,
+        swap_mode=SwapMode.NONE,
     )
 
     # === Non-Swappable Zones ===
@@ -190,6 +256,65 @@ class Zones:
         swap_mode=SwapMode.NONE,
     )
 
+    _TABLE_SCOPED: ClassVar[tuple[Zone, ...]] = (
+        TABLE,
+        DATA,
+        TOOLBAR,
+        FILTERS,
+        SCOPE_TABS,
+        PAGINATION,
+        SELECT_ALL,
+        SEARCH,
+        BULK_BAR,
+    )
+
+    @classmethod
+    def _table_ids(cls, scope: RenderScope, table_key: str) -> dict[str, str]:
+        """Claim all table-role IDs from one response-local render scope."""
+        return {
+            zone.role: scope.id(zone.role, key=table_key) for zone in cls._TABLE_SCOPED
+        }
+
+    @classmethod
+    @contextmanager
+    def table_scope(
+        cls,
+        scope: RenderScope,
+        table_key: str,
+    ) -> Iterator[dict[str, str]]:
+        """Resolve table roles for ``table_key`` during one component render."""
+        resolved = cls._table_ids(scope, table_key)
+        resolution = _ZoneResolution(
+            scope=scope,
+            table_key=table_key,
+            ids=resolved,
+        )
+        token = _active_zone_resolution.set(resolution)
+        try:
+            yield resolved
+        finally:
+            _active_zone_resolution.reset(token)
+
+    @classmethod
+    def claim_table_id(cls, role: str, *, key: str | None = None) -> str:
+        """Claim a deterministic child ID inside the active table scope."""
+        resolution = _active_zone_resolution.get()
+        if resolution is None:
+            raise RuntimeError(
+                "A table child ID requires an active Zones.table_scope()"
+            )
+        stable_key = resolution.table_key
+        if key is not None:
+            stable_key = f"{stable_key}-{key}"
+        return resolution.scope.id(role, key=stable_key)
+
+    @classmethod
+    def table_zone_id(cls, zone: Zone, *, table_key: str) -> str:
+        """Resolve one stable table ID for request/fragment routing code."""
+        if zone not in cls._TABLE_SCOPED:
+            raise ValueError(f"{zone!r} is not scoped to a data table")
+        return cls._table_ids(RenderScope(), table_key)[zone.role]
+
     @classmethod
     def data_refresh_oob_select(cls) -> str:
         """Selectors an ``hx-select`` data swap must additionally preserve.
@@ -205,7 +330,7 @@ class Zones:
         Returns:
             Comma-separated selector list for ``hx-select-oob``.
         """
-        return f"#{cls.TOOLBAR.id}-switchers,#table-scope-tabs"
+        return f"#{cls.TOOLBAR.id}-switchers,{cls.SCOPE_TABS.selector}"
 
     @classmethod
     def all_zones(cls) -> list[Zone]:
@@ -215,6 +340,9 @@ class Zones:
             cls.DATA,
             cls.TOOLBAR,
             cls.FILTERS,
+            cls.SCOPE_TABS,
+            cls.PAGINATION,
+            cls.SELECT_ALL,
             cls.SEARCH,
             cls.MODAL,
             cls.SLIDE_OVER,
@@ -237,7 +365,7 @@ class Zones:
         Returns None if no zone with that ID exists.
         """
         for zone in cls.all_zones():
-            if zone.id == zone_id:
+            if zone_id in (zone.id, zone.default_id):
                 return zone
         return None
 

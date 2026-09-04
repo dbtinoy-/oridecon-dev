@@ -14,7 +14,7 @@ from oridecon.admin.ui.organisms.data_table.states import StateRenderer
 from oridecon.admin.ui.organisms.data_table.views import view_strategy_registry
 from oridecon.admin.ui.organisms.pagination import Pagination
 from oridecon.serialization import dumps_str
-from oridecon.ui import TableState, Zones, el, raw, render_to_string
+from oridecon.ui import TableState, Zones, el, render_to_string
 
 
 class DataTableRenderer:
@@ -113,9 +113,9 @@ class DataTableRenderer:
         is_htmx = self.props.get("htmx_request", False)
 
         # Scope tabs — inline for full render, OOB for HTMX data-only
-        tabs_html = ""
+        tabs_node: Any = ""
         if can_view and not (self.props.get("render_fragment") or is_htmx):
-            tabs_html = self._render_scope_tabs()
+            tabs_node = self._render_scope_tabs()
 
         # View content
         view_content = self._render_view_content()
@@ -176,7 +176,7 @@ class DataTableRenderer:
                 el(
                     "div",
                     header_section,
-                    raw(tabs_html),
+                    tabs_node,
                     container,
                     id=Zones.TABLE.id,
                     x_data=f"{{ selectedIds: [], expandedIds: [], collapsedGroups: [], lastSelected: null, focusedId: null, hasActiveFiltersState: false, allIds: {self.all_ids_json}, ...window.LexigramTableLogic }}",
@@ -203,7 +203,7 @@ class DataTableRenderer:
             "filter": toolbar.render_filters(),
         }
 
-    def _render_scope_tabs(self, oob: bool = False) -> str:
+    def _render_scope_tabs(self, oob: bool = False) -> Any:
         """Render Active/Trash scope tabs for soft-delete toggling."""
         from oridecon.ui import HTMXAttrs
 
@@ -244,25 +244,26 @@ class DataTableRenderer:
                 **htmx_attrs,
             )
 
-        outer_attrs: dict[str, Any] = {"class_": "mb-4", "id": "table-scope-tabs"}
+        outer_attrs: dict[str, Any] = {
+            "class_": "mb-4",
+            "id": Zones.SCOPE_TABS.id,
+        }
         if oob:
             outer_attrs["hx_swap_oob"] = "outerHTML"
 
-        return render_to_string(
+        return el(
+            "div",
             el(
                 "div",
                 el(
-                    "div",
-                    el(
-                        "nav",
-                        _tab("Active", active, active_url, active_attrs),
-                        _tab("Trash", not active, trash_url, trash_attrs),
-                        class_="flex space-x-8 border-b border-border",
-                    ),
-                    class_="px-6",
+                    "nav",
+                    _tab("Active", active, active_url, active_attrs),
+                    _tab("Trash", not active, trash_url, trash_attrs),
+                    class_="flex space-x-8 border-b border-border",
                 ),
-                **outer_attrs,
-            )
+                class_="px-6",
+            ),
+            **outer_attrs,
         )
 
     def _render_oob_fragments(self) -> list[Any]:
@@ -412,7 +413,7 @@ class DataTableRenderer:
             **htmx_attrs,
         )
 
-    def _render_script(self) -> str:
+    def _render_script(self) -> Any:
         """Render Alpine.js script."""
         from oridecon.ui import DataTableScriptRenderer
 

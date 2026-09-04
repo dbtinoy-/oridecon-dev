@@ -1,5 +1,8 @@
 """Tests for UI zones module."""
 
+import pytest
+
+from oridecon.ui import RenderScope
 from oridecon.ui.core.zones import SwapMode, Zone, Zones
 
 
@@ -69,10 +72,52 @@ class TestZones:
         assert Zones.SEARCH.swappable is False
         assert Zones.SEARCH.swap_mode == SwapMode.NONE
 
+    def test_table_scope_resolves_stable_role_ids_and_restores_defaults(self) -> None:
+        scope = RenderScope()
+
+        with Zones.table_scope(scope, "orders"):
+            resolved = {
+                "table": Zones.TABLE.id,
+                "data": Zones.DATA.id,
+                "select_all": Zones.SELECT_ALL.id,
+            }
+            assert resolved == {
+                "table": "oridecon-table-orders",
+                "data": "oridecon-table-data-orders",
+                "select_all": "oridecon-table-select-all-orders",
+            }
+            assert Zones.data_refresh_oob_select() == (
+                "#oridecon-table-toolbar-orders-switchers,"
+                "#oridecon-table-scope-tabs-orders"
+            )
+
+        assert Zones.TABLE.id == "oridecon-table"
+        assert Zones.DATA.id == "table-data"
+
+        with Zones.table_scope(RenderScope(), "orders"):
+            assert Zones.TABLE.id == resolved["table"]
+            assert Zones.DATA.id == resolved["data"]
+
+    def test_table_scope_rejects_duplicate_explicit_key_in_one_response(self) -> None:
+        scope = RenderScope()
+        with Zones.table_scope(scope, "orders"):
+            pass
+
+        with pytest.raises(ValueError, match="Duplicate RenderScope ID"):
+            with Zones.table_scope(scope, "orders"):
+                pass
+
+    def test_table_zone_id_matches_render_scope_contract(self) -> None:
+        assert Zones.table_zone_id(Zones.DATA, table_key="orders") == (
+            "oridecon-table-data-orders"
+        )
+        with pytest.raises(ValueError, match="not scoped"):
+            Zones.table_zone_id(Zones.FLASH, table_key="orders")
+
     def test_all_zones_returns_list(self) -> None:
         zones = Zones.all_zones()
         assert isinstance(zones, list)
-        assert len(zones) == 11
+        assert len(zones) == 14
 
     def test_swappable_zones(self) -> None:
         swappable = Zones.swappable()

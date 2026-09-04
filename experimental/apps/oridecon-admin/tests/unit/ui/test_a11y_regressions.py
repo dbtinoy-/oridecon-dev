@@ -135,13 +135,14 @@ def test_flash_close_buttons_are_labeled() -> None:
 def test_table_views_render_unique_row_checkbox_ids() -> None:
     views = SRC / "ui" / "organisms" / "table" / "views"
     expected = {
-        "tabular_rows.py": 'id=f"row-select-{rid}"',
-        "grid.py": 'id=f"grid-select-{rid}"',
-        "stacked.py": 'id=f"stacked-select-{rid}"',
-        "calendar.py": 'id=f"calendar-select-{rid}"',
+        "tabular_rows.py": '"row-select"',
+        "grid.py": '"grid-select"',
+        "stacked.py": '"stacked-select"',
+        "calendar.py": '"calendar-select"',
     }
     for filename, marker in expected.items():
         source = (views / filename).read_text(encoding="utf-8")
+        assert "Zones.claim_table_id(" in source
         assert marker in source, (
             f"{filename}: row checkboxes must carry unique ids — every row "
             'previously rendered the duplicate id="ids"'
