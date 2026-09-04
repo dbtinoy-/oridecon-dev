@@ -25,3 +25,10 @@ class MountContext:
     nav_builder: Any | None = None
     router: Any | None = None
     admin_app: Any | None = None
+    # Doc 33: SecurityHeadersRegistry stored here at mount time so
+    # _mount_app_state can expose it on app.state under the attribute
+    # ``security_headers_middleware`` (kept for test/controller compatibility).
+    # The registry holds a weak reference to the real middleware instance once
+    # it handles its first request, enabling invalidate() calls from the
+    # settings save path without a dummy instance.
+    security_headers_middleware: Any | None = None

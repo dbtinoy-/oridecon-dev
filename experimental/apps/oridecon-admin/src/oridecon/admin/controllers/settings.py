@@ -683,6 +683,27 @@ class SettingsController(SettingsHistoryMixin, AdminController):
             rollback=is_rollback,
         )
 
+        # Doc 33: If security-headers settings changed, invalidate the
+        # per-worker cache immediately so the next response reflects the
+        # new policy.  Best-effort — TTL (30 s) already bounds staleness.
+        if namespace.startswith("admin.security"):
+            try:
+                mw = getattr(
+                    getattr(request.app, "state", None),
+                    "security_headers_middleware",
+                    None,
+                )
+                if mw is not None and callable(getattr(mw, "invalidate", None)):
+                    mw.invalidate()
+                    logger.debug(
+                        "settings.security_headers_cache_invalidated",
+                        namespace=namespace,
+                    )
+            except Exception:  # noqa: BLE001 — invalidation is best-effort
+                logger.warning(
+                    "settings.security_headers_invalidate_failed", namespace=namespace
+                )
+
         if request.headers.get("hx-request") == "true":
             self._flash_messages.clear()
             message = "Settings saved successfully."

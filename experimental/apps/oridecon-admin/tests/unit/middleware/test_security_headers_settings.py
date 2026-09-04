@@ -179,3 +179,82 @@ class TestSecurityHeadersTtl:
 
 async def _passthrough(scope: dict, receive: object, send: object) -> None:
     """Inner app stub."""
+
+
+class TestSecurityHeadersRegistry:
+    """Doc 33 save-path wiring: SecurityHeadersRegistry connects mount time to request time."""
+
+    def test_registry_invalidate_before_register_is_noop(self) -> None:
+        from oridecon.admin.middleware.security_headers import SecurityHeadersRegistry
+
+        reg = SecurityHeadersRegistry()
+        # Must not raise even without a middleware registered yet.
+        reg.invalidate()
+
+    def test_registry_register_and_invalidate(self) -> None:
+        from oridecon.admin.middleware.security_headers import (
+            SecurityHeadersMiddleware,
+            SecurityHeadersRegistry,
+        )
+
+        reg = SecurityHeadersRegistry()
+        mw = SecurityHeadersMiddleware(
+            app=_passthrough, settings_store=None, registry=reg
+        )
+        # Simulate a cached state:
+        mw._resolved = object()  # type: ignore[assignment]
+        mw._resolved_at = 9999.0
+
+        reg.invalidate()
+
+        assert mw._resolved is None
+        assert mw._resolved_at is None
+
+    def test_middleware_registers_itself_with_registry(self) -> None:
+        from oridecon.admin.middleware.security_headers import (
+            SecurityHeadersMiddleware,
+            SecurityHeadersRegistry,
+        )
+
+        reg = SecurityHeadersRegistry()
+        mw = SecurityHeadersMiddleware(
+            app=_passthrough, settings_store=None, registry=reg
+        )
+        assert reg._instance is mw
+
+    def test_middleware_without_registry_still_works(self) -> None:
+        from oridecon.admin.middleware.security_headers import SecurityHeadersMiddleware
+
+        # Existing callers that omit registry= must still work.
+        mw = SecurityHeadersMiddleware(app=_passthrough, settings_store=None)
+        mw.invalidate()  # must not raise
+
+    @pytest.mark.asyncio
+    async def test_registry_invalidate_triggers_reread(self) -> None:
+        """End-to-end: registry.invalidate() causes next request to re-read settings."""
+        import time
+        from oridecon.admin.middleware.security_headers import (
+            SecurityHeadersMiddleware,
+            SecurityHeadersRegistry,
+        )
+
+        store = _SettingsStore({"admin.security.frame_options": "DENY"})
+        reg = SecurityHeadersRegistry()
+        mw = SecurityHeadersMiddleware(
+            app=_passthrough, settings_store=store, settings_ttl=30.0, registry=reg
+        )
+
+        first = await mw._resolve_headers()
+        assert first._headers["X-Frame-Options"] == "DENY"
+
+        # Simulate a settings save that changes the value:
+        store.values["admin.security.frame_options"] = "SAMEORIGIN"
+
+        # Before invalidation, the cached value is still served:
+        still_cached = await mw._resolve_headers()
+        assert still_cached is first
+
+        # After registry.invalidate() (called from the settings controller):
+        reg.invalidate()
+        refreshed = await mw._resolve_headers()
+        assert refreshed._headers["X-Frame-Options"] == "SAMEORIGIN"

@@ -532,3 +532,14 @@ class AdminMountContributorsMixin:
                 app.state.saved_view_service = ctx.saved_view_service
             if admin_app is not None and hasattr(admin_app, "state"):
                 admin_app.state.saved_view_service = ctx.saved_view_service
+
+        # Doc 33: Expose the SecurityHeadersMiddleware instance on app state
+        # so the settings save path can call invalidate() for same-worker
+        # cache eviction (TTL still bounds cross-worker staleness).
+        if ctx.security_headers_middleware is not None:
+            if hasattr(app, "state"):
+                app.state.security_headers_middleware = ctx.security_headers_middleware
+            if admin_app is not None and hasattr(admin_app, "state"):
+                admin_app.state.security_headers_middleware = (
+                    ctx.security_headers_middleware
+                )
