@@ -133,7 +133,7 @@ class AdminContributorSubProvider:
                         # services are not registered in this deployment:
                         # the feature is disabled, not broken. Keep this one
                         # concise structured event; the helper avoids the
-                        # multi-line LexigramError representation.
+                        # multi-line OrideconError representation.
                         logger.info(
                             "admin.contributor_disabled",
                             contributor=contributor.name,

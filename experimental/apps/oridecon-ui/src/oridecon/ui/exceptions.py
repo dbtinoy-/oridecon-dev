@@ -5,14 +5,14 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 
-from oridecon.contracts.exceptions import LexigramError
+from oridecon.contracts.exceptions import OrideconError
 from oridecon.ui.core.base import el, render_to_string
 from oridecon.ui.core.zones import Zones
 from oridecon.ui.molecules.error_state import ErrorState
 from oridecon.ui.molecules.toast import InlineToast
 
 
-class UIError(LexigramError):
+class UIError(OrideconError):
     """Base exception for all UI-domain errors."""
 
     _code: str = "LEX_ERR_UI_001"

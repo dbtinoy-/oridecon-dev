@@ -13,7 +13,7 @@ from oridecon.admin.exceptions import (
     NotificationError,
     PermissionDeniedError,
 )
-from oridecon.contracts.exceptions import DomainError, LexigramError, ValidationError
+from oridecon.contracts.exceptions import DomainError, OrideconError, ValidationError
 
 
 class TestErrorCode:
@@ -40,7 +40,7 @@ class TestAdminError:
     """Tests for AdminError base exception."""
 
     def test_inherits_from_lexigram_error(self) -> None:
-        assert issubclass(AdminError, LexigramError)
+        assert issubclass(AdminError, OrideconError)
 
     def test_can_be_raised(self) -> None:
         with pytest.raises(AdminError):

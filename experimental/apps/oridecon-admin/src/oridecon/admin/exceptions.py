@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from enum import StrEnum
 
-from oridecon.contracts.exceptions import DomainError, LexigramError
+from oridecon.contracts.exceptions import DomainError, OrideconError
 from oridecon.contracts.exceptions import ValidationError as BaseValidationError
 
 
@@ -20,7 +20,7 @@ class ErrorCode(StrEnum):
     VALIDATION_FAILED = "VALIDATION_FAILED"
 
 
-class AdminError(LexigramError):
+class AdminError(OrideconError):
     """Base exception for all admin errors."""
 
     _code: str = "LEX_ERR_ADMIN_002"
