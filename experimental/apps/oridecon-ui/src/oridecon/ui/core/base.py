@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from contextvars import ContextVar, Token
 from copy import copy
 import html
@@ -91,6 +91,19 @@ def _is_html_structure(value: Any) -> bool:
         value,
         (Element, RawHTML, TrustedHTML, *_HTPY_STRUCTURE_TYPES),
     )
+
+
+def _declared_renderer(value: Any) -> Callable[[], Any] | None:
+    """Return a render method declared by the value's concrete type.
+
+    Instance-level ``__getattr__`` fallbacks (notably mocks) must not create an
+    accidental render protocol: calling a dynamically fabricated ``render``
+    can recurse forever and bypass the typed structure boundary.
+    """
+    if not callable(getattr(type(value), "render", None)):
+        return None
+    renderer = value.render
+    return renderer if callable(renderer) else None
 
 
 class Element:
@@ -241,8 +254,8 @@ def _render_child(child: Any) -> str:
     # checked before Iterable because htpy elements support iteration.
     if _is_html_structure(child):
         return render_to_string(child)
-    renderer = getattr(child, "render", None)
-    if callable(renderer):
+    renderer = _declared_renderer(child)
+    if renderer is not None:
         return _render_child(renderer())
     if isinstance(child, Iterable) and not isinstance(child, (bytes, dict)):
         return "".join(_render_child(item) for item in child)
@@ -488,9 +501,11 @@ def render_to_string(value: str | Any) -> str:
         # can invoke the same failing renderer more than once.
         return cast("str", value.__html__())
 
-    # fallback for objects with render method but not inheriting from Component
-    if hasattr(value, "render") and callable(value.render):
-        return render_to_string(value.render())
+    # Fallback for objects with a concrete render method but not inheriting
+    # from Component. Dynamic instance attributes do not establish a protocol.
+    renderer = _declared_renderer(value)
+    if renderer is not None:
+        return render_to_string(renderer())
 
     return html.escape(str(value))
 

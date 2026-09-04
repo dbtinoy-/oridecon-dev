@@ -67,16 +67,6 @@ class Section(Component):
 
     def render(self) -> Any:
         """Render the section."""
-        from oridecon.ui.core.base import raw, render_to_string
-
-        # Render children
-        children_html = [
-            raw(render_to_string(c))
-            if hasattr(c, "__html__") or hasattr(c, "render")
-            else str(c)
-            for c in self.children
-        ]
-
         # Icon element
         icon_el = ""
         if self.icon:
@@ -121,7 +111,7 @@ class Section(Component):
 
         content_section = el(
             "div",
-            *children_html,
+            *self.children,
             id=f"{self.title.replace(' ', '_')}_content",
             class_="space-y-4",
             **content_attrs,

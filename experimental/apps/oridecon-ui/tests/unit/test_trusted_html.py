@@ -25,6 +25,16 @@ class _ForeignRenderable:
         return '<img src=x onerror="renderBypass()">'
 
 
+class _DynamicRenderLookalike:
+    def __getattr__(self, name: str) -> object:
+        if name == "render":
+            return lambda: self
+        raise AttributeError(name)
+
+    def __str__(self) -> str:
+        return '<img src=x onerror="dynamicRenderBypass()">'
+
+
 class TestTrustedHTML:
     def test_requires_attributable_source(self) -> None:
         with pytest.raises(ValueError, match="non-empty source"):
@@ -75,6 +85,12 @@ class TestConcreteTrustBoundary:
 
     def test_foreign_renderable_string_is_text_when_nested(self) -> None:
         output = render_to_string(el("div", _ForeignRenderable()))
+
+        assert "<img " not in output
+        assert "&lt;img src=x" in output
+
+    def test_dynamic_render_attribute_is_not_a_render_protocol(self) -> None:
+        output = render_to_string(el("div", _DynamicRenderLookalike()))
 
         assert "<img " not in output
         assert "&lt;img src=x" in output

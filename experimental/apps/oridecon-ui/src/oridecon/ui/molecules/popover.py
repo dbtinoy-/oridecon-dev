@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from oridecon.ui.core.base import Component, el, raw, render_to_string
+from oridecon.ui.core.base import Component, el
 
 
 class Popover(Component):
@@ -27,13 +27,6 @@ class Popover(Component):
             self.width,
             "w-72",
         )
-
-        children_html = [
-            raw(render_to_string(c))
-            if hasattr(c, "__html__") or hasattr(c, "render")
-            else str(c)
-            for c in self.children
-        ]
 
         return el(
             "div",
@@ -67,7 +60,7 @@ class Popover(Component):
                         {
                             "class": "relative grid bg-popover text-popover-foreground p-4 gap-4"
                         },
-                        *children_html,
+                        *self.children,
                     ),
                 ),
             ),

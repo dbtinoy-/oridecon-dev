@@ -18,14 +18,6 @@ class Row(Component):
         self.gap = gap
 
     def render(self) -> Any:
-        from oridecon.ui.core.base import raw, render_to_string
-
-        children_html = [
-            raw(render_to_string(c))
-            if hasattr(c, "__html__") or hasattr(c, "render")
-            else str(c)
-            for c in self.children
-        ]
         # Merge layout classes with any custom classes in props
         cls = f"grid grid-cols-{self.cols} gap-{self.gap}"
         custom_cls = self.props.get("class_", self.props.get("class"))
@@ -38,7 +30,7 @@ class Row(Component):
             for k, v in self.props.items()
             if k not in ("cols", "gap", "class_", "class")
         }
-        return el("div", *children_html, class_=cls, **attrs)
+        return el("div", *self.children, class_=cls, **attrs)
 
 
 class Col(Component):
@@ -58,14 +50,6 @@ class Col(Component):
         self.span = span
 
     def render(self) -> Any:
-        from oridecon.ui.core.base import raw, render_to_string
-
-        children_html = [
-            raw(render_to_string(c))
-            if hasattr(c, "__html__") or hasattr(c, "render")
-            else str(c)
-            for c in self.children
-        ]
         cls = f"flex flex-col gap-{self.gap}"
 
         # Add span class if specified
@@ -81,7 +65,7 @@ class Col(Component):
             for k, v in self.props.items()
             if k not in ("gap", "span", "class_", "class")
         }
-        return el("div", *children_html, class_=cls, **attrs)
+        return el("div", *self.children, class_=cls, **attrs)
 
 
 class Aside(Component):
@@ -101,14 +85,6 @@ class Aside(Component):
         self.width = width
 
     def render(self) -> Any:
-        from oridecon.ui.core.base import raw, render_to_string
-
-        children_html = [
-            raw(render_to_string(c))
-            if hasattr(c, "__html__") or hasattr(c, "render")
-            else str(c)
-            for c in self.children
-        ]
         cls = f"flex-shrink-0 {self.width} bg-card border-r border-border h-full overflow-y-auto"
         if self.position == "right":
             cls = cls.replace("border-r", "border-l")
@@ -122,7 +98,7 @@ class Aside(Component):
             for k, v in self.props.items()
             if k not in ("position", "width", "class_", "class")
         }
-        return el("aside", *children_html, class_=cls, **attrs)
+        return el("aside", *self.children, class_=cls, **attrs)
 
 
 class Grid(Component):
@@ -157,20 +133,12 @@ class Grid(Component):
         if custom_cls:
             cls = f"{cls} {custom_cls}"
 
-        from oridecon.ui.core.base import raw, render_to_string
-
-        children_html = [
-            raw(render_to_string(c))
-            if hasattr(c, "__html__") or hasattr(c, "render")
-            else str(c)
-            for c in self.children
-        ]
         attrs = {
             k: v
             for k, v in self.props.items()
             if k not in ("cols", "gap", "class_", "class")
         }
-        return el("div", *children_html, class_=cls, **attrs)
+        return el("div", *self.children, class_=cls, **attrs)
 
 
 class Stack(Component):
@@ -188,18 +156,10 @@ class Stack(Component):
         if custom_cls:
             cls = f"{cls} {custom_cls}"
 
-        from oridecon.ui.core.base import raw, render_to_string
-
-        children_html = [
-            raw(render_to_string(c))
-            if hasattr(c, "__html__") or hasattr(c, "render")
-            else str(c)
-            for c in self.children
-        ]
         attrs = {
             k: v for k, v in self.props.items() if k not in ("gap", "class_", "class")
         }
-        return el("div", *children_html, class_=cls, **attrs)
+        return el("div", *self.children, class_=cls, **attrs)
 
 
 class Container(Component):
@@ -209,18 +169,10 @@ class Container(Component):
             self.children = list(children)
 
     def render(self) -> Any:
-        from oridecon.ui.core.base import raw, render_to_string
-
-        children_html = [
-            raw(render_to_string(c))
-            if hasattr(c, "__html__") or hasattr(c, "render")
-            else str(c)
-            for c in self.children
-        ]
         cls = "max-w-7xl mx-auto px-4"
         custom_cls = self.props.get("class_", self.props.get("class"))
         if custom_cls:
             cls = f"{cls} {custom_cls}"
 
         attrs = {k: v for k, v in self.props.items() if k not in ("class_", "class")}
-        return el("div", *children_html, class_=cls, **attrs)
+        return el("div", *self.children, class_=cls, **attrs)
