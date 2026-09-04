@@ -4,10 +4,17 @@ from __future__ import annotations
 
 from typing import Any
 
-from oridecon.ui import Component, Element, get_render_scope, js_json, js_string
-from oridecon.ui.atoms.icons import ICONS, get_icon
+from oridecon.ui import (
+    Component,
+    Element,
+    get_icon,
+    get_render_scope,
+    js_json,
+    js_string,
+    trusted_html,
+)
+from oridecon.ui.atoms.icons import ICONS
 from oridecon.ui.attributes.alpine import alpine
-from oridecon.ui.core.trusted_html import trusted_html
 
 
 class CommandPalette(Component):

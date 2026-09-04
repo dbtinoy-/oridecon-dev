@@ -9,9 +9,8 @@ from oridecon.admin.schema.base import SchemaField
 from oridecon.admin.schema.exceptions import FieldError
 from oridecon.result import Err, Ok, Result
 from oridecon.serialization import dumps_str, loads_str
-from oridecon.ui import Element, get_render_scope, js_json, js_string
+from oridecon.ui import Element, RenderScope, get_render_scope, js_json, js_string
 from oridecon.ui.attributes.alpine import alpine
-from oridecon.ui.core.render_context import RenderScope
 
 
 @dataclass(frozen=True, kw_only=True)
