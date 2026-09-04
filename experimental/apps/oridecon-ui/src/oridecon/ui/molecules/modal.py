@@ -158,7 +158,7 @@ class Modal(Component):
             # also own its submit/cancel semantics and should not receive
             # invisible, out-of-form controls injected by the container.
             if form_obj and form_suppresses and not form_id:
-                auto_form_id = "modal-form"
+                auto_form_id = f"{dialog_id}-form"
                 rendered_children = [
                     _inject_form_id(s, auto_form_id) if isinstance(s, str) else s
                     for s in rendered_children

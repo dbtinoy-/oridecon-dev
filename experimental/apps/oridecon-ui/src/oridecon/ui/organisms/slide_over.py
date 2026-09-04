@@ -4,6 +4,7 @@ import re
 from typing import Any
 
 from oridecon.ui.core.base import Component, el, render_child_to_string
+from oridecon.ui.core.render_context import get_render_scope
 from oridecon.ui.core.trusted_html import trusted_html
 
 # Width map for size parameter
@@ -51,7 +52,7 @@ class SlideOver(Component):
         self,
         title: str,
         trigger: str | Any = None,
-        slide_id: str = "slide-over",
+        slide_id: str | None = None,
         is_open: bool = False,
         render_trigger: bool = True,
         footer: list[Any] | None = None,
@@ -71,7 +72,7 @@ class SlideOver(Component):
         )
         self.title = title
         self.trigger = trigger
-        self.id = slide_id
+        self.slide_id = slide_id
         self.initial_open = is_open
         self.render_trigger = render_trigger
         self.footer = footer or []
@@ -80,6 +81,12 @@ class SlideOver(Component):
         self.subtitle = subtitle
 
     def render(self) -> Any:
+        panel_scope = get_render_scope().child("slide-over")
+        panel_id = panel_scope.id("panel", key=self.slide_id)
+        identity_suffix = panel_id.removeprefix(f"{panel_scope.prefix}-panel-")
+        title_id = f"{panel_scope.prefix}-title-{identity_suffix}"
+        description_id = f"{panel_scope.prefix}-description-{identity_suffix}"
+
         rendered_children = [render_child_to_string(child) for child in self.children]
 
         footer_html: list[Any] = []
@@ -131,7 +138,7 @@ class SlideOver(Component):
             # dead button sitting outside the form element. Raw forms get a
             # stable id injected so the binding is always possible.
             if form_present and not form_id and (form_suppresses or not has_own_submit):
-                auto_form_id = "slide-over-form"
+                auto_form_id = f"{panel_id}-form"
                 rendered_children = [
                     _inject_form_id(s, auto_form_id) if isinstance(s, str) else s
                     for s in rendered_children
@@ -241,8 +248,9 @@ class SlideOver(Component):
                 {
                     "x-show": "open",
                     "class": "fixed inset-0 z-50 pointer-events-auto",
-                    "aria-labelledby": f"{self.id}-title",
-                    "aria-describedby": f"{self.id}-description",
+                    "id": panel_id,
+                    "aria-labelledby": title_id,
+                    "aria-describedby": description_id,
                     "role": "dialog",
                     "aria-modal": "true",
                     "x-trap": "open",
@@ -309,7 +317,7 @@ class SlideOver(Component):
                                                     "h2",
                                                     {
                                                         "class": title_cls,
-                                                        "id": f"{self.id}-title",
+                                                        "id": title_id,
                                                     },
                                                     self.title,
                                                 ),
@@ -351,7 +359,7 @@ class SlideOver(Component):
                                         "div",
                                         {
                                             "class": "relative flex-1 overflow-y-auto px-5 py-5",
-                                            "id": f"{self.id}-description",
+                                            "id": description_id,
                                         },
                                         *children_html,
                                     ),

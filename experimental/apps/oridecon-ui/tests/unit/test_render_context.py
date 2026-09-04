@@ -16,6 +16,7 @@ from oridecon.ui.core.render_context import (
     render_context,
 )
 from oridecon.ui.molecules.modal import Modal
+from oridecon.ui.organisms.slide_over import SlideOver
 
 _VALID_ID = re.compile(r"^[a-z][a-z0-9-]*$")
 
@@ -190,5 +191,47 @@ class TestModalRenderScope:
                 [
                     Modal("First", modal_id="settings", render_trigger=False),
                     Modal("Second", modal_id="settings", render_trigger=False),
+                ]
+            )
+
+
+class TestSlideOverRenderScope:
+    def test_sibling_panels_receive_unique_linked_ids(self) -> None:
+        output = render_to_string(
+            [
+                SlideOver("First", render_trigger=False),
+                SlideOver("Second", render_trigger=False),
+            ]
+        )
+
+        assert 'id="oridecon-slide-over-panel-1"' in output
+        assert 'id="oridecon-slide-over-panel-2"' in output
+        assert 'aria-labelledby="oridecon-slide-over-title-1"' in output
+        assert 'aria-labelledby="oridecon-slide-over-title-2"' in output
+
+    def test_separate_panel_renders_are_stable(self) -> None:
+        first = str(SlideOver("Settings", render_trigger=False))
+        second = str(SlideOver("Settings", render_trigger=False))
+
+        assert first == second
+        assert 'id="oridecon-slide-over-panel-1"' in first
+
+    def test_explicit_panel_key_reproduces_partial_identity(self) -> None:
+        full = str(
+            SlideOver("Settings", slide_id="account-settings", render_trigger=False)
+        )
+        partial = str(
+            SlideOver("Settings", slide_id="account-settings", render_trigger=False)
+        )
+
+        assert 'id="oridecon-slide-over-panel-account-settings"' in full
+        assert full == partial
+
+    def test_duplicate_explicit_panel_keys_fail_in_one_tree(self) -> None:
+        with pytest.raises(ValueError, match="Duplicate RenderScope ID"):
+            render_to_string(
+                [
+                    SlideOver("First", slide_id="settings", render_trigger=False),
+                    SlideOver("Second", slide_id="settings", render_trigger=False),
                 ]
             )
