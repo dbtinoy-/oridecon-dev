@@ -13,6 +13,45 @@ from oridecon.logging import get_logger
 
 logger = get_logger(__name__)
 
+_ALPINE_ARGUMENT_RE = re.compile(r"^[a-z][a-z0-9:_-]*$")
+_ALPINE_MODIFIER_RE = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
+_ALPINE_COLON_FAMILIES = ("x-on", "x-bind", "x-transition")
+
+
+def _validate_alpine_attribute_name(name: str) -> None:
+    """Reject Alpine spellings that browsers retain but Alpine ignores."""
+    if not name.startswith("x-"):
+        return
+    if name != name.lower():
+        raise ValueError(f"Alpine attribute names must be lowercase: {name!r}")
+    if "--" in name:
+        raise ValueError(f"Malformed Alpine attribute name: {name!r}")
+
+    for family in _ALPINE_COLON_FAMILIES:
+        if name.startswith(f"{family}-"):
+            raise ValueError(
+                f"Malformed Alpine attribute {name!r}; use {family}:<argument>"
+            )
+        if name.startswith(f"{family}:"):
+            directive, *modifiers = name[len(family) + 1 :].split(".")
+            if not _ALPINE_ARGUMENT_RE.fullmatch(directive):
+                raise ValueError(f"Invalid Alpine directive argument in {name!r}")
+            if any(
+                not _ALPINE_MODIFIER_RE.fullmatch(item) for item in modifiers
+            ) or len(set(modifiers)) != len(modifiers):
+                raise ValueError(f"Invalid Alpine directive modifiers in {name!r}")
+            return
+
+    if name in {"x-on", "x-bind"} or name.startswith(("x-on.", "x-bind.")):
+        raise ValueError(f"Alpine attribute {name!r} requires a directive argument")
+    if name.startswith("x-transition."):
+        modifiers = name.removeprefix("x-transition.").split(".")
+        if any(not _ALPINE_MODIFIER_RE.fullmatch(item) for item in modifiers) or len(
+            set(modifiers)
+        ) != len(modifiers):
+            raise ValueError(f"Invalid Alpine transition modifiers in {name!r}")
+
+
 # Prefer a real `htpy` module when available, but tolerate environments
 # without it (tests, minimal installs). We expose an `el` factory that
 # constructs a real htpy element when possible, otherwise falls back to
@@ -92,6 +131,8 @@ class Element:
                 attr_name = k[:-1]
             else:
                 attr_name = k.replace("_", "-")
+
+            _validate_alpine_attribute_name(attr_name)
 
             if v is True:
                 parts.append(f" {attr_name}")

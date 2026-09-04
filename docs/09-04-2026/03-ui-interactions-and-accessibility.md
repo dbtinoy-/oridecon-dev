@@ -32,12 +32,16 @@ browser. R17/B13 covered only `x_on_*`; the same class of defect remains.
 Create `src/oridecon/ui/attributes/alpine.py`:
 
 ```python
-alpine.data("tabs")                  # {"x-data": "tabs"}
-alpine.on("click", "select(...)" )  # {"x-on:click": ...}
-alpine.bind("aria-selected", expr)   # {"x-bind:aria-selected": ...}
-alpine.model("value")                # {"x-model": ...}
-alpine.show(expr)
-alpine.transition("enter-start", value)
+state = alpine.expr("tabs")
+select = alpine.expr("select(...)")
+selected = alpine.expr("active")
+
+alpine.data(state)                         # {"x-data": "tabs"}
+alpine.on("click", select)                 # {"x-on:click": ...}
+alpine.bind("aria-selected", selected)     # {"x-bind:aria-selected": ...}
+alpine.model(alpine.expr("value"))         # {"x-model": ...}
+alpine.show(selected)
+alpine.transition("enter-start", alpine.expr("opacity-0"))
 ```
 
 Validate event/property/modifier tokens against conservative patterns. Keep

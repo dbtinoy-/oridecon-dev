@@ -31,6 +31,7 @@ from __future__ import annotations
 from typing import Any
 
 from oridecon.serialization import dumps_str
+from oridecon.ui.attributes import alpine
 from oridecon.ui.core.base import Component, el
 
 DEFAULT_OPERATORS = ("eq", "neq", "contains", "gt", "gte", "lt", "lte")
@@ -178,8 +179,8 @@ class QueryBuilder(Component):
                         el(
                             "option",
                             x_for="def in fieldOptions",
-                            x_bind_value="def.name",
                             x_text="def.label",
+                            **alpine.bind("value", alpine.expr("def.name")),
                         ),
                     ),
                     x_model=f"{var}.field",
@@ -205,8 +206,8 @@ class QueryBuilder(Component):
                     el(
                         "option",
                         x_for="op in operatorOptions",
-                        x_bind_value="op.value",
                         x_text="op.label",
+                        **alpine.bind("value", alpine.expr("op.value")),
                     ),
                 ),
                 x_model=f"{var}.operator",
@@ -225,8 +226,8 @@ class QueryBuilder(Component):
                             el(
                                 "option",
                                 x_for="opt in optionsFor(" + var + ")",
-                                x_bind_value="opt.value",
                                 x_text="opt.label",
+                                **alpine.bind("value", alpine.expr("opt.value")),
                             ),
                         ),
                         x_model=f"{var}.value",
@@ -238,9 +239,9 @@ class QueryBuilder(Component):
                     "template",
                     el(
                         "input",
-                        x_bind_type=f"inputTypeFor({var})",
                         x_model=f"{var}.value",
                         class_="qb-value-input bg-background border border-border rounded-md px-2 py-1 text-sm w-44",
+                        **alpine.bind("type", alpine.expr(f"inputTypeFor({var})")),
                     ),
                     x_if=f"inputTypeFor({var}) !== 'select'",
                 ),
@@ -276,17 +277,27 @@ class QueryBuilder(Component):
                 "button",
                 "AND",
                 type="button",
-                **{"x-on:click": f"setLogic({var}.id, 'AND')"},
-                x_bind_class=f"{var}.logic === 'AND' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'",
                 class_="qb-logic-toggle px-2 py-0.5 rounded text-xs font-semibold",
+                **{"x-on:click": f"setLogic({var}.id, 'AND')"},
+                **alpine.bind(
+                    "class",
+                    alpine.expr(
+                        f"{var}.logic === 'AND' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'"
+                    ),
+                ),
             ),
             el(
                 "button",
                 "OR",
                 type="button",
-                **{"x-on:click": f"setLogic({var}.id, 'OR')"},
-                x_bind_class=f"{var}.logic === 'OR' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'",
                 class_="qb-logic-toggle px-2 py-0.5 rounded text-xs font-semibold",
+                **{"x-on:click": f"setLogic({var}.id, 'OR')"},
+                **alpine.bind(
+                    "class",
+                    alpine.expr(
+                        f"{var}.logic === 'OR' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'"
+                    ),
+                ),
             ),
         ]
         if removable:
@@ -438,7 +449,7 @@ class QueryBuilder(Component):
                 "input",
                 type="hidden",
                 name=self.name,
-                x_bind_value="serialize()",
+                **alpine.bind("value", alpine.expr("serialize()")),
             ),
             (
                 el(

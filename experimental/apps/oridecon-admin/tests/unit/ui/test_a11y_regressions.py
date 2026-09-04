@@ -108,6 +108,19 @@ class TestCommandPaletteA11y:
         assert "Toggle Dark Mode" not in html
 
 
+def test_sidebar_overlay_uses_canonical_transition_directives() -> None:
+    from oridecon.admin.ui.templates.shell_sections import build_sidebar_container
+    from oridecon.ui import el
+
+    html = str(build_sidebar_container(el("nav", "Navigation")))
+
+    assert 'x-transition:enter="transition-opacity ease-linear duration-300"' in html
+    assert 'x-transition:enter-start="opacity-0"' in html
+    assert 'x-transition:leave-end="opacity-0"' in html
+    assert "x-transition-enter" not in html
+    assert "x-transition-leave" not in html
+
+
 def test_flash_close_buttons_are_labeled() -> None:
     from oridecon.admin.ui.templates import shell_scripts
 

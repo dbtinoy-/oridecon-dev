@@ -5,6 +5,7 @@ from typing import Any
 
 from oridecon.logging import get_logger
 from oridecon.ui import ActionButton, Component, el
+from oridecon.ui.attributes import alpine
 from oridecon.ui.core.js import js_json, js_string
 from oridecon.ui.core.url import is_safe_navigation_url
 
@@ -210,7 +211,7 @@ class TaskProgress(Component):
                 el(
                     "div",
                     class_="h-full bg-primary-600 dark:bg-primary-400 rounded-full transition-all duration-300",
-                    x_bind__style="'width: ' + progress + '%'",
+                    **alpine.bind("style", alpine.expr("'width: ' + progress + '%'")),
                 ),
                 class_="w-full bg-muted rounded-full h-2.5",
             ),

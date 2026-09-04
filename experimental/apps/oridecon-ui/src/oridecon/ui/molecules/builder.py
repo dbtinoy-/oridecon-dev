@@ -5,6 +5,7 @@ from typing import Any
 from oridecon import serialization as json
 from oridecon.logging import get_logger
 from oridecon.serialization import dumps_str
+from oridecon.ui.attributes import alpine
 from oridecon.ui.core.base import Component, NoContext, el
 
 logger = get_logger(__name__)
@@ -95,9 +96,14 @@ class Builder(Component):
                 "input",
                 type="hidden",
                 name=self.name,
-                # Use x_bind to keep the hidden input in sync with Alpine state
-                # We need to map the items back to the data format [ {type, data} ]
-                x_bind_value="JSON.stringify(items.map(i => ({type: i.type, data: i.data})))",
+                # Keep the hidden input in sync with Alpine state. A dict is
+                # required because Alpine directives use a colon, not a dash.
+                **alpine.bind(
+                    "value",
+                    alpine.expr(
+                        "JSON.stringify(items.map(i => ({type: i.type, data: i.data})))"
+                    ),
+                ),
             ),
             # List of blocks
             el(
