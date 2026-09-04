@@ -179,5 +179,5 @@ class TestAdminCliContributorCommands:
         assert cmd.contributor == "admin"
         assert (
             cmd.app_factory_path
-            == "lexigram.admin.cli.commands.search:create_app"
+            == "oridecon.admin.cli.commands.search:create_app"
         )

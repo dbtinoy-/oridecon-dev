@@ -1,4 +1,4 @@
-"""Caching middleware for Lexigram Admin."""
+"""Caching middleware for Oridecon Admin."""
 
 from __future__ import annotations
 

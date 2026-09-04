@@ -116,7 +116,7 @@ class TestDeleteBulkAction:
         assert "hx-target" in result
         assert "#slide-over-container" in result
         assert "hx-include" in result
-        assert "lexigram-table" in result
+        assert "oridecon-table" in result
 
 
 class TestExportAction:

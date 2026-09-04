@@ -1,6 +1,6 @@
-"""Base controller classes for Lexigram Admin.
+"""Base controller classes for Oridecon Admin.
 
-This module provides base classes that leverage Lexigram's DI container
+This module provides base classes that leverage oridecon's DI container
 to provide common functionality to all admin controllers.
 """
 

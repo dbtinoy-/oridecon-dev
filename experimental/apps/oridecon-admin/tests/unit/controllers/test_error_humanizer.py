@@ -26,12 +26,12 @@ class TestHumanizeError:
         message = (
             "[LEX_ERR_DI_004] 'Thing' is not registered.\n"
             "  → Fix: Verify the type is registered in a Provider.\n"
-            "  → See: https://docs.lexigram.dev/reference/errors/LEX_ERR_DI_004"
+            "  → See: https://docs.oridecon.dev/reference/errors/LEX_ERR_DI_004"
         )
         result = humanize_error(message)
         assert "LEX_ERR" not in result
         assert "→" not in result
-        assert "docs.lexigram.dev" not in result
+        assert "docs.oridecon.dev" not in result
         assert "'Thing' is not registered." in result
 
     def test_collapses_to_single_line(self) -> None:

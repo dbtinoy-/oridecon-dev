@@ -1,4 +1,4 @@
-"""Tests for cache adapter delegating to lexigram-cache."""
+"""Tests for cache adapter delegating to oridecon-cache."""
 
 from __future__ import annotations
 

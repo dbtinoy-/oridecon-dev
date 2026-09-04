@@ -58,7 +58,7 @@ def _make_mfa_service(
         return_value=Ok(
             (
                 "JBSWY3DPEHPK3PXP",
-                "otpauth://totp/Lexigram%20Admin:admin%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=Lexigram%20Admin",
+                "otpauth://totp/Oridecon%20Admin:admin%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=Oridecon%20Admin",
                 "<svg>qr</svg>",
             )
         )

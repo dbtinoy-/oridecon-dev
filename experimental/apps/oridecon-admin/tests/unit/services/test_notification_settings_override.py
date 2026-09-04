@@ -48,20 +48,20 @@ class TestSenderIdentityOverride:
     async def test_override_applied(self) -> None:
         store = _FakeStore(
             {
-                "admin.notifications.email_from": "hello@lexigram.dev",
-                "admin.notifications.email_from_name": "Lexigram",
+                "admin.notifications.email_from": "hello@oridecon.dev",
+                "admin.notifications.email_from_name": "Oridecon",
             }
         )
         service = _service(store)
-        assert await service.effective_sender() == ("hello@lexigram.dev", "Lexigram")
-        assert service.email_sender.from_email == "hello@lexigram.dev"
+        assert await service.effective_sender() == ("hello@oridecon.dev", "Oridecon")
+        assert service.email_sender.from_email == "hello@oridecon.dev"
 
     @pytest.mark.asyncio
     async def test_empty_values_reset_to_config_defaults(self) -> None:
         store = _FakeStore(
             {
-                "admin.notifications.email_from": "hello@lexigram.dev",
-                "admin.notifications.email_from_name": "Lexigram",
+                "admin.notifications.email_from": "hello@oridecon.dev",
+                "admin.notifications.email_from_name": "Oridecon",
             }
         )
         service = _service(store, ttl=0.0)
@@ -124,7 +124,7 @@ class TestSenderIdentityOverride:
             mailer=_CaptureMailer(), config=AdminNotificationConfig()
         )
         service.attach_settings_store(
-            _FakeStore({"admin.notifications.email_from": "ops@lexigram.dev"})
+            _FakeStore({"admin.notifications.email_from": "ops@oridecon.dev"})
         )
         from oridecon.admin.services.notifications.models import (
             NotificationRecipient,
@@ -135,7 +135,7 @@ class TestSenderIdentityOverride:
         )
         assert result.is_ok()
         assert len(sent) == 1
-        assert sent[0].from_email == "ops@lexigram.dev"
+        assert sent[0].from_email == "ops@oridecon.dev"
 
 
 class TestMailerHealth:

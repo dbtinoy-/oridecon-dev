@@ -119,7 +119,7 @@ class BaseLayoutConfig(HTMLDocumentConfig):
     """
 
     # Branding
-    site_name: str = "Lexigram Admin"
+    site_name: str = "Oridecon Admin"
     site_logo: str | None = None
     site_logo_alt: str = "Logo"
 

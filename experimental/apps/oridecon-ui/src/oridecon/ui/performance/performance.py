@@ -1,5 +1,5 @@
 """
-Performance utilities for Lexigram Admin UI.
+Performance utilities for Oridecon Admin UI.
 
 Provides response optimization, render caching, and lazy loading
 helpers for HTMX-powered components.

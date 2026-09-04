@@ -1,4 +1,4 @@
-"""Unit tests for lexigram-admin constants."""
+"""Unit tests for oridecon-admin constants."""
 
 import pytest
 

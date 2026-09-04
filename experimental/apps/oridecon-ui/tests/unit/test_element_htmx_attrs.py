@@ -1,7 +1,7 @@
 """Audit tests for HTMX and HTML attribute conversion in Element.__html__().
 
 This test module verifies that the underscore-to-hyphen attribute conversion
-in :class:`~lexigram.ui.core.base.Element` correctly handles:
+in :class:`~oridecon.ui.core.base.Element` correctly handles:
 
 - All standard HTMX 2.x ``hx_*`` → ``hx-*`` attribute mappings
 - Boolean HTMX attributes (present/absent in output HTML)

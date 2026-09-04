@@ -20,7 +20,7 @@ def test_layout_switcher_and_attrs():
     # Buttons render as ActionButton content (icon buttons should be present)
     assert "aria-pressed" in out or "svg" in out
     # Layout buttons target the root container (for full table re-render on layout change)
-    assert 'hx-target="#lexigram-table"' in out
+    assert 'hx-target="#oridecon-table"' in out
     # Buttons should use baked URL approach, not hx-include
     assert 'hx-params="none"' in out
 

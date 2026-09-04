@@ -13,7 +13,7 @@ from oridecon.ui import Link, el
 
 
 def render_verify_email_page(
-    site_name: str = "Lexigram Admin",
+    site_name: str = "Oridecon Admin",
     email: str = "",
     error: str = "",
     notice: str = "",
@@ -79,7 +79,7 @@ def render_verify_email_page(
 
 
 def render_email_verified_page(
-    site_name: str = "Lexigram Admin",
+    site_name: str = "Oridecon Admin",
     error: str = "",
     next_url: str = "/admin/",
     login_url: str = "/admin/login",

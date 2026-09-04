@@ -1,4 +1,4 @@
-"""Design tokens and style utilities for Lexigram UI."""
+"""Design tokens and style utilities for Oridecon UI."""
 
 from __future__ import annotations
 

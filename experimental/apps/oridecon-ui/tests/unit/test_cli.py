@@ -1,4 +1,4 @@
-"""Tests for the lexigram-ui component CLI — registry and add command."""
+"""Tests for the oridecon-ui component CLI — registry and add command."""
 
 from __future__ import annotations
 
@@ -15,11 +15,11 @@ class TestComponentEntry:
         entry = ComponentEntry(
             name="test",
             description="A test component",
-            source_path="lexigram/ui/atoms/test.py",
+            source_path="oridecon/ui/atoms/test.py",
         )
         assert entry.name == "test"
         assert entry.description == "A test component"
-        assert entry.source_path == "lexigram/ui/atoms/test.py"
+        assert entry.source_path == "oridecon/ui/atoms/test.py"
         assert entry.dependencies == []
         assert entry.requires == []
 
@@ -27,11 +27,11 @@ class TestComponentEntry:
         entry = ComponentEntry(
             name="button",
             description="Button component",
-            source_path="lexigram/ui/atoms/button.py",
-            dependencies=["lexigram/ui/core/base.py"],
+            source_path="oridecon/ui/atoms/button.py",
+            dependencies=["oridecon/ui/core/base.py"],
             requires=["core-ui"],
         )
-        assert entry.dependencies == ["lexigram/ui/core/base.py"]
+        assert entry.dependencies == ["oridecon/ui/core/base.py"]
         assert entry.requires == ["core-ui"]
 
 
@@ -56,19 +56,19 @@ class TestComponentRegistry:
 
     def test_every_entry_has_source_path(self) -> None:
         for entry in COMPONENT_REGISTRY.values():
-            assert entry.source_path.startswith("lexigram/ui/")
+            assert entry.source_path.startswith("oridecon/ui/")
 
     def test_button_entry(self) -> None:
         entry = COMPONENT_REGISTRY["button"]
         assert entry.description == "Button component with semantic color variants"
-        assert "lexigram/ui/core/base.py" in entry.dependencies
+        assert "oridecon/ui/core/base.py" in entry.dependencies
 
     def test_form_entry_dependencies(self) -> None:
         entry = COMPONENT_REGISTRY["form"]
         assert len(entry.dependencies) == 3
-        assert "lexigram/ui/core/base.py" in entry.dependencies
-        assert "lexigram/ui/atoms/button.py" in entry.dependencies
-        assert "lexigram/ui/molecules/form_field.py" in entry.dependencies
+        assert "oridecon/ui/core/base.py" in entry.dependencies
+        assert "oridecon/ui/atoms/button.py" in entry.dependencies
+        assert "oridecon/ui/molecules/form_field.py" in entry.dependencies
 
 
 class TestFindUiPackage:
@@ -78,9 +78,9 @@ class TestFindUiPackage:
         pkg_path = _find_ui_package()
         assert pkg_path is not None
         assert pkg_path.exists()
-        assert (pkg_path / "lexigram" / "ui" / "cli").exists()
-        assert (pkg_path / "lexigram" / "ui" / "core").exists()
-        assert (pkg_path / "lexigram" / "ui" / "atoms").exists()
+        assert (pkg_path / "oridecon" / "ui" / "cli").exists()
+        assert (pkg_path / "oridecon" / "ui" / "core").exists()
+        assert (pkg_path / "oridecon" / "ui" / "atoms").exists()
 
 
 class TestCollectFiles:
@@ -164,7 +164,7 @@ class TestAddCommandEntryPoint:
         result = runner.invoke(app, ["button", "--output", output_dir])
         assert result.exit_code == 0, f"STDERR: {result.stdout}"
         assert "Added button component" in result.stdout
-        assert (tmp_path / "ui" / "lexigram" / "ui" / "atoms" / "button.py").exists()
+        assert (tmp_path / "ui" / "oridecon" / "ui" / "atoms" / "button.py").exists()
 
     def test_add_card_component_copies_deps(self, tmp_path: Path) -> None:
         from typer.testing import CliRunner
@@ -174,8 +174,8 @@ class TestAddCommandEntryPoint:
         output_dir = str(tmp_path / "ui")
         result = runner.invoke(app, ["card", "--output", output_dir])
         assert result.exit_code == 0
-        assert (tmp_path / "ui" / "lexigram" / "ui" / "molecules" / "card.py").exists()
-        assert (tmp_path / "ui" / "lexigram" / "ui" / "core" / "base.py").exists()
+        assert (tmp_path / "ui" / "oridecon" / "ui" / "molecules" / "card.py").exists()
+        assert (tmp_path / "ui" / "oridecon" / "ui" / "core" / "base.py").exists()
 
     def test_add_duplicate_skips_without_force(self, tmp_path: Path) -> None:
         from typer.testing import CliRunner

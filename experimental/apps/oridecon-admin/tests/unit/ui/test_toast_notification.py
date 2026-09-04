@@ -80,7 +80,7 @@ class TestToastNotification:
             calls.append((message, category, payload))
 
         monkeypatch.setattr(
-            "lexigram.admin.ui.molecules.toast_notification.flash",
+            "oridecon.admin.ui.molecules.toast_notification.flash",
             capture,
         )
         ToastNotification.make("Updated").success().title("Saved").duration(4000).send()
@@ -101,7 +101,7 @@ class TestToastNotification:
             calls.append((message, category, payload))
 
         monkeypatch.setattr(
-            "lexigram.admin.ui.molecules.toast_notification.flash",
+            "oridecon.admin.ui.molecules.toast_notification.flash",
             capture,
         )
         ToastNotification.make("body").error().send()

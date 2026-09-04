@@ -33,7 +33,7 @@ pytestmark = pytest.mark.browser
 # what tells us the shipped asset works.
 _HTMX_FILE = (
     Path(__file__).resolve().parents[2]
-    / "src/lexigram/admin/static/js/htmx.min.js"
+    / "src/oridecon/admin/static/js/htmx.min.js"
 )
 _HTMX = "/static/htmx.min.js"
 

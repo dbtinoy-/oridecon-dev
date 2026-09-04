@@ -32,7 +32,7 @@ def _make_service(
     audit = MagicMock()
     audit.log_event = AsyncMock(return_value=None)
     service = AdminMfaService(
-        config=AdminMfaConfig(enabled=enabled, issuer="Lexigram Admin", skew=2),
+        config=AdminMfaConfig(enabled=enabled, issuer="Oridecon Admin", skew=2),
         store=store,
         audit_service=audit,
     )
@@ -49,7 +49,7 @@ async def test_start_setup_returns_secret_uri_svg() -> None:
     secret, uri, svg = result.unwrap()
     assert len(secret) == 32
     assert "otpauth://totp/" in uri
-    assert "issuer=Lexigram" in uri
+    assert "issuer=Oridecon" in uri
     assert svg.startswith("<svg")
     store.get_secret.assert_not_awaited()
     store.save_secret.assert_not_awaited()
@@ -132,7 +132,7 @@ async def test_verify_code_accepts_live_code() -> None:
 
 @pytest.mark.asyncio
 async def test_verify_code_accepts_lexigram_auth_generated_code() -> None:
-    """Parity: codes produced by lexigram-auth's own TOTP engine verify."""
+    """Parity: codes produced by oridecon-auth's own TOTP engine verify."""
     from oridecon.auth.authn.mfa import generate_totp_code, generate_totp_secret
 
     secret = generate_totp_secret()

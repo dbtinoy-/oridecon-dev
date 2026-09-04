@@ -4,7 +4,7 @@ These tests assert the *rendered markup and Alpine state* produced by the
 component (hidden JSON input, operator/field catalogs, recursive group
 markup).  Live Alpine behaviour is not executed here — the serialization
 contract is exercised end-to-end by the block-model translator tests in
-lexigram-search.
+oridecon-search.
 """
 
 from __future__ import annotations
@@ -196,7 +196,7 @@ class TestQueryBuilderMarkup:
         qb = QueryBuilder(name="filters", value=value)
         x_data = loads_str(_extract_x_data(_render(qb)))
         # the JSON block contract is the load-bearing part; the translator
-        # (lexigram-search) is what guarantees lowering — see test_block_translator.
+        # (oridecon-search) is what guarantees lowering — see test_block_translator.
         assert x_data["tree"]["logic"] == "AND"
         assert x_data["tree"]["rules"][0]["field"] == "status"
 

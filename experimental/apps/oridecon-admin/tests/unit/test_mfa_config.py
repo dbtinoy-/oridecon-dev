@@ -10,7 +10,7 @@ from oridecon.admin.config import AdminAuthConfig, AdminConfig, AdminMfaConfig
 def test_admin_mfa_config_defaults() -> None:
     cfg = AdminConfig()
     assert cfg.auth.mfa.enabled is True
-    assert cfg.auth.mfa.issuer == "Lexigram Admin"
+    assert cfg.auth.mfa.issuer == "Oridecon Admin"
     assert cfg.auth.mfa.skew == 1
 
 

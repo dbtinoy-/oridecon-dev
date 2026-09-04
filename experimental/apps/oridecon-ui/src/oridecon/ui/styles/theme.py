@@ -13,7 +13,7 @@ from oridecon.ui.styles.design_tokens import (
 # background and, in dark mode, washed-out foregrounds. These explicit
 # rules keep the same class names functional in both themes.
 _OPACITY_UTILITIES_CSS = """
-/* Lexigram UI — opacity utilities for CSS-variable colors (Tailwind CDN
+/* Oridecon UI — opacity utilities for CSS-variable colors (Tailwind CDN
    skips these because the colors are custom properties) */
 .bg-success\\/10 { background-color: color-mix(in srgb, var(--color-success) 10%, transparent); }
 .bg-success\\/20 { background-color: color-mix(in srgb, var(--color-success) 20%, transparent); }
@@ -94,7 +94,7 @@ def shadcn_css(
         dark_colors["--color-info"] = info
 
     parts = [
-        "/* Lexigram UI — ShadCN-compatible design tokens */",
+        "/* Oridecon UI — ShadCN-compatible design tokens */",
         render_all_tokens(colors, dark_colors),
         _OPACITY_UTILITIES_CSS,
     ]

@@ -1,5 +1,5 @@
 """
-Accessibility utilities for Lexigram Admin UI.
+Accessibility utilities for Oridecon Admin UI.
 
 Provides ARIA attributes, live region announcements, and keyboard
 navigation helpers for HTMX-powered components.

@@ -12,7 +12,7 @@ Tests:
 - Table density control
 - Keyboard shortcuts
 
-Author: Lexigram Admin Team
+Author: Oridecon Admin Team
 """
 
 from dataclasses import dataclass

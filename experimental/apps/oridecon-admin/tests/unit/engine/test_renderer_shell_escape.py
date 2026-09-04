@@ -49,7 +49,7 @@ class TestRendererShellBoundary:
 
     def test_shell_template_has_no_unsafe_filter(self) -> None:
         template = (
-            pkg_files("lexigram.admin") / "views" / "templates" / "admin_shell.html"
+            pkg_files("oridecon.admin") / "views" / "templates" / "admin_shell.html"
         ).read_text()
         assert "{{ content }}" in template
         assert "| safe" not in template

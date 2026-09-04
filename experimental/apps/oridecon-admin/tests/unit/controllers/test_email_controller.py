@@ -183,9 +183,9 @@ class TestStatusCardOverrides:
 
     def test_sender_param_overrides_config(self) -> None:
         c = _controller(notification_service=_service())
-        html = c._status_card(sender=("ops@lexigram.dev", "Lexigram Ops"))
-        assert "ops@lexigram.dev" in html
-        assert "Lexigram Ops" in html
+        html = c._status_card(sender=("ops@oridecon.dev", "Oridecon Ops"))
+        assert "ops@oridecon.dev" in html
+        assert "Oridecon Ops" in html
         assert "admin@example.com" not in html
 
     def test_no_sender_falls_back_to_config(self) -> None:
@@ -237,7 +237,7 @@ class TestDeliveriesSection:
         row = {
             "notification_type": "test_email",
             "recipient": "op@example.com",
-            "subject": "Test email from Lexigram Admin",
+            "subject": "Test email from Oridecon Admin",
             "success": 1,
             "error": None,
             "created_at": "2026-09-02 10:00:00",

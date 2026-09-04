@@ -273,7 +273,7 @@ class Sidebar(Component):
         self,
         items: list[SidebarItem | SidebarSection],
         user: Any | None = None,
-        logo_text: str = "Lexigram",
+        logo_text: str = "Oridecon",
         logo_url: str = "",
         user_menu_items: list[dict] | None = None,
         system_menu_items: list[dict] | None = None,
@@ -322,7 +322,7 @@ class Sidebar(Component):
         # Logo Icon - Navigates to the admin dashboard. Both branding nodes
         # disappear in mini mode; the header then contains only the collapse
         # control rather than a misleading partial brand.
-        brand_label = f"Go to {self.logo_text or 'Lexigram'} home"
+        brand_label = f"Go to {self.logo_text or 'Oridecon'} home"
         if self.logo_url:
             logo_icon = el(
                 "a",
@@ -342,7 +342,7 @@ class Sidebar(Component):
                 "a",
                 el(
                     "span",
-                    (self.logo_text or "Lexigram")[0].upper(),
+                    (self.logo_text or "Oridecon")[0].upper(),
                     class_="text-white",
                 ),
                 class_="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/20 flex-shrink-0 cursor-pointer hover:bg-primary-700 transition-colors",

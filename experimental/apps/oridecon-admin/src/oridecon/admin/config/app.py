@@ -82,7 +82,7 @@ class AdminConfig(BaseConfig):
     env: Environment | None = Field(None, description="Deployment environment")
 
     # Core Settings
-    title: str = Field(default="Lexigram Admin")
+    title: str = Field(default="Oridecon Admin")
     prefix: str = Field(default="/admin")
     htmx_prefix: str = Field(default="/admin/htmx")
     api_prefix: str = Field(default="/admin/api")

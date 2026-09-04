@@ -133,7 +133,7 @@ class TestGracefulDegradation:
         assert result.is_err()
         message = str(result.unwrap_err().message)
         assert "openpyxl" in message
-        assert "lexigram-admin[export]" in message
+        assert "oridecon-admin[export]" in message
 
     @pytest.mark.asyncio
     async def test_unsupported_format_message_lists_xlsx(self) -> None:

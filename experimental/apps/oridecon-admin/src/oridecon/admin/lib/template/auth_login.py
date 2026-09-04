@@ -22,7 +22,7 @@ from oridecon.ui import (
 def render_login_page(
     next_url: str = "/admin/",
     error: str = "",
-    site_name: str = "Lexigram Admin",
+    site_name: str = "Oridecon Admin",
     csrf_token: str = "",
     notice: str = "",
     registration_enabled: bool = False,
@@ -97,7 +97,7 @@ def render_login_page(
 
 
 def render_register_page(
-    site_name: str = "Lexigram Admin",
+    site_name: str = "Oridecon Admin",
     csrf_token: str = "",
     error: str = "",
     notice: str = "",

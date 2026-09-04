@@ -1,4 +1,4 @@
-"""Integration tests for lexigram-ui package."""
+"""Integration tests for oridecon-ui package."""
 
 from __future__ import annotations
 

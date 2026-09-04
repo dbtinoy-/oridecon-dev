@@ -1,1 +1,1 @@
-"""Tests for the lexigram-admin actions module."""
+"""Tests for the oridecon-admin actions module."""

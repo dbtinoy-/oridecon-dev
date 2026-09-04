@@ -8,19 +8,19 @@ from pathlib import Path
 
 import pytest
 
-PACKAGE = "lexigram.admin"
+PACKAGE = "oridecon.admin"
 
 # Map of importable path → expected marker in docstring
 EXPECTED_MARKERS: dict[str, str] = {
     # Module-level docstring markers
-    "lexigram.admin.resources.base": ".. stability:: stable",
-    "lexigram.admin.actions.base": ".. stability:: stable",
-    "lexigram.admin.pages.base": ".. experimental::",
-    "lexigram.admin.clusters.base": ".. experimental::",
-    "lexigram.admin.relations.manager_ext": ".. experimental::",
+    "oridecon.admin.resources.base": ".. stability:: stable",
+    "oridecon.admin.actions.base": ".. stability:: stable",
+    "oridecon.admin.pages.base": ".. experimental::",
+    "oridecon.admin.clusters.base": ".. experimental::",
+    "oridecon.admin.relations.manager_ext": ".. experimental::",
     # Class-level docstring markers
-    "lexigram.admin.data.data_source.IDataSource": ".. stability:: stable",
-    "lexigram.admin.schema.base.SchemaField": ".. stability:: stable",
+    "oridecon.admin.data.data_source.IDataSource": ".. stability:: stable",
+    "oridecon.admin.schema.base.SchemaField": ".. stability:: stable",
 }
 
 
@@ -44,7 +44,7 @@ def _module_has_marker(import_path: str, marker: str) -> bool:
     parts = import_path.split(".")
     if "." not in import_path:
         return False
-    # Class-level markers: 5+ parts (e.g. "lexigram.admin.data.data_source.IDataSource")
+    # Class-level markers: 5+ parts (e.g. "oridecon.admin.data.data_source.IDataSource")
     if len(parts) >= 5:
         module_path = ".".join(parts[:-1])
         class_name = parts[-1]
@@ -57,7 +57,7 @@ def _module_has_marker(import_path: str, marker: str) -> bool:
             return False
         doc = cls.__doc__ or ""
         return marker in doc
-    # For module-level markers (4 parts: lexigram.admin.actions.base)
+    # For module-level markers (4 parts: oridecon.admin.actions.base)
     try:
         mod = importlib.import_module(import_path)
     except (ImportError, ValueError):

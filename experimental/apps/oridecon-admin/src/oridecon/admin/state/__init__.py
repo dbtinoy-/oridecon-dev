@@ -1,4 +1,4 @@
-"""State management for Lexigram Admin.
+"""State management for Oridecon Admin.
 
 PEP 562 lazy loading to avoid import-time dependency issues.
 """

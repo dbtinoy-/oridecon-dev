@@ -1,4 +1,4 @@
-"""Unified RBAC system for Lexigram Admin."""
+"""Unified RBAC system for Oridecon Admin."""
 
 from __future__ import annotations
 

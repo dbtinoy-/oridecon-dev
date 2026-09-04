@@ -1,4 +1,4 @@
-"""Authentication models for Lexigram Admin.
+"""Authentication models for Oridecon Admin.
 
 This module re-exports admin user types for backwards-compatible access.
 """

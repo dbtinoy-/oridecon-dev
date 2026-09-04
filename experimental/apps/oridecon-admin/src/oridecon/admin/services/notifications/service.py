@@ -680,7 +680,7 @@ class AdminNotificationService:
                 )
             )
         await self._refresh_sender_identity()
-        subject = "Test email from Lexigram Admin"
+        subject = "Test email from Oridecon Admin"
         body = (
             "This is a test email sent from the Email delivery page.\n\n"
             "If you are reading this, outbound email delivery works."

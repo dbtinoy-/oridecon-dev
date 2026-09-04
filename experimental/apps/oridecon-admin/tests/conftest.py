@@ -30,7 +30,7 @@ from oridecon.testing import TestEnvironment
 try:
     import importlib
 
-    importlib.import_module("lexigram.testing.fixtures.core")
+    importlib.import_module("oridecon.testing.fixtures.core")
 except ImportError:
     pass
 

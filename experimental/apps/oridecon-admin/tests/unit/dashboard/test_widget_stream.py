@@ -1,8 +1,8 @@
 """Unit tests for the widget-stream SSE route's resource-authorization narrowing.
 
 The surrounding transport (SSE framing, keepalive, request-entry auth
-middleware) is already covered by lexigram-web's sse_from_stream tests
-and lexigram-admin's AdminAuthorizationMiddleware tests respectively —
+middleware) is already covered by oridecon-web's sse_from_stream tests
+and oridecon-admin's AdminAuthorizationMiddleware tests respectively —
 not duplicated here. This file covers only the logic specific to this
 route: narrowing a caller-supplied resources= filter to resources the
 caller is actually authorized to list.

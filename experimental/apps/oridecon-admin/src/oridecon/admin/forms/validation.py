@@ -1,4 +1,4 @@
-"""Validation engine for Lexigram Admin Forms."""
+"""Validation engine for Oridecon Admin Forms."""
 
 from __future__ import annotations
 

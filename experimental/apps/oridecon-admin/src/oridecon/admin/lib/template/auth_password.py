@@ -12,7 +12,7 @@ from oridecon.ui import EmailInput, Link, PasswordInput
 
 
 def render_password_reset_request_page(
-    site_name: str = "Lexigram Admin",
+    site_name: str = "Oridecon Admin",
     csrf_token: str = "",
     error: str = "",
     sent: bool = False,
@@ -75,7 +75,7 @@ def render_password_reset_request_page(
 
 def render_password_reset_confirm_page(
     token: str,
-    site_name: str = "Lexigram Admin",
+    site_name: str = "Oridecon Admin",
     csrf_token: str = "",
     error: str = "",
     password_err: str = "",

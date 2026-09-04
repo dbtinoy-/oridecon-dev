@@ -31,7 +31,7 @@ class AdminMfaConfig(DomainModel):
         description="Second factor used at login: 'totp' (authenticator app) or 'email' (one-time code)",
     )
     issuer: str = Field(
-        default="Lexigram Admin",
+        default="Oridecon Admin",
         description="TOTP issuer label shown in authenticator apps",
     )
     skew: int = Field(

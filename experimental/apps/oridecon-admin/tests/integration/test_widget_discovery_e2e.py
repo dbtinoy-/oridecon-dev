@@ -81,7 +81,7 @@ class TestAdminContributorImportability:
             assert LlmAdminContributor is not None
             assert LlmAdminContributor.__name__ == "LlmAdminContributor"
         except (ImportError, ModuleNotFoundError):
-            pytest.skip("lexigram-ai-llm not available in this environment")
+            pytest.skip("oridecon-ai-llm not available in this environment")
 
     def test_webhook_admin_contributor_importable(self) -> None:
         """Test webhook admin contributor is importable."""
@@ -91,7 +91,7 @@ class TestAdminContributorImportability:
             assert WebhookAdminContributor is not None
             assert WebhookAdminContributor.__name__ == "WebhookAdminContributor"
         except (ImportError, ModuleNotFoundError):
-            pytest.skip("lexigram-webhook not available in this environment")
+            pytest.skip("oridecon-webhook not available in this environment")
 
     def test_audit_admin_contributor_importable(self) -> None:
         """Test audit admin contributor is importable."""
@@ -101,7 +101,7 @@ class TestAdminContributorImportability:
             assert AuditAdminContributor is not None
             assert AuditAdminContributor.__name__ == "AuditAdminContributor"
         except (ImportError, ModuleNotFoundError):
-            pytest.skip("lexigram-audit not available in this environment")
+            pytest.skip("oridecon-audit not available in this environment")
 
 
 class TestAdminContributorRegistry:
@@ -293,7 +293,7 @@ class TestEntryPointRegistration:
         """Test that the admin contributors entry point group exists."""
         import importlib.metadata
 
-        ENTRY_POINT_GROUP = "lexigram.admin.contributors"
+        ENTRY_POINT_GROUP = "oridecon.admin.contributors"
 
         try:
             eps = importlib.metadata.entry_points(group=ENTRY_POINT_GROUP)
@@ -309,7 +309,7 @@ class TestEntryPointRegistration:
         """Test that core admin contributor is discoverable via entry points."""
         import importlib.metadata
 
-        ENTRY_POINT_GROUP = "lexigram.admin.contributors"
+        ENTRY_POINT_GROUP = "oridecon.admin.contributors"
 
         try:
             eps = importlib.metadata.entry_points(group=ENTRY_POINT_GROUP)

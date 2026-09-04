@@ -21,7 +21,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-SRC = Path(__file__).resolve().parents[2] / "src" / "lexigram" / "ui"
+SRC = Path(__file__).resolve().parents[2] / "src" / "oridecon" / "ui"
 
 # Matches `x_on_foo=` kwargs and `"x_on_foo"` dict keys, but not the htmx
 # `hx_on_*` alias (valid) and not prose in comments/docstrings.

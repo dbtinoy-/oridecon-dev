@@ -20,7 +20,7 @@ def test_view_switcher_singleton_and_htmx_attrs():
     assert out.count('class="view-switcher') == 1
     # Items include data_view query param and target/swap attributes
     assert 'hx-get="/admin/users?data_view=' in out
-    assert 'hx-target="#lexigram-table"' in out
+    assert 'hx-target="#oridecon-table"' in out
     assert 'hx-swap="outerHTML"' in out
     assert 'hx-push-url="true"' in out
 
@@ -36,7 +36,7 @@ def test_view_switcher_singleton_and_htmx_attrs():
 
     assert out2.count('class="view-switcher') == 1
     assert 'hx-get="/admin/users?data_view=' in out2
-    assert 'hx-target="#lexigram-table"' in out2
+    assert 'hx-target="#oridecon-table"' in out2
 
 
 def test_controls_outside_container_and_filters_below_search():
@@ -53,7 +53,7 @@ def test_controls_outside_container_and_filters_below_search():
     out = str(dt.render())
 
     # Controls (view-switcher) should appear before the main container to be outside it
-    assert out.find('class="view-switcher') < out.find("lexigram-data-table-container")
+    assert out.find('class="view-switcher') < out.find("oridecon-data-table-container")
 
     # Search input should be present and appear before table content
     assert 'name="search"' in out

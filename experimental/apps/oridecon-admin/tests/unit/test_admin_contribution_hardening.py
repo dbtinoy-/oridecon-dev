@@ -54,7 +54,7 @@ class TestActionParameterSchema:
             name="flush_cache",
             title="Flush Cache",
             contributor="cache",
-            handler="lexigram.cache.admin:flush_cache",
+            handler="oridecon.cache.admin:flush_cache",
             parameter_schema=schema,
         )
         assert action.parameter_schema is not None
@@ -65,7 +65,7 @@ class TestActionParameterSchema:
             name="flush_all",
             title="Flush All",
             contributor="cache",
-            handler="lexigram.cache.admin:flush_all",
+            handler="oridecon.cache.admin:flush_all",
         )
         assert action.parameter_schema is None
 

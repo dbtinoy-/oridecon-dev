@@ -1,4 +1,4 @@
-"""Background tasks for Lexigram Admin.
+"""Background tasks for Oridecon Admin.
 
 PEP 562 lazy loading to avoid import-time dependency issues.
 """

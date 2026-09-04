@@ -1,4 +1,4 @@
-"""Tests for DelegatingAuthAdapter — the lexigram-auth bridge for admin auth."""
+"""Tests for DelegatingAuthAdapter — the oridecon-auth bridge for admin auth."""
 
 from __future__ import annotations
 

@@ -44,7 +44,7 @@ async def test_adapter_attaches_session_manager():
             self.db_provider = db
     
     admin_store = MockAdminStore(db_provider)
-    container.singleton("lexigram.admin.auth.AbstractAdminUserStore", lambda: admin_store)
+    container.singleton("oridecon.admin.auth.AbstractAdminUserStore", lambda: admin_store)
 
     from oridecon.auth.config import AuthConfig, JWTConfig
     _key = "test-session-manager-key-32bytes!!"

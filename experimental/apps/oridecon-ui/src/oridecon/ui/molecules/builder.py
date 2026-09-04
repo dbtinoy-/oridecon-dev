@@ -203,7 +203,7 @@ class Builder(Component):
             field_els = []
             for field in block.fields:
                 # We need to bind the field's value to item.data[field_name]
-                # Lexigram components use self.name and self.props['value']
+                # oridecon components use self.name and self.props['value']
                 # We'll inject Alpine x-model into the component's props
                 field.props["x-model"] = f"item.data['{field.name}']"
                 field_els.append(field.render())

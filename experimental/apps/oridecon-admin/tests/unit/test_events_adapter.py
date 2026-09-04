@@ -1,4 +1,4 @@
-"""Tests for events adapter delegating to lexigram-events."""
+"""Tests for events adapter delegating to oridecon-events."""
 
 from __future__ import annotations
 

@@ -229,7 +229,7 @@ class TestTenantScopedSettings:
             return "tenant-42"
 
         monkeypatch.setattr(
-            "lexigram.admin.controllers.settings.resolve_tenant_id", _fake_resolve
+            "oridecon.admin.controllers.settings.resolve_tenant_id", _fake_resolve
         )
 
         called_with = {}
@@ -261,7 +261,7 @@ class TestTenantScopedSettings:
             )
 
         monkeypatch.setattr(
-            "lexigram.admin.controllers.settings.resolve_tenant_id", _fail_resolve
+            "oridecon.admin.controllers.settings.resolve_tenant_id", _fail_resolve
         )
 
         req = _mock_request(user=_FakeUser())

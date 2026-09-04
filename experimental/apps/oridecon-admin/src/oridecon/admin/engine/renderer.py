@@ -58,7 +58,7 @@ class AdminRendererConfig:
     """Configuration for AdminRenderer."""
 
     # Site branding
-    site_name: str = "Lexigram Admin"
+    site_name: str = "Oridecon Admin"
     site_logo: str | None = None
 
     # Layout options

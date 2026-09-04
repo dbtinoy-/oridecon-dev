@@ -22,9 +22,9 @@ class TestUIComponentRenderedHook:
     def test_qualified_component_name(self) -> None:
         """Test fully qualified component name is preserved."""
         hook = UIComponentRenderedHook(
-            component_name="lexigram.ui.molecules.card.UserCard"
+            component_name="oridecon.ui.molecules.card.UserCard"
         )
-        assert hook.component_name == "lexigram.ui.molecules.card.UserCard"
+        assert hook.component_name == "oridecon.ui.molecules.card.UserCard"
 
     def test_dataclass_kw_only(self) -> None:
         """Test dataclass uses keyword-only fields."""

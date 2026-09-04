@@ -1,5 +1,5 @@
 """
-Advanced Bulk Action Manager for Lexigram Admin.
+Advanced Bulk Action Manager for Oridecon Admin.
 
 Provides comprehensive bulk operation support including:
 - Bulk editing and assignment

@@ -104,7 +104,7 @@ class ResourceLens:
 
         The default implementation calls ``queryset.filter(**cls.query_filters)``
         which is compatible with SQLAlchemy ``Select`` objects that expose
-        a ``.filter()`` method, and the Lexigram ``RepositoryProtocol``
+        a ``.filter()`` method, and the oridecon ``RepositoryProtocol``
         query builder.
 
         Override for custom query logic::

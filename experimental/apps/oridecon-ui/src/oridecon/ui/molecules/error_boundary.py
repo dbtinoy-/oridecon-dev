@@ -1,4 +1,4 @@
-"""Error Boundary component for Lexigram Admin."""
+"""Error Boundary component for Oridecon Admin."""
 
 from __future__ import annotations
 

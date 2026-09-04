@@ -11,12 +11,12 @@ def test_monitoring_directory_deleted() -> None:
         "..",
         "..",
         "src",
-        "lexigram",
+        "oridecon",
         "ui",
         "monitoring",
     )
     assert not os.path.exists(os.path.normpath(monitoring_path)), (
-        "lexigram/ui/monitoring/ still exists — delete it (it is a duplicate of performance/)"
+        "oridecon/ui/monitoring/ still exists — delete it (it is a duplicate of performance/)"
     )
 
 

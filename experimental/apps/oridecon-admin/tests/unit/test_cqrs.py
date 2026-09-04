@@ -1,6 +1,6 @@
 """Tests for the CQRS message types (commands and queries).
 
-Admin buses are the framework buses from lexigram-events (CommandBusImpl /
+Admin buses are the framework buses from oridecon-events (CommandBusImpl /
 QueryBusImpl).  There are no admin-specific bus reimplementations.
 """
 

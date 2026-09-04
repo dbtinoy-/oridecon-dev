@@ -1,4 +1,4 @@
-"""Real-time data subscriptions for Lexigram Admin."""
+"""Real-time data subscriptions for Oridecon Admin."""
 
 from __future__ import annotations
 

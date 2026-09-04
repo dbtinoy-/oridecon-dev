@@ -1,4 +1,4 @@
-"""Cluster navigation helpers for Lexigram Admin.
+"""Cluster navigation helpers for Oridecon Admin.
 
 A cluster groups contributor navigation items (declared via
 ``NavigationContribution(group=...)``) behind a single top-level sidebar

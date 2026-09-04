@@ -20,7 +20,7 @@ class TestAPIDataSourceQuerySpec:
         mock_client = AsyncMock()
         mock_client.get.return_value = mock_response
 
-        with patch("lexigram.admin.data.adapters.api_adapter.httpx.AsyncClient") as mock_cls:
+        with patch("oridecon.admin.data.adapters.api_adapter.httpx.AsyncClient") as mock_cls:
             mock_cls.return_value = mock_client
             from oridecon.admin.data.adapters.api_adapter import APIDataSource
             ds = APIDataSource(base_url="http://test/api/items")
@@ -37,7 +37,7 @@ class TestAPIDataSourceQuerySpec:
         mock_client = AsyncMock()
         mock_client.get.return_value = mock_response
 
-        with patch("lexigram.admin.data.adapters.api_adapter.httpx.AsyncClient") as mock_cls:
+        with patch("oridecon.admin.data.adapters.api_adapter.httpx.AsyncClient") as mock_cls:
             mock_cls.return_value = mock_client
             from oridecon.admin.data.adapters.api_adapter import APIDataSource
             ds = APIDataSource(base_url="http://test/api/items")

@@ -1,4 +1,4 @@
-"""Session-based auth guard middleware for the Lexigram Admin panel.
+"""Session-based auth guard middleware for the Oridecon Admin panel.
 
 Redirects unauthenticated requests to the login page.  Bypass paths
 (login, setup, static assets, health) are always passed through so

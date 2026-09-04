@@ -1,4 +1,4 @@
-"""Built-in authentication controller for Lexigram Admin (package facade).
+"""Built-in authentication controller for Oridecon Admin (package facade).
 
 Implements login/logout, MFA challenge/setup, password reset, and
 registration/email-verification endpoints with standalone UI (no admin
@@ -27,6 +27,6 @@ class AuthController(
     AuthRegistrationMixin,
     AuthCoreMixin,
 ):
-    """Built-in authentication controller for Lexigram Admin."""
+    """Built-in authentication controller for Oridecon Admin."""
 
     prefix = ""

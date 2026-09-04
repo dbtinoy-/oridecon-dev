@@ -97,7 +97,7 @@ class TestInfrastructureController:
         controller = InfrastructureController(renderer=renderer)
         secondary = [{"label": "Web", "href": "/admin/web", "active": False}]
         with patch(
-            "lexigram.admin.engine.renderer.resolve_admin_nav",
+            "oridecon.admin.engine.renderer.resolve_admin_nav",
             return_value=([], [], secondary),
         ):
             resp = await controller.index(_mock_request(groups=_groups()))

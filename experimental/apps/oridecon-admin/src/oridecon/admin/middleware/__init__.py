@@ -1,4 +1,4 @@
-"""Middleware module for Lexigram Admin."""
+"""Middleware module for Oridecon Admin."""
 
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-"""ShadCN-compatible design tokens for Lexigram UI.
+"""ShadCN-compatible design tokens for Oridecon UI.
 
 All values use oklch color space for perceptually-uniform interpolation.
 Overridable via CSS custom properties.

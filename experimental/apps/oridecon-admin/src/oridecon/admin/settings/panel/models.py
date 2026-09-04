@@ -72,7 +72,7 @@ class BrandingSettings(DomainModel):
     """Site branding and theme settings consumed by the admin renderer."""
 
     site_name: str = Field(
-        default="Lexigram Admin",
+        default="Oridecon Admin",
         min_length=1,
         max_length=120,
         title="Site Name",

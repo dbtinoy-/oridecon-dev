@@ -38,7 +38,7 @@ def _panel(**overrides: object) -> SimpleNamespace:
     base: dict[str, object] = {
         "name": "system-info",
         "title": "System Info",
-        "contributor": "lexigram-admin",
+        "contributor": "oridecon-admin",
         "route_path": "/admin/system/info",
         "icon": "info",
         "category": "System",
@@ -113,7 +113,7 @@ class TestConfigLayoutPanelLinks:
         from oridecon.admin.settings.panel.types import ConfigCategory
 
         category = ConfigCategory(
-            name="lexigram-admin", label="Lexigram Admin", specs=[]
+            name="oridecon-admin", label="Oridecon Admin", specs=[]
         )
         html = render_to_string(
             ConfigLayout(
@@ -123,7 +123,7 @@ class TestConfigLayoutPanelLinks:
                 ],
             )
         )
-        assert html.index("Lexigram Admin") < html.index("System Info")
+        assert html.index("Oridecon Admin") < html.index("System Info")
 
 
 class TestControllerPanelLinks:

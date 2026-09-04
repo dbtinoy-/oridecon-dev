@@ -39,7 +39,7 @@ class TestSpecs:
         assert isinstance(nodes["primary_color"], ColorNode)
         assert isinstance(nodes["dark_mode"], EnumNode)
         assert nodes["dark_mode"].options == ["system", "light", "dark"]
-        assert nodes["site_name"].default == "Lexigram Admin"
+        assert nodes["site_name"].default == "Oridecon Admin"
 
     def test_cache_spec_nodes(self) -> None:
         nodes = CacheSpec.get_nodes()

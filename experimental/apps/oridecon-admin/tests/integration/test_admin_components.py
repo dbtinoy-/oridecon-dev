@@ -1,4 +1,4 @@
-"""Integration tests for lexigram-admin package lifecycle."""
+"""Integration tests for oridecon-admin package lifecycle."""
 
 from __future__ import annotations
 

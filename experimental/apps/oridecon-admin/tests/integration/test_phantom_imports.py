@@ -10,17 +10,17 @@ from pathlib import Path
 import re
 
 FORBIDDEN_PATTERNS: list[re.Pattern[str]] = [
-    re.compile(r"^from lexigram\.ui\.atoms[\.\s]", re.MULTILINE),
-    re.compile(r"^from lexigram\.ui\.molecules[\.\s]", re.MULTILINE),
-    re.compile(r"^from lexigram\.ui\.organisms[\.\s]", re.MULTILINE),
-    re.compile(r"^from lexigram\.ui\.layouts[\.\s]", re.MULTILINE),
-    re.compile(r"^from lexigram\.ui\.htmx[\.\s]", re.MULTILINE),
-    re.compile(r"^from lexigram\.ui\.monitoring[\.\s]", re.MULTILINE),
-    re.compile(r"^from lexigram\.ui\.performance[\.\s]", re.MULTILINE),
-    re.compile(r"^from lexigram\.ui\.config\s+import", re.MULTILINE),
-    re.compile(r"^from lexigram\.ui\.core[\.\s]", re.MULTILINE),
-    re.compile(r"^from lexigram\.ui\.exceptions\s+import", re.MULTILINE),
-    re.compile(r"^from lexigram\.ui\.accessibility[\.\s]", re.MULTILINE),
+    re.compile(r"^from oridecon\.ui\.atoms[\.\s]", re.MULTILINE),
+    re.compile(r"^from oridecon\.ui\.molecules[\.\s]", re.MULTILINE),
+    re.compile(r"^from oridecon\.ui\.organisms[\.\s]", re.MULTILINE),
+    re.compile(r"^from oridecon\.ui\.layouts[\.\s]", re.MULTILINE),
+    re.compile(r"^from oridecon\.ui\.htmx[\.\s]", re.MULTILINE),
+    re.compile(r"^from oridecon\.ui\.monitoring[\.\s]", re.MULTILINE),
+    re.compile(r"^from oridecon\.ui\.performance[\.\s]", re.MULTILINE),
+    re.compile(r"^from oridecon\.ui\.config\s+import", re.MULTILINE),
+    re.compile(r"^from oridecon\.ui\.core[\.\s]", re.MULTILINE),
+    re.compile(r"^from oridecon\.ui\.exceptions\s+import", re.MULTILINE),
+    re.compile(r"^from oridecon\.ui\.accessibility[\.\s]", re.MULTILINE),
 ]
 
 ADMIN_SRC = Path(__file__).resolve().parents[2] / "src"
@@ -93,9 +93,9 @@ def test_no_deep_path_ui_imports_in_admin_source() -> None:
     if offenders:
         lines = [f"  {p}: {imp}" for p, imp in sorted(set(offenders))]
         msg = (
-            "Deep-path imports into lexigram.ui internals are forbidden.\n"
+            "Deep-path imports into oridecon.ui internals are forbidden.\n"
             "Use `from oridecon.ui import X` instead. If a symbol is missing\n"
-            "from `lexigram.ui`, add it to lexigram-ui's `_LAZY_IMPORTS`.\n"
+            "from `oridecon.ui`, add it to oridecon-ui's `_LAZY_IMPORTS`.\n"
             "\nOffending imports:\n" + "\n".join(lines)
         )
         raise AssertionError(msg)
@@ -117,7 +117,7 @@ def test_no_phantom_symbols_in_admin_tests() -> None:
     if offenders:
         lines = [f"  {p}: {imp}" for p, imp in sorted(set(offenders))]
         msg = (
-            "Test files contain deep-path imports into lexigram.ui internals.\n"
+            "Test files contain deep-path imports into oridecon.ui internals.\n"
             "Use `from oridecon.ui import X` unless you're specifically testing\n"
             "the internal module path.\n"
             "\nOffending imports:\n" + "\n".join(lines)

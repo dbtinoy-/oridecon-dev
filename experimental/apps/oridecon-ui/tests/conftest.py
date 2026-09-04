@@ -1,4 +1,4 @@
-"""Shared test configuration and fixtures for lexigram-ui tests."""
+"""Shared test configuration and fixtures for oridecon-ui tests."""
 
 from __future__ import annotations
 

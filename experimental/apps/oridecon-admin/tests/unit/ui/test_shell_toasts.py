@@ -70,7 +70,7 @@ class TestShellFlashToasts:
         css_path = (
             Path(__file__).parents[3]
             / "src"
-            / "lexigram"
+            / "oridecon"
             / "admin"
             / "static"
             / "css"
@@ -90,7 +90,7 @@ class TestShellFlashToasts:
         js_path = (
             Path(__file__).parents[3]
             / "src"
-            / "lexigram"
+            / "oridecon"
             / "admin"
             / "static"
             / "js"

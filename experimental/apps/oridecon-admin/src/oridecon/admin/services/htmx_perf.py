@@ -1,4 +1,4 @@
-"""HTMX performance monitoring for Lexigram Admin.
+"""HTMX performance monitoring for Oridecon Admin.
 
 For pure HTMX attribute helpers (hx_swap_oob, hx_prefetch, etc.)
 see oridecon.ui.htmx.helpers.

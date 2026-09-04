@@ -1,5 +1,5 @@
 """
-Observability utilities for Lexigram Admin UI.
+Observability utilities for Oridecon Admin UI.
 
 Provides metrics collection, logging helpers, and debug tools
 for monitoring HTMX-powered components.

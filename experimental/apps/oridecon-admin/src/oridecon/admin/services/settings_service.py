@@ -17,7 +17,7 @@ logger = get_logger(__name__)
 KEY_PREFIX = "admin_ui."
 
 DEFAULT_SETTINGS: dict[str, Any] = {
-    "site_name": "Lexigram Admin",
+    "site_name": "Oridecon Admin",
     "primary_color": "#6b7280",
     "logo_url": "",
     "favicon_url": "",

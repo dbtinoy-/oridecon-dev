@@ -126,7 +126,7 @@ async def test_send_otp_sends_and_persists_code() -> None:
 
 @pytest.mark.asyncio
 async def test_email_otp_parity_with_auth_primitives() -> None:
-    """Parity: issued code is lexigram-auth derived, 6-digit, digest-verified."""
+    """Parity: issued code is oridecon-auth derived, 6-digit, digest-verified."""
     from oridecon.auth.authn.mfa import generate_totp_code, generate_totp_secret
 
     store = _make_store()

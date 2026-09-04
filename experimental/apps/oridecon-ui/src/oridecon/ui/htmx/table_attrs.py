@@ -1,5 +1,5 @@
 """
-Centralized HTMX attribute generation for Lexigram Admin.
+Centralized HTMX attribute generation for Oridecon Admin.
 
 This module provides a type-safe, consistent way to generate HTMX attributes
 for different action types. All components should use these builders rather

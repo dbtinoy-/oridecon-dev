@@ -23,7 +23,7 @@ import pytest
 
 _CSS_DIR = (
     Path(__file__).resolve().parents[3]
-    / "src/lexigram/admin/static/css"
+    / "src/oridecon/admin/static/css"
 )
 _STYLESHEETS = ("tailwind.css", "admin.css")
 
@@ -190,7 +190,7 @@ class TestUtilityClassesExist:
     like ``text-[11px]`` looks correct in review and renders as nothing.
     """
 
-    _SRC = Path(__file__).resolve().parents[3] / "src/lexigram/admin"
+    _SRC = Path(__file__).resolve().parents[3] / "src/oridecon/admin"
 
     #: Utilities that carry a colour or size and so must resolve to a rule.
     _ARBITRARY = re.compile(

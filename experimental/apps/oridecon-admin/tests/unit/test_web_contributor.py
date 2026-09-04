@@ -68,6 +68,6 @@ def test_admin_pyproject_declares_web_contributor_entry_point() -> None:
     data = tomllib.loads(pyproject_path.read_text())
 
     assert (
-        data["project"]["entry-points"]["lexigram.web.contributors"]["admin"]
-        == "lexigram.admin.web.contributor:AdminWebContributor"
+        data["project"]["entry-points"]["oridecon.web.contributors"]["admin"]
+        == "oridecon.admin.web.contributor:AdminWebContributor"
     )

@@ -37,14 +37,14 @@ class TestSidebarA11y:
 def test_sidebar_branding_and_toggle_share_the_header() -> None:
     from oridecon.admin.ui.organisms.sidebar import Sidebar
 
-    html = render_to_string(Sidebar(items=[], logo_text="Lexigram"))
+    html = render_to_string(Sidebar(items=[], logo_text="Oridecon"))
     header_end = html.index('class="admin-sidebar-footer')
     toggle_index = html.index('aria-label="Toggle sidebar"')
 
     assert toggle_index < header_end
     assert html.count('aria-label="Toggle sidebar"') == 1
     assert 'x-show="!sidebarMini"' in html
-    assert 'aria-label="Go to Lexigram home"' in html
+    assert 'aria-label="Go to Oridecon home"' in html
     assert "justify-center" in html
 
 

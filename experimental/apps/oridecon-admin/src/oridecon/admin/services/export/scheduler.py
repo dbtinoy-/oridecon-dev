@@ -1,4 +1,4 @@
-"""Export job models and scheduling types for Lexigram Admin."""
+"""Export job models and scheduling types for Oridecon Admin."""
 
 from __future__ import annotations
 

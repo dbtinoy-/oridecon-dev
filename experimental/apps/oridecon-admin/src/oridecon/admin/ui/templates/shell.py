@@ -31,7 +31,7 @@ from oridecon.ui import (
 
 class AdminShell(Component):
     """
-    Main responsive shell for Lexigram Admin.
+    Main responsive shell for Oridecon Admin.
     Stitches together the Sidebar, TopBar and content area.
     """
 

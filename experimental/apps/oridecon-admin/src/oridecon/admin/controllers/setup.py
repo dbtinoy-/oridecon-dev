@@ -1,4 +1,4 @@
-"""First-run setup controller for Lexigram Admin.
+"""First-run setup controller for Oridecon Admin.
 
 Provides the initial account creation wizard shown when no admin users exist.
 The SetupMiddleware redirects all admin requests here until at least one
