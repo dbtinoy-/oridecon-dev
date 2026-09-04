@@ -14,7 +14,9 @@ from oridecon.contracts.admin.page_content import PageContent, PaginationContent
 from oridecon.ui import (
     PageSizeSelector,
     PaginationLinks,
+    Zones,
     el,
+    get_render_scope,
     render_to_string,
     trusted_html,
 )
@@ -79,15 +81,27 @@ def render_page_content(
     content: PageContent,
     *,
     back_url: str | None = None,
+    page_key: str | None = None,
 ) -> HTMLResponse:
-    """Render structured page content to an HTML response.
+    """Render structured page content with stable response-local zone IDs.
 
-    Args:
-        content: Structured page title, body, and optional pagination.
-        back_url: Optional host-owned contextual return URL. Used for
-            standalone contributor settings panels; ordinary management
-            pages leave it unset and retain their existing markup.
+    ``page_key`` should identify a page across full and partial requests. The
+    pagination URL is the natural default; non-paginated pages fall back to
+    their title and can provide an explicit key when titles are not unique.
     """
+    resolved_key = page_key or (
+        content.pagination.base_url if content.pagination else content.title
+    )
+    with Zones.table_scope(get_render_scope(), f"page-{resolved_key}"):
+        return _render_page_content_response(content, back_url=back_url)
+
+
+def _render_page_content_response(
+    content: PageContent,
+    *,
+    back_url: str | None,
+) -> HTMLResponse:
+    """Build the response while the page-content zone scope is active."""
     body_node = trusted_content(content.body)
     pagination_node = (
         trusted_html(
@@ -148,7 +162,7 @@ def render_page_content(
             title_block,
             el(
                 "div",
-                {"id": "table-data"},
+                {"id": Zones.DATA.id},
                 body_node,
                 pagination_node,
             ),

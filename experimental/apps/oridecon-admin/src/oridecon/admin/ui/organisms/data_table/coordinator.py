@@ -8,7 +8,7 @@ from oridecon.admin.config import TableConfiguration
 from oridecon.admin.resources.config import clone_table_configuration
 from oridecon.admin.ui.organisms.data_table.actions import ActionManager
 from oridecon.admin.ui.organisms.data_table.rendering import DataTableRenderer
-from oridecon.ui import Component, TableState, Zones, get_render_scope
+from oridecon.ui import Component, TableState, Zones, get_render_scope, trusted_html
 
 
 class DataTable(Component):
@@ -172,7 +172,10 @@ class DataTable(Component):
                 summary=self.summary,
                 props=self.props,
             )
-            return renderer.render()
+            return trusted_html(
+                renderer.render(),
+                source="structured admin DataTable renderer",
+            )
 
 
 __all__ = ["DataTable"]

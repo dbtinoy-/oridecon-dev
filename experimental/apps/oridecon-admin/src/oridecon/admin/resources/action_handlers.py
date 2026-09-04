@@ -1745,6 +1745,7 @@ class DeleteActionHandler:
         html = render_delete_confirm(
             record_label=record_label,
             delete_url=delete_url,
+            table_key=resource.name or None,
         )
         return HTMLResponse(html)
 

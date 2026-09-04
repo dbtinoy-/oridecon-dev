@@ -17,7 +17,15 @@ from oridecon.contracts.admin.types import (
     WidgetSize,
 )
 from oridecon.primitives.registry import Registry
-from oridecon.ui import el, render_to_string
+from oridecon.ui import (
+    RenderScope,
+    TrustedHTML,
+    el,
+    get_render_scope,
+    js_string,
+    render_to_string,
+    trusted_html,
+)
 
 
 def _admin_endpoint(path: str, admin_prefix: str) -> str:
@@ -52,7 +60,7 @@ def _render_live_widget_script(admin_prefix: str = "/admin") -> str:
         # guard would leave every page after the first with no live updates.
         "var existing=window.__orideconLiveWidgets;"
         "if(existing&&existing.readyState!==2)return;"
-        f"var es=new EventSource('{prefix}/_sse/widgets');"
+        f"var es=new EventSource({js_string(f'{prefix}/_sse/widgets')});"
         "window.__orideconLiveWidgets=es;"
         "es.onmessage=function(ev){"
         "var data;"
@@ -250,10 +258,12 @@ class WidgetRegistry(Registry[str, type[IWidget]]):
             )
 
         parts: list[str] = []
+        scope = get_render_scope().child("dashboard-widget")
         for widget_index, widget_def in enumerate(contributor_widgets):
             parts.append(
                 _render_contributor_card(
                     self,
+                    scope,
                     widget_index,
                     widget_def,
                     width=width,
@@ -269,9 +279,28 @@ class WidgetRegistry(Registry[str, type[IWidget]]):
 
         return "".join(parts)
 
+    def trusted_contributor_widgets(
+        self,
+        contributor_widgets: list[DashboardWidgetDefinition],
+        width: str = "100%",
+        page_filters: dict[str, Any] | None = None,
+        admin_prefix: str = "/admin",
+    ) -> TrustedHTML:
+        """Render registry-owned cards as attributable composition markup."""
+        return trusted_html(
+            self.render_contributor_widgets(
+                contributor_widgets,
+                width=width,
+                page_filters=page_filters,
+                admin_prefix=admin_prefix,
+            ),
+            source="structured admin contributor-widget card renderer",
+        )
+
 
 def _render_contributor_card(
     registry: WidgetRegistry,
+    scope: RenderScope,
     widget_index: int,
     widget_def: DashboardWidgetDefinition,
     width: str,
@@ -407,9 +436,11 @@ def _render_contributor_card(
     # skeleton would pulse forever on a failed widget and look like a hang
     # rather than an error. Errors are surfaced in the card itself, next to
     # the widget that failed, with a retry that re-fires the same request.
+    body_id = scope.id("body", key=widget_def.name)
+    card_id = scope.id("card", key=widget_def.name)
     body_kwargs: dict[str, Any] = {
         "class": "widget-body",
-        "id": f"widget-{widget_def.name}-body",
+        "id": body_id,
         "hx-get": widget_fetch_url(
             _admin_endpoint(widget_def.render_endpoint, admin_prefix), page_filters
         ),
@@ -433,7 +464,7 @@ def _render_contributor_card(
     card = el(
         "div",
         *card_children,
-        id=f"widget-card-{widget_def.name}",
+        id=card_id,
         data_widget_name=widget_def.name,
         class_=f"widget-card bg-card border border-border rounded-lg shadow p-4 group {col_span}".strip(),
         style=f"width:{width};",

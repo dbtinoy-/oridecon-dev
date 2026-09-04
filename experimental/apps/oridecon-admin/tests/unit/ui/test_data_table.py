@@ -4,9 +4,16 @@ from oridecon.admin.config import TableConfiguration
 from oridecon.admin.resources.base import Resource
 from oridecon.admin.resources.config import ResourceConfig
 from oridecon.admin.ui.organisms.data_table import DataTable
-from oridecon.ui import Zones
+from oridecon.ui import TrustedHTML, Zones
 from oridecon.ui.columns.types import TextColumn
 from oridecon.ui.core.base import render_to_string
+
+
+def test_data_table_attributes_its_serialized_component_output() -> None:
+    rendered = DataTable(columns=[TextColumn("name")], data=[]).render()
+
+    assert isinstance(rendered, TrustedHTML)
+    assert rendered.source == "structured admin DataTable renderer"
 
 
 def test_data_table_renders_empty_state_when_no_data():

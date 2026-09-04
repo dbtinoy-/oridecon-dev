@@ -25,9 +25,22 @@ that fires an HTMX PATCH to *reorder_url* with a JSON body::
 
 from __future__ import annotations
 
+# Security boundary: unlike the project convenience encoder, stdlib JSON
+# fails rather than coercing unsupported values while producing JS literals.
+import json  # noqa: TID251
 from typing import Any
 
-from oridecon.ui import Component, el
+from oridecon.ui import Component, el, trusted_html
+
+
+def _script_literal(value: str) -> str:
+    """Serialize a string for inline JavaScript without allowing tag closure."""
+    return (
+        json.dumps(value, ensure_ascii=True)
+        .replace("<", "\\u003c")
+        .replace(">", "\\u003e")
+        .replace("&", "\\u0026")
+    )
 
 
 class SortableRecordList(Component):
@@ -84,7 +97,6 @@ class SortableRecordList(Component):
         list_el = el(
             "ul",
             *row_els,
-            id="sortable-list",
             class_=(
                 "divide-y divide-border rounded-lg border border-border overflow-hidden"
             ),
@@ -164,6 +176,9 @@ class SortableRecordList(Component):
 
     def _alpine_script(self) -> Any:
         """Render the inline Alpine.js + SortableJS setup script."""
+        reorder_url = _script_literal(self.reorder_url)
+        target = _script_literal(self.hx_target)
+        swap = _script_literal(self.hx_swap)
         js = (
             "function sortableRecords() {"
             "  return {"
@@ -180,9 +195,9 @@ class SortableRecordList(Component):
             "    saveOrder() {"
             "      const items = this.$refs.sortableList.querySelectorAll('li');"
             "      const order = Array.from(items).map(el => el.dataset.id);"
-            "      htmx.ajax('PATCH', '" + self.reorder_url + "', {"
-            "        target: '" + self.hx_target + "',"
-            "        swap: '" + self.hx_swap + "',"
+            "      htmx.ajax('PATCH', " + reorder_url + ", {"
+            "        target: " + target + ","
+            "        swap: " + swap + ","
             "        values: { order: order }"
             "      });"
             "      this.dirty = false;"
@@ -190,4 +205,8 @@ class SortableRecordList(Component):
             "  };"
             "}"
         )
-        return el("script", js, type="text/javascript")
+        return el(
+            "script",
+            trusted_html(js, source="generated SortableRecordList controller"),
+            type="text/javascript",
+        )

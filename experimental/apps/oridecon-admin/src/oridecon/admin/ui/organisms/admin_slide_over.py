@@ -13,9 +13,25 @@ via HTMX ``innerHTML`` swap, which is already wired in the AdminShell.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import Any
 
-from oridecon.ui import SlideOver, Zones, el, raw, render_to_string
+from oridecon.ui import (
+    SlideOver,
+    TrustedHTML,
+    Zones,
+    el,
+    get_render_scope,
+    js_string,
+    render_to_string,
+    trusted_html,
+)
+
+
+def _static_confirmation_markup(value: str) -> TrustedHTML:
+    """Attribute framework-owned static confirmation icon markup."""
+    return trusted_html(value, source="static admin confirmation icon")
+
 
 # ---------------------------------------------------------------------------
 # Helper: render a SlideOver fragment into the SLIDE_OVER zone
@@ -37,7 +53,8 @@ def render_slide_over_fragment(
 
     Args:
         title: Panel heading text.
-        content: Any renderable component or HTML string for the body.
+        content: Structured renderable body. Plain strings render as text;
+            pre-rendered markup must use ``TrustedHTML`` explicitly.
         subtitle: Optional secondary heading text.
         footer: Optional list of footer components (buttons, etc.).
         size: SlideOver width — ``sm``, ``md``, ``lg``, ``xl``, ``2xl``, ``full``.
@@ -46,14 +63,6 @@ def render_slide_over_fragment(
     Returns:
         HTML string ready to swap into ``#slide-over-container``.
     """
-    content_html = (
-        raw(render_to_string(content))
-        if hasattr(content, "render")
-        else raw(content)
-        if isinstance(content, str)
-        else content
-    )
-
     panel = SlideOver(
         title=title,
         subtitle=subtitle,
@@ -63,7 +72,7 @@ def render_slide_over_fragment(
         size=size,
         variant=variant,
         footer=footer or [],
-        children=[content_html],
+        children=[content],
     )
     return render_to_string(panel)
 
@@ -79,10 +88,11 @@ def render_delete_confirm(
     delete_url: str,
     cancel_label: str = "Cancel",
     confirm_label: str = "Delete",
-    message: str | None = None,
+    message: Any | None = None,
     extra_warning: str | None = None,
     hx_target: str | None = None,
     hx_swap: str | None = None,
+    table_key: str | None = None,
 ) -> str:
     """
     Render a delete-confirmation slide-over fragment.
@@ -100,8 +110,20 @@ def render_delete_confirm(
         hx_target: HTMX target zone after deletion (default: DATA zone).
         hx_swap: HTMX swap mode (default: DATA zone swap mode).
     """
-    target = hx_target or Zones.DATA.selector
+    target = hx_target or (
+        f"#{Zones.table_zone_id(Zones.DATA, table_key=table_key)}"
+        if table_key
+        else Zones.DATA.selector
+    )
     swap = hx_swap or Zones.DATA.swap_mode.value
+    confirm_input_id = (
+        get_render_scope()
+        .child("delete-confirm")
+        .id(
+            "input",
+            key=delete_url,
+        )
+    )
 
     default_message = (
         "You are about to permanently delete ",
@@ -120,7 +142,7 @@ def render_delete_confirm(
             {
                 "class": "flex items-start gap-4 rounded-xl bg-destructive/10 border border-destructive/30 p-4"
             },
-            raw(
+            _static_confirmation_markup(
                 '<div class="flex-shrink-0 mt-0.5">'
                 '<svg class="h-6 w-6 text-destructive" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">'
                 '<path stroke-linecap="round" stroke-linejoin="round" '
@@ -139,7 +161,7 @@ def render_delete_confirm(
                 el(
                     "p",
                     {"class": "mt-1 text-sm text-destructive leading-relaxed"},
-                    *([raw(message)] if message is not None else list(default_message)),
+                    *([message] if message is not None else list(default_message)),
                 ),
             ),
         ),
@@ -163,7 +185,7 @@ def render_delete_confirm(
             el(
                 "label",
                 {
-                    "for": "delete-confirm-input",
+                    "for": confirm_input_id,
                     "class": "block text-sm font-medium text-foreground mb-1",
                 },
                 "Type ",
@@ -178,7 +200,7 @@ def render_delete_confirm(
                 "input",
                 {
                     "type": "text",
-                    "id": "delete-confirm-input",
+                    "id": confirm_input_id,
                     "name": "delete_confirm",
                     "x-model": "confirmText",
                     "placeholder": "Type DELETE here",
@@ -230,7 +252,7 @@ def render_delete_confirm(
                 "disabled:opacity-50 disabled:cursor-not-allowed"
             ),
         },
-        raw(
+        _static_confirmation_markup(
             '<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">'
             '<path stroke-linecap="round" stroke-linejoin="round" '
             'd="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>'
@@ -258,6 +280,7 @@ def render_bulk_delete_confirm(
     *,
     record_count: int,
     bulk_url: str,
+    record_ids: Sequence[str] = (),
     action: str = "delete",
     title: str = "Delete Records",
     heading: str = "Confirm Bulk Deletion",
@@ -265,10 +288,11 @@ def render_bulk_delete_confirm(
     subtitle: str | None = None,
     cancel_label: str = "Cancel",
     confirm_label: str = "Delete",
-    message: str | None = None,
+    message: Any | None = None,
     extra_warning: str | None = None,
     hx_target: str | None = None,
     hx_swap: str | None = None,
+    table_key: str | None = None,
     variant: str = "danger",
     confirm_button_class: str | None = None,
 ) -> str:
@@ -284,6 +308,7 @@ def render_bulk_delete_confirm(
     Args:
         record_count: Number of records being affected.
         bulk_url: HTMX POST endpoint for the bulk action.
+        record_ids: Selection captured when the confirmation panel opens.
         action: Value posted in the ``action`` field (default ``"delete"``).
         title: Slide-over panel title (default ``"Delete Records"``).
         heading: Body heading text (default ``"Confirm Bulk Deletion"``).
@@ -299,8 +324,20 @@ def render_bulk_delete_confirm(
         confirm_button_class: Tailwind classes for the confirm button
             (default: destructive styling).
     """
-    target = hx_target or Zones.DATA.selector
+    target = hx_target or (
+        f"#{Zones.table_zone_id(Zones.DATA, table_key=table_key)}"
+        if table_key
+        else Zones.DATA.selector
+    )
     swap = hx_swap or Zones.DATA.swap_mode.value
+    confirm_input_id = (
+        get_render_scope()
+        .child("bulk-delete-confirm")
+        .id(
+            "input",
+            key=f"{bulk_url}-{action}",
+        )
+    )
 
     suffix = "s" if record_count != 1 else ""
     default_message = (
@@ -314,13 +351,17 @@ def render_bulk_delete_confirm(
     body = el(
         "div",
         {"x-data": "{ confirmText: '' }", "class": "space-y-4"},
+        *[
+            el("input", type="hidden", name="ids", value=record_id)
+            for record_id in record_ids
+        ],
         # Danger icon + message block
         el(
             "div",
             {
                 "class": "flex items-start gap-4 rounded-xl bg-destructive/10 border border-destructive/30 p-4"
             },
-            raw(
+            _static_confirmation_markup(
                 '<div class="flex-shrink-0 mt-0.5">'
                 '<svg class="h-6 w-6 text-destructive" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">'
                 '<path stroke-linecap="round" stroke-linejoin="round" '
@@ -339,7 +380,7 @@ def render_bulk_delete_confirm(
                 el(
                     "p",
                     {"class": "mt-1 text-sm text-destructive leading-relaxed"},
-                    *([raw(message)] if message is not None else list(default_message)),
+                    *([message] if message is not None else list(default_message)),
                 ),
             ),
         ),
@@ -363,7 +404,7 @@ def render_bulk_delete_confirm(
             el(
                 "label",
                 {
-                    "for": "bulk-delete-confirm-input",
+                    "for": confirm_input_id,
                     "class": "block text-sm font-medium text-foreground mb-1",
                 },
                 "Type ",
@@ -378,7 +419,7 @@ def render_bulk_delete_confirm(
                 "input",
                 {
                     "type": "text",
-                    "id": "bulk-delete-confirm-input",
+                    "id": confirm_input_id,
                     "name": "delete_confirm",
                     "x-model": "confirmText",
                     "placeholder": f"Type {confirm_phrase} here",
@@ -427,13 +468,17 @@ def render_bulk_delete_confirm(
             "hx-post": bulk_url,
             "hx-target": target,
             "hx-swap": swap,
-            "hx-vals": f'{{"action":"{action}"}}',
-            "hx-include": f"{Zones.TABLE.selector} [name='ids']:checked",
+            "hx-vals": f'{{"action":{js_string(action)}}}',
+            "hx-include": (
+                "closest [role='dialog']"
+                if record_ids
+                else f"{Zones.TABLE.selector} [name='ids']:checked"
+            ),
             "x-on:click": "open = false",
-            "x-bind:disabled": f"confirmText !== '{confirm_phrase}'",
+            "x-bind:disabled": f"confirmText !== {js_string(confirm_phrase)}",
             "class": confirm_button_class or default_button_class,
         },
-        raw(
+        _static_confirmation_markup(
             '<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">'
             '<path stroke-linecap="round" stroke-linejoin="round" '
             'd="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>'

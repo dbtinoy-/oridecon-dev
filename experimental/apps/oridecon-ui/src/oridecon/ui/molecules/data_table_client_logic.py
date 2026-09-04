@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from oridecon.ui import Zones, el, js_json, raw
+from oridecon.ui import Zones, el, js_json, trusted_html
 
 
 class DataTableScriptRenderer:
@@ -674,4 +674,7 @@ class DataTableScriptRenderer:
             }});
         }})();
         """
-        return el("script", raw(script_js))
+        return el(
+            "script",
+            trusted_html(script_js, source="generated DataTable client controller"),
+        )

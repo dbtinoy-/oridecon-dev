@@ -16,16 +16,16 @@ def test_pagination_does_not_duplicate():
     )
     marker = f'id="{pagination_id}"'
 
-    html1 = dt.render()
+    html1 = str(dt.render())
     assert html1.count(marker) == 1
 
     # Simulate moving to next page / filter change and re-render
     dt.state.page = 2
     dt.data = [{"id": i, "name": f"name{i}"} for i in range(11, 21)]
-    html2 = dt.render()
+    html2 = str(dt.render())
     assert html2.count(marker) == 1
 
     # Simulate a sort/filter change
     dt.state.sort_by = "name"
-    html3 = dt.render()
+    html3 = str(dt.render())
     assert html3.count(marker) == 1

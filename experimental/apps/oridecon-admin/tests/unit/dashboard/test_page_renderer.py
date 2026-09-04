@@ -8,6 +8,7 @@ from oridecon.admin.dashboard.page_renderer import render_page_content
 from oridecon.admin.dashboard.route_integrator import StructuredPageHandler
 from oridecon.contracts.admin import PageContent, PaginationContent
 from oridecon.contracts.admin.widget_content import EmptyContent
+from oridecon.ui import Zones
 
 
 async def test_render_page_content_returns_html_with_title() -> None:
@@ -30,6 +31,9 @@ async def test_render_page_content_includes_pagination_when_total_positive() -> 
     html = response.body.decode()
     assert "of" in html
     assert "25" in html
+    data_id = Zones.table_zone_id(Zones.DATA, table_key="page-/t")
+    assert f'hx-target="#{data_id}"' in html
+    assert f'hx-select="#{data_id}"' in html
 
 
 async def test_render_page_content_emits_table_data_swap_zone() -> None:
@@ -46,7 +50,8 @@ async def test_render_page_content_emits_table_data_swap_zone() -> None:
         )
     )
     html = response.body.decode()
-    assert 'id="table-data"' in html
+    data_id = Zones.table_zone_id(Zones.DATA, table_key="page-/t")
+    assert f'id="{data_id}"' in html
 
 
 async def test_render_page_content_table_markup_is_not_escaped() -> None:

@@ -1016,7 +1016,9 @@ class BulkActionHandler:
             html = render_bulk_delete_confirm(
                 record_count=record_count,
                 bulk_url=bulk_url,
+                record_ids=ids,
                 action=action,
+                table_key=resource.name or None,
                 confirm_label=confirm_label,
                 confirm_phrase=confirm_phrase,
             )

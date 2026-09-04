@@ -9,7 +9,7 @@ from starlette.requests import Request
 from starlette.responses import HTMLResponse
 
 from oridecon.contracts.admin.protocols import AdminContributorRegistryProtocol
-from oridecon.ui import el
+from oridecon.ui import el, get_render_scope
 
 
 async def render_customize_panel(
@@ -110,11 +110,19 @@ async def render_customize_panel(
     customize_save_url = (
         admin_prefix_from_request(request).rstrip("/") or "/admin"
     ) + "/core/widgets/customize/save"
+    form_id = (
+        get_render_scope()
+        .child("dashboard-customize")
+        .id(
+            "form",
+            key=f"{tenant_id}-{user_id}",
+        )
+    )
     form = el(
         "form",
         el("input", type_="hidden", name="csrf_token", value=csrf_token or ""),
         *sections,
-        id="widget-customize-form",
+        id=form_id,
         **{
             "hx-post": customize_save_url,
             "hx-swap": "none",
@@ -141,7 +149,7 @@ async def render_customize_panel(
                     "button",
                     "Save All Changes",
                     type_="submit",
-                    form="widget-customize-form",
+                    form=form_id,
                     class_="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/90 transition-colors",
                 ),
             ],

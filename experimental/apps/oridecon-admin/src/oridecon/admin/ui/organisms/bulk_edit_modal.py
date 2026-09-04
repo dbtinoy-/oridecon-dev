@@ -9,11 +9,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from htpy import div, form, input_, label, option, p, select, span, textarea
+from htpy import div, form, label, option, p, select
 
 from oridecon.admin.actions.bulk_manager import BulkEditField
 from oridecon.admin.ui.organisms.admin_slide_over import render_slide_over_fragment
-from oridecon.ui import Button, el, raw
+from oridecon.ui import Button, Zones, el, get_render_scope, js_string
 
 
 def bulk_edit_modal(
@@ -21,6 +21,9 @@ def bulk_edit_modal(
     fields: list[BulkEditField],
     action_url: str,
     preview_items: list[str] | None = None,
+    *,
+    hx_target: str | None = None,
+    modal_key: str | None = None,
 ) -> str:
     """
     Render a bulk-edit slide-over panel.
@@ -34,6 +37,20 @@ def bulk_edit_modal(
     Returns:
         HTML string for the SlideOver zone (``#slide-over-container``)
     """
+    identity_key = modal_key or action_url or "default"
+    scope = get_render_scope().child("bulk-edit")
+    form_id = scope.id("form", key=identity_key)
+    field_nodes = [
+        _render_field_node(
+            field,
+            field_id=scope.id(
+                "field",
+                key=f"{identity_key}-{index}-{field.name}",
+            ),
+        )
+        for index, field in enumerate(fields)
+    ]
+
     preview_block: Any = ""
     if preview_items:
         preview_block = el(
@@ -80,12 +97,13 @@ def bulk_edit_modal(
         "div",
         {"class": "space-y-5"},
         preview_block,
-        raw(
-            f'<form id="bulk-edit-form" hx-post="{action_url}" '
-            'hx-target="#table-body" hx-swap="outerHTML">'
-            '<div class="space-y-4">'
-            + "".join(_render_field_html(f) for f in fields)
-            + "</div></form>"
+        el(
+            "form",
+            el("div", *field_nodes, class_="space-y-4"),
+            id=form_id,
+            hx_post=action_url,
+            hx_target=hx_target or Zones.DATA.selector,
+            hx_swap="outerHTML",
         ),
     )
 
@@ -107,7 +125,7 @@ def bulk_edit_modal(
         "button",
         {
             "type": "submit",
-            "form": "bulk-edit-form",
+            "form": form_id,
             "x-on:click": "open = false",
             "class": (
                 "inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium "
@@ -128,104 +146,57 @@ def bulk_edit_modal(
     )
 
 
-def _render_field_html(field: BulkEditField) -> str:
-    """Render a single form field as an HTML string (used in slide-over body)."""
-    field_id = f"bulk-edit-{field.name}"
-    input_cls = (
+def _render_field_node(field: BulkEditField, *, field_id: str) -> Any:
+    """Build one escaped, structured field for the bulk-edit form."""
+    input_class = (
         "mt-1 block w-full rounded-lg border border-border "
         "bg-card text-foreground px-3 py-2 text-sm "
         "focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
     )
-    required_attr = "required" if field.required else ""
-    req_star = (
-        '<span class="text-destructive ml-0.5">*</span>' if field.required else ""
-    )
-    label_html = (
-        f'<label for="{field_id}" class="block text-sm font-medium '
-        f'text-foreground mb-1">{field.label}{req_star}</label>'
+    label_node = el(
+        "label",
+        field.label,
+        (
+            el("span", "*", class_="text-destructive ml-0.5", aria_hidden=True)
+            if field.required
+            else ""
+        ),
+        for_=field_id,
+        class_="block text-sm font-medium text-foreground mb-1",
     )
 
+    common = {
+        "id": field_id,
+        "name": field.name,
+        "required": field.required,
+        "class_": input_class,
+    }
     if field.field_type == "select" and field.options:
-        options_html = '<option value="">-- No change --</option>' + "".join(
-            f'<option value="{v}">{lbl}</option>' for v, lbl in field.options
+        input_node = el(
+            "select",
+            el("option", "-- No change --", value=""),
+            *[
+                el("option", option_label, value=str(value))
+                for value, option_label in field.options
+            ],
+            **common,
         )
-        input_html = f'<select id="{field_id}" name="{field.name}" {required_attr} class="{input_cls}">{options_html}</select>'
     elif field.field_type == "textarea":
-        input_html = f'<textarea id="{field_id}" name="{field.name}" rows="3" {required_attr} class="{input_cls}"></textarea>'
+        input_node = el("textarea", rows="3", **common)
     elif field.field_type == "checkbox":
-        input_html = (
-            f'<input type="checkbox" id="{field_id}" name="{field.name}" value="true" '
-            f'class="mt-1 h-4 w-4 rounded border-border text-primary-600 focus:ring-primary-500">'
+        common["class_"] = (
+            "mt-1 h-4 w-4 rounded border-border text-primary-600 focus:ring-primary-500"
         )
+        input_node = el("input", type="checkbox", value="true", **common)
     else:
-        input_html = (
-            f'<input type="{field.field_type}" id="{field_id}" name="{field.name}" '
-            f'{required_attr} class="{input_cls}">'
-        )
+        input_node = el("input", type=field.field_type, **common)
 
-    help_html = (
-        f'<p class="mt-1 text-xs text-muted-foreground">{field.help_text}</p>'
+    help_node = (
+        el("p", field.help_text, class_="mt-1 text-xs text-muted-foreground")
         if field.help_text
         else ""
     )
-    return f'<div class="space-y-1">{label_html}{input_html}{help_html}</div>'
-
-    """Render a single form field."""
-    field_id = f"bulk-edit-{field.name}"
-
-    # Label
-    label_elem = label(
-        for_=field_id,
-        class_="block text-sm font-medium text-foreground",
-    )[
-        field.label,
-        span(class_="text-destructive")[" *"] if field.required else None,
-    ]
-
-    # Input element based on type
-    if field.field_type == "select" and field.options:
-        input_elem = select(
-            id=field_id,
-            name=field.name,
-            required=field.required,
-            class_="mt-1 block w-full rounded-md border-border dark:bg-muted dark:text-foreground shadow-sm focus:border-ring focus:ring-ring sm:text-sm",
-        )[
-            option(value="")["-- No change --"],
-            [option(value=str(vl[0]))[vl[1]] for vl in field.options],
-        ]
-    elif field.field_type == "textarea":
-        input_elem = textarea(
-            id=field_id,
-            name=field.name,
-            required=field.required,
-            rows="3",
-            class_="mt-1 block w-full rounded-md border-border dark:bg-muted dark:text-foreground shadow-sm focus:border-ring focus:ring-ring sm:text-sm",
-        )
-    elif field.field_type == "checkbox":
-        input_elem = input_(
-            type="checkbox",
-            id=field_id,
-            name=field.name,
-            value="true",
-            class_="mt-1 h-4 w-4 rounded border-border text-primary focus:ring-ring",
-        )
-    else:
-        input_elem = input_(
-            type=field.field_type,
-            id=field_id,
-            name=field.name,
-            required=field.required,
-            class_="mt-1 block w-full rounded-md border-border dark:bg-muted dark:text-foreground shadow-sm focus:border-ring focus:ring-ring sm:text-sm",
-        )
-
-    # Help text
-    help_elem = (
-        p(class_="mt-1 text-sm text-muted-foreground")[field.help_text]
-        if field.help_text
-        else None
-    )
-
-    return div(class_="form-field")[label_elem, input_elem, help_elem]
+    return el("div", label_node, input_node, help_node, class_="space-y-1")
 
 
 def bulk_assign_modal(
@@ -236,6 +207,9 @@ def bulk_assign_modal(
     field_name: str = "value",
     allow_null: bool = False,
     confirm_message: str | None = None,
+    *,
+    hx_target: str | None = None,
+    modal_key: str | None = None,
 ) -> Any:
     """
     Render a modal for bulk assign operations (status, owner, etc.).
@@ -252,9 +226,18 @@ def bulk_assign_modal(
     Returns:
         htpy component for the modal
     """
+    identity_key = modal_key or f"{action_url}-{field_name}"
+    scope = get_render_scope().child("bulk-assign")
+    modal_id = scope.id("modal", key=identity_key)
+    form_id = scope.id("form", key=identity_key)
+    value_id = scope.id("value", key=identity_key)
+    close_script = (
+        f"document.getElementById({js_string(modal_id)}).classList.add('hidden')"
+    )
+
     return div(
         class_="fixed inset-0 bg-muted bg-opacity-50 hidden",
-        id="bulk-assign-modal",
+        id=modal_id,
     )[
         div(class_="flex items-center justify-center min-h-screen px-4")[
             div(
@@ -267,10 +250,12 @@ def bulk_assign_modal(
                             f"Bulk Assign {field_label}"
                         ],
                         Button(
+                            "✕",
                             type="button",
-                            color="ghost",
-                            onclick="document.getElementById('bulk-assign-modal').classList.add('hidden')",
-                        )["✕"],  # type: ignore[index]
+                            variant="ghost",
+                            onclick=close_script,
+                            aria_label="Close bulk assignment",
+                        ),
                     ],
                 ],
                 # Body
@@ -286,17 +271,17 @@ def bulk_assign_modal(
                         ]
                     ),
                     form(
-                        id="bulk-assign-form",
+                        id=form_id,
                         hx_post=action_url,
-                        hx_target="#table-body",
+                        hx_target=hx_target or Zones.DATA.selector,
                         hx_swap="outerHTML",
                     )[
                         label(
-                            for_="bulk-assign-value",
+                            for_=value_id,
                             class_="block text-sm font-medium text-foreground mb-2",
                         )[f"Select {field_label}"],
                         select(
-                            id="bulk-assign-value",
+                            id=value_id,
                             name=field_name,
                             required=not allow_null,
                             class_="block w-full rounded-md border-border dark:bg-muted dark:text-foreground shadow-sm focus:border-ring focus:ring-ring",
@@ -318,16 +303,17 @@ def bulk_assign_modal(
                     class_="px-6 py-4 border-t border-border flex justify-end space-x-3",
                 )[
                     Button(
+                        "Cancel",
                         type="button",
-                        color="secondary",
-                        onclick="document.getElementById('bulk-assign-modal').classList.add('hidden')",
-                    )["Cancel"],  # type: ignore[index]
+                        variant="secondary",
+                        onclick=close_script,
+                    ),
                     Button(
+                        "Assign",
                         type="submit",
-                        form="bulk-assign-form",
-                        color="primary",
-                        onclick="document.getElementById('bulk-assign-modal').classList.add('hidden')",
-                    )["Assign"],  # type: ignore[index]
+                        form=form_id,
+                        onclick=close_script,
+                    ),
                 ],
             ]
         ]
@@ -340,6 +326,9 @@ def bulk_confirm_dialog(
     preview_items: list[str] | None = None,
     is_danger: bool = False,
     action_url: str = "",
+    *,
+    hx_target: str | None = None,
+    dialog_key: str | None = None,
 ) -> Any:
     """
     Render a confirmation dialog for bulk actions.
@@ -354,10 +343,22 @@ def bulk_confirm_dialog(
     Returns:
         htpy component for the confirmation dialog
     """
+    identity_key = dialog_key or f"{action_url}-{action_name}"
+    dialog_id = (
+        get_render_scope()
+        .child("bulk-confirm")
+        .id(
+            "dialog",
+            key=identity_key,
+        )
+    )
+    close_script = (
+        f"document.getElementById({js_string(dialog_id)}).classList.add('hidden')"
+    )
 
     return div(
         class_="fixed inset-0 bg-muted bg-opacity-50 hidden",
-        id="bulk-confirm-dialog",
+        id=dialog_id,
     )[
         div(class_="flex items-center justify-center min-h-screen px-4")[
             div(
@@ -401,18 +402,20 @@ def bulk_confirm_dialog(
                     class_="px-6 py-4 border-t border-border flex justify-end space-x-3",
                 )[
                     Button(
+                        "Cancel",
                         type="button",
-                        color="secondary",
-                        onclick="document.getElementById('bulk-confirm-dialog').classList.add('hidden')",
-                    )["Cancel"],  # type: ignore[index]
+                        variant="secondary",
+                        onclick=close_script,
+                    ),
                     Button(
+                        action_name.title(),
                         type="button",
-                        color="danger" if is_danger else "primary",
+                        variant="destructive" if is_danger else "default",
                         hx_post=action_url,
-                        hx_target="#table-body",
+                        hx_target=hx_target or Zones.DATA.selector,
                         hx_swap="outerHTML",
-                        onclick="document.getElementById('bulk-confirm-dialog').classList.add('hidden')",
-                    )[action_name.title()],  # type: ignore[index]
+                        onclick=close_script,
+                    ),
                 ],
             ]
         ]
@@ -422,6 +425,8 @@ def bulk_confirm_dialog(
 def bulk_progress_indicator(
     action_name: str,
     progress_url: str,
+    *,
+    progress_key: str | None = None,
 ) -> Any:
     """
     Render a progress indicator for slow bulk actions.
@@ -435,9 +440,16 @@ def bulk_progress_indicator(
     Returns:
         htpy component for the progress indicator
     """
+    identity_key = progress_key or f"{progress_url}-{action_name}"
+    scope = get_render_scope().child("bulk-progress")
+    root_id = scope.id("root", key=identity_key)
+    bar_id = scope.id("bar", key=identity_key)
+    status_id = scope.id("status", key=identity_key)
+    errors_id = scope.id("errors", key=identity_key)
+
     return div(
         class_="fixed inset-0 bg-muted bg-opacity-50 flex items-center justify-center",
-        id="bulk-progress",
+        id=root_id,
     )[
         div(
             class_="bg-card rounded-lg shadow-xl max-w-md w-full p-6",
@@ -448,14 +460,14 @@ def bulk_progress_indicator(
             # Progress bar
             div(class_="w-full bg-muted rounded-full h-2.5 mb-2")[
                 div(
-                    id="progress-bar",
+                    id=bar_id,
                     class_="bg-primary h-2.5 rounded-full transition-all duration-300",
                     style="width: 0%",
                 )
             ],
             # Status text
             div(
-                id="progress-status",
+                id=status_id,
                 class_="text-sm text-muted-foreground text-center",
                 hx_get=progress_url,
                 hx_trigger="every 500ms",
@@ -463,7 +475,7 @@ def bulk_progress_indicator(
             )["Starting..."],
             # Errors
             div(
-                id="progress-errors",
+                id=errors_id,
                 class_="mt-4 text-sm text-destructive",
             ),
         ]
