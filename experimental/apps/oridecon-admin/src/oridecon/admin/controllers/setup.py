@@ -1,4 +1,4 @@
-"""First-run setup controller for Oridecon Admin.
+"""First-run setup controller for Lexigram Admin.
 
 Provides the initial account creation wizard shown when no admin users exist.
 The SetupMiddleware redirects all admin requests here until at least one
@@ -287,7 +287,7 @@ class SetupController(AdminController):
             # Treat any persistence failure (duplicate email, DB error, etc.)
             # as a non-fatal setup error that is shown back to the user.
             # Full detail goes to the log; the page gets a humanized message
-            # (no [ORI_ERR_*] codes or docs links).
+            # (no [LEX_ERR_*] codes or docs links).
             from oridecon.admin.controllers._errors import humanize_error
 
             logger.error("setup.create_user_failed", email=email, error=str(exc))

@@ -30,12 +30,12 @@ class TestLiveWidgetStreamScript:
         script = live_widget_stream_script("/admin")
         assert "readyState!==2" in script
         # The handle itself is stored, not a bare boolean.
-        assert "window.__orideconLiveWidgets=es;" in script
+        assert "window.__lexigramLiveWidgets=es;" in script
 
     def test_registers_an_error_handler_that_clears_the_handle(self) -> None:
         script = live_widget_stream_script("/admin")
         assert "es.onerror=" in script
-        assert "window.__orideconLiveWidgets=null;" in script
+        assert "window.__lexigramLiveWidgets=null;" in script
 
     def test_closes_the_stream_on_unload(self) -> None:
         script = live_widget_stream_script("/admin")

@@ -1,6 +1,6 @@
 """Form (organisms) HTMX submission behavior.
 
-The base :class:`~oridecon.ui.organisms.forms.Form` must progressive-enhance
+The base :class:`~lexigram.ui.organisms.forms.Form` must progressive-enhance
 native POST forms: with htmx present the submit is intercepted (``hx-post`` +
 ``hx-target``), without JavaScript the native action/method POST still works.
 No inline ``onclick`` submit JavaScript should ever be emitted.

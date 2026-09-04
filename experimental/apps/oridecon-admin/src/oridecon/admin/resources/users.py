@@ -1,5 +1,5 @@
 """
-User resource definition for Oridecon Admin.
+User resource definition for Lexigram Admin.
 
 This module defines the UserResource class that provides admin interface
 for managing users with date range filtering capabilities.

@@ -1,7 +1,7 @@
 """Smoke: AdminProvider's exported contracts resolve after register+boot.
 
 AdminProvider cannot boot in a bare container: freeze-time validation
-(ORI_ERR_DI_008) requires DatabaseProviderProtocol and FlagManagerProtocol to
+(LEX_ERR_DI_008) requires DatabaseProviderProtocol and FlagManagerProtocol to
 be registered. Both are satisfied with MagicMock stand-ins via
 ``TestEnvironment.override``, which ``setup()`` applies before the app starts.
 """

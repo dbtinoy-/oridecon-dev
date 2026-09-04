@@ -16,7 +16,7 @@ from oridecon.ui import EmailInput, PasswordInput, TextInput, el
 
 def render_setup_page(
     error: str = "",
-    site_name: str = "Oridecon Admin",
+    site_name: str = "Lexigram Admin",
     locked: bool = False,
     csrf_token: str = "",
     setup_token_required: bool = False,

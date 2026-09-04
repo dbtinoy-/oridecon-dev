@@ -1,6 +1,6 @@
 """Regression tests for RolesResource (RBAC dataclass-backed resource).
 
-RolesResource previously imported a nonexistent ``oridecon.admin.models.auth``
+RolesResource previously imported a nonexistent ``lexigram.admin.models.auth``
 module, making the module unimportable.  It is now bound to the canonical
 ``RoleDefinition`` dataclass, and its create form must render schema fields with no
 errors.

@@ -252,7 +252,7 @@ def test_bulk_csv_action_uses_native_download_submission():
 
     assert 'data-bulk-download-url="/admin/users/bulk"' in rendered
     assert 'data-bulk-action="export"' in rendered
-    assert "OrideconDownloadBulk" in rendered
+    assert "LexigramDownloadBulk" in rendered
     assert "hx-post" not in rendered
 
 

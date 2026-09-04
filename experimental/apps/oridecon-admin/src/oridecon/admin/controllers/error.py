@@ -1,4 +1,4 @@
-"""Error handler controller for Oridecon Admin.
+"""Error handler controller for Lexigram Admin.
 
 Provides user-friendly error pages for common HTTP errors.
 """

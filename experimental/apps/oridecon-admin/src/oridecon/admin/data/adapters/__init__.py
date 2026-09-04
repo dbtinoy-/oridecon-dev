@@ -1,4 +1,4 @@
-"""Data source adapters for Oridecon Admin."""
+"""Data source adapters for Lexigram Admin."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Semantic color maps for Oridecon UI components.
+"""Semantic color maps for Lexigram UI components.
 
 All values use CSS variable references (Tailwind arbitrary value syntax)
 instead of hardcoded color classes. Tokens are resolved from ShadCN-

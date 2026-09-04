@@ -212,7 +212,7 @@ class TestDynamicCategories:
         categories, visible = controller._build_categories(req)
         assert len(categories) == 1
         assert categories[0].name == "built-in"
-        assert len(visible) == 9
+        assert len(visible) == 10
 
 
 class TestTenantScopedSettings:
@@ -229,7 +229,7 @@ class TestTenantScopedSettings:
             return "tenant-42"
 
         monkeypatch.setattr(
-            "oridecon.admin.controllers.settings.resolve_tenant_id", _fake_resolve
+            "lexigram.admin.controllers.settings.resolve_tenant_id", _fake_resolve
         )
 
         called_with = {}
@@ -261,7 +261,7 @@ class TestTenantScopedSettings:
             )
 
         monkeypatch.setattr(
-            "oridecon.admin.controllers.settings.resolve_tenant_id", _fail_resolve
+            "lexigram.admin.controllers.settings.resolve_tenant_id", _fail_resolve
         )
 
         req = _mock_request(user=_FakeUser())

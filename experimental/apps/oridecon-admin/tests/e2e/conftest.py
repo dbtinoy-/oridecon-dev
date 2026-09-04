@@ -4,7 +4,7 @@ All tests in this directory are tagged ``@pytest.mark.e2e`` and require a
 running ASGI server + full framework stack.  They are skipped by default and
 only run when the ``--run-e2e`` flag is explicitly passed:
 
-    uv run pytest --run-e2e oridecon-admin/tests/e2e/
+    uv run pytest --run-e2e lexigram-admin/tests/e2e/
 
 """
 

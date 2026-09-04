@@ -1,5 +1,5 @@
 """
-Zone-Based UI Architecture for Oridecon Admin.
+Zone-Based UI Architecture for Lexigram Admin.
 
 A Zone is a DOM subtree with:
 - A unique ID

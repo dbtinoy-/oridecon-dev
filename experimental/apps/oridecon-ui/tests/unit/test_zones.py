@@ -52,7 +52,7 @@ class TestZone:
 
 class TestZones:
     def test_table_zone(self) -> None:
-        assert Zones.TABLE.id == "oridecon-table"
+        assert Zones.TABLE.id == "lexigram-table"
         assert Zones.TABLE.swappable is True
         assert Zones.TABLE.swap_mode == SwapMode.OUTER_HTML
 

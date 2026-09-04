@@ -1,7 +1,7 @@
 """Public-API guard test.
 
-Every symbol in CANONICAL_API_SYMBOLS must be importable from `oridecon.ui`.
-This test prevents silent drift: if a downstream package (like oridecon-admin)
+Every symbol in CANONICAL_API_SYMBOLS must be importable from `lexigram.ui`.
+This test prevents silent drift: if a downstream package (like lexigram-admin)
 depends on a name, that name must live on the package surface — never via
 a deep-path import.
 """
@@ -14,7 +14,7 @@ import re
 import pytest
 
 # Symbols the public API promises. Grouped by responsibility for readability.
-# Order does not matter; the test resolves each name through `oridecon.ui`.
+# Order does not matter; the test resolves each name through `lexigram.ui`.
 CANONICAL_API_SYMBOLS: list[str] = [
     # Core primitives
     "Component", "Element", "RawHTML", "el", "raw", "render_to_string",
@@ -88,17 +88,17 @@ CANONICAL_API_SYMBOLS: list[str] = [
 
 @pytest.mark.parametrize("name", CANONICAL_API_SYMBOLS)
 def test_public_api_symbol_resolves(name: str) -> None:
-    """Every canonical name must resolve from `oridecon.ui`.
+    """Every canonical name must resolve from `lexigram.ui`.
 
     If this test fails, either:
-    1. Add the symbol to `LAZY_IMPORTS` in `oridecon/ui/exports/lazy.py`, OR
+    1. Add the symbol to `LAZY_IMPORTS` in `lexigram/ui/exports/lazy.py`, OR
     2. Remove it from CANONICAL_API_SYMBOLS if it should not be public.
 
     Never let a downstream package deep-path-import what should be public.
     """
-    ui = importlib.import_module("oridecon.ui")
+    ui = importlib.import_module("lexigram.ui")
     resolved = getattr(ui, name)
-    assert resolved is not None, f"`oridecon.ui.{name}` resolved to None"
+    assert resolved is not None, f"`lexigram.ui.{name}` resolved to None"
 
 
 def test_canonical_list_has_no_duplicates() -> None:
@@ -108,8 +108,8 @@ def test_canonical_list_has_no_duplicates() -> None:
 
 
 def test_dir_includes_all_canonical_names() -> None:
-    """`dir(oridecon.ui)` should surface every canonical name for IDEs."""
-    ui = importlib.import_module("oridecon.ui")
+    """`dir(lexigram.ui)` should surface every canonical name for IDEs."""
+    ui = importlib.import_module("lexigram.ui")
     dir_names = set(dir(ui))
     missing = set(CANONICAL_API_SYMBOLS) - dir_names
     assert not missing, f"Missing from dir(): {sorted(missing)}"
@@ -119,7 +119,7 @@ def _load_lazy_imports() -> set[str]:
     """Load the set of public symbols from the lazy import map."""
     repo_root = os.path.join(os.path.dirname(__file__), "..", "..", "..")
     ui_init = os.path.join(
-        repo_root, "oridecon-ui", "src", "oridecon", "ui", "exports", "lazy.py"
+        repo_root, "lexigram-ui", "src", "lexigram", "ui", "exports", "lazy.py"
     )
     with open(ui_init) as f:
         content = f.read()
@@ -150,7 +150,7 @@ def _load_lazy_imports() -> set[str]:
 
 
 DEEP_IMPORT_RE = re.compile(
-    r"^from oridecon\.ui\.(?:atoms|molecules|organisms|core)\.\w+\s+import\s+(.+)$",
+    r"^from lexigram\.ui\.(?:atoms|molecules|organisms|core)\.\w+\s+import\s+(.+)$",
 )
 
 
@@ -159,11 +159,11 @@ def test_no_phantom_deep_imports() -> None:
     public surface instead, unless the symbol is genuinely not public.
 
     This test prevents a downstream package from silently depending on
-    a oridecon.ui internal without the author of oridecon.ui knowing.
+    a lexigram.ui internal without the author of lexigram.ui knowing.
     """
     public = _load_lazy_imports()
     repo_root = os.path.join(os.path.dirname(__file__), "..", "..", "..")
-    packages = ["oridecon-admin", "oridecon-web"]
+    packages = ["lexigram-admin", "lexigram-web"]
     violations: list[str] = []
 
     for pkg in packages:

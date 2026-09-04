@@ -52,9 +52,9 @@ class TestLockErrors:
         assert issubclass(LockTimeoutError, LockError)
 
     def test_lock_code(self) -> None:
-        assert LockError._code == "ORI_ERR_ADMIN_023"
-        assert LockAcquisitionError._code == "ORI_ERR_ADMIN_024"
-        assert LockTimeoutError._code == "ORI_ERR_ADMIN_025"
+        assert LockError._code == "LEX_ERR_ADMIN_023"
+        assert LockAcquisitionError._code == "LEX_ERR_ADMIN_024"
+        assert LockTimeoutError._code == "LEX_ERR_ADMIN_025"
 
 
 # ---------------------------------------------------------------------------

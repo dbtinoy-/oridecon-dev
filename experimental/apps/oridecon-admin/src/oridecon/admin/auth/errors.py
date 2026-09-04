@@ -19,13 +19,13 @@ from oridecon.contracts.exceptions.domain import DomainError
 class AdminAuthError(DomainError):
     """Base exception for all admin authentication errors."""
 
-    _code: str = "ORI_ERR_ADMIN_010"
+    _code: str = "LEX_ERR_ADMIN_010"
 
 
 class InvalidCredentialsError(AdminAuthError):
     """Raised when email/password combination is incorrect."""
 
-    _code: str = "ORI_ERR_ADMIN_011"
+    _code: str = "LEX_ERR_ADMIN_011"
 
 
 class AccountLockedError(AdminAuthError):
@@ -38,7 +38,7 @@ class AccountLockedError(AdminAuthError):
         reason: Categorised reason string (lockout, rate_limit, etc.).
     """
 
-    _code: str = "ORI_ERR_ADMIN_012"
+    _code: str = "LEX_ERR_ADMIN_012"
 
     def __init__(
         self,
@@ -75,7 +75,7 @@ class RateLimitExceededError(AdminAuthError):
         reason: Categorised reason string.
     """
 
-    _code: str = "ORI_ERR_ADMIN_013"
+    _code: str = "LEX_ERR_ADMIN_013"
 
     def __init__(
         self,
@@ -102,85 +102,85 @@ class RateLimitExceededError(AdminAuthError):
 class SessionNotFoundError(AdminAuthError):
     """Raised when the requested session does not exist."""
 
-    _code: str = "ORI_ERR_ADMIN_014"
+    _code: str = "LEX_ERR_ADMIN_014"
 
 
 class SessionExpiredError(AdminAuthError):
     """Raised when the session has exceeded its idle or absolute timeout."""
 
-    _code: str = "ORI_ERR_ADMIN_015"
+    _code: str = "LEX_ERR_ADMIN_015"
 
 
 class CsrfValidationError(AdminAuthError):
     """Raised when CSRF token is missing, invalid, or expired."""
 
-    _code: str = "ORI_ERR_ADMIN_016"
+    _code: str = "LEX_ERR_ADMIN_016"
 
 
 class PasswordPolicyError(AdminAuthError):
     """Raised when a password does not meet policy requirements."""
 
-    _code: str = "ORI_ERR_ADMIN_017"
+    _code: str = "LEX_ERR_ADMIN_017"
 
 
 class SetupAlreadyCompletedError(AdminAuthError):
     """Raised when setup is attempted after an admin account already exists."""
 
-    _code: str = "ORI_ERR_ADMIN_018"
+    _code: str = "LEX_ERR_ADMIN_018"
 
 
 class SetupTokenInvalidError(AdminAuthError):
     """Raised when the ADMIN_SETUP_TOKEN env var is set and the provided token doesn't match."""
 
-    _code: str = "ORI_ERR_ADMIN_019"
+    _code: str = "LEX_ERR_ADMIN_019"
 
 
 class PasswordResetTokenInvalidError(AdminAuthError):
     """Raised when a password reset token is unknown or already consumed."""
 
-    _code: str = "ORI_ERR_ADMIN_020"
+    _code: str = "LEX_ERR_ADMIN_020"
 
 
 class PasswordResetTokenExpiredError(AdminAuthError):
     """Raised when a password reset token has expired."""
 
-    _code: str = "ORI_ERR_ADMIN_021"
+    _code: str = "LEX_ERR_ADMIN_021"
 
 
 class MfaNotEnabledError(AdminAuthError):
     """Raised when 2FA is required but not configured/enabled."""
 
-    _code: str = "ORI_ERR_ADMIN_022"
+    _code: str = "LEX_ERR_ADMIN_022"
 
 
 class MfaVerificationFailedError(AdminAuthError):
     """Raised when a TOTP code is missing, invalid, or expired."""
 
-    _code: str = "ORI_ERR_ADMIN_023"
+    _code: str = "LEX_ERR_ADMIN_023"
 
 
 class EmailVerificationRequiredError(AdminAuthError):
     """Raised when login is blocked because the email is unverified."""
 
-    _code: str = "ORI_ERR_ADMIN_024"
+    _code: str = "LEX_ERR_ADMIN_024"
 
 
 class EmailVerificationTokenInvalidError(AdminAuthError):
     """Raised when a verification token is missing, invalid, used, or expired."""
 
-    _code: str = "ORI_ERR_ADMIN_025"
+    _code: str = "LEX_ERR_ADMIN_025"
 
 
 class EmailOtpDeliveryError(AdminAuthError):
     """Raised when an email OTP cannot be delivered."""
 
-    _code: str = "ORI_ERR_ADMIN_026"
+    _code: str = "LEX_ERR_ADMIN_026"
 
 
 class EmailOtpCooldownError(AdminAuthError):
     """Raised when an email OTP resend is attempted too soon."""
 
-    _code: str = "ORI_ERR_ADMIN_027"
+    _code: str = "LEX_ERR_ADMIN_027"
 
 
 __all__ = [

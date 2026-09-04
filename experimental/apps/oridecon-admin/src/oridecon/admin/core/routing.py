@@ -167,7 +167,7 @@ class AdminRouter:
             if hasattr(invoker, "routes"):
                 invoker.routes.append(admin_mount)
             else:
-                logger.warning("Could not mount admin - Oridecon invoker has no routes")
+                logger.warning("Could not mount admin - Lexigram invoker has no routes")
                 return None
         else:
             logger.warning("Could not mount admin - unknown app type")

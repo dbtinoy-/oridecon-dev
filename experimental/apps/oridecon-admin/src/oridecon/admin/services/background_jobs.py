@@ -54,7 +54,7 @@ logger = get_logger(__name__)
 class JobNotFoundError(KeyError):
     """Raised when a job_id is not found in the queue."""
 
-    _code: str = "ORI_ERR_ADMIN_028"
+    _code: str = "LEX_ERR_ADMIN_028"
 
 
 @dataclass

@@ -1,4 +1,4 @@
-"""The ``oridecon.ui`` public import surface is stable across refactors.
+"""The ``lexigram.ui`` public import surface is stable across refactors.
 
 The top-level package resolves names lazily through ``__getattr__``;
 this suite pins the full ``__all__`` surface so re-organising the lazy
@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import pytest
 
-from oridecon import ui
+from lexigram import ui
 from oridecon.ui import (  # noqa: F401 — lazy-surface smoke import
     Button,
     Card,

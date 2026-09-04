@@ -9,7 +9,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from oridecon import serialization as json
+from lexigram import serialization as json
 from oridecon.admin.services.import_ import (
     AdminImportService,
     ImportJob,

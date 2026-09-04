@@ -53,7 +53,7 @@ async def test_get_authenticated_user_with_invalid_token_logs_header(caplog):
     req = DummyRequest(headers={"Authorization": f"Bearer {fake_token}"})
 
     caplog.clear()
-    caplog.set_level("WARNING", logger="oridecon.admin.auth.guards")
+    caplog.set_level("WARNING", logger="lexigram.admin.auth.guards")
 
     user = await mw._get_authenticated_user(req)
 

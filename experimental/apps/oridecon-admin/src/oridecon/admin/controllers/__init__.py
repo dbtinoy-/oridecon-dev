@@ -1,4 +1,4 @@
-"""Controllers module for Oridecon Admin."""
+"""Controllers module for Lexigram Admin."""
 
 from __future__ import annotations
 

@@ -13,12 +13,12 @@ class TestUIError:
         error = UIError("Test error message")
         assert str(error) == "Test error message"
 
-    def test_ui_error_inherits_from_oridecon_error(self) -> None:
-        """Test UIError inherits from OrideconError."""
-        from oridecon.contracts.exceptions import OrideconError
+    def test_ui_error_inherits_from_lexigram_error(self) -> None:
+        """Test UIError inherits from LexigramError."""
+        from oridecon.contracts.exceptions import LexigramError
 
         error = UIError("Test")
-        assert isinstance(error, OrideconError)
+        assert isinstance(error, LexigramError)
 
     def test_ui_error_with_code(self) -> None:
         """Test UIError can have an error code."""

@@ -132,7 +132,7 @@ class TestAdminProvider:
         )
         app = SimpleNamespace(state=SimpleNamespace())
         monkeypatch.setattr(
-            "oridecon.admin.core.routing.AdminRouter",
+            "lexigram.admin.core.routing.AdminRouter",
             _FakeRouter,
         )
 
@@ -190,7 +190,7 @@ class TestAdminProvider:
         await provider.boot(_AdminResolver())
         app = SimpleNamespace(state=SimpleNamespace())
         monkeypatch.setattr(
-            "oridecon.admin.core.routing.AdminRouter",
+            "lexigram.admin.core.routing.AdminRouter",
             _FakeRouter,
         )
 
@@ -237,7 +237,7 @@ class TestAdminProvider:
         await provider.boot(_Resolver())
         app = SimpleNamespace(state=SimpleNamespace())
         monkeypatch.setattr(
-            "oridecon.admin.core.routing.AdminRouter",
+            "lexigram.admin.core.routing.AdminRouter",
             _FakeRouter,
         )
 
@@ -283,7 +283,7 @@ class TestAdminProvider:
         await provider.register(FakeRegistrar())
         app = SimpleNamespace(state=SimpleNamespace())
         monkeypatch.setattr(
-            "oridecon.admin.core.routing.AdminRouter",
+            "lexigram.admin.core.routing.AdminRouter",
             _FakeRouter,
         )
 
@@ -331,7 +331,7 @@ class TestAdminProvider:
         await provider.boot(_Resolver())
         app = SimpleNamespace(state=SimpleNamespace())
         monkeypatch.setattr(
-            "oridecon.admin.core.routing.AdminRouter",
+            "lexigram.admin.core.routing.AdminRouter",
             _FakeRouter,
         )
 
@@ -358,7 +358,7 @@ class TestAdminProvider:
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """When DI can't resolve ProgressController, it should fall back to
-        the admin-owned LocalProgressTracker, not import oridecon-tasks."""
+        the admin-owned LocalProgressTracker, not import lexigram-tasks."""
         from oridecon.admin.controllers.progress import LocalProgressTracker
 
         class _Resolver:
@@ -391,7 +391,7 @@ class TestAdminProvider:
         provider = AdminProvider()
         app = SimpleNamespace(state=SimpleNamespace())
         monkeypatch.setattr(
-            "oridecon.admin.core.routing.AdminRouter",
+            "lexigram.admin.core.routing.AdminRouter",
             _FakeRouter,
         )
 
@@ -439,7 +439,7 @@ class TestAdminProvider:
         provider = AdminProvider(resources=[_UsersResource])
         app = SimpleNamespace(state=SimpleNamespace())
         monkeypatch.setattr(
-            "oridecon.admin.core.routing.AdminRouter",
+            "lexigram.admin.core.routing.AdminRouter",
             _FakeRouter,
         )
 

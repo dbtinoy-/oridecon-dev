@@ -97,7 +97,7 @@ class TestClusterCenterController:
         controller.renderer.render_page.side_effect = _render_page_returning_content
         secondary = [{"label": "Posts", "href": "/admin/content/posts", "active": True}]
         with patch(
-            "oridecon.admin.engine.renderer.resolve_admin_nav",
+            "lexigram.admin.engine.renderer.resolve_admin_nav",
             return_value=([], [], secondary),
         ):
             resp = await controller.index(_mock_request(groups=_groups()))

@@ -165,7 +165,7 @@ def with_admin_error_handling(
 class AdminError(CoreAdminError):
     """Admin operation error with structured response."""
 
-    _code: str = "ORI_ERR_ADMIN_022"
+    _code: str = "LEX_ERR_ADMIN_022"
 
     def __init__(self, response: ErrorResponse, **kwargs: Any) -> None:
         self.response = response

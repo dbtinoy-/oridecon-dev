@@ -1,5 +1,5 @@
 """
-Observability utilities for Oridecon UI.
+Observability utilities for Lexigram UI.
 
 Provides general-purpose in-memory metrics collection for HTMX components.
 HTMX-specific tracking, debug panels, and request logging are admin-specific

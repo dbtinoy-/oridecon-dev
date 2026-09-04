@@ -1,4 +1,4 @@
-"""Data layer for Oridecon Admin."""
+"""Data layer for Lexigram Admin."""
 
 from __future__ import annotations
 

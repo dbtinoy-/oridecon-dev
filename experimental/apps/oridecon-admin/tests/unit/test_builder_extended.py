@@ -15,7 +15,7 @@ from oridecon.admin.config import AdminConfig, AdminNavigationGroup
 
 pytestmark = pytest.mark.skipif(
     not _BUILDER_AVAILABLE,
-    reason="AdminBuilder unavailable (oridecon.primitives.builder.BaseBuilder missing)",
+    reason="AdminBuilder unavailable (lexigram.primitives.builder.BaseBuilder missing)",
 )
 
 

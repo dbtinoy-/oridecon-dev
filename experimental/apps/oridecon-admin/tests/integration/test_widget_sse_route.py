@@ -11,7 +11,7 @@ ASGI app inline and only returns once the response completes
 (httpx/_transports/asgi.py:170), so an endless SSE response hangs the
 request. Test (b) therefore invokes the built handler directly with a
 Starlette ``Request`` for the response-shape assertion; the transport
-layer of SSE framing is already covered by oridecon-web's
+layer of SSE framing is already covered by lexigram-web's
 sse_from_stream tests.
 """
 

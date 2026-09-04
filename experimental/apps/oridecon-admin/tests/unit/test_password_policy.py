@@ -1,9 +1,9 @@
-"""Tests for oridecon-auth PasswordPolicy used by oridecon-admin.
+"""Tests for lexigram-auth PasswordPolicy used by lexigram-admin.
 
-AdminPasswordPolicy has been removed.  oridecon-admin now resolves
+AdminPasswordPolicy has been removed.  lexigram-admin now resolves
 PasswordHasherProtocol and PasswordPolicyProtocol from the DI container,
-which is backed by oridecon-auth's PasswordHasher / PasswordPolicy when
-oridecon-auth is installed.
+which is backed by lexigram-auth's PasswordHasher / PasswordPolicy when
+lexigram-auth is installed.
 
 This suite validates that:
   - auth's PasswordPolicy satisfies PasswordPolicyProtocol from contracts

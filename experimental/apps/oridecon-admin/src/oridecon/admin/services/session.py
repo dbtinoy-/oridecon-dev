@@ -1,4 +1,4 @@
-"""Session state management for Oridecon Admin.
+"""Session state management for Lexigram Admin.
 
 This module provides request-scoped session state storage via DI container.
 """

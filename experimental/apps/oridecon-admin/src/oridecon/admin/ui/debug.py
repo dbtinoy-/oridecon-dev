@@ -1,4 +1,4 @@
-"""Debug components for Oridecon Admin."""
+"""Debug components for Lexigram Admin."""
 
 from __future__ import annotations
 

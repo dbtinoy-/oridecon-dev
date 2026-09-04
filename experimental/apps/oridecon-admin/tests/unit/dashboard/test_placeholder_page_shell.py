@@ -129,10 +129,10 @@ class TestAllShellCallersDeclareTrust:
     @pytest.mark.parametrize(
         "module_path",
         [
-            "oridecon/admin/core/rendering.py",
-            "oridecon/admin/dashboard/page_fallbacks.py",
-            "oridecon/admin/dashboard/page_handlers.py",
-            "oridecon/admin/engine/renderer.py",
+            "lexigram/admin/core/rendering.py",
+            "lexigram/admin/dashboard/page_fallbacks.py",
+            "lexigram/admin/dashboard/page_handlers.py",
+            "lexigram/admin/engine/renderer.py",
         ],
     )
     def test_caller_wraps_content_in_markup(self, module_path: str) -> None:

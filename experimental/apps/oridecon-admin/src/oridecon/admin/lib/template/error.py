@@ -18,7 +18,7 @@ def render_error_page(
     title: str = "Error",
     message: str = "An error occurred",
     details: str = "",
-    site_name: str = "Oridecon Admin",
+    site_name: str = "Lexigram Admin",
     icon: str = "",
     action_text: str = "Return to Admin",
     action_url: str = "/admin/",

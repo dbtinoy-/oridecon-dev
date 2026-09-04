@@ -43,7 +43,7 @@ def _standalone_card(
     copy: str,
     children: list[Any],
     *,
-    site_name: str = "Oridecon Admin",
+    site_name: str = "Lexigram Admin",
     base_url: str = "/admin",
     flash_messages: list[tuple[str, str]] | None = None,
 ) -> str:

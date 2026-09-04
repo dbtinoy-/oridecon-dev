@@ -1,4 +1,4 @@
-"""Debug Panel molecule for Oridecon Admin."""
+"""Debug Panel molecule for Lexigram Admin."""
 
 from __future__ import annotations
 
@@ -88,7 +88,7 @@ class DebugPanel(Component):
             "div",
             el(
                 "div",
-                el("h3", "Oridecon Debug", class_="text-lg font-bold mb-4"),
+                el("h3", "Lexigram Debug", class_="text-lg font-bold mb-4"),
                 *metrics,
                 *slow_list,
                 el(

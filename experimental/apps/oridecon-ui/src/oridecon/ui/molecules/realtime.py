@@ -1,4 +1,4 @@
-"""Real-time UI components for Oridecon Admin."""
+"""Real-time UI components for Lexigram Admin."""
 
 from __future__ import annotations
 

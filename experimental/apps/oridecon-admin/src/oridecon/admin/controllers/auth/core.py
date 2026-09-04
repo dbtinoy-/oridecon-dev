@@ -25,7 +25,7 @@ _CACHE_CONTROL_NO_STORE = {"Cache-Control": "no-store"}
 
 _DEFAULT_NEXT = "/admin/"
 
-_ORI_ERR_RE = re.compile(r"^\[ORI_ERR_[A-Z0-9_]+\]\s+")
+_LEX_ERR_RE = re.compile(r"^\[LEX_ERR_[A-Z0-9_]+\]\s+")
 
 _SEE_DOCS_RE = re.compile(r"\n\s*→\s*See:.*$")
 
@@ -34,12 +34,12 @@ def _humanize_error(message: str) -> str:
     """Strip framework error prefixes from a message for user display.
 
     Delegates to the shared :func:`oridecon.admin.controllers._errors.humanize_error`,
-    which removes ``[ORI_ERR_*]`` codes and ``→ Fix:`` / ``→ See:``
+    which removes ``[LEX_ERR_*]`` codes and ``→ Fix:`` / ``→ See:``
     annotations anywhere in the string (chained errors embed them
     mid-message, not just at the start).
 
     Args:
-        message: Raw error message, possibly including ``[ORI_ERR_*]``
+        message: Raw error message, possibly including ``[LEX_ERR_*]``
             prefixes and ``→ Fix:`` / ``→ See:`` annotation lines.
 
     Returns:

@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 
 from oridecon.admin.core.decorators import (
-    HAS_ORI_DI,
+    HAS_LEX_DI,
     Scope,
     ScopeContext,
     clear_singletons,
@@ -53,7 +53,7 @@ class TestDecorators:
         svc = RequestSvc()
         assert isinstance(svc, RequestSvc)
 
-    def test_singleton_decorator_when_no_oridecon_di(self) -> None:
+    def test_singleton_decorator_when_no_lexigram_di(self) -> None:
         # We can always apply the decorator and create an instance
         @singleton
         class CacheSvc:
@@ -196,5 +196,5 @@ class TestClearSingletons:
     def test_clear_singletons_runs_without_error(self) -> None:
         clear_singletons()  # Should not raise
 
-    def test_has_oridecon_di_flag_is_bool(self) -> None:
-        assert isinstance(HAS_ORI_DI, bool)
+    def test_has_lexigram_di_flag_is_bool(self) -> None:
+        assert isinstance(HAS_LEX_DI, bool)

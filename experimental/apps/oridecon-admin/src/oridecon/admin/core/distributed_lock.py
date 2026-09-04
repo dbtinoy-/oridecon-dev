@@ -39,7 +39,7 @@ R = TypeVar("R")
 class LockError(CoreLockError):
     """Base lock error."""
 
-    _code: str = "ORI_ERR_ADMIN_023"
+    _code: str = "LEX_ERR_ADMIN_023"
 
     def __init__(self, message: str = "Lock error", **kwargs: Any) -> None:
         super().__init__(message, **kwargs)
@@ -48,7 +48,7 @@ class LockError(CoreLockError):
 class LockAcquisitionError(LockError):
     """Could not acquire lock — another process holds it."""
 
-    _code: str = "ORI_ERR_ADMIN_024"
+    _code: str = "LEX_ERR_ADMIN_024"
 
     def __init__(self, message: str = "Could not acquire lock", **kwargs: Any) -> None:
         super().__init__(message, **kwargs)
@@ -57,7 +57,7 @@ class LockAcquisitionError(LockError):
 class LockTimeoutError(LockError):
     """Lock acquisition timed out waiting for the lock to be released."""
 
-    _code: str = "ORI_ERR_ADMIN_025"
+    _code: str = "LEX_ERR_ADMIN_025"
 
     def __init__(
         self, message: str = "Lock acquisition timed out", **kwargs: Any

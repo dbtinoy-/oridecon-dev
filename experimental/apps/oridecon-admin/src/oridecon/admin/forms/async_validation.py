@@ -459,7 +459,7 @@ def async_validate(
 class AsyncValidationError(CoreValidationError):
     """Raised when async validation fails."""
 
-    _code: str = "ORI_ERR_ADMIN_029"
+    _code: str = "LEX_ERR_ADMIN_029"
 
     def __init__(self, result: ValidationResult, **kwargs: Any) -> None:
         self.result = result

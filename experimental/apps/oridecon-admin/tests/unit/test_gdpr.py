@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from oridecon import serialization as json
+from lexigram import serialization as json
 import pytest
 
 from oridecon.admin.gdpr import (

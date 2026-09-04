@@ -16,12 +16,12 @@ class TestStubModuleImports:
         import oridecon.admin.data.cache  # noqa: F401
 
         # Module exists and has correct docstring
-        assert oridecon.admin.data.cache.__doc__ is not None
+        assert lexigram.admin.data.cache.__doc__ is not None
 
     def test_request_cache_imports(self) -> None:
         import oridecon.admin.services.request_cache  # noqa: F401
 
-        assert oridecon.admin.services.request_cache.__doc__ is not None
+        assert lexigram.admin.services.request_cache.__doc__ is not None
 
     def test_storage_backends_imports(self) -> None:
         import oridecon.admin.services.storage.backends  # noqa: F401

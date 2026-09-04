@@ -1,7 +1,11 @@
-"""Unified RBAC system for Oridecon Admin."""
+"""Unified RBAC system for Lexigram Admin."""
 
 from __future__ import annotations
 
+from oridecon.admin.rbac.effective import (
+    EffectivePermissions,
+    resolve_effective_permissions,
+)
 from oridecon.admin.rbac.policies import (
     PolicyRegistry,
     get_policy,
@@ -24,6 +28,7 @@ from oridecon.contracts.auth import RoleDefinition
 __all__ = [
     "ActionPermission",
     "AdminRoleStoreProtocol",
+    "EffectivePermissions",
     "FieldPermission",
     "Policy",
     "PolicyContext",
@@ -35,4 +40,5 @@ __all__ = [
     "get_resource_permissions",
     "register_policy",
     "register_resource_permissions",
+    "resolve_effective_permissions",
 ]

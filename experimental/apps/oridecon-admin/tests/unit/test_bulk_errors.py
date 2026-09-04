@@ -24,7 +24,7 @@ async def test_bulk_edit_unexpected_error_propagates(caplog):
     ds = BadDataSource()
     manager = BulkActionManager(data_source=ds)
 
-    caplog.set_level("ERROR", logger="oridecon")
+    caplog.set_level("ERROR", logger="lexigram")
     with pytest.raises(RuntimeError, match="boom"):
         await manager.bulk_edit(
             ids=[1, 2, 3], updates={"a": 1}, create_snapshot=True,

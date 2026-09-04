@@ -1,4 +1,4 @@
-"""Roles management resource for Oridecon Admin."""
+"""Roles management resource for Lexigram Admin."""
 
 from __future__ import annotations
 

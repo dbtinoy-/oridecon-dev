@@ -19,7 +19,7 @@ from oridecon.contracts.auth import AuthorizerProtocol
 
 @inject
 class PermissionService:
-    """Central service for all permission checks in Oridecon Admin.
+    """Central service for all permission checks in Lexigram Admin.
 
     Delegates core RBAC logic to an implementation of AuthorizerProtocol.
     Maintains ResourcePermissions registry for admin UI.

@@ -38,7 +38,7 @@ class TenantConfig:
 class TenantNotFoundError(KeyError):
     """Raised when a tenant is not found in the registry."""
 
-    _code: str = "ORI_ERR_ADMIN_030"
+    _code: str = "LEX_ERR_ADMIN_030"
 
 
 __all__ = [

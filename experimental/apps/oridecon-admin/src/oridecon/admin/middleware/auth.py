@@ -1,6 +1,6 @@
-"""Authentication middleware for Oridecon Admin.
+"""Authentication middleware for Lexigram Admin.
 
-This middleware integrates with Oridecon's DI container to provide
+This middleware integrates with Lexigram's DI container to provide
 request-scoped user authentication and authorization.
 """
 

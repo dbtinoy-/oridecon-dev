@@ -1,4 +1,4 @@
-"""Virtual Scroll component for Oridecon Admin."""
+"""Virtual Scroll component for Lexigram Admin."""
 
 from __future__ import annotations
 

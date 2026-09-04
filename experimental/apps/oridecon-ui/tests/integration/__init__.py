@@ -1,1 +1,1 @@
-"""Integration tests for oridecon-ui package."""
+"""Integration tests for lexigram-ui package."""

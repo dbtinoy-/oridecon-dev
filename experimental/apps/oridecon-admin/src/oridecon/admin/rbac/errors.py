@@ -13,25 +13,25 @@ from oridecon.contracts.exceptions.domain import DomainError
 class AdminRoleError(DomainError):
     """Base exception for all role management errors."""
 
-    _code: str = "ORI_ERR_ADMIN_022"
+    _code: str = "LEX_ERR_ADMIN_022"
 
 
 class RoleDuplicateError(AdminRoleError):
     """A role with the same name already exists."""
 
-    _code: str = "ORI_ERR_ADMIN_023"
+    _code: str = "LEX_ERR_ADMIN_023"
 
 
 class RoleNotFoundError(AdminRoleError):
     """The requested role does not exist."""
 
-    _code: str = "ORI_ERR_ADMIN_024"
+    _code: str = "LEX_ERR_ADMIN_024"
 
 
 class SystemRoleError(AdminRoleError):
     """The operation is not allowed on a system role."""
 
-    _code: str = "ORI_ERR_ADMIN_025"
+    _code: str = "LEX_ERR_ADMIN_025"
 
 
 __all__ = [

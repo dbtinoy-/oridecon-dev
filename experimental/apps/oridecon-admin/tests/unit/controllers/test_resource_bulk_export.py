@@ -159,17 +159,17 @@ _PKG_ROOT = Path(__file__).resolve().parents[3]
 
 
 class TestB28FrontendHelperExists:
-    def test_admin_js_defines_oridecon_download_bulk(self) -> None:
-        """B28: buttons call window.OrideconDownloadBulk — it must exist."""
-        js = (_PKG_ROOT / "src/oridecon/admin/static/js/admin.js").read_text(
+    def test_admin_js_defines_lexigram_download_bulk(self) -> None:
+        """B28: buttons call window.LexigramDownloadBulk — it must exist."""
+        js = (_PKG_ROOT / "src/lexigram/admin/static/js/admin.js").read_text(
             encoding="utf-8"
         )
-        assert "window.OrideconDownloadBulk = function" in js
+        assert "window.LexigramDownloadBulk = function" in js
         assert "data-bulk-download-url" in js
         assert 'input[name="ids"]:checked' in js
 
     def test_layout_exposes_csrf_token_global(self) -> None:
         source = (
-            _PKG_ROOT / "src/oridecon/admin/ui/layouts/admin_layout.py"
+            _PKG_ROOT / "src/lexigram/admin/ui/layouts/admin_layout.py"
         ).read_text(encoding="utf-8")
-        assert "window.__orideconCsrfToken" in source
+        assert "window.__lexigramCsrfToken" in source

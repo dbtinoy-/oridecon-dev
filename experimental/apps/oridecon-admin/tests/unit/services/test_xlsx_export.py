@@ -299,5 +299,5 @@ class TestDownloadButtonSets:
             name="export_xlsx", label="Export Excel", icon=None, _color="secondary"
         )
         html = str(render_bulk_action_button(action, resource_prefix="/admin/products"))
-        assert "OrideconDownloadBulk" in html
+        assert "LexigramDownloadBulk" in html
         assert 'data-bulk-action="export_xlsx"' in html

@@ -67,7 +67,7 @@ class TestResourceIntegration:
         # Act: From Form
         back_data = transformer.transform_from_form(form_data)
         # Allow JSON spacing variations across different json.dumps implementations
-        from oridecon import serialization as json
+        from lexigram import serialization as json
 
         assert json.loads(back_data["metadata"]) == {"color": "red"}
 

@@ -11,13 +11,13 @@ from __future__ import annotations
 from typing import Any
 
 try:
-    from oridecon.cache.service.core import CacheService as _OrideconCacheService
+    from oridecon.cache.service.core import CacheService as _LexigramCacheService
     from oridecon.contracts.infra.cache import CacheBackendProtocol
 
     _HAS_CACHE = True
 except ImportError:  # noqa: F841
     _HAS_CACHE = False
-    _OrideconCacheService = object  # type: ignore[assignment,misc]
+    _LexigramCacheService = object  # type: ignore[assignment,misc]
     CacheBackendProtocol = object  # type: ignore[assignment,misc]
 
 

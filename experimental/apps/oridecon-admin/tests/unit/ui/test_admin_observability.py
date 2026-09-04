@@ -140,25 +140,25 @@ class TestDebugPanel:
     """Tests for debug panel rendering."""
 
     def test_debug_panel_hidden_without_env(self, monkeypatch):
-        monkeypatch.delenv("ORI_DEBUG", raising=False)
+        monkeypatch.delenv("LEX_DEBUG", raising=False)
         html = render_debug_panel()
         assert html == ""
 
     def test_debug_panel_shown_with_env(self, monkeypatch):
-        monkeypatch.setenv("ORI_DEBUG", "1")
+        monkeypatch.setenv("LEX_DEBUG", "1")
         html = render_debug_panel()
         assert "debug-panel" in html
         assert "Debug" in html
 
     def test_debug_panel_shows_zones(self, monkeypatch):
-        monkeypatch.setenv("ORI_DEBUG", "1")
+        monkeypatch.setenv("LEX_DEBUG", "1")
         zones_info = {Zones.DATA.id: True, Zones.TOOLBAR.id: False}
         html = render_debug_panel(zones_info=zones_info)
         assert Zones.DATA.id in html
         assert Zones.TOOLBAR.id in html
 
     def test_debug_panel_shows_timing(self, monkeypatch):
-        monkeypatch.setenv("ORI_DEBUG", "1")
+        monkeypatch.setenv("LEX_DEBUG", "1")
         html = render_debug_panel(render_time_ms=42.5)
         assert "42.50ms" in html
 

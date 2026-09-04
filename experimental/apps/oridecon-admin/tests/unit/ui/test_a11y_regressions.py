@@ -19,7 +19,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-SRC = Path(__file__).resolve().parents[3] / "src" / "oridecon" / "admin"
+SRC = Path(__file__).resolve().parents[3] / "src" / "lexigram" / "admin"
 
 _DEAD_ALPINE = re.compile(r"""(?<![a-z_])x_on_[a-z_]+\s*=|["']x_on_[a-z_]+["']""")
 

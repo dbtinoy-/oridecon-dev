@@ -3,7 +3,7 @@
 All tests in this directory require a real browser and are skipped unless
 ``--run-a11y`` is passed:
 
-    uv run pytest --run-a11y oridecon-ui/tests/a11y/
+    uv run pytest --run-a11y lexigram-ui/tests/a11y/
 
 """
 

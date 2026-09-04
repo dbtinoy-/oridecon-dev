@@ -1,4 +1,4 @@
-"""Tests for lazy loading utilities used by oridecon-admin."""
+"""Tests for lazy loading utilities used by lexigram-admin."""
 
 from oridecon.primitives.lazy import LazyImport
 

@@ -20,9 +20,9 @@ except ImportError:
 # Environment variable prefix
 # ---------------------------------------------------------------------------
 
-ENV_PREFIX: str = "ORI_ADMIN__"
+ENV_PREFIX: str = "LEX_ADMIN__"
 ENV_NESTED_DELIMITER: str = "__"
-"""Delimiter for nested env var keys (e.g. ORI_ADMIN__AUTH__SESSION_SECRET)."""
+"""Delimiter for nested env var keys (e.g. LEX_ADMIN__AUTH__SESSION_SECRET)."""
 
 # ---------------------------------------------------------------------------
 # Default settings

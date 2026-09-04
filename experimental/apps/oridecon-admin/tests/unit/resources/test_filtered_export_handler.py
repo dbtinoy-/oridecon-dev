@@ -221,7 +221,7 @@ class TestClientScriptsCarryFilteredExport:
     def test_admin_js_forwards_scope_and_list_query(self) -> None:
         from pathlib import Path
 
-        js = (Path(__file__).resolve().parents[3] / "src/oridecon/admin/static/js/admin.js").read_text("utf-8")
+        js = Path("src/lexigram/admin/static/js/admin.js").read_text("utf-8")
         assert "scope', 'filtered'" in js.replace('"', "'")
         assert "list_query" in js
         assert "Select at least one row to export" not in js

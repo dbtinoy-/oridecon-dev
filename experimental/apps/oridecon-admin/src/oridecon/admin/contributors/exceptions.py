@@ -16,7 +16,7 @@ class ContributorPermissionError(AdminError):
         missing_permissions: Permissions the user lacks.
     """
 
-    _code: str = "ORI_ERR_ADMIN_020"
+    _code: str = "LEX_ERR_ADMIN_020"
 
     def __init__(
         self,
@@ -40,7 +40,7 @@ class ContributorNotFoundError(AdminError):
         contributor_id: The requested contributor ID that was not found.
     """
 
-    _code: str = "ORI_ERR_ADMIN_021"
+    _code: str = "LEX_ERR_ADMIN_021"
 
     def __init__(self, contributor_id: str) -> None:
         self.contributor_id = contributor_id

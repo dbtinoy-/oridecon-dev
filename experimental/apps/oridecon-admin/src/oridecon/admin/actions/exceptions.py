@@ -13,13 +13,13 @@ from oridecon.admin.exceptions import AdminError
 class ActionError(AdminError):
     """Base exception for all action-related errors."""
 
-    _code = "ORI_ERR_ADMIN_ACTION_001"
+    _code = "LEX_ERR_ADMIN_ACTION_001"
 
 
 class PermissionDenied(ActionError):  # noqa: N818
     """Raised when a user lacks permission to execute an action."""
 
-    _code = "ORI_ERR_ADMIN_ACTION_002"
+    _code = "LEX_ERR_ADMIN_ACTION_002"
 
 
 __all__ = [

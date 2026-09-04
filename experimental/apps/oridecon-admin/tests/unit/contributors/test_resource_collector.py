@@ -43,7 +43,7 @@ class _ContributorSamePkg:
 
 
 class _ContributorHyphenatedPkg:
-    package_source = "oridecon-template"
+    package_source = "lexigram-template"
     name = "hyphen"
 
     def get_resources(self):
@@ -117,7 +117,7 @@ class TestResourceCollector:
         collector = ResourceCollector(NamingPolicy(mode="warn"))
         result = collector.collect([_ContributorHyphenatedPkg()])
         assert len(result) == 1
-        assert result[0].name == "oridecon_template.users"
+        assert result[0].name == "lexigram_template.users"
 
 
 class TestApplyNamespace:
@@ -133,9 +133,9 @@ class TestApplyNamespace:
         class OriginalResource:
             name = "users"
 
-        wrapped = apply_namespace(OriginalResource, "oridecon-template.users")
-        assert wrapped.name == "oridecon_template.users"
-        assert wrapped.route_prefix == "/oridecon_template/users"
+        wrapped = apply_namespace(OriginalResource, "lexigram-template.users")
+        assert wrapped.name == "lexigram_template.users"
+        assert wrapped.route_prefix == "/lexigram_template/users"
 
     def test_route_prefix_from_dotted_name(self) -> None:
         class OriginalResource:

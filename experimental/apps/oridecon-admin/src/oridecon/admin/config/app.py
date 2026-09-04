@@ -46,7 +46,7 @@ class AdminConfig(BaseConfig):
     Configuration is loaded from:
     1. Pydantic defaults (this model)
     2. application.yaml (admin: section)
-    3. Environment variables (ORI_ADMIN_*)
+    3. Environment variables (LEX_ADMIN_*)
     4. Runtime config (hot-reloadable)
 
     Attributes:
@@ -82,7 +82,7 @@ class AdminConfig(BaseConfig):
     env: Environment | None = Field(None, description="Deployment environment")
 
     # Core Settings
-    title: str = Field(default="Oridecon Admin")
+    title: str = Field(default="Lexigram Admin")
     prefix: str = Field(default="/admin")
     htmx_prefix: str = Field(default="/admin/htmx")
     api_prefix: str = Field(default="/admin/api")

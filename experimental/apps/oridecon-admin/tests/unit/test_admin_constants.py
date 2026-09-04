@@ -1,4 +1,4 @@
-"""Unit tests for oridecon-admin constants."""
+"""Unit tests for lexigram-admin constants."""
 
 import pytest
 
@@ -29,7 +29,7 @@ class TestAdminConstants:
 
     def test_env_prefix(self) -> None:
         """Test environment variable prefix."""
-        assert ENV_PREFIX == "ORI_ADMIN__"
+        assert ENV_PREFIX == "LEX_ADMIN__"
         assert isinstance(ENV_PREFIX, str)
 
     def test_env_nested_delimiter(self) -> None:

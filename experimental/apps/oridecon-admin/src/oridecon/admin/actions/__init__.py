@@ -1,4 +1,4 @@
-"""Action managers for Oridecon Admin.
+"""Action managers for Lexigram Admin.
 
 PEP 562 lazy loading to avoid import-time dependency issues.
 """

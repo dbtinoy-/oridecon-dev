@@ -1,4 +1,4 @@
-"""URL state synchronization for Oridecon Admin."""
+"""URL state synchronization for Lexigram Admin."""
 
 from __future__ import annotations
 

@@ -101,7 +101,7 @@ async def test_auth_guard_skip_logs_error_when_auth_required(
 
     monkeypatch.setitem(
         sys.modules,
-        "oridecon.admin.middleware.auth_guard",
+        "lexigram.admin.middleware.auth_guard",
         None,  # type: ignore[arg-type]
     )
     log_mock = MagicMock()

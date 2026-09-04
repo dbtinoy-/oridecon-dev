@@ -1,4 +1,4 @@
-"""State persistence for Oridecon Admin."""
+"""State persistence for Lexigram Admin."""
 
 from __future__ import annotations
 

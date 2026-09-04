@@ -9,7 +9,7 @@ from oridecon.di.module import DynamicModule, Module, module
 
 @module()
 class AdminModule(Module):
-    """Oridecon admin panel module.
+    """Lexigram admin panel module.
 
     Call :meth:`configure` to register the admin panel with its bundle
     provider and contributor system.

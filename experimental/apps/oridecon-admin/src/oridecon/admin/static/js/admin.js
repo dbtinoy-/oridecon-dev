@@ -1,5 +1,5 @@
 /**
- * Oridecon Admin - Core JavaScript
+ * Lexigram Admin - Core JavaScript
  */
 (function() {
   'use strict';
@@ -14,11 +14,11 @@
   });
 
   // ========== Bulk export download (B28) ==========
-  // Export buttons render onclick="return window.OrideconDownloadBulk(this)"
+  // Export buttons render onclick="return window.LexigramDownloadBulk(this)"
   // with data-bulk-download-url / data-bulk-action attributes. CSV/JSON
   // responses carry Content-Disposition and must bypass HTMX (whose swap
   // would inject the file into the page), so we fetch and download a blob.
-  window.OrideconDownloadBulk = function(btn) {
+  window.LexigramDownloadBulk = function(btn) {
     downloadBulk(btn);
     return false;
   };
@@ -124,7 +124,12 @@
       type = type || 'info';
       duration = duration || 3000;
       
-      const container = document.querySelector('.toast-container') || createToastContainer();
+      // The server-rendered flash zone is #flash-container; client-created
+      // toasts use .toast-container. Reuse either global overlay so a flash
+      // response never leaves a second container in document flow.
+      const container =
+        document.querySelector('.toast-container, #flash-container') ||
+        createToastContainer();
       const toast = document.createElement('div');
       toast.className = 'toast toast-' + type;
       toast.innerHTML = '<span class="toast-message">' + escapeHtml(message) + '</span>' +
@@ -348,7 +353,7 @@
   }
 
   // Expose utilities
-  window.OrideconAdmin = {
+  window.LexigramAdmin = {
     showToast: function(msg, type, dur) { return window.showToast(msg, type, dur); },
     openModal: function(m) { return window.openModal(m); },
     closeModal: function(m) { return window.closeModal(m); },

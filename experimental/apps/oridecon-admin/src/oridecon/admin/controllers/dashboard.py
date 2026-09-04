@@ -270,7 +270,7 @@ class DashboardController(AdminController):
         # SortableJS drag-and-drop controls + widget config helpers
         dnd_html = raw(
             """
-<div id="dashboard-dnd-controls" class="dashboard-dnd-controls mt-1 flex items-center justify-end gap-3" data-csrf-token="__ORIDECON_CSRF_TOKEN__">
+<div id="dashboard-dnd-controls" class="dashboard-dnd-controls mt-1 flex items-center justify-end gap-3" data-csrf-token="__LEXIGRAM_CSRF_TOKEN__">
   <span id="dashboard-layout-status" class="text-xs text-muted-foreground" role="status" aria-live="polite"></span>
   <button id="save-layout-btn" type="button"
           class="hidden inline-flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/10 px-3 py-2 text-sm font-medium text-primary transition hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
@@ -341,7 +341,7 @@ class DashboardController(AdminController):
 """.replace(
                 "/admin/core/widgets/reorder",
                 f"{admin_prefix}/core/widgets/reorder",
-            ).replace("__ORIDECON_CSRF_TOKEN__", escape(csrf_token))
+            ).replace("__LEXIGRAM_CSRF_TOKEN__", escape(csrf_token))
         )
 
         customize_btn = el(

@@ -193,14 +193,14 @@ class ImportAction(_ImportReportMixin, HeaderAction):
         into the data zone — a route that did not exist, so clicking
         Import swapped a 404 into the table. Both the toolbar and the
         default :meth:`render_button` consume these attributes, handing
-        off to the shared ``OrideconImportUpload`` script, which opens a
+        off to the shared ``LexigramImportUpload`` script, which opens a
         file picker and POSTs the file to the upload route.
         """
         return {
             "type": "button",
             "data_import_upload_url": url,
             "data_import_accept": ",".join(self._accept_extensions),
-            "onclick": "return window.OrideconImportUpload(this);",
+            "onclick": "return window.LexigramImportUpload(this);",
         }
 
     def example_csv(self) -> str:

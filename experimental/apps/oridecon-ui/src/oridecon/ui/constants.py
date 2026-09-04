@@ -11,7 +11,7 @@ except ImportError:
     __version__ = "0.0.0"
 
 
-ENV_PREFIX: str = "ORI_UI__"
+ENV_PREFIX: str = "LEX_UI__"
 ENV_NESTED_DELIMITER: str = "__"
 
 

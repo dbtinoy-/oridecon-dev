@@ -254,7 +254,7 @@ def __getattr__(name: str) -> Any:
 class FeatureDisabledError(ConfigurationError):
     """Raised when a required admin feature is disabled."""
 
-    _code: str = "ORI_ERR_ADMIN_027"
+    _code: str = "LEX_ERR_ADMIN_027"
 
     def __init__(self, flag_name: str) -> None:
         self.flag_name = flag_name

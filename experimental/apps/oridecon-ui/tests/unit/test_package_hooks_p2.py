@@ -1,4 +1,4 @@
-"""P2 hook surface import verification for oridecon-ui."""
+"""P2 hook surface import verification for lexigram-ui."""
 
 from __future__ import annotations
 
@@ -16,8 +16,8 @@ def test_ui_hooks_root_module_exists() -> None:
 
     assert UIComponentRenderedHook.__name__ == "UIComponentRenderedHook"
     assert UITemplateRenderedHook.__name__ == "UITemplateRenderedHook"
-    assert oridecon.ui.UIComponentRenderedHook is UIComponentRenderedHook
-    assert oridecon.ui.UITemplateRenderedHook is UITemplateRenderedHook
+    assert lexigram.ui.UIComponentRenderedHook is UIComponentRenderedHook
+    assert lexigram.ui.UITemplateRenderedHook is UITemplateRenderedHook
 
 
 def test_ui_hook_payloads_are_frozen_and_keyword_only() -> None:

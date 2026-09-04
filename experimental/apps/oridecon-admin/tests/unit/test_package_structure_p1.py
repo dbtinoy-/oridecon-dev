@@ -1,4 +1,4 @@
-"""Structural layout test for oridecon-admin Task 4 normalization.
+"""Structural layout test for lexigram-admin Task 4 normalization.
 
 Asserts the canonical layout after:
 - utils/ → lib/
@@ -16,7 +16,7 @@ import pytest
 # Root of the admin source tree
 # __file__ is tests/unit/test_package_structure_p1.py
 # parents[0] = tests/unit/, parents[1] = tests/, parents[2] = project root
-_ADMIN_SRC = Path(__file__).parents[2] / "src" / "oridecon" / "admin"
+_ADMIN_SRC = Path(__file__).parents[2] / "src" / "lexigram" / "admin"
 
 
 class TestLibLayout:
@@ -30,7 +30,7 @@ class TestLibLayout:
 
 
 class TestProtocolsLayout:
-    """Protocols promoted to oridecon-contracts."""
+    """Protocols promoted to lexigram-contracts."""
 
     def test_protocols_py_removed(self) -> None:
         # protocols.py was the backward-compat shim. All imports migrated to contracts.
@@ -73,7 +73,7 @@ class TestEventsLayout:
 
 
 class TestMonitoringLayout:
-    """monitoring/ removed — all monitoring moved to oridecon-monitor."""
+    """monitoring/ removed — all monitoring moved to lexigram-monitor."""
 
     def test_monitoring_dir_removed(self) -> None:
         assert not (_ADMIN_SRC / "monitoring").exists(), "monitoring/ must not exist"

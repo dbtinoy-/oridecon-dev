@@ -1,4 +1,4 @@
-"""SSE support for Oridecon UI.
+"""SSE support for Lexigram UI.
 
 Server-side:  ``SSEMessage``, ``SSEStream`` — format and stream SSE payloads.
 Client-side:  ``SSE`` component — renders the HTMX SSE connector element with

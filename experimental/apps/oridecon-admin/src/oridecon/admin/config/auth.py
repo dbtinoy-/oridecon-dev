@@ -31,7 +31,7 @@ class AdminMfaConfig(DomainModel):
         description="Second factor used at login: 'totp' (authenticator app) or 'email' (one-time code)",
     )
     issuer: str = Field(
-        default="Oridecon Admin",
+        default="Lexigram Admin",
         description="TOTP issuer label shown in authenticator apps",
     )
     skew: int = Field(
@@ -189,7 +189,7 @@ class AdminAuthConfig(DomainModel):
             raise ValueError(
                 "CRITICAL SECURITY ERROR: Default admin session_secret detected in "
                 f"{self.env.upper()}.\n"
-                "You MUST set a secure session secret via ORI_ADMIN__AUTH__SESSION_SECRET.",
+                "You MUST set a secure session secret via LEX_ADMIN__AUTH__SESSION_SECRET.",
             )
 
         if (

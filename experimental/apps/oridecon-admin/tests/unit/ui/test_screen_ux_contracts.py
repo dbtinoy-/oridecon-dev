@@ -125,7 +125,7 @@ class TestDashboardWidgetCards:
             [_widget("a", "A"), _widget("b", "B"), _widget("c", "C")]
         )
 
-        assert html.count("__orideconWidgetState") == 2  # guard read + guard set
+        assert html.count("__lexigramWidgetState") == 2  # guard read + guard set
 
     def test_error_copy_distinguishes_permission_from_outage(self) -> None:
         """"Something went wrong" for a 403 sends the operator debugging the

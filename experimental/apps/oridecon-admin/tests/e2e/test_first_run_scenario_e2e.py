@@ -17,7 +17,7 @@ This single scenario guards the first-run regressions fixed on 2026-09-01
 - B4: exactly one ``<title>`` per page
 - B5: ``create_app()`` returns a mounted, working application
 - B6: no third-party CDN references in served pages
-- B7: no raw ``ORI_ERR`` chains in user-facing pages/redirects
+- B7: no raw ``LEX_ERR`` chains in user-facing pages/redirects
 - B8: setup truthfully reports success on drivers without INSERT row counts
 """
 
@@ -27,8 +27,8 @@ import re
 from typing import Any
 
 import httpx
-import pytest
 from pydantic import BaseModel, Field
+import pytest
 
 from oridecon.admin.actions.standard.header import CreateAction
 from oridecon.admin.actions.standard.row import DeleteAction, EditAction
@@ -38,6 +38,8 @@ from oridecon.admin.resources import Resource
 from oridecon.di.container import Container
 from oridecon.sql.di.provider import DatabaseProvider
 from oridecon.ui.columns.types import TextColumn
+
+pytestmark = pytest.mark.e2e
 
 SETUP_TOKEN = "e2e-first-run-token"
 ADMIN_EMAIL = "operator@example.test"
@@ -171,7 +173,7 @@ def _assert_page_hygiene(html: str, *, context: str) -> None:
     assert html.count("<title>") == 1, f"{context}: expected exactly one <title>"
     assert "unpkg.com" not in html, f"{context}: third-party CDN reference"
     assert "cdn.jsdelivr" not in html, f"{context}: third-party CDN reference"
-    assert "ORI_ERR" not in html, f"{context}: raw framework error leaked"
+    assert "LEX_ERR" not in html, f"{context}: raw framework error leaked"
 
 
 # ── App boot: the real thing ────────────────────────────────────────────────
@@ -205,11 +207,18 @@ async def app(tmp_path):
         }
     )
 
-    return await create_app(
+    application = await create_app(
         resources=[GadgetResource],
         config=config,
         container=container,
     )
+    try:
+        yield application
+    finally:
+        # The factory accepts a pre-populated container but intentionally does
+        # not own its lifecycle. Close the test-owned database provider so its
+        # aiosqlite worker cannot keep pytest alive after the scenario passes.
+        await db.shutdown()
 
 
 @pytest.fixture

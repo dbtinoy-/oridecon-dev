@@ -171,7 +171,7 @@ class TestBootSchemaMarker:
                 marker_calls["mark_current"] = (component, fingerprint)
 
         monkeypatch.setattr(
-            "oridecon.admin.auth.store.schema_marker.AdminSchemaMarker",
+            "lexigram.admin.auth.store.schema_marker.AdminSchemaMarker",
             FakeMarker,
         )
         return stores, FakeResolver(), marker_calls
@@ -256,7 +256,7 @@ class TestBootSchemaMarker:
     ):
         stores, resolver, _ = self._make_world(monkeypatch, is_current=True)
         monkeypatch.setattr(
-            "oridecon.admin.auth.store.schema_marker.AdminSchemaMarker",
+            "lexigram.admin.auth.store.schema_marker.AdminSchemaMarker",
             None,  # not callable → constructor raises TypeError
         )
 

@@ -1,4 +1,4 @@
-"""Component gallery: renders every oridecon-ui component as HTML pages.
+"""Component gallery: renders every lexigram-ui component as HTML pages.
 
 The gallery is the substrate for axe-core accessibility scans (Phase 1 of
 the professional-grade plan). Each component is rendered through

@@ -68,7 +68,7 @@ class TestSchemaFingerprint:
         computed = compute_schema_fingerprint()
         assert computed == ADMIN_AUTH_SCHEMA_FINGERPRINT, (
             "Auth-store DDL changed. Update ADMIN_AUTH_SCHEMA_FINGERPRINT in "
-            "src/oridecon/admin/auth/store/schema_marker.py to: " + computed
+            "src/lexigram/admin/auth/store/schema_marker.py to: " + computed
         )
 
     def test_fingerprint_is_hex_sha256(self) -> None:
@@ -83,7 +83,7 @@ class TestSchemaFingerprint:
 
     def test_module_without_ddl_raises(self) -> None:
         with pytest.raises(ValueError, match="no DDL literals"):
-            compute_schema_fingerprint(("oridecon.admin.sql_dialect",))
+            compute_schema_fingerprint(("lexigram.admin.sql_dialect",))
 
     def test_fingerprint_is_deterministic(self) -> None:
         assert compute_schema_fingerprint() == compute_schema_fingerprint()

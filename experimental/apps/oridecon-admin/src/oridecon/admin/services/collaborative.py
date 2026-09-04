@@ -127,7 +127,7 @@ class PresenceEntry:
 class LockConflictError(RuntimeError):
     """Raised when trying to acquire a lock already held by another user."""
 
-    _code: str = "ORI_ERR_ADMIN_026"
+    _code: str = "LEX_ERR_ADMIN_026"
 
     def __init__(self, holder_id: str, expires_at: datetime) -> None:
         self.holder_id = holder_id

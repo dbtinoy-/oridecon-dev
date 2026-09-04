@@ -104,10 +104,10 @@ class TestPluginsController:
     ) -> None:
         with (
             patch(
-                "oridecon.plugins.discovery.discover_plugins",
+                "lexigram.plugins.discovery.discover_plugins",
                 return_value=descriptors,
             ),
-            patch("oridecon.plugins.state.load_disabled", return_value={"rag"}),
+            patch("lexigram.plugins.state.load_disabled", return_value={"rag"}),
         ):
             resp = await controller.index(
                 _mock_request(user=_FakeUser(), session={"csrf_session_id": "s1"})
@@ -126,7 +126,7 @@ class TestPluginsController:
         self, controller: PluginsController, renderer: MagicMock
     ) -> None:
         with patch(
-            "oridecon.admin.controllers.plugins._load_toolbox",
+            "lexigram.admin.controllers.plugins._load_toolbox",
             return_value=None,
         ):
             resp = await controller.index(
@@ -145,11 +145,11 @@ class TestPluginsController:
     ) -> None:
         with (
             patch(
-                "oridecon.plugins.discovery.discover_plugins",
+                "lexigram.plugins.discovery.discover_plugins",
                 return_value=descriptors,
             ),
-            patch("oridecon.plugins.state.load_disabled", return_value=set()),
-            patch("oridecon.plugins.state.update_disabled") as update,
+            patch("lexigram.plugins.state.load_disabled", return_value=set()),
+            patch("lexigram.plugins.state.update_disabled") as update,
         ):
             resp = await controller.toggle(
                 _mock_request(
@@ -174,11 +174,11 @@ class TestPluginsController:
     ) -> None:
         with (
             patch(
-                "oridecon.plugins.discovery.discover_plugins",
+                "lexigram.plugins.discovery.discover_plugins",
                 return_value=descriptors,
             ),
-            patch("oridecon.plugins.state.load_disabled", return_value={"rag"}),
-            patch("oridecon.plugins.state.update_disabled") as update,
+            patch("lexigram.plugins.state.load_disabled", return_value={"rag"}),
+            patch("lexigram.plugins.state.update_disabled") as update,
         ):
             resp = await controller.toggle(
                 _mock_request(
@@ -206,11 +206,11 @@ class TestPluginsController:
         )
         with (
             patch(
-                "oridecon.plugins.discovery.discover_plugins",
+                "lexigram.plugins.discovery.discover_plugins",
                 return_value=descriptors,
             ),
-            patch("oridecon.plugins.state.load_disabled", return_value=set()),
-            patch("oridecon.plugins.state.save_disabled") as save,
+            patch("lexigram.plugins.state.load_disabled", return_value=set()),
+            patch("lexigram.plugins.state.save_disabled") as save,
         ):
             resp = await controller.toggle(
                 _mock_request(
@@ -231,11 +231,11 @@ class TestPluginsController:
         controller = PluginsController(renderer=renderer, csrf_service=_FakeCsrf())
         with (
             patch(
-                "oridecon.plugins.discovery.discover_plugins",
+                "lexigram.plugins.discovery.discover_plugins",
                 return_value=descriptors,
             ),
-            patch("oridecon.plugins.state.load_disabled", return_value=set()),
-            patch("oridecon.plugins.state.save_disabled") as save,
+            patch("lexigram.plugins.state.load_disabled", return_value=set()),
+            patch("lexigram.plugins.state.save_disabled") as save,
         ):
             resp = await controller.toggle(
                 _mock_request(
@@ -256,11 +256,11 @@ class TestPluginsController:
         controller = PluginsController(renderer=renderer, csrf_service=_FakeCsrf())
         with (
             patch(
-                "oridecon.plugins.discovery.discover_plugins",
+                "lexigram.plugins.discovery.discover_plugins",
                 return_value=descriptors,
             ),
-            patch("oridecon.plugins.state.load_disabled", return_value=set()),
-            patch("oridecon.plugins.state.update_disabled") as update,
+            patch("lexigram.plugins.state.load_disabled", return_value=set()),
+            patch("lexigram.plugins.state.update_disabled") as update,
         ):
             resp = await controller.toggle(
                 _mock_request(
@@ -284,11 +284,11 @@ class TestPluginsController:
     ) -> None:
         with (
             patch(
-                "oridecon.plugins.discovery.discover_plugins",
+                "lexigram.plugins.discovery.discover_plugins",
                 return_value=descriptors,
             ),
-            patch("oridecon.plugins.state.load_disabled", return_value=set()),
-            patch("oridecon.plugins.state.update_disabled") as update,
+            patch("lexigram.plugins.state.load_disabled", return_value=set()),
+            patch("lexigram.plugins.state.update_disabled") as update,
         ):
             resp = await controller.toggle(
                 _mock_request(
@@ -314,11 +314,11 @@ class TestPluginsController:
         )
         with (
             patch(
-                "oridecon.plugins.discovery.discover_plugins",
+                "lexigram.plugins.discovery.discover_plugins",
                 return_value=descriptors,
             ),
-            patch("oridecon.plugins.state.load_disabled", return_value=set()),
-            patch("oridecon.plugins.state.update_disabled"),
+            patch("lexigram.plugins.state.load_disabled", return_value=set()),
+            patch("lexigram.plugins.state.update_disabled"),
         ):
             await controller.toggle(
                 _mock_request(
@@ -338,11 +338,11 @@ class TestPluginsController:
     ) -> None:
         with (
             patch(
-                "oridecon.plugins.discovery.discover_plugins",
+                "lexigram.plugins.discovery.discover_plugins",
                 return_value=descriptors,
             ),
             patch(
-                "oridecon.plugins.state.update_disabled",
+                "lexigram.plugins.state.update_disabled",
                 side_effect=PluginStateError("disk full"),
             ) as update,
         ):
@@ -366,11 +366,11 @@ class TestPluginsController:
     ) -> None:
         with (
             patch(
-                "oridecon.plugins.discovery.discover_plugins",
+                "lexigram.plugins.discovery.discover_plugins",
                 return_value=descriptors,
             ),
             patch(
-                "oridecon.plugins.state.update_disabled",
+                "lexigram.plugins.state.update_disabled",
                 return_value={"rag"},
             ) as update,
         ):
@@ -403,10 +403,10 @@ class TestPluginsController:
         )
         with (
             patch(
-                "oridecon.plugins.discovery.discover_plugins",
+                "lexigram.plugins.discovery.discover_plugins",
                 return_value=[descriptor],
             ),
-            patch("oridecon.plugins.state.load_disabled", return_value=set()),
+            patch("lexigram.plugins.state.load_disabled", return_value=set()),
         ):
             resp = await controller.index(
                 _mock_request(user=_FakeUser(), session={"csrf_session_id": "s1"})

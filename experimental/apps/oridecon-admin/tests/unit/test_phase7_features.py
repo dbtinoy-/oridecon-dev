@@ -1,5 +1,5 @@
 """Tests for Phase 7 features:
-- InboxService from oridecon-notification (database notifications)
+- InboxService from lexigram-notification (database notifications)
 - Timezone handling (format_datetime, convert_to_timezone, get_user_timezone)
 - AutoRefreshWidget / LiveDataTable (live polling)
 - DateHierarchyFilter (date hierarchy)
@@ -14,7 +14,7 @@ from unittest.mock import MagicMock
 import pytest
 
 # ---------------------------------------------------------------------------
-# InboxService (oridecon-notification)
+# InboxService (lexigram-notification)
 # ---------------------------------------------------------------------------
 from oridecon.notification import InboxMessage, InboxService, InMemoryInboxStore
 

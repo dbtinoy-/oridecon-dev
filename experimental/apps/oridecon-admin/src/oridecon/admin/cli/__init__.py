@@ -8,7 +8,7 @@ from __future__ import annotations
 import os
 import warnings
 
-if not __name__.endswith(".__main__") and "_ORI_ADMIN_CLI_OK" not in os.environ:
+if not __name__.endswith(".__main__") and "_LEX_ADMIN_CLI_OK" not in os.environ:
     warnings.warn(
         "oridecon.admin.cli is tooling, not a runtime API. "
         "Use the `oridecon-admin` console script instead.",

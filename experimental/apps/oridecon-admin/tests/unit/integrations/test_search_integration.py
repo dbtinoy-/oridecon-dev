@@ -96,7 +96,7 @@ class TestSearchIntegrationBoot:
             f"Expected SearchEngineProtocol, got {resolved_key}"
         )
 
-    def test_module_has_no_direct_oridecon_search_import(self) -> None:
+    def test_module_has_no_direct_lexigram_search_import(self) -> None:
         """SearchIntegration must not import oridecon.search directly (§5)."""
         import inspect
 

@@ -211,7 +211,7 @@ class TestImportButtonRendering:
         ctx = ActionContext(resource_name="products", resource_prefix="/admin/products")
         html = action.render_button(None, ctx)
         assert 'data-import-upload-url="/admin/products/import"' in html
-        assert "OrideconImportUpload" in html
+        assert "LexigramImportUpload" in html
         assert ".csv,.json,.jsonl" in html
         assert "hx-get" not in html
 
@@ -233,6 +233,6 @@ class TestSharedScriptShipsHelper:
         )
 
         rendered = str(DataTableScriptRenderer.render(["1"]))
-        assert "window.OrideconImportUpload" in rendered
+        assert "window.LexigramImportUpload" in rendered
         assert "importUploadUrl" in rendered
         assert "X-CSRF-Token" in rendered

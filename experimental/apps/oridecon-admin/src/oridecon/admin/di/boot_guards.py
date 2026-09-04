@@ -69,7 +69,7 @@ class AdminBootGuardsMixin:
 
         # The first-run wizard must be gated: boot refuses to start without
         # a setup token (admin.auth.security.setup_token, legacy env var
-        # ADMIN_SETUP_TOKEN, or nested ORI_ADMIN_AUTH__SECURITY__SETUP_TOKEN)
+        # ADMIN_SETUP_TOKEN, or nested LEX_ADMIN_AUTH__SECURITY__SETUP_TOKEN)
         # unless the operator explicitly opts out with
         # admin.auth.security.setup_token_optin_unsafe=true for local/
         # ephemeral environments only.
@@ -80,7 +80,7 @@ class AdminBootGuardsMixin:
             raise RuntimeError(
                 "Refusing to boot admin without a setup token: set "
                 "ADMIN_SETUP_TOKEN (or config admin.auth.security.setup_token, "
-                "env ORI_ADMIN_AUTH__SECURITY__SETUP_TOKEN), or explicitly opt "
+                "env LEX_ADMIN_AUTH__SECURITY__SETUP_TOKEN), or explicitly opt "
                 "out for local/ephemeral environments with "
                 "admin.auth.security.setup_token_optin_unsafe=true"
             )

@@ -83,7 +83,7 @@ class ImpersonationController:
         if result.is_err():
             error = result.unwrap_err()
             # DomainError.message is the bare human-readable text; str()
-            # appends the ORI_ERR_* code enrichment (docs URL + arrow),
+            # appends the LEX_ERR_* code enrichment (docs URL + arrow),
             # which is not latin-1 encodable and so not header-safe.
             return self._toast_error(error.message, status_code=403)
 

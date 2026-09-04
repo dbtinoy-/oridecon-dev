@@ -179,7 +179,7 @@ class DataTableRenderer:
                     raw(tabs_html),
                     container,
                     id=Zones.TABLE.id,
-                    x_data=f"{{ selectedIds: [], expandedIds: [], collapsedGroups: [], lastSelected: null, focusedId: null, hasActiveFiltersState: false, allIds: {self.all_ids_json}, ...window.OrideconTableLogic }}",
+                    x_data=f"{{ selectedIds: [], expandedIds: [], collapsedGroups: [], lastSelected: null, focusedId: null, hasActiveFiltersState: false, allIds: {self.all_ids_json}, ...window.LexigramTableLogic }}",
                     **{
                         "@keydown.window": "handleKeydown($event)",
                         "@htmx:after-swap.window": "$nextTick(() => updateActiveFiltersState())",

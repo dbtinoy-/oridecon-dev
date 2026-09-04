@@ -1,4 +1,4 @@
-"""Unified data source interfaces for Oridecon Admin."""
+"""Unified data source interfaces for Lexigram Admin."""
 
 from __future__ import annotations
 

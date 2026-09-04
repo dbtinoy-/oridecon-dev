@@ -15,7 +15,7 @@ browser binaries still gets a green run:
 uv run playwright install chromium
 
 # run them
-uv run pytest experimental/apps/oridecon-admin/tests/browser --run-browser
+uv run pytest experimental/apps/lexigram-admin/tests/browser --run-browser
 ```
 
 Without `--run-browser` the suite is collected and skipped. With the flag

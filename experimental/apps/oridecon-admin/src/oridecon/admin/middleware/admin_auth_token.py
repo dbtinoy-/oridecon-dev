@@ -32,7 +32,7 @@ class DebugAdminAuthMiddleware:
         request: Any,
         call_next: Callable[[Any], Awaitable[Any]],
     ) -> Any:
-        # Oridecon middleware adapter will pass a Oridecon `Request` wrapper
+        # Lexigram middleware adapter will pass a Lexigram `Request` wrapper
         try:
             header_val = request.headers.get("x-debug-token")
         except AttributeError as e:

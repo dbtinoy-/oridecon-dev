@@ -50,13 +50,13 @@ async def _run_reindex(config_path: Path, app_module: str | None) -> None:
 
     from oridecon.app import Application
     from oridecon.config.loader import ConfigLoader  # type: ignore[import-untyped]
-    from oridecon.config.main import OrideconConfig
+    from oridecon.config.main import LexigramConfig
 
     if app_module is None:
         echo("Error: --app-module is required", err=True)
         raise TyperExit(1)
 
-    config = ConfigLoader().load_sync(OrideconConfig, config_path)
+    config = ConfigLoader().load_sync(LexigramConfig, config_path)
 
     module_path, _, class_name = app_module.rpartition(":")
     try:

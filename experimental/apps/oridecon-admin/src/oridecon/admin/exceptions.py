@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from enum import StrEnum
 
-from oridecon.contracts.exceptions import DomainError, OrideconError
+from oridecon.contracts.exceptions import DomainError, LexigramError
 from oridecon.contracts.exceptions import ValidationError as BaseValidationError
 
 
@@ -20,40 +20,40 @@ class ErrorCode(StrEnum):
     VALIDATION_FAILED = "VALIDATION_FAILED"
 
 
-class AdminError(OrideconError):
+class AdminError(LexigramError):
     """Base exception for all admin errors."""
 
-    _code: str = "ORI_ERR_ADMIN_002"
+    _code: str = "LEX_ERR_ADMIN_002"
 
 
 class NotFoundError(DomainError):
     """Raised when a resource is not found."""
 
-    _code: str = "ORI_ERR_ADMIN_003"
+    _code: str = "LEX_ERR_ADMIN_003"
 
 
 class PermissionDeniedError(DomainError):
     """Raised when permission is denied."""
 
-    _code: str = "ORI_ERR_ADMIN_004"
+    _code: str = "LEX_ERR_ADMIN_004"
 
 
 class ConflictError(DomainError):
     """Raised when a resource conflict occurs."""
 
-    _code: str = "ORI_ERR_ADMIN_005"
+    _code: str = "LEX_ERR_ADMIN_005"
 
 
 class AdminValidationError(BaseValidationError):
     """Raised when validation fails."""
 
-    _code: str = "ORI_ERR_ADMIN_006"
+    _code: str = "LEX_ERR_ADMIN_006"
 
 
 class DataError(DomainError):
     """Raised when a data source or database error occurs in admin."""
 
-    _code: str = "ORI_ERR_ADMIN_007"
+    _code: str = "LEX_ERR_ADMIN_007"
 
 
 class AdminDataError(AdminError):
@@ -63,13 +63,13 @@ class AdminDataError(AdminError):
     to prevent infrastructure details from bubbling up to the UI.
     """
 
-    _code: str = "ORI_ERR_ADMIN_008"
+    _code: str = "LEX_ERR_ADMIN_008"
 
 
 class NotificationError(DomainError):
     """Raised when a notification fails to send."""
 
-    _code: str = "ORI_ERR_ADMIN_009"
+    _code: str = "LEX_ERR_ADMIN_009"
 
 
 __all__ = [

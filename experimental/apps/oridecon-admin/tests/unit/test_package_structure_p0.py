@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[2]
-SRC_ROOT = PACKAGE_ROOT / "src/oridecon/admin"
+SRC_ROOT = PACKAGE_ROOT / "src/lexigram/admin"
 
 
 def test_admin_has_no_src_testing_shim() -> None:

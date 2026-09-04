@@ -1,4 +1,4 @@
-"""Reactive state management based on Signals for Oridecon Admin."""
+"""Reactive state management based on Signals for Lexigram Admin."""
 
 from __future__ import annotations
 

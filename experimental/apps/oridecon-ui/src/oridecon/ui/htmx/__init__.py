@@ -1,4 +1,4 @@
-"""HTMX helpers for Oridecon UI — consolidated re-exports."""
+"""HTMX helpers for Lexigram UI — consolidated re-exports."""
 
 from __future__ import annotations
 

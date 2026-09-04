@@ -45,7 +45,7 @@ def _positive_int(value: Any, default: int) -> int:
 class ResilienceIntegration:
     """Adapter that decorates data-source calls with retry and circuit-breaker.
 
-    Gracefully no-ops when ``oridecon-resilience`` is not installed or the
+    Gracefully no-ops when ``oridecon.resilience`` is not installed or the
     integration is disabled.
     """
 

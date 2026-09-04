@@ -42,7 +42,7 @@ async def test_delete_and_exists_failure_logs(caplog, capfd):
     storage = FailingStorage()
     svc = FileUploadService(storage=storage)
 
-    caplog.set_level("ERROR", logger="oridecon")
+    caplog.set_level("ERROR", logger="lexigram")
     deleted = await svc.delete("path/to/file")
     assert deleted is False
     # Delete failure returned False; log capture is validated elsewhere

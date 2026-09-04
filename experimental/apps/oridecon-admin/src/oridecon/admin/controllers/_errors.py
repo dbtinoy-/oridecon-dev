@@ -3,14 +3,14 @@
 Single place that turns framework error strings into text safe to show a
 person. Framework errors are chained and machine-annotated::
 
-    [ORI_ERR_ADMIN_010] Verification email could not be delivered:
-    [ORI_ERR_ADMIN_009] All 1 recipient(s) failed: ...
+    [LEX_ERR_ADMIN_010] Verification email could not be delivered:
+    [LEX_ERR_ADMIN_009] All 1 recipient(s) failed: ...
       → Fix: Configure a mailer backend ...
-      → See: https://docs.oridecon.dev/reference/errors/ORI_ERR_ADMIN_010
+      → See: https://docs.oridecon.dev/reference/errors/LEX_ERR_ADMIN_010
 
 None of that belongs in a query string, flash message, or rendered page:
 error codes and docs links are for logs (where the full chain is always
-recorded before humanizing). This module strips every ``[ORI_ERR_*]``
+recorded before humanizing). This module strips every ``[LEX_ERR_*]``
 token and every ``→ Fix:`` / ``→ See:`` annotation — anywhere in the
 string, not just at the start — and collapses the remainder to a single
 line.
@@ -25,7 +25,7 @@ from __future__ import annotations
 import re
 
 # Error-code tokens, wherever they appear (chains embed them mid-string).
-_ORI_ERR_TOKEN_RE = re.compile(r"\[ORI_ERR_[A-Z0-9_]+\]\s*")
+_LEX_ERR_TOKEN_RE = re.compile(r"\[LEX_ERR_[A-Z0-9_]+\]\s*")
 
 # "→ Fix: ..." / "→ See: ..." annotations. They run to the end of their
 # line; chained messages may contain several.
@@ -39,7 +39,7 @@ def humanize_error(message: str, *, fallback: str = "") -> str:
 
     Args:
         message: Raw error text, possibly a chained framework error with
-            ``[ORI_ERR_*]`` codes and ``→ Fix:`` / ``→ See:`` lines.
+            ``[LEX_ERR_*]`` codes and ``→ Fix:`` / ``→ See:`` lines.
         fallback: Returned when the cleaned message ends up empty (e.g. the
             original consisted only of annotations).
 
@@ -49,7 +49,7 @@ def humanize_error(message: str, *, fallback: str = "") -> str:
     """
     if not message:
         return fallback
-    cleaned = _ORI_ERR_TOKEN_RE.sub("", message)
+    cleaned = _LEX_ERR_TOKEN_RE.sub("", message)
     cleaned = _ANNOTATION_RE.sub("", cleaned)
     cleaned = _WHITESPACE_RE.sub(" ", cleaned).strip()
     return cleaned or fallback

@@ -29,7 +29,7 @@ async def create_app(
     resources: Sequence[type | Resource] | dict[str, type | Resource] | None = None,
     config: AdminConfig | None = None,
     config_path: Path | str | None = None,
-    title: str = "Oridecon Admin",
+    title: str = "Lexigram Admin",
     prefix: str = "/admin",
     debug: bool = False,
     database_url: str | None = None,
@@ -66,9 +66,10 @@ async def create_app(
     """
     from oridecon.admin.config import AdminConfig as AdminConfigCls
 
+    config_loader: AdminConfigLoader | None = kwargs.pop("config_loader", None)
     if config is None and config_path is not None:
-        loader = AdminConfigLoader(yaml_path=Path(config_path))
-        config = await loader.load()
+        config_loader = AdminConfigLoader(yaml_path=Path(config_path))
+        config = await config_loader.load()
 
     if config is None:
         config = AdminConfigCls(title=title, prefix=prefix, debug=debug)
@@ -97,7 +98,12 @@ async def create_app(
         await db_provider.register(container)
         await db_provider.boot(container)
 
-    admin = AdminProvider(config=config, resources=resources_list, **kwargs)
+    admin = AdminProvider(
+        config=config,
+        resources=resources_list,
+        config_loader=config_loader,
+        **kwargs,
+    )
     await admin.register(container)
     await admin.boot(container)
 
@@ -122,7 +128,7 @@ async def create_admin_provider(
     resources: Sequence[type | Resource] | dict[str, type | Resource] | None = None,
     config: AdminConfig | None = None,
     config_path: Path | str | None = None,
-    title: str = "Oridecon Admin",
+    title: str = "Lexigram Admin",
     prefix: str = "/admin",
     debug: bool = False,
     **kwargs: Any,
@@ -130,9 +136,10 @@ async def create_admin_provider(
     """Create an AdminProvider for use with Application."""
     from oridecon.admin.config import AdminConfig as AdminConfigCls
 
+    config_loader: AdminConfigLoader | None = kwargs.pop("config_loader", None)
     if config is None and config_path is not None:
-        loader = AdminConfigLoader(yaml_path=Path(config_path))
-        config = await loader.load()
+        config_loader = AdminConfigLoader(yaml_path=Path(config_path))
+        config = await config_loader.load()
 
     if config is None:
         config = AdminConfigCls(title=title, prefix=prefix, debug=debug)
@@ -144,7 +151,11 @@ async def create_admin_provider(
         else:
             resources_list = list(resources)
 
-    admin = AdminProvider(config=config, resources=resources_list)
+    admin = AdminProvider(
+        config=config,
+        resources=resources_list,
+        config_loader=config_loader,
+    )
     logger.info("AdminProvider created for prefix %s", prefix)
     return admin
 

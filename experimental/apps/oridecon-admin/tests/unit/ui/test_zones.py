@@ -117,7 +117,7 @@ class TestZones:
     def test_zones_table_exists(self):
         """TABLE zone should exist and be the root scope."""
         assert Zones.TABLE is not None
-        assert Zones.TABLE.id == "oridecon-table"
+        assert Zones.TABLE.id == "lexigram-table"
         assert Zones.TABLE.swappable is True
         assert Zones.TABLE.swap_mode == SwapMode.OUTER_HTML
 
@@ -159,7 +159,7 @@ class TestZones:
 
     def test_zones_get_by_id(self):
         """Zones.get_by_id() should find zones by ID."""
-        zone = Zones.get_by_id("oridecon-table")
+        zone = Zones.get_by_id("lexigram-table")
         assert zone == Zones.TABLE
 
         zone = Zones.get_by_id("table-data")
@@ -172,7 +172,7 @@ class TestZones:
 
     def test_zones_get_by_selector(self):
         """Zones.get_by_selector() should find zones by CSS selector."""
-        zone = Zones.get_by_selector("#oridecon-table")
+        zone = Zones.get_by_selector("#lexigram-table")
         assert zone == Zones.TABLE
 
         # Should also work without #

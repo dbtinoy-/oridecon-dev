@@ -1,4 +1,4 @@
-"""Oridecon Admin — Administrative panel for Oridecon applications."""
+"""Lexigram Admin — Administrative panel for Lexigram applications."""
 
 from __future__ import annotations
 

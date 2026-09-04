@@ -1,4 +1,4 @@
-"""Oridecon UI — HTMX/htpy component library for Oridecon web applications.
+"""Lexigram UI — HTMX/htpy component library for Lexigram web applications.
 
 Provides general-purpose UI components, layouts, and utilities for building
 server-rendered HTMX applications.

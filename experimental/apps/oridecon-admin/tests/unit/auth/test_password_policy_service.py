@@ -1,4 +1,4 @@
-"""Unit tests for AdminPasswordPolicyService (oridecon-auth delegation)."""
+"""Unit tests for AdminPasswordPolicyService (lexigram-auth delegation)."""
 
 from __future__ import annotations
 
@@ -33,7 +33,7 @@ def _make_service(
 
 
 def test_parity_with_auth_policy_verdicts() -> None:
-    """Verdicts are identical to the delegated oridecon-auth policy."""
+    """Verdicts are identical to the delegated lexigram-auth policy."""
     service, policy = _make_service()
     samples = ["short", "Correct-Horse-42!Battery", "password123", "welcome"]
 
