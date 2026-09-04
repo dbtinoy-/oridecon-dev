@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from oridecon.ui import raw
+from oridecon.ui import js_string, trusted_html
 
 
 def search_overlay_markup() -> Any:
     """Build the search-overlay styles, keyboard nav script and SPA nav hook."""
-    return raw(
+    return trusted_html(
         """
         <style>
             [x-cloak] {
@@ -218,6 +218,7 @@ def search_overlay_markup() -> Any:
             })();
         </script>
         """,
+        source="AdminShell search overlay markup",
     )
 
 
@@ -227,7 +228,7 @@ def loading_bar_script(flash_zone_id: str) -> Any:
     Args:
         flash_zone_id: DOM id of the flash container used for error toasts.
     """
-    return raw(
+    return trusted_html(
         f"""
         <div id="htmx-loading-bar" class="hidden fixed top-0 left-0 right-0 h-1 bg-primary-600 z-50 transition-opacity">
             <div class="h-full bg-primary-400 animate-pulse"></div>
@@ -310,7 +311,7 @@ def loading_bar_script(flash_zone_id: str) -> Any:
             document.body.addEventListener('htmx:responseError', function(evt) {{
                 const {{ xhr }} = evt.detail;
                 const status = xhr.status;
-                const flashContainer = document.getElementById('{flash_zone_id}');
+                const flashContainer = document.getElementById({js_string(flash_zone_id)});
 
                 let message = 'An error occurred';
                 let variant = 'error';
@@ -348,7 +349,7 @@ def loading_bar_script(flash_zone_id: str) -> Any:
 
             // Show toast helper
             function showToast(message, type, duration) {{
-                const flashContainer = document.getElementById('{flash_zone_id}');
+                const flashContainer = document.getElementById({js_string(flash_zone_id)});
                 duration = Number.isFinite(Number(duration)) ? Number(duration) : 5000;
                 if (!flashContainer) return;
                 const bgColors = {{success: 'bg-success/10 border border-success/30 text-success', error: 'bg-destructive/10 border border-destructive/30 text-destructive', warning: 'bg-warning/10 border border-warning/30 text-warning', info: 'bg-info/10 border border-info/30 text-info'}};
@@ -388,7 +389,7 @@ def loading_bar_script(flash_zone_id: str) -> Any:
 
             // Network error handling
             document.body.addEventListener('htmx:sendError', function(evt) {{
-                const flashContainer = document.getElementById('{flash_zone_id}');
+                const flashContainer = document.getElementById({js_string(flash_zone_id)});
                 if (flashContainer) {{
                     flashContainer.innerHTML = `<div class="fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg bg-warning/10 border border-warning/30 text-warning max-w-sm" role="alert">
                         <div class="flex items-start gap-3">
@@ -405,6 +406,7 @@ def loading_bar_script(flash_zone_id: str) -> Any:
             }})();
         </script>
     """,
+        source="AdminShell loading and error markup",
     )
 
 
@@ -415,7 +417,7 @@ def admin_form_ux_script() -> Any:
     classes so it works for settings, generated resource forms, declarative
     FormBase forms, and forms inserted later by HTMX overlays.
     """
-    return raw(
+    return trusted_html(
         """
         <style>
             form[data-admin-form] [data-admin-form-actions] {
@@ -604,6 +606,7 @@ def admin_form_ux_script() -> Any:
         }());
         </script>
         """,
+        source="AdminShell delegated form UX markup",
     )
 
 
