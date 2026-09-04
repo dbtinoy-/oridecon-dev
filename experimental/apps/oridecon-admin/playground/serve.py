@@ -351,9 +351,17 @@ async def _allow_preview_embedding() -> None:
 
     from oridecon.admin.settings.panel.models import DEFAULT_CSP
 
+    # The Arena proxy injects a Cloudflare Insights beacon script into the
+    # proxied HTML; the enforced policy (script-src 'self' ...) would block
+    # it and leave a console error. Allow that analytics origin here — it is
+    # proxy-injected telemetry, not app code, and this relaxation is applied
+    # only to the playground's preview surface.
     relaxed_csp = DEFAULT_CSP.replace(
         "frame-ancestors 'none';",
         "frame-ancestors *;",
+    ).replace(
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval';",
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com;",
     )
     rows = [
         ("admin_ui.admin.security.frame_options", json.dumps("")),
