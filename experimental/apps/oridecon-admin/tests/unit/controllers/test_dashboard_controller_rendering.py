@@ -16,7 +16,7 @@ from oridecon.contracts.admin import (
     WidgetKind,
     WidgetSize,
 )
-from oridecon.ui import RenderScope, render_to_string
+from oridecon.ui import Element, RenderScope, TrustedHTML, render_to_string
 
 
 def test_dashboard_dnd_nodes_scope_ids_and_serialize_dynamic_values() -> None:
@@ -37,6 +37,30 @@ def test_dashboard_dnd_nodes_scope_ids_and_serialize_dynamic_values() -> None:
     assert "\\u003c/script\\u003e" in html
     assert "&lt;/script&gt;&lt;script&gt;" in html
     assert html.count("<script") == 1
+
+
+def test_dashboard_dnd_controller_replaces_and_cleans_up_its_listeners() -> None:
+    _controls, script = _dashboard_dnd_nodes(
+        scope=RenderScope(),
+        dashboard_key="operations",
+        grid_id="dashboard-grid",
+        reorder_url="/admin/widgets/reorder",
+        csrf_token="csrf",
+    )
+
+    assert isinstance(script, Element)
+    assert isinstance(script.children[0], TrustedHTML)
+    assert script.children[0].source == "generated dashboard layout controller"
+    source = script.children[0].value
+    assert "window.__orideconDashboardControllers" in source
+    assert "if (previous) previous.destroy()" in source
+    assert "htmx:beforeCleanupElement" in source
+    assert "removeEventListener('htmx:afterSwap', afterSwap)" in source
+    assert "saveBtn.removeEventListener('click', saveLayout)" in source
+    assert "sortableInstance.destroy()" in source
+    assert "new AbortController()" in source
+    assert "window.__adminDashboardListeners" not in source
+    assert "htmx.process(" not in source
 
 
 class TestDashboardController:

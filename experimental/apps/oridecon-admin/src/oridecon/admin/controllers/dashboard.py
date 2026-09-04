@@ -81,18 +81,35 @@ def _dashboard_dnd_nodes(
     )
     script = f"""
 (function() {{
-  var grid = document.getElementById({js_string(grid_id)});
+  var controllerKey = {js_string(controls_id)};
+  var registry = window.__orideconDashboardControllers;
+  if (!(registry instanceof Map)) {{
+    registry = window.__orideconDashboardControllers = new Map();
+  }}
+  var previous = registry.get(controllerKey);
+  if (previous) previous.destroy();
+
+  var grid = null;
   var saveBtn = document.getElementById({js_string(save_id)});
   var status = document.getElementById({js_string(status_id)});
   var controls = document.getElementById({js_string(controls_id)});
   var sortableInstance = null;
+  var saveRequest = null;
+  var destroyed = false;
+  var controller = {{destroy: destroy}};
 
   function setStatus(message) {{
-    if (status) status.textContent = message || '';
+    if (status && status.isConnected) status.textContent = message || '';
   }}
 
   function initSortable() {{
-    grid = document.getElementById({js_string(grid_id)});
+    if (destroyed) return;
+    var nextGrid = document.getElementById({js_string(grid_id)});
+    if (nextGrid !== grid) {{
+      if (sortableInstance) sortableInstance.destroy();
+      sortableInstance = null;
+      grid = nextGrid;
+    }}
     if (!grid || sortableInstance || typeof Sortable === 'undefined') return;
     sortableInstance = new Sortable(grid, {{
       animation: 150,
@@ -104,41 +121,74 @@ def _dashboard_dnd_nodes(
     }});
   }}
 
-  initSortable();
-  if (!window.__adminDashboardListeners) {{
-    window.__adminDashboardListeners = 1;
-    document.body.addEventListener('htmx:afterSwap', initSortable);
-    document.body.addEventListener('htmx:afterSwap', function(e) {{
-      var t = e.detail && e.detail.target;
-      if (t && window.htmx) {{ try {{ htmx.process(t); }} catch (err) {{}} }}
+  async function saveLayout() {{
+    initSortable();
+    if (!sortableInstance || !grid || !saveBtn) return;
+    var order = Array.from(grid.querySelectorAll('.widget-card')).map(function(card) {{
+      return card.dataset.widgetName;
     }});
-  }}
-
-  if (saveBtn) {{
-    saveBtn.addEventListener('click', async function() {{
-      if (!sortableInstance) return;
-      var order = Array.from(grid.querySelectorAll('.widget-card')).map(function(card) {{
-        return card.dataset.widgetName;
+    if (saveRequest) saveRequest.abort();
+    var request = new AbortController();
+    saveRequest = request;
+    saveBtn.disabled = true;
+    setStatus('Saving layout…');
+    try {{
+      var csrf = controls ? controls.dataset.csrfToken || '' : '';
+      var resp = await fetch({js_string(reorder_url)}, {{
+        method: 'POST',
+        headers: {{'Content-Type': 'application/json', 'X-CSRF-Token': csrf}},
+        body: JSON.stringify({{order: order}}),
+        signal: request.signal
       }});
-      saveBtn.disabled = true;
-      setStatus('Saving layout…');
-      try {{
-        var csrf = controls ? controls.dataset.csrfToken || '' : '';
-        var resp = await fetch({js_string(reorder_url)}, {{
-          method: 'POST',
-          headers: {{'Content-Type': 'application/json', 'X-CSRF-Token': csrf}},
-          body: JSON.stringify({{order: order}})
-        }});
-        if (!resp.ok) throw new Error('save_failed');
+      if (!resp.ok) throw new Error('save_failed');
+      if (saveRequest === request) {{
         saveBtn.classList.add('hidden');
         setStatus('Layout saved');
-      }} catch (e) {{
-        setStatus('Could not save layout. Try again.');
-      }} finally {{
-        saveBtn.disabled = false;
       }}
-    }});
+    }} catch (error) {{
+      if (error.name !== 'AbortError' && saveRequest === request) {{
+        setStatus('Could not save layout. Try again.');
+      }}
+    }} finally {{
+      if (saveRequest === request) {{
+        saveRequest = null;
+        if (saveBtn.isConnected) saveBtn.disabled = false;
+      }}
+    }}
   }}
+
+  function afterSwap() {{
+    if (!controls || !controls.isConnected) {{
+      destroy();
+      return;
+    }}
+    initSortable();
+  }}
+
+  function beforeCleanup(event) {{
+    var target = event.detail && event.detail.elt || event.target;
+    if (target && controls && (target === controls ||
+        (typeof target.contains === 'function' && target.contains(controls)))) destroy();
+  }}
+
+  function destroy() {{
+    if (destroyed) return;
+    destroyed = true;
+    document.body.removeEventListener('htmx:afterSwap', afterSwap);
+    document.body.removeEventListener('htmx:beforeCleanupElement', beforeCleanup);
+    window.removeEventListener('pagehide', destroy);
+    if (saveBtn) saveBtn.removeEventListener('click', saveLayout);
+    if (saveRequest) saveRequest.abort();
+    if (sortableInstance) sortableInstance.destroy();
+    if (registry.get(controllerKey) === controller) registry.delete(controllerKey);
+  }}
+
+  registry.set(controllerKey, controller);
+  document.body.addEventListener('htmx:afterSwap', afterSwap);
+  document.body.addEventListener('htmx:beforeCleanupElement', beforeCleanup);
+  window.addEventListener('pagehide', destroy, {{once: true}});
+  if (saveBtn) saveBtn.addEventListener('click', saveLayout);
+  initSortable();
 }})();
 """
     script_node = el(
