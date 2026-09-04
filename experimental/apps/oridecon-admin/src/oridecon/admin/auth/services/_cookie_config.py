@@ -24,10 +24,16 @@ def build_session_cookie_kwargs(cfg: AdminAuthConfig) -> SessionCookieKwargs:
     without HTTPS still works.
     """
     is_prod = cfg.env == "production"
+    https_only = cfg.cookie_secure if cfg.cookie_secure is not None else is_prod
+    same_site = cfg.cookie_same_site or ("strict" if is_prod else "lax")
+    if same_site == "none" and not https_only:
+        # Browsers reject a SameSite=None cookie without Secure, so a
+        # SameSite=None override implies the Secure flag.
+        https_only = True
     return SessionCookieKwargs(
         secret_key=cfg.session_secret.get_secret_value(),
-        https_only=is_prod,
-        same_site="strict" if is_prod else "lax",
+        https_only=https_only,
+        same_site=same_site,
         max_age=cfg.session_lifetime,
     )
 

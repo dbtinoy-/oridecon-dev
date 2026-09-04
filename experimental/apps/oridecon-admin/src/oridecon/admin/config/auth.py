@@ -132,6 +132,23 @@ class AdminAuthConfig(DomainModel):
             "across other workers."
         ),
     )
+    cookie_same_site: Literal["lax", "strict", "none"] | None = Field(
+        default=None,
+        description=(
+            "Override the SameSite attribute of the session cookie. Default: "
+            "'lax' in development, 'strict' in production. Set 'none' when the "
+            "panel is embedded on another site (e.g. a sandboxed preview); "
+            "this forces the Secure flag because browsers reject "
+            "SameSite=None without it."
+        ),
+    )
+    cookie_secure: bool | None = Field(
+        default=None,
+        description=(
+            "Override the Secure flag of the session cookie. Default: false in "
+            "development, true in production."
+        ),
+    )
 
     # Security settings
     idle_timeout: int = Field(

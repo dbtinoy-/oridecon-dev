@@ -227,6 +227,20 @@ async def build_app():
     container.singleton(ProductStore, ProductStore(_seed_products()))
     container.singleton(CustomerStore, CustomerStore(_seed_customers()))
 
+    auth_config: dict[str, Any] = {
+        "session_secret": "playground-session-secret-not-for-prod",
+        "security": {"setup_token": SETUP_TOKEN},
+        # Email verification enforcement stays at its default (ON)
+        # and no mailer is configured — the fresh-install path.
+    }
+    if _preview_embed_enabled():
+        # The Arena/E2B preview can embed the panel as a third-party
+        # iframe; SameSite=lax cookies are then dropped by the browser
+        # and every CSRF-protected POST fails. SameSite=None (+Secure,
+        # implied by the builder) keeps the session/CSRF flow working.
+        auth_config["cookie_same_site"] = "none"
+        auth_config["cookie_secure"] = True
+
     config = AdminConfig.from_dict(
         {
             "prefix": "/admin",
@@ -234,12 +248,7 @@ async def build_app():
             # Debug on: exercises the R11 console-mailer fallback so
             # verification/reset emails land in the server log.
             "debug": True,
-            "auth": {
-                "session_secret": "playground-session-secret-not-for-prod",
-                "security": {"setup_token": SETUP_TOKEN},
-                # Email verification enforcement stays at its default (ON)
-                # and no mailer is configured — the fresh-install path.
-            },
+            "auth": auth_config,
         }
     )
 
@@ -291,6 +300,21 @@ def _attach_root_landing(app: Any) -> None:
     app.add_route("/", _root, methods=["GET"])
 
 
+def _preview_embed_enabled() -> bool:
+    """True when this playground should relax security for the live preview.
+
+    The Arena/E2B preview embeds the app on a ``*.arena.site`` /
+    ``*.e2b.app`` origin, which requires iframe-friendly framing headers
+    and a cross-site session cookie. Base the decision on the sandbox
+    environment; operators can override with
+    ``ORIDECON_PLAYGROUND_ALLOW_EMBED=0|1``.
+    """
+    env_value = os.environ.get("ORIDECON_PLAYGROUND_ALLOW_EMBED")
+    if env_value is None:
+        return bool(os.environ.get("E2B_SANDBOX") or os.environ.get("E2B_SANDBOX_ID"))
+    return env_value.strip().lower() not in {"0", "false", "off", "no", ""}
+
+
 def main() -> None:
     import uvicorn
 
@@ -303,38 +327,33 @@ def main() -> None:
 
 
 async def _allow_preview_embedding() -> None:
-    """Let the E2B/Arena preview frame the panel (playground only).
+    """Relax framing for the Arena/E2B live preview (playground only).
 
     The admin security middleware ships ``X-Frame-Options: DENY`` and
     ``frame-ancestors 'none'``, which is correct for production but makes
-    the live preview block the iframe. When this process runs inside an
-    E2B sandbox (or ``ORIDECON_PLAYGROUND_ALLOW_EMBED=1``), write the two
-    inherited settings the middleware reads:
+    the embedded preview block the iframe. When this process runs inside
+    a preview sandbox, write the two inherited settings the middleware
+    reads:
 
     * ``admin.security.frame_options`` → ``""``  (no X-Frame-Options)
-    * ``admin.security.csp`` → DEFAULT_CSP with ``frame-ancestors``
-      limited to the E2B preview origins instead of ``'none'``
+    * ``admin.security.csp`` → DEFAULT_CSP with ``frame-ancestors *``
+      (the preview parent may be ``*.arena.site``, ``*.e2b.app`` or a
+      related host; the playground is the only surface that runs this)
 
     Values are JSON-encoded exactly like ``oridecon.serialization`` stores
     them. The report-only STRICT_CSP candidate is left untouched (it never
     blocks framing and keeps the console diagnostics).
     """
 
-    env_value = os.environ.get("ORIDECON_PLAYGROUND_ALLOW_EMBED")
-    if env_value is None:
-        enabled = bool(os.environ.get("E2B_SANDBOX") or os.environ.get("E2B_SANDBOX_ID"))
-    else:
-        enabled = env_value.strip().lower() not in {"0", "false", "off", "no", ""}
-    if not enabled:
+    if not _preview_embed_enabled():
         print("▶ preview embedding: NOT relaxed (secure defaults kept)")
         return
 
     from oridecon.admin.settings.panel.models import DEFAULT_CSP
 
-    preview_ancestors = "'self' https://*.e2b.app https://e2b.app"
     relaxed_csp = DEFAULT_CSP.replace(
         "frame-ancestors 'none';",
-        f"frame-ancestors {preview_ancestors};",
+        "frame-ancestors *;",
     )
     rows = [
         ("admin_ui.admin.security.frame_options", json.dumps("")),
@@ -352,7 +371,7 @@ async def _allow_preview_embedding() -> None:
                 (key, value),
             )
         await db.commit()
-    print("▶ preview embedding: relaxed (frame_options cleared, frame-ancestors E2B-only)")
+    print("▶ preview embedding: relaxed (frame_options cleared, frame-ancestors *, SameSite=None cookie)")
 
 
 if __name__ == "__main__":

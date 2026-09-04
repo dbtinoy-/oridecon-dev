@@ -33,3 +33,37 @@ def test_cookie_kwargs_secret_key_is_plain_string() -> None:
     kwargs = build_session_cookie_kwargs(cfg)
     assert isinstance(kwargs["secret_key"], str)
     assert kwargs["secret_key"] == "y" * 64
+
+
+def test_same_site_none_override_forces_secure() -> None:
+    cfg = AdminAuthConfig(
+        env="development",
+        session_secret="z" * 64,
+        cookie_same_site="none",
+    )
+    kwargs = build_session_cookie_kwargs(cfg)
+    assert kwargs["same_site"] == "none"
+    # Browsers reject SameSite=None without Secure; the builder must force it.
+    assert kwargs["https_only"] is True
+
+
+def test_cookie_secure_override_wins_in_development() -> None:
+    cfg = AdminAuthConfig(
+        env="development",
+        session_secret="z" * 64,
+        cookie_secure=True,
+    )
+    kwargs = build_session_cookie_kwargs(cfg)
+    assert kwargs["https_only"] is True
+    assert kwargs["same_site"] == "lax"
+
+
+def test_defaults_unchanged_without_overrides() -> None:
+    dev = build_session_cookie_kwargs(
+        AdminAuthConfig(env="development", session_secret="z" * 64)
+    )
+    prod = build_session_cookie_kwargs(
+        AdminAuthConfig(env="production", session_secret="z" * 64)
+    )
+    assert (dev["https_only"], dev["same_site"]) == (False, "lax")
+    assert (prod["https_only"], prod["same_site"]) == (True, "strict")
