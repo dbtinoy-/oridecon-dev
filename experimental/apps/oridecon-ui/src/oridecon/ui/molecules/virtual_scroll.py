@@ -6,7 +6,9 @@ from copy import copy
 import re
 from typing import Any
 
+from oridecon.ui.atoms.icons import get_icon
 from oridecon.ui.core.base import Component, Element, el
+from oridecon.ui.core.render_context import get_render_scope
 from oridecon.ui.core.url import is_safe_navigation_url
 
 _DOM_ID_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_-]*$")
@@ -60,6 +62,9 @@ class VirtualScroll(Component):
         self.placeholder = placeholder
 
     def render(self) -> Any:
+        # Reserve the caller-facing ID in the response-local scope so sibling
+        # virtual regions cannot silently emit the same target.
+        get_render_scope().child("virtual-scroll").id("root", key=self.target_id)
         custom_class = self.props.get("class_", self.props.get("class"))
         attrs = {
             key: value
@@ -161,14 +166,16 @@ class InfiniteScrollTrigger(Component):
         self.trigger = trigger
         self.target = target
         self.swap = swap
-        self.select = select or "#table-content > *"
+        # Omitting hx-select lets the endpoint own its fragment shape. A
+        # page-global #table-content fallback selected rows from the first
+        # table when multiple feeds were composed.
+        self.select = select
 
     def render(self) -> Any:
         children = self.children or [
-            el(
-                "i",
-                aria_hidden="true",
-                class_="htmx-indicator fas fa-spinner fa-spin mr-2 text-primary",
+            get_icon(
+                "refresh-cw",
+                class_name="htmx-indicator mr-2 h-4 w-4 animate-spin text-primary",
             ),
             el("span", "Load more", class_="text-muted-foreground text-sm"),
         ]

@@ -50,6 +50,16 @@ class TestVirtualScroll:
         with pytest.raises(ValueError, match="conflicts"):
             VirtualScroll("/items", target_id="orders", id_="customers")
 
+    def test_duplicate_targets_fail_in_one_render_tree(self) -> None:
+        page = el(
+            "main",
+            VirtualScroll("/orders", target_id="shared-results"),
+            VirtualScroll("/customers", target_id="shared-results"),
+        )
+
+        with pytest.raises(ValueError, match="Duplicate RenderScope ID"):
+            render_to_string(page)
+
 
 class TestInfiniteRow:
     def test_decorating_an_element_does_not_mutate_the_caller(self) -> None:
@@ -94,7 +104,21 @@ class TestInfiniteScrollTrigger:
         assert 'hx-target="#orders-results"' in html
         assert 'aria-label="Load more results"' in html
         assert "htmx-indicator" in html
+        assert "<svg" in html
+        assert "fa-spinner" not in html
         assert "Load more" in html
+        assert "#table-content" not in html
+
+    def test_explicit_scoped_fragment_selector_is_preserved(self) -> None:
+        html = render_to_string(
+            InfiniteScrollTrigger(
+                "/items?page=2",
+                target="#orders-results",
+                select="#orders-results > .order",
+            )
+        )
+
+        assert 'hx-select="#orders-results &gt; .order"' in html
 
     def test_custom_link_content_is_preserved(self) -> None:
         html = render_to_string(
