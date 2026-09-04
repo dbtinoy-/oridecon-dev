@@ -21,6 +21,18 @@ except ImportError:
     Markup = str  # type: ignore[misc,assignment]
 
 
+def _page_content_node(content: Any) -> Any:
+    """Adapt the renderer's legacy HTML-string contract at one named boundary."""
+    if isinstance(content, str):
+        from oridecon.ui import trusted_html
+
+        return trusted_html(
+            content,
+            source="AdminRenderer legacy page-content HTML contract",
+        )
+    return content
+
+
 def resolve_admin_nav(request: Any) -> tuple[list, list, list | None]:
     """Resolve nav items, system menu items, and cluster secondary nav.
 
@@ -188,7 +200,7 @@ class AdminRenderer:
         csrf_token = getattr(request.state, "csrf_token", None) if request else None
 
         shell = AdminShell(
-            content=content,
+            content=_page_content_node(content),
             title=title,
             user=user,
             nav_items=nav_items,
@@ -252,9 +264,6 @@ class AdminRenderer:
         Returns:
             HTMLResponse with partial content
         """
-        if hasattr(content, "__html__"):
-            content_str = str(content.__html__())
-        else:
-            content_str = str(content)
+        from oridecon.ui import render_to_string
 
-        return HTMLResponse(content_str, headers=headers or {})
+        return HTMLResponse(render_to_string(content), headers=headers or {})

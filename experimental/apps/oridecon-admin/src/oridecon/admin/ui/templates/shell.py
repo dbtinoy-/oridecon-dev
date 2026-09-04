@@ -24,8 +24,7 @@ from oridecon.ui import (
     Zones,
     el,
     flash_to_toast,
-    raw,
-    render_to_string,
+    trusted_html,
 )
 
 
@@ -151,22 +150,30 @@ class AdminShell(Component):
             )
 
         # 3. Theme styles (injected as inline style for runtime primary color)
+        # ``style`` is a raw-text HTML element, so a literal ``<`` could end
+        # the element before CSS parsing. Encode it as a CSS escape before the
+        # one attributable trust grant around generated theme output.
         theme_style = (
-            raw(f"<style id='admin-theme-css'>{self.theme_css}</style>")
+            el(
+                "style",
+                trusted_html(
+                    self.theme_css.replace("<", r"\3c "),
+                    source="AdminShell generated theme CSS",
+                ),
+                id="admin-theme-css",
+            )
             if self.theme_css
             else ""
         )
 
         search_overlay = search_overlay_markup()
 
-        sidebar_html = raw(render_to_string(sidebar))
-        topbar_html = raw(render_to_string(topbar))
-
-        # Normalize content to an HTML string so the shell always exposes a
-        # stable `#main-content` element (with constant classes) for HTMX
-        # targets. Cluster centers render their sidebar inside the content
-        # and own their layout.
-        content_inner = raw(render_to_string(self.content))
+        # Keep framework objects structured through the shell. Plain content
+        # strings are text; legacy HTML producers must grant trust at their
+        # own output boundary before constructing AdminShell.
+        sidebar_node = sidebar
+        topbar_node = topbar
+        content_inner = self.content
 
         # 4. Handle Notifications (Toast)
         # We wrap in a container to allow OOB swaps. Structured flash entries
@@ -175,11 +182,15 @@ class AdminShell(Component):
         toasts = "".join(
             channel.render_toast(toast) for toast in flash_to_toast(self.flash_messages)
         )
-        toast_node = raw(toasts) if toasts else ""
+        toast_node = (
+            trusted_html(toasts, source="ServerToastChannel rendered toast")
+            if toasts
+            else ""
+        )
 
         flash_container = el("div", toast_node, id=Zones.FLASH.id)
 
-        sidebar_container = build_sidebar_container(sidebar_html)
+        sidebar_container = build_sidebar_container(sidebar_node)
 
         impersonation_banner = build_impersonation_banner(
             self.impersonation_active,
@@ -189,7 +200,7 @@ class AdminShell(Component):
         )
 
         main_area = build_main_area(
-            topbar_html,
+            topbar_node,
             impersonation_banner,
             self.breadcrumbs,
             content_inner,

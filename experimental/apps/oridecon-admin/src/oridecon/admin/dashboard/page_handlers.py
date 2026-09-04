@@ -81,7 +81,9 @@ _PAGE_HEADER_RE = re.compile(
 )
 
 
-def _settings_back_url(request: StarletteRequest, settings_url: str | None) -> str | None:
+def _settings_back_url(
+    request: StarletteRequest, settings_url: str | None
+) -> str | None:
     """Return a contextual settings link unless the sidebar is still visible."""
     if not settings_url or request.headers.get("HX-Target") == "settings-content":
         return None
@@ -259,7 +261,7 @@ async def wrap_page_in_shell(
     from oridecon.admin.engine.renderer import resolve_admin_nav
     from oridecon.admin.navigation.manager import NavigationManager
     from oridecon.admin.ui.templates.shell import AdminShell
-    from oridecon.ui import raw, render_to_string
+    from oridecon.ui import render_to_string, trusted_html
 
     content = (
         response.body.decode()
@@ -267,9 +269,7 @@ async def wrap_page_in_shell(
         else str(response.body)
     )
 
-    user = (
-        getattr(request.state, "user", None) if hasattr(request, "state") else None
-    )
+    user = getattr(request.state, "user", None) if hasattr(request, "state") else None
     nav_items, system_menu_items, secondary_nav = resolve_admin_nav(request)
     state = getattr(request, "app", None)
     groups = (
@@ -296,7 +296,13 @@ async def wrap_page_in_shell(
         from oridecon.admin.ui.organisms.secondary_nav import ClusterLayout
 
         content = render_to_string(
-            ClusterLayout(items=secondary_nav, content=raw(content))
+            ClusterLayout(
+                items=secondary_nav,
+                content=trusted_html(
+                    content,
+                    source="dashboard page response body",
+                ),
+            )
         )
         if is_cluster:
             content = _cluster_header_html() + content
@@ -319,9 +325,7 @@ async def wrap_page_in_shell(
                 None,
             )
             if child is not None:
-                breadcrumbs.append(
-                    {"label": item.get("label", ""), "url": item_href}
-                )
+                breadcrumbs.append({"label": item.get("label", ""), "url": item_href})
                 breadcrumbs.append({"label": child.get("label", ""), "url": ""})
                 title = child.get("label", title)
                 break
@@ -373,9 +377,7 @@ async def wrap_page_in_shell(
                 # flat legacy key ("X") — get_all() always includes
                 # DEFAULT_SETTINGS under the flat keys so the flat lookup
                 # would otherwise shadow any explicitly saved value.
-                value = overrides.get(f"admin.branding.{field}") or overrides.get(
-                    field
-                )
+                value = overrides.get(f"admin.branding.{field}") or overrides.get(field)
                 if value:
                     branding[field] = value
             if branding.get("primary_color"):
@@ -415,7 +417,7 @@ async def wrap_page_in_shell(
     from oridecon.admin.resources.urls import admin_prefix_from_request
 
     shell = AdminShell(
-        content=content,
+        content=trusted_html(content, source="dashboard shell page response"),
         title=title,
         user=user,
         nav_items=nav_items,
