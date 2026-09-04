@@ -108,6 +108,21 @@ class TestFalsySettings:
         assert await store.contains("admin.cache.default_ttl") is True
         assert await store.contains("admin.cache.missing") is False
 
+    @pytest.mark.asyncio
+    async def test_database_store_applies_writes_and_removals_together(self) -> None:
+        service = AdminSettingsService()
+        store = TenantConfigStore(service, tenant_id="tenant-a")
+        await store.set("admin.cache.enabled", True)
+
+        await store.apply_many(
+            {"admin.cache.default_ttl": 30},
+            delete_keys={"admin.cache.enabled"},
+            expected={"admin.cache.enabled": True},
+        )
+
+        assert await store.contains("admin.cache.enabled") is False
+        assert await store.get("admin.cache.default_ttl") == 30
+
 
 class TestTypedNodes:
     """Contributor field types retain strict form semantics."""
