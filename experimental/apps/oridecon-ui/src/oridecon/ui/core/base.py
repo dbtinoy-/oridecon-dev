@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from contextvars import ContextVar, Token
+from copy import copy
 import html
 import importlib
 import re
@@ -359,11 +360,13 @@ class Component:
             return child.render()
 
         if isinstance(child, Component):
-            # Merge parent's non-conflicting props into the child
-            for key, value in self.props.items():
-                if key not in child.props:
-                    child.props[key] = value
-            return child.render()
+            # Render a shallow structural clone so polymorphic composition never
+            # leaks parent attributes into a caller-owned component. Child
+            # values retain the established precedence over parent defaults.
+            cloned_child = copy(child)
+            cloned_child.props = {**self.props, **child.props}
+            cloned_child.children = list(child.children)
+            return cloned_child.render()
 
         return str(child)
 
