@@ -69,18 +69,20 @@ class TestCommandPaletteA11y:
         html = self._html()
         assert 'role="combobox"' in html
         assert 'aria-expanded="true"' in html
-        assert 'aria-controls="command-palette-options"' in html
+        options_id = re.search(r'<ul id="([^"]+)" role="listbox"', html)
+        assert options_id is not None
+        assert f'aria-controls="{options_id.group(1)}"' in html
         assert 'aria-autocomplete="list"' in html
         assert "aria-activedescendant" in html
         assert 'aria-label="Search commands and navigation"' in html
 
     def test_options_have_unique_bound_ids_and_selection_state(self) -> None:
         html = self._html()
-        assert 'id="command-palette-options"' in html
-        # el() HTML-escapes attribute values, so the single quotes in the
-        # Alpine :id binding render as &#x27;.
-        assert ':id="&#x27;command-palette-option-&#x27; + index"' in html
-        assert ":aria-selected=" in html
+        options_id = re.search(r'<ul id="([^"]+)" role="listbox"', html)
+        assert options_id is not None
+        assert options_id.group(1).startswith("oridecon-command-palette-options-")
+        assert 'x-bind:id="&quot;oridecon-command-palette-option-' in html
+        assert 'x-bind:aria-selected="selectedIndex === index"' in html
         # The old static duplicate id must not come back.
         assert 'id="option-1"' not in html
 
