@@ -12,7 +12,14 @@ Usage (from the repository root)::
     uv run python experimental/apps/oridecon-admin/playground/serve.py
 
 Then open http://localhost:8000/admin/ — the setup wizard appears on a
-fresh database. Setup token: ``dev-setup-token``.
+fresh database. Setup token: ``dev-setup-token``. The bare host root
+serves a landing page that forwards to ``/admin/``.
+
+When running inside an E2B/Arena preview sandbox (``E2B_SANDBOX`` set)
+the panel must be embeddable, so the ``frame_options`` setting is cleared
+and ``frame-ancestors`` is relaxed to the E2B preview origins. Outside a
+preview sandbox the production-identical security defaults are kept.
+Override with ``ORIDECON_PLAYGROUND_ALLOW_EMBED=0|1``.
 
 Verification workflow: docs/09-01-2026/04-verification-playbook.md.
 A clean boot must print ZERO tracebacks (roadmap R8).
@@ -21,6 +28,8 @@ A clean boot must print ZERO tracebacks (roadmap R8).
 from __future__ import annotations
 
 import asyncio
+import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -287,9 +296,63 @@ def main() -> None:
 
     app = asyncio.run(build_app())
     _attach_root_landing(app)
+    asyncio.run(_allow_preview_embedding())
     print(f"\n▶ Admin playground: http://localhost:{PORT}/admin/")
     print(f"▶ Setup token: {SETUP_TOKEN}\n")
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")  # noqa: S104 — dev playground binds all interfaces for sandbox preview
+
+
+async def _allow_preview_embedding() -> None:
+    """Let the E2B/Arena preview frame the panel (playground only).
+
+    The admin security middleware ships ``X-Frame-Options: DENY`` and
+    ``frame-ancestors 'none'``, which is correct for production but makes
+    the live preview block the iframe. When this process runs inside an
+    E2B sandbox (or ``ORIDECON_PLAYGROUND_ALLOW_EMBED=1``), write the two
+    inherited settings the middleware reads:
+
+    * ``admin.security.frame_options`` → ``""``  (no X-Frame-Options)
+    * ``admin.security.csp`` → DEFAULT_CSP with ``frame-ancestors``
+      limited to the E2B preview origins instead of ``'none'``
+
+    Values are JSON-encoded exactly like ``oridecon.serialization`` stores
+    them. The report-only STRICT_CSP candidate is left untouched (it never
+    blocks framing and keeps the console diagnostics).
+    """
+
+    env_value = os.environ.get("ORIDECON_PLAYGROUND_ALLOW_EMBED")
+    if env_value is None:
+        enabled = bool(os.environ.get("E2B_SANDBOX") or os.environ.get("E2B_SANDBOX_ID"))
+    else:
+        enabled = env_value.strip().lower() not in {"0", "false", "off", "no", ""}
+    if not enabled:
+        print("▶ preview embedding: NOT relaxed (secure defaults kept)")
+        return
+
+    from oridecon.admin.settings.panel.models import DEFAULT_CSP
+
+    preview_ancestors = "'self' https://*.e2b.app https://e2b.app"
+    relaxed_csp = DEFAULT_CSP.replace(
+        "frame-ancestors 'none';",
+        f"frame-ancestors {preview_ancestors};",
+    )
+    rows = [
+        ("admin_ui.admin.security.frame_options", json.dumps("")),
+        ("admin_ui.admin.security.csp", json.dumps(relaxed_csp)),
+    ]
+    import aiosqlite
+
+    async with aiosqlite.connect(DB_PATH) as db:
+        for key, value in rows:
+            await db.execute(
+                "INSERT INTO tenant_configs (tenant_id, key, value)"
+                " VALUES ('default', ?, ?)"
+                " ON CONFLICT (tenant_id, key) DO UPDATE SET"
+                " value = excluded.value, updated_at = CURRENT_TIMESTAMP",
+                (key, value),
+            )
+        await db.commit()
+    print("▶ preview embedding: relaxed (frame_options cleared, frame-ancestors E2B-only)")
 
 
 if __name__ == "__main__":
