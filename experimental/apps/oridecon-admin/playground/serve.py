@@ -241,10 +241,52 @@ async def build_app():
     )
 
 
+def _attach_root_landing(app: Any) -> None:
+    """Serve a minimal landing at the bare host root (sandbox preview /
+    localhost:8000) instead of Starlette's 404.
+
+    The admin panel is mounted at ``/admin``; the landing forwards there
+    immediately (meta refresh + link, no JS required) and shows the
+    playground credentials so a fresh preview needs no doc-lookup.
+    """
+
+    landing = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="0; url=/admin/">
+  <title>Oridecon Admin Playground</title>
+  <style>
+    body {{ font-family: ui-sans-serif, system-ui, sans-serif; background: #0b1220; color: #e2e8f0;
+           display: grid; place-items: center; min-height: 100vh; margin: 0; }}
+    main {{ max-width: 34rem; padding: 2rem; }}
+    a {{ color: #7dd3fc; }}
+    code {{ background: #1e293b; padding: .15rem .4rem; border-radius: .25rem; }}
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Oridecon Admin Playground</h1>
+    <p>Opening the admin panel… <a href="/admin/">open now</a>.</p>
+    <p>Sign in: <code>dev@example.dev</code> / <code>DevAdmin#123</code></p>
+  </main>
+</body>
+</html>"""
+
+    async def _root(request: Any) -> Any:
+        from starlette.responses import HTMLResponse
+
+        return HTMLResponse(landing)
+
+    app.add_route("/", _root, methods=["GET"])
+
+
 def main() -> None:
     import uvicorn
 
     app = asyncio.run(build_app())
+    _attach_root_landing(app)
     print(f"\n▶ Admin playground: http://localhost:{PORT}/admin/")
     print(f"▶ Setup token: {SETUP_TOKEN}\n")
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")  # noqa: S104 — dev playground binds all interfaces for sandbox preview
