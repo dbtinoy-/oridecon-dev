@@ -332,6 +332,7 @@ async def wrap_page_in_shell(
     )
 
     branding: dict[str, str] = {}
+    features: dict[str, bool] = {}
     try:
         from oridecon.admin.multitenancy.adapter import resolve_tenant_id
         from oridecon.admin.services.settings_service import (
@@ -368,6 +369,31 @@ async def wrap_page_in_shell(
                 theme_css = AdminThemeService(
                     primary_color=branding["primary_color"]
                 ).generate_theme_css()
+
+            # Load feature flags from admin.features.* settings so the shell
+            # can gate sidebar entries and UI affordances at render time.
+            # The shell_sections module looks up "{flag}_enabled" keys, so we
+            # map the stored boolean value to both the raw key and the suffixed form.
+            _feature_fields = (
+                "command_palette",
+                "keyboard_shortcuts",
+                "theme_toggle",
+                "search",
+                "optimistic_updates",
+                "undo_redo",
+                "autosave",
+                "audit_logging",
+                "activity_feed",
+                "notifications",
+                "webhooks",
+                "api_docs",
+            )
+            for flag in _feature_fields:
+                raw = overrides.get(f"admin.features.{flag}")
+                if raw is not None:
+                    enabled = str(raw).lower() not in ("false", "0", "no", "off")
+                    features[flag] = enabled
+                    features[f"{flag}_enabled"] = enabled
     except Exception:  # noqa: BLE001, S110 — non-fatal
         pass
 
@@ -382,6 +408,7 @@ async def wrap_page_in_shell(
         user_menu_items=user_menu_items,
         breadcrumbs=breadcrumbs,
         theme_css=theme_css,
+        features=features or None,
         admin_prefix=(
             admin_prefix_from_request(request) if request is not None else "/admin"
         ),

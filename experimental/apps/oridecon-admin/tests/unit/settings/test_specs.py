@@ -38,7 +38,11 @@ class TestSpecs:
         assert isinstance(nodes["site_name"], StringNode)
         assert isinstance(nodes["primary_color"], ColorNode)
         assert isinstance(nodes["dark_mode"], EnumNode)
-        assert nodes["dark_mode"].options == ["system", "light", "dark"]
+        # Options may be a list of values or a dict of value→label (human-readable labels
+        # were added in the branding spec to improve the settings form UX).
+        dm_options = nodes["dark_mode"].options
+        allowed_values = list(dm_options) if isinstance(dm_options, dict) else dm_options
+        assert set(allowed_values) == {"system", "light", "dark"}
         assert nodes["site_name"].default == "Oridecon Admin"
 
     def test_cache_spec_nodes(self) -> None:
