@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from oridecon.ui.attributes import alpine
 from oridecon.ui.core.base import Component, el
 
 
@@ -101,7 +102,12 @@ class Tabs(Component):
                                 else {
                                     "type": "button",
                                     "@click": f"activeTab = '{value}'",
-                                    "x_bind__class": f"activeTab === '{value}' ? 'bg-background text-foreground shadow' : 'text-muted-foreground hover:text-foreground'",
+                                    **alpine.bind(
+                                        "class",
+                                        alpine.expr(
+                                            f"activeTab === '{value}' ? 'bg-background text-foreground shadow' : 'text-muted-foreground hover:text-foreground'"
+                                        ),
+                                    ),
                                     "role": "tab",
                                     "aria_selected": "true"
                                     if value == self.active_id

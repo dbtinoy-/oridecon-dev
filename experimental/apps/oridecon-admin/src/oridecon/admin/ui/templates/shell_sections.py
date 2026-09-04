@@ -6,6 +6,7 @@ from typing import Any
 
 from oridecon.admin.ui.organisms.sidebar import SidebarItem
 from oridecon.ui import el
+from oridecon.ui.attributes import alpine
 
 
 def _user_has_permission(user: Any, permission: str) -> bool:
@@ -169,12 +170,18 @@ def build_sidebar_container(sidebar_html: Any) -> Any:
             "div",
             class_="fixed inset-0 z-30 bg-muted/50 backdrop-blur-sm lg:hidden",
             x_show="sidebarOpen",
-            x_transition_enter="transition-opacity ease-linear duration-300",
-            x_transition_enter_start="opacity-0",
-            x_transition_enter_end="opacity-100",
-            x_transition_leave="transition-opacity ease-linear duration-300",
-            x_transition_leave_start="opacity-100",
-            x_transition_leave_end="opacity-0",
+            **alpine.transition(
+                "enter",
+                alpine.expr("transition-opacity ease-linear duration-300"),
+            ),
+            **alpine.transition("enter-start", alpine.expr("opacity-0")),
+            **alpine.transition("enter-end", alpine.expr("opacity-100")),
+            **alpine.transition(
+                "leave",
+                alpine.expr("transition-opacity ease-linear duration-300"),
+            ),
+            **alpine.transition("leave-start", alpine.expr("opacity-100")),
+            **alpine.transition("leave-end", alpine.expr("opacity-0")),
             **{"x-on:click": "sidebarOpen = false"},
             aria_hidden="true",
         ),
