@@ -2,17 +2,17 @@
 
 import pytest
 
-from oridecon.ui import (
-    MetricProtocol,
-    MetricsCollector,
-    MetricType,
-)
 from oridecon.admin.ui.observability import (
     get_health_status,
     render_debug_panel,
     track_error,
     track_htmx_request,
     track_render_time,
+)
+from oridecon.ui import (
+    MetricProtocol,
+    MetricsCollector,
+    MetricType,
 )
 from oridecon.ui.core.zones import Zones
 
@@ -90,17 +90,19 @@ class TestTrackingFunctions:
     def setup_method(self):
         """Reset metrics before each test."""
         from unittest.mock import MagicMock
+
         import oridecon.admin.lib.di as di_module
 
         self._collector = MetricsCollector()
         mock_resolver = MagicMock()
         mock_resolver.resolve_sync.return_value = self._collector
         self._original_resolver_fn = di_module.get_admin_resolver
-        di_module.get_admin_resolver = lambda context=None: mock_resolver
+        di_module.get_admin_resolver = lambda _context=None: mock_resolver
 
     def teardown_method(self):
         """Restore original resolver after each test."""
         import oridecon.admin.lib.di as di_module
+
         di_module.get_admin_resolver = self._original_resolver_fn
 
     def test_track_htmx_request(self):
@@ -140,25 +142,25 @@ class TestDebugPanel:
     """Tests for debug panel rendering."""
 
     def test_debug_panel_hidden_without_env(self, monkeypatch):
-        monkeypatch.delenv("LEX_DEBUG", raising=False)
+        monkeypatch.delenv("ORI_DEBUG", raising=False)
         html = render_debug_panel()
         assert html == ""
 
     def test_debug_panel_shown_with_env(self, monkeypatch):
-        monkeypatch.setenv("LEX_DEBUG", "1")
+        monkeypatch.setenv("ORI_DEBUG", "1")
         html = render_debug_panel()
         assert "debug-panel" in html
         assert "Debug" in html
 
     def test_debug_panel_shows_zones(self, monkeypatch):
-        monkeypatch.setenv("LEX_DEBUG", "1")
+        monkeypatch.setenv("ORI_DEBUG", "1")
         zones_info = {Zones.DATA.id: True, Zones.TOOLBAR.id: False}
         html = render_debug_panel(zones_info=zones_info)
         assert Zones.DATA.id in html
         assert Zones.TOOLBAR.id in html
 
     def test_debug_panel_shows_timing(self, monkeypatch):
-        monkeypatch.setenv("LEX_DEBUG", "1")
+        monkeypatch.setenv("ORI_DEBUG", "1")
         html = render_debug_panel(render_time_ms=42.5)
         assert "42.50ms" in html
 
@@ -169,17 +171,19 @@ class TestHealthStatus:
     def setup_method(self):
         """Set up fresh collector for each test."""
         from unittest.mock import MagicMock
+
         import oridecon.admin.lib.di as di_module
 
         self._collector = MetricsCollector()
         mock_resolver = MagicMock()
         mock_resolver.resolve_sync.return_value = self._collector
         self._original_resolver_fn = di_module.get_admin_resolver
-        di_module.get_admin_resolver = lambda context=None: mock_resolver
+        di_module.get_admin_resolver = lambda _context=None: mock_resolver
 
     def teardown_method(self):
         """Restore original resolver after each test."""
         import oridecon.admin.lib.di as di_module
+
         di_module.get_admin_resolver = self._original_resolver_fn
 
     def test_health_status_healthy(self):

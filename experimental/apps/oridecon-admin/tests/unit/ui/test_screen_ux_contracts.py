@@ -125,11 +125,10 @@ class TestDashboardWidgetCards:
             [_widget("a", "A"), _widget("b", "B"), _widget("c", "C")]
         )
 
-        assert html.count("__lexigramWidgetState") == 2  # guard read + guard set
+        assert html.count("__orideconWidgetState") == 2  # guard read + guard set
 
     def test_error_copy_distinguishes_permission_from_outage(self) -> None:
-        """"Something went wrong" for a 403 sends the operator debugging the
-        wrong thing."""
+        """Generic 403 copy sends the operator debugging the wrong thing."""
         html = WidgetRegistry().render_contributor_widgets([_widget()])
 
         assert "do not have access" in html
@@ -175,9 +174,7 @@ class TestInfrastructureCards:
     def test_child_links_are_labelled_as_a_group(self, card_html: str) -> None:
         assert 'aria-label="Web sections"' in card_html
 
-    def test_child_links_stay_above_the_stretched_overlay(
-        self, card_html: str
-    ) -> None:
+    def test_child_links_stay_above_the_stretched_overlay(self, card_html: str) -> None:
         """Otherwise the card link swallows every sub-link."""
         assert "cluster-card" in card_html
 
@@ -238,9 +235,7 @@ class TestImpersonationBanner:
 
     @pytest.fixture
     def html(self) -> str:
-        return render_to_string(
-            build_impersonation_banner(True, "user-42", "tok")
-        )
+        return render_to_string(build_impersonation_banner(True, "user-42", "tok"))
 
     def test_inactive_renders_nothing(self) -> None:
         assert build_impersonation_banner(False, "user-42", "tok") == ""
@@ -256,7 +251,7 @@ class TestImpersonationBanner:
         assert "recorded against this account" in html
 
     def test_stop_button_names_its_target(self, html: str) -> None:
-        """"Stop impersonating" alone is ambiguous out of context."""
+        """The stop label alone is ambiguous when read out of context."""
         assert 'aria-label="Stop impersonating user-42"' in html
 
     def test_not_signalled_by_colour_alone(self, html: str) -> None:
@@ -343,9 +338,7 @@ class TestAreaDescriptions:
     def test_tolerates_contributions_without_the_field(self) -> None:
         """The field is new; older contributions simply lack the attribute."""
         controller = self._controller(INFRASTRUCTURE_CLUSTER)
-        legacy = types.SimpleNamespace(
-            label="Web", icon="globe", url="/x", children=[]
-        )
+        legacy = types.SimpleNamespace(label="Web", icon="globe", url="/x", children=[])
 
         assert "HTTP routing" in controller._describe(legacy)
 
@@ -358,9 +351,7 @@ class TestAreaDescriptions:
         """The controller is generic; asserting "infrastructure" on a Content
         landing page is simply false."""
         controller = self._controller(
-            types.SimpleNamespace(
-                name="content", label="Content", group="content"
-            )
+            types.SimpleNamespace(name="content", label="Content", group="content")
         )
 
         assert controller._describe(self._area("Widgets")) == (
@@ -371,9 +362,7 @@ class TestAreaDescriptions:
         """The map is keyed on label alone, so a "Web" area in another
         cluster would otherwise inherit infrastructure copy."""
         controller = self._controller(
-            types.SimpleNamespace(
-                name="content", label="Content", group="content"
-            )
+            types.SimpleNamespace(name="content", label="Content", group="content")
         )
 
         assert "HTTP routing" not in controller._describe(self._area("Web"))
