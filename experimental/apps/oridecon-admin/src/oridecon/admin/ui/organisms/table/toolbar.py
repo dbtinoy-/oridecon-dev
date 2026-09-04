@@ -436,7 +436,13 @@ class TableToolbar(Component):
             show_clear=True,
             **search_attrs,
         )
-        return el("div", search_bar.render(), class_="flex-1 mb-2", id=Zones.SEARCH.id)
+        return el(
+            "div",
+            search_bar.render(),
+            class_="flex-1 mb-2",
+            id=Zones.SEARCH.id,
+            data_oridecon_table_search=True,
+        )
 
     def render_filters(self) -> Any:
         if not controls_for(getattr(self.state, "view", None)).filters:
@@ -457,7 +463,12 @@ class TableToolbar(Component):
             state=self.state,
             id=Zones.FILTERS.id,
         )
-        return el("div", filter_bar.render(), class_="mb-4")
+        return el(
+            "div",
+            filter_bar.render(),
+            class_="mb-4",
+            data_oridecon_table_filters=True,
+        )
 
     def render_switchers_oob(self) -> Any:
         """

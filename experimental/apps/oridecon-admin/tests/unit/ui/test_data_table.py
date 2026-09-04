@@ -109,6 +109,17 @@ def test_sibling_tables_resolve_distinct_internal_zones() -> None:
         assert f'id="{table_id}"' in html
         assert f'id="{data_id}"' in html
         assert f'hx-target="#{data_id}"' in html
+        assert f"allIds: [&quot;{key}&quot;]" in html
+        assert f'data-oridecon-table-ids="[&quot;{key}&quot;]"' in html
+        assert f'aria-label="{key.title()} table"' in html
+        refresh_event = f"oridecon-refresh-table-{table_id}"
+        assert f'data-oridecon-table-refresh-event="{refresh_event}"' in html
+        assert f"{refresh_event} from:body" in html
+
+    assert html.count(" data-oridecon-table-root") == 2
+    assert html.count(" data-oridecon-table-data") == 2
+    assert "@keydown.window" not in html
+    assert html.count('@keydown="handleKeydown($event)"') == 2
 
 
 def test_table_zones_remain_stable_between_full_and_htmx_renders() -> None:

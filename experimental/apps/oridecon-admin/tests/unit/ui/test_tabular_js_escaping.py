@@ -91,7 +91,10 @@ class TestGroupNameInJsStringContexts:
 
         assert "toggleGroup" in html
         assert "collapsedGroups.includes" in html
-        assert "x&#x27;);alert(1)//" not in html
+        # The human-readable aria-label may contain the safely HTML-escaped
+        # group name; executable Alpine contexts must retain JS backslashes.
+        assert "toggleGroup(&#x27;x&#x27;);alert(1)//" not in html
+        assert "x\\&#x27;);alert(1)//" in html
         assert "\\\\nline2" in html
 
 

@@ -133,6 +133,8 @@ class DataTableRenderer:
             view_content,
             pagination_el if pagination_el else "",
             id=Zones.DATA.id,
+            data_oridecon_table_data=True,
+            data_oridecon_table_ids=self.all_ids_json,
         )
 
         # HTMX wrapper
@@ -169,6 +171,14 @@ class DataTableRenderer:
 
         # Script and final markup
         script = self._render_script()
+        resource_label = self.config.resource_name or (
+            self.config.resource_prefix.rstrip("/").rsplit("/", 1)[-1]
+            if self.config.resource_prefix
+            else "Data"
+        )
+        table_accessible_name = (
+            str(resource_label).replace("_", " ").replace("-", " ").title() + " table"
+        )
 
         return render_to_string(
             [
@@ -179,12 +189,27 @@ class DataTableRenderer:
                     tabs_node,
                     container,
                     id=Zones.TABLE.id,
-                    x_data=f"{{ selectedIds: [], expandedIds: [], collapsedGroups: [], lastSelected: null, focusedId: null, hasActiveFiltersState: false, allIds: {self.all_ids_json}, ...window.LexigramTableLogic }}",
+                    tabindex="0",
+                    role="region",
+                    aria_label=table_accessible_name,
+                    data_oridecon_table_root=True,
+                    data_oridecon_table_refresh_event=(
+                        f"oridecon-refresh-table-{Zones.TABLE.id}"
+                    ),
+                    x_data=(
+                        "{ ...window.LexigramTableLogic, selectedIds: [], "
+                        "expandedIds: [], collapsedGroups: [], lastSelected: null, "
+                        "focusedId: null, hasActiveFiltersState: false, "
+                        f"allIds: {self.all_ids_json} }}"
+                    ),
                     **{
-                        "@keydown.window": "handleKeydown($event)",
-                        "@htmx:after-swap.window": "$nextTick(() => updateActiveFiltersState())",
-                        "@input.window": f"if ($event.target.closest('{Zones.SEARCH.selector}') || $event.target.closest('{Zones.FILTERS.selector}')) $nextTick(() => updateActiveFiltersState())",
-                        "@change.window": f"if ($event.target.closest('{Zones.SEARCH.selector}') || $event.target.closest('{Zones.FILTERS.selector}')) $nextTick(() => updateActiveFiltersState())",
+                        "@keydown": "handleKeydown($event)",
+                        "@htmx:after-swap": (
+                            "$nextTick(() => { updateActiveFiltersState(); "
+                            "refreshIdsFrom($event.detail.target); })"
+                        ),
+                        "@input": "if ($event.target.closest('[data-oridecon-table-search], [data-oridecon-table-filters]')) $nextTick(() => updateActiveFiltersState())",
+                        "@change": "if ($event.target.closest('[data-oridecon-table-search], [data-oridecon-table-filters]')) $nextTick(() => updateActiveFiltersState())",
                     },
                 ),
             ],
@@ -406,7 +431,10 @@ class DataTableRenderer:
             "div",
             table_content,
             id=Zones.TABLE.id + "-inner",
-            hx_trigger="refreshTable from:body",
+            hx_trigger=(
+                "refreshTable from:body, "
+                f"oridecon-refresh-table-{Zones.TABLE.id} from:body"
+            ),
             # hx-select-oob travels with hx-select; children that inherit one
             # without the other would swap OOB fragments they never asked for.
             hx_disinherit="hx-select hx-select-oob",

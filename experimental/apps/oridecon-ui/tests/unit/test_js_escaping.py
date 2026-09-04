@@ -358,7 +358,7 @@ class TestHtmxOptimisticHelpers:
 
 
 class TestDataTableAllIds:
-    """Row ids are database values interpolated into an inline script."""
+    """Per-table row IDs must never seed process-global client state."""
 
     def _render(self, all_ids: list[str]) -> str:
         from oridecon.ui import render_to_string
@@ -374,10 +374,13 @@ class TestDataTableAllIds:
         assert "</script><img" not in rendered
         assert "<img" not in rendered
 
-    def test_ids_survive_encoding(self) -> None:
+    def test_ids_are_not_stored_in_the_global_method_registry(self) -> None:
         rendered = self._render(["r1", "r2"])
 
-        assert _literal_at(rendered, "allIds: ") == ["r1", "r2"]
+        assert "r1" not in rendered
+        assert "r2" not in rendered
+        assert "allIds:" not in rendered
+        assert "window.LexigramTableLogic" in rendered
 
     def test_bulk_progress_listener_is_idempotent_and_accessible(self) -> None:
         rendered = self._render([])

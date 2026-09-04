@@ -2,24 +2,54 @@ from __future__ import annotations
 
 from typing import Any
 
-from oridecon.ui import Zones, el, js_json, trusted_html
+from oridecon.ui import el, trusted_html
 
 
 class DataTableScriptRenderer:
     """Renderer for the client-side Alpine.js logic of the DataTable."""
 
     @staticmethod
-    def render(all_ids: list[str]) -> Any:
-        # We assume all_ids is already a list of strings
+    def render(_all_ids: list[str]) -> Any:
+        # Row IDs belong to each Alpine root, not this process-global method set.
+        table_root_selector = "[data-oridecon-table-root]"
         script_js = f"""
         (function() {{
+            const serializeTableQuery = function(table) {{
+                const params = new URLSearchParams();
+                const ignored = new Set(['ids', 'csrf_token', 'action', 'scope', 'list_query']);
+                table.querySelectorAll('input[name], select[name], textarea[name]').forEach(
+                    function(control) {{
+                        if (control.disabled || ignored.has(control.name)) return;
+                        const type = String(control.type || '').toLowerCase();
+                        if ((type === 'checkbox' || type === 'radio') && !control.checked) return;
+                        if (control.tagName === 'SELECT' && control.multiple) {{
+                            Array.from(control.selectedOptions).forEach(function(option) {{
+                                params.append(control.name, option.value);
+                            }});
+                        }} else if (!['button', 'file', 'reset', 'submit'].includes(type)) {{
+                            params.append(control.name, control.value);
+                        }}
+                    }}
+                );
+                return params.toString();
+            }};
+
+            const refreshTableRoot = function(table) {{
+                const eventName = table && table.dataset.orideconTableRefreshEvent;
+                if (!eventName || !window.htmx ||
+                    typeof window.htmx.trigger !== 'function') return false;
+                window.htmx.trigger(document.body, eventName);
+                return true;
+            }};
+
             // Keep downloads as native form submissions. HTMX receives CSV
             // bytes through XHR and cannot turn Content-Disposition into a
             // browser download, while a temporary form preserves cookies,
             // CSRF fields, and the selected IDs.
             window.LexigramDownloadBulk = window.LexigramDownloadBulk || function(button) {{
-                const table = document.querySelector('{Zones.TABLE.selector}');
-                const checked = table ? table.querySelectorAll('input[name="ids"]:checked') : [];
+                const table = button && button.closest('{table_root_selector}');
+                if (!table) return false;
+                const checked = table.querySelectorAll('input[name="ids"]:checked');
                 const filtered = !checked.length;
 
                 const form = document.createElement('form');
@@ -38,9 +68,10 @@ class DataTableScriptRenderer:
                 add('action', button.dataset.bulkAction || 'export');
                 if (filtered) {{
                     // R25: no selection means "export everything matching
-                    // the current view" — forward the list's URL state.
+                    // this table's current view" — sibling tables may have
+                    // independent search, filters, and sort state.
                     add('scope', 'filtered');
-                    add('list_query', window.location.search.replace(/^\\?/, ''));
+                    add('list_query', serializeTableQuery(table));
                 }} else {{
                     checked.forEach((checkbox) => add('ids', checkbox.value));
                 }}
@@ -59,8 +90,9 @@ class DataTableScriptRenderer:
             // native form) so the JSON/HTML fragment response can surface a
             // toast instead of navigating away from the list.
             window.LexigramImportUpload = window.LexigramImportUpload || function(button) {{
-                const url = button.dataset.importUploadUrl || '';
-                if (!url) return false;
+                const table = button && button.closest('{table_root_selector}');
+                const url = button && button.dataset.importUploadUrl || '';
+                if (!table || !url) return false;
                 const notify = function(message, type) {{
                     if (window.showToast) window.showToast(message, type);
                     else if (window.alert) window.alert(message);
@@ -74,8 +106,7 @@ class DataTableScriptRenderer:
                     picker.remove();
                     if (!file) return;
                     try {{
-                        const table = document.querySelector('{Zones.TABLE.selector}');
-                        const csrfInput = table && table.querySelector('input[name="csrf_token"]');
+                        const csrfInput = table.querySelector('input[name="csrf_token"]');
                         const csrfEl = document.querySelector('[data-csrf-token]');
                         const csrf = (csrfInput && csrfInput.value) ||
                             window.__orideconCsrfToken ||
@@ -123,8 +154,10 @@ class DataTableScriptRenderer:
                             notify('Import failed: ' + (detail || response.status), 'error');
                             return;
                         }}
-                        notify('Import finished. Reloading…', 'success');
-                        setTimeout(function() {{ window.location.reload(); }}, 600);
+                        notify('Import finished. Refreshing the table…', 'success');
+                        setTimeout(function() {{
+                            if (!refreshTableRoot(table)) window.location.reload();
+                        }}, 600);
                     }} catch (err) {{
                         notify('Import failed.', 'error');
                     }}
@@ -164,11 +197,13 @@ class DataTableScriptRenderer:
                     }}
                 }};
 
-                const refreshBulkTable = () => {{
-                    if (window.htmx && typeof window.htmx.trigger === 'function') {{
+                const refreshBulkTable = (table) => {{
+                    if (refreshTableRoot(table)) {{
+                        // Keep the legacy integration hook local to the table
+                        // that initiated the mutation.
+                        window.htmx.trigger(table, 'refresh-list');
+                    }} else if (window.htmx && typeof window.htmx.trigger === 'function') {{
                         window.htmx.trigger(document.body, 'refreshTable');
-                        // Keep the legacy event available to integrations that
-                        // listened for the phase-1 bulk response trigger.
                         window.htmx.trigger(document.body, 'refresh-list');
                     }} else if (document.body) {{
                         document.body.dispatchEvent(new CustomEvent('refreshTable'));
@@ -286,7 +321,7 @@ class DataTableScriptRenderer:
                     const duration = Number.isFinite(Number(metadata.duration))
                         ? Number(metadata.duration) : (type === 'success' ? 3000 : 8000);
                     notifyBulkProgress(message, type, duration);
-                    if (metadata.refresh !== false) refreshBulkTable();
+                    if (metadata.refresh !== false) refreshBulkTable(state.tableRoot);
                     window.setTimeout(() => {{
                         if (state.region && state.region.parentNode) state.region.remove();
                     }}, 250);
@@ -344,6 +379,10 @@ class DataTableScriptRenderer:
                 }};
 
                 document.addEventListener('bulk-progress-start', (event) => {{
+                    const eventElement = event && event.detail && event.detail.elt
+                        ? event.detail.elt : event && event.target;
+                    const tableRoot = eventElement && eventElement.closest
+                        ? eventElement.closest('{table_root_selector}') : null;
                     let detail = event && event.detail ? event.detail : {{}};
                     if (detail.value && typeof detail.value === 'object') detail = detail.value;
                     const taskId = typeof detail.task_id === 'string' ? detail.task_id : '';
@@ -364,6 +403,7 @@ class DataTableScriptRenderer:
                         statusUrl: statusUrl,
                         source: null,
                         region: buildBulkProgressRegion(taskId, total),
+                        tableRoot: tableRoot,
                         done: false,
                         statusRequested: false
                     }};
@@ -398,13 +438,14 @@ class DataTableScriptRenderer:
             window.LexigramTableInitialized = true;
 
             window.LexigramTableLogic = {{
-                allIds: {js_json(all_ids)},
-                hasActiveFiltersState: false,
-
                 updateActiveFiltersState() {{
-                    const searchInput = document.getElementById('{Zones.SEARCH.id}-input');
+                    const root = this.$root;
+                    if (!root) return;
+                    const searchInput = root.querySelector(
+                        '[data-oridecon-table-search] input'
+                    );
                     const hasSearch = searchInput && searchInput.value && searchInput.value.trim() !== '';
-                    const filterBar = document.getElementById('{Zones.FILTERS.id}');
+                    const filterBar = root.querySelector('[data-oridecon-table-filters]');
                     let hasFilters = false;
                     if (filterBar) {{
                         // Consider filters active only if any control has a non-empty/checked value
@@ -497,11 +538,29 @@ class DataTableScriptRenderer:
                     this.lastSelected = null;
                 }},
 
+                refreshIdsFrom(target) {{
+                    const root = this.$root;
+                    if (!root || !target || !root.contains(target)) return;
+                    const dataRegion = target.matches('[data-oridecon-table-data]')
+                        ? target : target.querySelector('[data-oridecon-table-data]');
+                    if (!dataRegion || !root.contains(dataRegion)) return;
+                    try {{
+                        const ids = JSON.parse(dataRegion.dataset.orideconTableIds || '[]');
+                        this.refreshAllIds(Array.isArray(ids) ? ids : []);
+                    }} catch (err) {{
+                        this.refreshAllIds([]);
+                    }}
+                }},
+
                 reorderColumn(fromCol, toCol) {{
                     if (fromCol === toCol) return;
 
-                    // Get current column names from the headers
-                    const ths = Array.from(document.querySelectorAll('{Zones.TABLE.selector} thead th[data-col-name]'));
+                    const root = this.$root;
+                    if (!root) return;
+                    // Read only this instance's current column order.
+                    const ths = Array.from(
+                        root.querySelectorAll('thead th[data-col-name]')
+                    );
                     let colNames = ths.map(th => th.getAttribute('data-col-name'));
 
                     if (colNames.length === 0) {{
@@ -515,8 +574,8 @@ class DataTableScriptRenderer:
                     if (fromIdx !== -1 && toIdx !== -1) {{
                         colNames.splice(toIdx, 0, colNames.splice(fromIdx, 1)[0]);
 
-                        // Update the hidden input
-                        const input = document.querySelector('input[name="col_order"]');
+                        // Update only this table's hidden state input.
+                        const input = root.querySelector('input[name="col_order"]');
                         if (input) {{
                             input.value = colNames.join(',');
                             // Trigger HTMX refresh by submitting the form or triggering a change
@@ -533,16 +592,22 @@ class DataTableScriptRenderer:
                         this.collapsedGroups.push(groupName);
                     }}
 
-                    // Keep in sync with hidden input for server state persistence on next load
-                    const input = document.querySelector('input[name="collapsed_groups"]');
+                    // Keep this table's server state in sync for its next load.
+                    const root = this.$root;
+                    const input = root && root.querySelector('input[name="collapsed_groups"]');
                     if (input) {{
                         input.value = this.collapsedGroups.join(',');
                     }}
                 }},
 
                 handleKeydown(e) {{
-                     if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {{
-                         if (e.key === 'Escape') e.target.blur();
+                     const isTypingTarget = e.target.matches &&
+                         e.target.matches('[contenteditable]:not([contenteditable="false"])');
+                     if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName) ||
+                         isTypingTarget) {{
+                         if (e.key === 'Escape' && typeof e.target.blur === 'function') {{
+                             e.target.blur();
+                         }}
                          return;
                      }}
 
@@ -569,7 +634,9 @@ class DataTableScriptRenderer:
                               break;
                           case '/':
                               e.preventDefault();
-                              document.getElementById('{Zones.SEARCH.id}')?.focus();
+                              this.$root?.querySelector(
+                                  '[data-oridecon-table-search] input'
+                              )?.focus();
                               break;
                      }}
                 }}
@@ -608,43 +675,6 @@ class DataTableScriptRenderer:
                 document.addEventListener('alpine:init', registerResizable);
             }}
 
-            document.addEventListener('htmx:afterSwap', (e) => {{
-                try {{
-                    const target = e.detail.target;
-                    if (window.htmx && target) {{
-                        try {{ htmx.process(target); }} catch (err) {{ }}
-                    }}
-                    if (window.LexigramTableLogic && typeof window.LexigramTableLogic.updateActiveFiltersState === 'function') {{
-                        window.LexigramTableLogic.updateActiveFiltersState();
-                    }}
-                    if (target && target.id === '{Zones.DATA.id}') {{
-                        const checkboxes = target.querySelectorAll('input[name="ids"]');
-                        const newIds = Array.from(checkboxes).map(cb => cb.value);
-                        const tableEl = document.getElementById('{Zones.TABLE.id}');
-                        if (tableEl && window.Alpine) {{
-                            Alpine.$data(tableEl).refreshAllIds(newIds);
-                        }}
-                    }}
-                }} catch (err) {{ }}
-            }});
-
-            document.addEventListener('htmx:beforeSwap', (e) => {{
-                try {{
-                    const targetId = e.detail.target?.id;
-                    if (targetId !== '{Zones.TABLE.id}' && targetId !== 'main-content') return;
-                    const fragment = e.detail.serverResponse;
-                    if (!fragment) return;
-                    const doc = new DOMParser().parseFromString(fragment, 'text/html');
-                    const newInput = doc.querySelector('#{Zones.SEARCH.id}-input');
-                    const oldInput = document.getElementById('{Zones.SEARCH.id}-input');
-                    if (!newInput || !oldInput) return;
-                    ['hx-get','hx-trigger','hx-target','hx-swap','hx-include','hx-vals','hx-push-url','placeholder'].forEach(attr => {{
-                        const val = newInput.getAttribute(attr);
-                        if (val != null) oldInput.setAttribute(attr, val);
-                    }});
-                }} catch (err) {{ }}
-            }});
-
             function updateSidebarActive(url) {{
                 const sidebarLinks = document.querySelectorAll('#main-sidebar nav a[hx-get]');
                 sidebarLinks.forEach(link => {{
@@ -666,8 +696,10 @@ class DataTableScriptRenderer:
 
             document.addEventListener('htmx:afterSettle', (e) => {{
                 try {{
-                    const targetId = e.detail.target?.id;
-                    if (targetId === 'main-content' || targetId === '{Zones.TABLE.id}') {{
+                    const target = e.detail.target;
+                    if (target && (target.id === 'main-content' ||
+                        target.matches('{table_root_selector}') ||
+                        target.closest('{table_root_selector}'))) {{
                         updateSidebarActive(window.location.pathname);
                     }}
                 }} catch (err) {{ }}
