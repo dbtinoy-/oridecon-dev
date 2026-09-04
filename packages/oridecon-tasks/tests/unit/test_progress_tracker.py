@@ -25,7 +25,6 @@ from oridecon.contracts.infra.tasks.progress import (
 )
 from oridecon.tasks.progress import InMemoryProgressTracker
 
-
 # ---------------------------------------------------------------------------
 # ProgressStatus
 # ---------------------------------------------------------------------------
@@ -85,6 +84,7 @@ class TestProgressSnapshot:
         )
         assert snap.message == ""
         assert snap.error == ""
+        assert snap.metadata == {}
 
     def test_frozen(self) -> None:
         snap = ProgressSnapshot(
@@ -159,6 +159,18 @@ class TestInMemoryProgressTrackerBasics:
         assert snap.message == "all done"
 
     @pytest.mark.asyncio
+    async def test_complete_preserves_copied_metadata(self) -> None:
+        """Completion hints are retained without sharing caller-owned state."""
+        tracker = InMemoryProgressTracker()
+        metadata: dict[str, object] = {"toast_type": "success", "refresh": True}
+        await tracker.complete("t1", "all done", metadata)
+        metadata["refresh"] = False
+
+        snap = await tracker.get("t1")
+        assert snap is not None
+        assert snap.metadata == {"toast_type": "success", "refresh": True}
+
+    @pytest.mark.asyncio
     async def test_complete_preserves_total(self) -> None:
         tracker = InMemoryProgressTracker()
         await tracker.update("t1", 7, 10)
@@ -186,6 +198,16 @@ class TestInMemoryProgressTrackerBasics:
         assert snap is not None
         assert snap.status == ProgressStatus.FAILED
         assert snap.error == "disk full"
+
+    @pytest.mark.asyncio
+    async def test_fail_preserves_metadata(self) -> None:
+        """Failure hints remain available to progress consumers."""
+        tracker = InMemoryProgressTracker()
+        await tracker.fail("t1", "disk full", {"retryable": False})
+
+        snap = await tracker.get("t1")
+        assert snap is not None
+        assert snap.metadata == {"retryable": False}
 
     @pytest.mark.asyncio
     async def test_fail_preserves_current_and_total(self) -> None:
